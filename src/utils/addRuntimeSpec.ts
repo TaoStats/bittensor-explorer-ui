@@ -3,13 +3,13 @@ import { getRuntimeSpec, getRuntimeSpecs } from "../services/runtimeService";
 
 import { uniq } from "./uniq";
 
-export async function addRuntimeSpec<T>(network: string, response: T|undefined, getSpecVersion: (data: T) => number|"latest") {
+export async function addRuntimeSpec<T>(response: T | undefined, getSpecVersion: (data: T) => number | "latest") {
 	if (response === undefined) {
 		return undefined;
 	}
 
 	const specVersion = getSpecVersion(response);
-	const spec = await getRuntimeSpec(network, specVersion);
+	const spec = await getRuntimeSpec(specVersion);
 
 	return {
 		...response,
@@ -18,10 +18,10 @@ export async function addRuntimeSpec<T>(network: string, response: T|undefined, 
 }
 
 
-export async function addRuntimeSpecs<T>(network: string, response: ItemsResponse<T>, getSpecVersion: (data: T) => number|"latest") {
+export async function addRuntimeSpecs<T>(response: ItemsResponse<T>, getSpecVersion: (data: T) => number | "latest") {
 	const specVersions = uniq(response.data.map(getSpecVersion));
 
-	const specs = await getRuntimeSpecs(network, specVersions);
+	const specs = await getRuntimeSpecs(specVersions);
 
 	const items = response.data.map(it => ({
 		...it,

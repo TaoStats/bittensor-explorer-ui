@@ -8,14 +8,13 @@ import { Link } from "../Link";
 import { Time } from "../Time";
 
 export type BlockInfoTableProps = {
-	network: string;
 	block: Resource<Block>;
 }
 
 const BlockInfoTableAttribute = InfoTableAttribute<Block>;
 
 export const BlockInfoTable = (props: BlockInfoTableProps) => {
-	const {network, block} = props;
+	const { block} = props;
 
 	return (
 		<InfoTable
@@ -61,7 +60,6 @@ export const BlockInfoTable = (props: BlockInfoTableProps) => {
 				label="Validator"
 				render={(data) => data.validator &&
 					<AccountAddress
-						network={network}
 						address={data.validator}
 						prefix={data.runtimeSpec.metadata.ss58Prefix}
 					/>

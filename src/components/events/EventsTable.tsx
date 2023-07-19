@@ -16,7 +16,6 @@ const parametersColCss = (showExtrinsic?: boolean) => css`
 `;
 
 export type EventsTableProps = {
-	network: string;
 	events: PaginatedResource<Event>;
 	showExtrinsic?: boolean;
 };
@@ -24,7 +23,7 @@ export type EventsTableProps = {
 const EventsItemsTableAttribute = ItemsTableAttribute<Event>;
 
 function EventsTable(props: EventsTableProps) {
-	const { network, events, showExtrinsic } = props;
+	const { events, showExtrinsic } = props;
 
 	return (
 		<ItemsTable
@@ -76,7 +75,6 @@ function EventsTable(props: EventsTableProps) {
 
 					return (
 						<DataViewer
-							network={network}
 							data={event.args}
 							metadata={getEventMetadataByName(
 								event.runtimeSpec.metadata,

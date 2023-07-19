@@ -12,13 +12,8 @@ import { useExtrinsicsWithoutTotalCount } from "../hooks/useExtrinsicsWithoutTot
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useTransfers } from "../hooks/useTransfers";
 import TransfersTable from "../components/transfers/TransfersTable";
-import { hasSupport } from "../services/networksService";
 import { useBlocks } from "../hooks/useBlocks";
 import BlocksTable from "../components/blocks/BlocksTable";
-import { useBalances } from "../hooks/useBalances";
-import BalancesTable from "../components/balances/BalancesTable";
-import { useUsdRates } from "../hooks/useUsdRates";
-import { useRootLoaderData } from "../hooks/useRootLoaderData";
 import { Link } from "../components/Link";
 
 const containerStyle = (theme: Theme) => css`
@@ -159,18 +154,12 @@ const footerStyle = (theme: Theme) => css`
 `;
 
 export const HomePage = () => {
-	const { network } = useRootLoaderData();
-
 	const extrinsics = useExtrinsicsWithoutTotalCount(
-		network.name,
 		undefined,
 		"id_DESC"
 	);
-	const blocks = useBlocks(network.name, undefined, "id_DESC");
-	const transfers = useTransfers(network.name, undefined, "id_DESC");
-	const topHolders = useBalances(network.name, undefined, "total_DESC");
-
-	const usdRates = useUsdRates();
+	const blocks = useBlocks(undefined, "id_DESC");
+	const transfers = useTransfers(undefined, "id_DESC");
 
 	return (
 		<div css={containerStyle}>
@@ -184,8 +173,6 @@ export const HomePage = () => {
 				<div css={searchBoxStyle}>
 					<SearchInput
 						css={searchInputStyle}
-						defaultNetwork={"polkadot"}
-						persistNetwork
 					/>
 				</div>
 
@@ -203,7 +190,6 @@ export const HomePage = () => {
 								value="extrinsics"
 							>
 								<ExtrinsicsTable
-									network={network.name}
 									extrinsics={extrinsics}
 									showAccount
 									showTime
@@ -217,43 +203,24 @@ export const HomePage = () => {
 								value="blocks"
 							>
 								<BlocksTable
-									network={network.name}
 									blocks={blocks}
 									showValidator
 									showTime
 								/>
 							</TabPane>
 
-							{hasSupport(network.name, "main-squid") && (
-								<TabPane
-									label="Transfers"
-									count={transfers.pagination.totalCount}
-									loading={transfers.loading}
-									error={transfers.error}
-									value="transfers"
-								>
-									<TransfersTable
-										network={network.name}
-										transfers={transfers}
-										showTime
-									/>
-								</TabPane>
-							)}
-							{hasSupport(network.name, "balances-squid") && (
-								<TabPane
-									label="Top holders"
-									count={topHolders.pagination.totalCount}
-									loading={topHolders.loading}
-									error={topHolders.error}
-									value="top-holders"
-								>
-									<BalancesTable
-										network={network.name}
-										balances={topHolders}
-										usdRates={usdRates}
-									/>
-								</TabPane>
-							)}
+							<TabPane
+								label="Transfers"
+								count={transfers.pagination.totalCount}
+								loading={transfers.loading}
+								error={transfers.error}
+								value="transfers"
+							>
+								<TransfersTable
+									transfers={transfers}
+									showTime
+								/>
+							</TabPane>
 						</TabbedContent>
 					</Card>
 				</div>

@@ -52,20 +52,20 @@ export const SearchPage = () => {
 	const maybeAddress = isAddress(query);
 	const maybeName = query && !maybeHash && !maybeHeight;
 
-	const extrinsicByHash = useExtrinsic(network.name, { hash_eq: query }, { skip: !maybeHash });
-	const blockByHash = useBlock(network.name, { hash_eq: query }, { skip: !maybeHash });
+	const extrinsicByHash = useExtrinsic({ hash_eq: query }, { skip: !maybeHash });
+	const blockByHash = useBlock({ hash_eq: query }, { skip: !maybeHash });
 
-	const account = useAccount(network.name, query, {
+	const account = useAccount(query, {
 		// extrinsic and block has precedence before account because the hashes may collide
 		// so wait until they are resolved and we know it is not extrinsic or block
 		skip: !maybeAddress || extrinsicByHash.error || blockByHash.error,
 		waitUntil: extrinsicByHash.loading || blockByHash.loading
 	});
 
-	const blockByHeight = useBlock(network.name, { height_eq: parseInt(query) }, { skip: !maybeHeight });
+	const blockByHeight = useBlock({ height_eq: parseInt(query) }, { skip: !maybeHeight });
 
-	const extrinsicsByName = useExtrinsicsByName(network.name, query, "id_DESC", { skip: !maybeName });
-	const eventsByName = useEventsByName(network.name, query, "id_DESC", { skip: !maybeName });
+	const extrinsicsByName = useExtrinsicsByName(query, "id_DESC", { skip: !maybeName });
+	const eventsByName = useEventsByName(query, "id_DESC", { skip: !maybeName });
 
 	const allResources = [extrinsicByHash, blockByHash, account, blockByHeight, extrinsicsByName, eventsByName];
 	const multipleResultsResources = [extrinsicsByName, eventsByName];
@@ -147,7 +147,7 @@ export const SearchPage = () => {
 						error={extrinsicsByName.error}
 						value="extrinsics"
 					>
-						<ExtrinsicsTable network={network.name} extrinsics={extrinsicsByName} showAccount showTime />
+						<ExtrinsicsTable extrinsics={extrinsicsByName} showAccount showTime />
 					</TabPane>
 				}
 				{!eventsByName.notFound &&
@@ -158,7 +158,7 @@ export const SearchPage = () => {
 						error={eventsByName.error}
 						value="events"
 					>
-						<EventsTable network={network.name} events={eventsByName} showExtrinsic />
+						<EventsTable events={eventsByName} showExtrinsic />
 					</TabPane>
 				}
 			</TabbedContent>

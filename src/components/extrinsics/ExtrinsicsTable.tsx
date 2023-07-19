@@ -8,7 +8,6 @@ import { Link } from "../Link";
 import { Time } from "../Time";
 
 export type ExtrinsicsTableProps = {
-	network: string;
 	extrinsics: PaginatedResource<Extrinsic>,
 	showAccount?: boolean;
 	showTime?: boolean;
@@ -18,7 +17,6 @@ const ExtrinsicsTableAttribute = ItemsTableAttribute<Extrinsic>;
 
 function ExtrinsicsTable(props: ExtrinsicsTableProps) {
 	const {
-		network,
 		extrinsics,
 		showAccount,
 		showTime,
@@ -60,7 +58,6 @@ function ExtrinsicsTable(props: ExtrinsicsTableProps) {
 					render={(extrinsic) =>
 						extrinsic.signer &&
 							<AccountAddress
-								network={network}
 								address={extrinsic.signer}
 								prefix={extrinsic.runtimeSpec.metadata.ss58Prefix}
 								shorten

@@ -5,16 +5,15 @@ import CheckIcon from "../../assets/check-icon.png";
 
 import { PaginatedResource } from "../../model/paginatedResource";
 import { Transfer } from "../../model/transfer";
-import { getNetwork } from "../../services/networksService";
 
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
 import { Time } from "../Time";
+import { NETWORK_CONFIG } from "../../config";
 
 export type TransfersTableProps = {
-	network: string;
 	transfers: PaginatedResource<Transfer>,
 	showTime?: boolean;
 };
@@ -23,12 +22,11 @@ const TransfersTableAttribute = ItemsTableAttribute<Transfer>;
 
 function TransfersTable(props: TransfersTableProps) {
 	const {
-		network,
 		transfers,
 		showTime,
 	} = props;
 
-	console.log(transfers);
+	const { currency } = NETWORK_CONFIG;
 
 	return (
 		<ItemsTable
@@ -52,7 +50,7 @@ function TransfersTable(props: TransfersTableProps) {
 				label="From"
 				render={(transfer) =>
 					<AccountAddress
-						network={network}
+						
 						address={transfer.fromPublicKey}
 						prefix={transfer.runtimeSpec.metadata.ss58Prefix}
 						shorten
@@ -64,7 +62,6 @@ function TransfersTable(props: TransfersTableProps) {
 				label="To"
 				render={(transfer) =>
 					<AccountAddress
-						network={network}
 						address={transfer.toPublicKey}
 						prefix={transfer.runtimeSpec.metadata.ss58Prefix}
 						shorten
@@ -77,7 +74,7 @@ function TransfersTable(props: TransfersTableProps) {
 				render={(transfer) =>
 					<Currency
 						amount={transfer.amount}
-						currency={getNetwork(network).symbol}
+						currency={currency}
 						decimalPlaces="optimal"
 						showFullInTooltip
 					/>

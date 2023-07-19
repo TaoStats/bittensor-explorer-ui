@@ -9,14 +9,13 @@ import { Link } from "../Link";
 import { Time } from "../Time";
 
 export type EventInfoTableProps = {
-	network: string;
 	event: Resource<Event>;
 }
 
 const EventInfoTableAttribute = InfoTableAttribute<Event>;
 
 export const EventInfoTable = (props: EventInfoTableProps) => {
-	const {network, event} = props;
+	const {event} = props;
 
 	return (
 		<InfoTable
@@ -87,7 +86,6 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 				label="Parameters"
 				render={(data) =>
 					<DataViewer
-						network={network}
 						data={data.args}
 						metadata={getEventMetadataByName(data.runtimeSpec.metadata, data.palletName, data.eventName)?.args}
 						runtimeSpec={data.runtimeSpec}

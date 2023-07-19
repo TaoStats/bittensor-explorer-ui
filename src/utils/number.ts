@@ -1,11 +1,11 @@
 import Decimal from "decimal.js";
-
-import { Network } from "../model/network";
+import { NETWORK_CONFIG } from "../config";
 
 const supportedFiatCurrencies = ["USD"];
 
-export function rawAmountToDecimal(network: Network, amount: string|undefined) {
-	const scale = new Decimal(10).pow(network.decimals * -1);
+export function rawAmountToDecimal(amount: string | undefined) {
+	const { decimals } = NETWORK_CONFIG; // TODO:
+	const scale = new Decimal(10).pow(decimals * -1);
 	return new Decimal(amount || 0).mul(scale);
 }
 
@@ -14,7 +14,7 @@ export type FormatNumberOptions = {
 	compact?: boolean;
 }
 
-export function formatNumber(value: number|Decimal, options: FormatNumberOptions = {}) {
+export function formatNumber(value: number | Decimal, options: FormatNumberOptions = {}) {
 	if (!(value instanceof Decimal)) {
 		value = new Decimal(value);
 	}
@@ -26,13 +26,13 @@ export function formatNumber(value: number|Decimal, options: FormatNumberOptions
 }
 
 export type FormatCurrencyOptions = {
-	decimalPlaces?: "optimal"|number;
+	decimalPlaces?: "optimal" | number;
 	minimalUsdValue?: Decimal;
 	usdRate?: Decimal;
 	compact?: boolean;
 }
 
-export function formatCurrency(value: number|Decimal, currency: string, options: FormatCurrencyOptions = {}) {
+export function formatCurrency(value: number | Decimal, currency: string, options: FormatCurrencyOptions = {}) {
 	if (!(value instanceof Decimal)) {
 		value = new Decimal(value);
 	}
@@ -57,7 +57,7 @@ export function formatCurrency(value: number|Decimal, currency: string, options:
 	}
 
 	// cryptocurrencies are formatted simply using the code (KSM)
-	return `${formatNumber(value, {decimalPlaces, compact: options.compact})} ${currency}`;
+	return `${formatNumber(value, { decimalPlaces, compact: options.compact })} ${currency}`;
 }
 
 

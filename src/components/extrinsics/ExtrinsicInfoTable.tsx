@@ -17,14 +17,13 @@ import { Link } from "../Link";
 import { Time } from "../Time";
 
 export type ExtrinsicInfoTableProps = {
-	network: string;
 	extrinsic: Resource<Extrinsic>;
 }
 
 const ExtrinsicInfoTableAttribute = InfoTableAttribute<Extrinsic>;
 
 export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
-	const {network, extrinsic} = props;
+	const {extrinsic} = props;
 
 	return (
 		<InfoTable
@@ -64,7 +63,6 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 				label="Account"
 				render={(data) => data.signer &&
 					<AccountAddress
-						network={network}
 						address={data.signer}
 						prefix={data.runtimeSpec.metadata.ss58Prefix}
 					/>
@@ -100,7 +98,6 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 				label="Parameters"
 				render={(data) =>
 					<DataViewer
-						network={network}
 						data={data.args}
 						metadata={getCallMetadataByName(data.runtimeSpec.metadata, data.palletName, data.callName)?.args}
 						runtimeSpec={data.runtimeSpec}
@@ -110,7 +107,7 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 			/>
 			<ExtrinsicInfoTableAttribute
 				label="Error"
-				render={(data) => <DataViewer network={network} data={data.error} copyToClipboard />}
+				render={(data) => <DataViewer data={data.error} copyToClipboard />}
 				hide={(data) => !data.error}
 			/>
 			<ExtrinsicInfoTableAttribute
@@ -123,7 +120,6 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 				render={(data) => data.signature &&
 					<DataViewer
 						simple
-						network={network}
 						data={data.signature}
 						runtimeSpec={data.runtimeSpec}
 						copyToClipboard

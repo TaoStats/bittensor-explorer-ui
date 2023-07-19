@@ -6,7 +6,7 @@ import { Resource } from "../model/resource";
 import { DataError } from "../utils/error";
 
 export function useResource<T = any, F extends any[] = any[]>(
-	fetchItem: (...args: F) => T|undefined|Promise<T|undefined>,
+	fetchItem: (...args: F) => T | undefined | Promise<T | undefined>,
 	args: F,
 	options?: FetchOptions
 ) {
@@ -26,7 +26,7 @@ export function useResource<T = any, F extends any[] = any[]>(
 			try {
 				const data = await fetchItem(...args);
 				setData(data);
-			} catch(e) {
+			} catch (e) {
 				if (e instanceof DataError) {
 					rollbar.error(e);
 					setError(e);

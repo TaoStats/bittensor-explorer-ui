@@ -9,27 +9,23 @@ import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import EventsTable from "../components/events/EventsTable";
 import { useBlock } from "../hooks/useBlock";
-import { useCalls } from "../hooks/useCalls";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useRootLoaderData } from "../hooks/useRootLoaderData";
 
 export type BlockPageParams = {
 	id: string;
 };
 
 export const BlockPage = () => {
-	const { network } = useRootLoaderData();
 	const { id } = useParams() as BlockPageParams;
 
-	const block = useBlock(network.name, { id_eq: id });
+	const block = useBlock({ id_eq: id });
 
-	const extrinsics = useExtrinsics(network.name, { blockId_eq: id }, "id_DESC");
-	const events = useEvents(network.name, { blockId_eq: id }, "id_DESC");
-	const calls = useCalls(network.name, { blockId_eq: id }, "id_DESC");
+	const extrinsics = useExtrinsics({ blockId_eq: id }, "id_DESC");
+	const events = useEvents({ blockId_eq: id }, "id_DESC");
 
-	useDOMEventTrigger("data-loaded", !block.loading && !extrinsics.loading && !events.loading && !calls.loading);
+	useDOMEventTrigger("data-loaded", !block.loading && !extrinsics.loading && !events.loading);
 
 	useEffect(() => {
 		if (extrinsics.pagination.offset === 0) {
@@ -45,10 +41,7 @@ export const BlockPage = () => {
 					Block #{id}
 					<CopyToClipboardButton value={id} />
 				</CardHeader>
-				<BlockInfoTable
-					network={network.name}
-					block={block}
-				/>
+				<BlockInfoTable block={block} />
 			</Card>
 			{block.data &&
 				<Card>
@@ -60,16 +53,7 @@ export const BlockPage = () => {
 							error={extrinsics.error}
 							value="extrinsics"
 						>
-							<ExtrinsicsTable network={network.name} extrinsics={extrinsics} showAccount />
-						</TabPane>
-						<TabPane
-							label="Calls"
-							count={calls.pagination.totalCount}
-							loading={calls.loading}
-							error={calls.error}
-							value="calls"
-						>
-							<CallsTable network={network.name} calls={calls} showAccount />
+							<ExtrinsicsTable extrinsics={extrinsics} showAccount />
 						</TabPane>
 						<TabPane
 							label="Events"
@@ -78,7 +62,7 @@ export const BlockPage = () => {
 							error={events.error}
 							value="events"
 						>
-							<EventsTable network={network.name} events={events} showExtrinsic />
+							<EventsTable events={events} showExtrinsic />
 						</TabPane>
 					</TabbedContent>
 				</Card>

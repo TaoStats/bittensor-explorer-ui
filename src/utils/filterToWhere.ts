@@ -7,10 +7,11 @@ export const filterToWhere = (filter: any = {}): string => {
 		]`;
 	} else if (filter instanceof Object) {
 		where += `{
-			${Object.keys(filter).map(
+			${
+	Object.keys(filter).map(
 		(key) => `${key}: ${filterToWhere(filter[key])}`
-	)}
-		},`;
+	)
+}},`;
 	} else if (filter !== "") {
 		const isString = typeof filter === "string";
 		const value = isString ? `"${filter}"` : filter;

@@ -1,13 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Outlet, useLoaderData } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
 import Background from "../assets/detail-page-bgr.svg";
 import { ReactComponent as Logo } from "../assets/calamar-logo-export-02.svg";
-
-import { Network } from "../model/network";
-
-import { NotFoundPage } from "../screens/notFound";
 
 import SearchInput from "./SearchInput";
 import { Link } from "./Link";
@@ -157,13 +153,7 @@ const footerStyle = css`
 	}
 `;
 
-export type ResultLayoutLoaderData = {
-	network?: Network;
-};
-
 export const ResultLayout = () => {
-	const {network} = useLoaderData() as ResultLayoutLoaderData;
-
 	return (
 		<div css={containerStyle}>
 			<div css={backgroundStyle} data-test="background" />
@@ -176,13 +166,12 @@ export const ResultLayout = () => {
 							</Link>
 						</div>
 						<div css={topBarRowStyle}>
-							<SearchInput css={searchInputStyle} defaultNetwork={network?.name} key={network?.name} />
+							<SearchInput css={searchInputStyle} />
 						</div>
 					</div>
 				</div>
 				<div css={contentStyle}>
-					{network && <Outlet />}
-					{!network && <NotFoundPage />}
+					<Outlet />
 				</div>
 			</div>
 			<Footer css={footerStyle} />

@@ -1,30 +1,30 @@
+import Decimal from "decimal.js";
 import { Balance } from "../../model/balance";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { Resource } from "../../model/resource";
-import { UsdRates } from "../../model/usdRates";
-import { getNetwork } from "../../services/networksService";
 import { decodeAddress } from "../../utils/formatAddress";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
+import { NETWORK_CONFIG } from "../../config";
 
 export type BalancesTableProps = {
-	network: string;
 	balances: PaginatedResource<Balance>;
-	usdRates: Resource<UsdRates>;
+	usdRate: Resource<Decimal>;
 };
 
-const BalancesItemsTableAttribute = ItemsTableAttribute<Balance, never, [UsdRates]>;
+const BalancesItemsTableAttribute = ItemsTableAttribute<Balance, never, [Decimal]>;
 
 function BalancesTable(props: BalancesTableProps) {
-	const { network, balances, usdRates } = props;
+	const { balances, usdRate } = props;
+	const { currency } = NETWORK_CONFIG;
 
 	return (
 		<ItemsTable
 			data={balances.data}
-			additionalData={[usdRates.data]}
-			loading={balances.loading || usdRates.loading}
+			additionalData={[usdRate.data]}
+			loading={balances.loading || usdRate.loading}
 			notFound={balances.notFound}
 			notFoundMessage="No balances found"
 			error={balances.error}
@@ -35,7 +35,6 @@ function BalancesTable(props: BalancesTableProps) {
 				label="Account"
 				render={(balance) =>
 					<AccountAddress
-						network={network}
 						address={decodeAddress(balance.id)}
 						prefix={balance.runtimeSpec.metadata.ss58Prefix}
 						shorten
@@ -45,12 +44,12 @@ function BalancesTable(props: BalancesTableProps) {
 
 			<BalancesItemsTableAttribute
 				label="Total"
-				render={(balance, usdRates) =>
+				render={(balance, usdRate) =>
 					<Currency
 						amount={balance.total}
-						currency={getNetwork(network).symbol}
+						currency={currency}
 						decimalPlaces="optimal"
-						usdRate={usdRates[network]}
+						usdRate={usdRate}
 						showFullInTooltip
 						showUsdValue
 					/>
@@ -59,12 +58,12 @@ function BalancesTable(props: BalancesTableProps) {
 
 			<BalancesItemsTableAttribute
 				label="Free"
-				render={(balance, usdRates) =>
+				render={(balance, usdRate) =>
 					<Currency
 						amount={balance.free}
-						currency={getNetwork(network).symbol}
+						currency={currency}
 						decimalPlaces="optimal"
-						usdRate={usdRates[network]}
+						usdRate={usdRate}
 						showFullInTooltip
 						showUsdValue
 					/>
@@ -73,12 +72,12 @@ function BalancesTable(props: BalancesTableProps) {
 
 			<BalancesItemsTableAttribute
 				label="Reserved"
-				render={(balance, usdRates) =>
+				render={(balance, usdRate) =>
 					<Currency
 						amount={balance.reserved}
-						currency={getNetwork(network).symbol}
+						currency={currency}
 						decimalPlaces="optimal"
-						usdRate={usdRates[network]}
+						usdRate={usdRate}
 						showFullInTooltip
 						showUsdValue
 					/>

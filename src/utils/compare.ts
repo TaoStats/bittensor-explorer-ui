@@ -44,7 +44,7 @@ function compareStrings(a: string, b: string, direction = SortDirection.ASC) {
 	return a.localeCompare(b) * direction;
 }
 
-function compareArrays<A, B>(a: A|A[], b: B|B[], direction = SortDirection.ASC, undefinedOrder = UndefinedOrder.ALWAYS_LAST) {
+function compareArrays<A, B>(a: A | A[], b: B | B[], direction = SortDirection.ASC, undefinedOrder = UndefinedOrder.ALWAYS_LAST) {
 	a = Array.isArray(a) ? a : [a];
 	b = Array.isArray(b) ? b : [b];
 
@@ -62,7 +62,7 @@ function compareWithUndefined<A, B>(a?: A, b?: B, direction = SortDirection.ASC,
 	const result = a === b ? 0
 		: typeof a === "undefined" ? -1 : 1;
 
-	switch(undefinedOrder) {
+	switch (undefinedOrder) {
 		case UndefinedOrder.ALWAYS_FIRST: return result;
 		case UndefinedOrder.ALWAYS_LAST: return result * -1;
 		case UndefinedOrder.DIRECTION_FIRST: return result * direction;

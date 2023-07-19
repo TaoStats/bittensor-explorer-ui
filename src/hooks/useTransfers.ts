@@ -4,10 +4,9 @@ import { getTransfers, TransfersFilter, TransfersOrder } from "../services/trans
 import { usePaginatedResource } from "./usePaginatedResource";
 
 export function useTransfers(
-	network: string,
 	filter: TransfersFilter | undefined,
 	order?: TransfersOrder,
 	options?: FetchOptions
 ) {
-	return usePaginatedResource(getTransfers, [network, filter, order], options);
+	return usePaginatedResource(getTransfers, [filter, order], options);
 }

@@ -71,7 +71,6 @@ const valueStyle = css`
 `;
 
 type ValueOfKindProps = {
-	network: string;
 	value: {
 		__kind: string,
 		value: any;
@@ -82,7 +81,6 @@ type ValueOfKindProps = {
 
 const ValueOfKind = (props: ValueOfKindProps) => {
 	const {
-		network,
 		value: {__kind: kind, ...value},
 		valueMetadata: metadata,
 		runtimeSpec
@@ -97,7 +95,6 @@ const ValueOfKind = (props: ValueOfKindProps) => {
 					</TableCell>
 					<TableCell>
 						<DataViewerValueParsed
-							network={network}
 							value={value.value || value}
 							metadata={metadata}
 							runtimeSpec={runtimeSpec}
@@ -110,19 +107,17 @@ const ValueOfKind = (props: ValueOfKindProps) => {
 };
 
 type MaybeAccountLinkValueProps = {
-	network: string;
 	value: any;
 	valueMetadata: DecodedArg;
 	runtimeSpec: RuntimeSpec;
 }
 
 const AccountValue = (props: MaybeAccountLinkValueProps) => {
-	const {network, value, valueMetadata, runtimeSpec} = props;
+	const {value, valueMetadata, runtimeSpec} = props;
 
 	if (valueMetadata.type === "MultiAddress") {
 		if (value.__kind === "Id") {
 			return <ValueOfKind
-				network={network}
 				value={value}
 				valueMetadata={{
 					...valueMetadata,
@@ -133,7 +128,6 @@ const AccountValue = (props: MaybeAccountLinkValueProps) => {
 		} else {
 			return (
 				<DataViewerValueParsed
-					network={network}
 					value={value}
 					runtimeSpec={runtimeSpec}
 				/>
@@ -144,7 +138,6 @@ const AccountValue = (props: MaybeAccountLinkValueProps) => {
 	return (
 		<div css={valueStyle}>
 			<AccountAddress
-				network={network}
 				address={value}
 				prefix={runtimeSpec.metadata.ss58Prefix}
 				copyToClipboard="small"
@@ -154,20 +147,18 @@ const AccountValue = (props: MaybeAccountLinkValueProps) => {
 };
 
 export type DataViewerValueParsedProps = {
-	network: string;
 	value: any;
 	metadata?: DecodedArg[]|DecodedArg;
 	runtimeSpec?: RuntimeSpec;
 };
 
 export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
-	const { network, metadata, runtimeSpec } = props;
+	const { metadata, runtimeSpec } = props;
 	let { value } = props;
 
 	if (metadata && runtimeSpec && ADDRESS_TYPES.includes((metadata as DecodedArg).type)) {
 		return (
 			<AccountValue
-				network={network}
 				value={value}
 				valueMetadata={metadata as DecodedArg}
 				runtimeSpec={runtimeSpec}
@@ -202,7 +193,6 @@ export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
 							</TableCell>
 							<TableCell>
 								<DataViewerValueParsed
-									network={network}
 									value={item}
 									metadata={itemsMetadata[index]}
 									runtimeSpec={runtimeSpec}
@@ -219,7 +209,6 @@ export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
 		if (value.__kind) {
 			return (
 				<ValueOfKind
-					network={network}
 					value={value}
 					runtimeSpec={runtimeSpec}
 				/>
@@ -239,7 +228,6 @@ export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
 							</TableCell>
 							<TableCell>
 								<DataViewerValueParsed
-									network={network}
 									value={value[key]}
 									metadata={Array.isArray(metadata)
 										? metadata?.find(it => noCase(it.name) === noCase(key))

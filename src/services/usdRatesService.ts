@@ -1,8 +1,5 @@
 import Decimal from "decimal.js";
 import { UsdRates } from "../model/usdRates";
-import { rollbar } from "../rollbar";
-
-import { getNetworks } from "./networksService";
 
 export const USD_RATES_REFRESH_RATE = 60000; // 1 minute
 
@@ -24,11 +21,9 @@ export async function getUsdRates() {
 			const usdRates = await fetchUsdRates();
 			storeUsdRates(usdRates);
 			storeUsdRatesUpdatedAt(Date.now());
-		} catch(e: any) {
+		} catch {
 			// probably rate limit exceeded, wait 2 minutes
 			storeCoinGeckoWaitUntil(Date.now() + 120000);
-			rollbar.error("CoinGecko error", e);
-			console.error("CoinGecko error", e);
 		}
 	});
 
@@ -47,7 +42,7 @@ function loadUsdRates() {
 			localStorage.getItem("usd-rates") || "{}",
 			(key, value) => key ? new Decimal(value) : value
 		) as UsdRates;
-	} catch(e) {
+	} catch (e) {
 		return {};
 	}
 }
@@ -73,30 +68,9 @@ function storeCoinGeckoWaitUntil(time: number) {
 }
 
 async function fetchUsdRates() {
-	console.log("fetchUsdRates");
-	const networks = getNetworks().filter(it => it.coinGeckoId);
-	const coinGeckoIds = networks.map(it => it.coinGeckoId);
-
-	const apiUrl = new URL("https://api.coingecko.com/api/v3/simple/price");
-	apiUrl.searchParams.set("ids", coinGeckoIds.join(","));
-	apiUrl.searchParams.set("vs_currencies", "usd");
-	apiUrl.searchParams.set("precision", "full");
-
-	const response = await fetch(apiUrl);
-
-	if (response.status !== 200) {
-		throw new Error(`CoinGecko non 200 reponse status: ${response.status}`);
-	}
-
-	const data = await response.json();
-
-	const usdRates: UsdRates = {};
-
-	for (const network of networks) {
-		if (network.coinGeckoId && data[network.coinGeckoId]?.usd) {
-			usdRates[network.name] = new Decimal(data[network.coinGeckoId].usd);
-		}
-	}
-
+	// FIXME:
+	const usdRates: UsdRates = {
+		"TAO": new Decimal(73.31)
+	};
 	return usdRates;
 }

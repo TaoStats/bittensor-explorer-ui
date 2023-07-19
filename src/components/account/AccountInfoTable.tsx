@@ -2,7 +2,6 @@
 import { HTMLAttributes } from "react";
 import { isEthereumAddress } from "@polkadot/util-crypto";
 
-import { useNetwork } from "../../hooks/useNetwork";
 import { Account } from "../../model/account";
 import { Resource } from "../../model/resource";
 import { encodeAddress } from "../../utils/formatAddress";
@@ -19,7 +18,6 @@ const AccountInfoTableAttribute = InfoTableAttribute<Account>;
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	const {network, account, ...tableProps} = props;
 
-	const networkData = useNetwork(network);
 
 	return (
 		<InfoTable
@@ -31,7 +29,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			{...tableProps}
 		>
 			<AccountInfoTableAttribute
-				label={`${networkData?.displayName} address`}
+				label="Bittensor Address"
 				render={(data) => encodeAddress(data.address, data.runtimeSpec.metadata.ss58Prefix)}
 				copyToClipboard={(data) => encodeAddress(data.address, data.runtimeSpec.metadata.ss58Prefix)}
 				hide={(data) => isEthereumAddress(data.address)}

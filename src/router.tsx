@@ -1,42 +1,25 @@
 import { Navigate, createBrowserRouter, redirect } from "react-router-dom";
 
 import { ResultLayout } from "./components/ResultLayout";
-import { getNetwork } from "./services/networksService";
 import { encodeAddress } from "./utils/formatAddress";
 
 import { AccountPage } from "./screens/account";
 import { BlockPage } from "./screens/block";
-import { CallPage } from "./screens/call";
 import { EventPage } from "./screens/event";
 import { ExtrinsicPage } from "./screens/extrinsic";
 import { HomePage } from "./screens/home";
 import { NotFoundPage } from "./screens/notFound";
 import { SearchPage } from "./screens/search";
-import { RuntimePage } from "./screens/runtime";
-
-import { config } from "./config";
 
 export const router = createBrowserRouter([
 	{
 		id: "home",
 		path: "/",
-		loader: ({ params }) => {
-			// const { network: networkName } = params;
-			const network = getNetwork("polkadot", false);
-
-			return { network };
-		},
 		element: <HomePage />,
 	},
 	{
 		id: "root",
 		path: "*",
-		loader: ({ params }) => {
-			// const { network: networkName } = params;
-			const network = getNetwork("polkadot", false);
-
-			return { network };
-		},
 		element: <ResultLayout />,
 		children: [
 			{
@@ -52,23 +35,18 @@ export const router = createBrowserRouter([
 				element: <BlockPage />,
 			},
 			{
-				path: "call/:id",
-				element: <CallPage />,
-			},
-			{
 				path: "account/:address",
 				element: <AccountPage />,
 				loader: ({ params }) => {
-					const { network: networkName, address } = params;
-					const network = networkName ? getNetwork(networkName, false) : undefined;
+					const { address } = params;
 
-					if (!network || !address) {
+					if (!address) {
 						return null;
 					}
 
-					const encodedAddress = encodeAddress(address, network.prefix);
+					const encodedAddress = encodeAddress(address, 42); // FIXME:
 					if (address !== encodedAddress) {
-						return redirect(`/${network.name}/account/${encodedAddress}`);
+						return redirect(`/account/${encodedAddress}`);
 					}
 
 					return null;
@@ -81,14 +59,6 @@ export const router = createBrowserRouter([
 			{
 				path: "latest-extrinsics",
 				element: <Navigate to=".." replace />,
-			},
-			{
-				path: "runtime",
-				element: config.devtools.enabled ? <RuntimePage /> : <NotFoundPage />,
-			},
-			{
-				path: "runtime/:specVersion",
-				element: config.devtools.enabled ? <RuntimePage /> : <NotFoundPage />,
 			},
 			{
 				path: "*",

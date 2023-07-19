@@ -4,15 +4,12 @@ import { css, Theme } from "@emotion/react";
 import { IconButton, Modal, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Close } from "@mui/icons-material";
 
-import { config } from "../config";
-
 import { DecodedArg } from "../model/decodedMetadata";
 import { RuntimeSpec } from "../model/runtimeSpec";
 
 import CopyToClipboardButton from "./CopyToClipboardButton";
 import { DataViewerValueJson } from "./DataViewerValueJson";
 import { DataViewerValueParsed } from "./DataViewerValueParsed";
-import { Devtool } from "./Devtool";
 
 const dataViewerStyle = css`
 	display: flex;
@@ -126,18 +123,16 @@ const closeButtonStyle = css`
 	z-index: 10;
 `;
 
-export type DataViewerMode = "json" | "parsed" | "meta";
+export type DataViewerMode = "json" | "parsed";
 
 const MODES: (DataViewerMode|false)[] = [
 	"parsed",
 	"json",
-	config.devtools.enabled && "meta"
 ];
 
 const modeLabels: Record<DataViewerMode, ReactNode> = {
 	parsed: "Parsed",
 	json: "Raw",
-	meta: <Devtool>Meta</Devtool>
 };
 
 type ModeSelectProps = {
@@ -203,7 +198,6 @@ const DataViewerModalHandle = (props: DataViewerModalHandleProps) => {
 };
 
 export type DataViewerProps = {
-	network: string;
 	data: any;
 	metadata?: DecodedArg[];
 	runtimeSpec?: RuntimeSpec;
@@ -215,7 +209,6 @@ export type DataViewerProps = {
 
 function DataViewer(props: DataViewerProps) {
 	const {
-		network,
 		data,
 		metadata,
 		runtimeSpec,
@@ -246,7 +239,6 @@ function DataViewer(props: DataViewerProps) {
 
 	const parsedContent = useMemo(() => (!simple || defaultMode === "parsed") && (
 		<DataViewerValueParsed
-			network={network}
 			value={data}
 			metadata={metadata}
 			runtimeSpec={runtimeSpec}
@@ -275,7 +267,6 @@ function DataViewer(props: DataViewerProps) {
 							<div css={scrollAreaStyle}>
 								{mode === "json" && jsonContent}
 								{mode === "parsed" && parsedContent}
-								{metadata && mode === "meta" && <DataViewerValueJson value={metadata} />}
 							</div>
 						</div>
 					</DataViewerModalHandle>
@@ -284,7 +275,6 @@ function DataViewer(props: DataViewerProps) {
 			<div css={scrollAreaStyle}>
 				{mode === "json" && jsonContent}
 				{mode === "parsed" && parsedContent}
-				{mode === "meta" && <DataViewerValueJson value={metadata} />}
 			</div>
 		</div>
 	);

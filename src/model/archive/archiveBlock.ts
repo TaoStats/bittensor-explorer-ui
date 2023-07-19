@@ -4,7 +4,7 @@ export type ArchiveBlock = {
 	height: number;
 	timestamp: string;
 	parentHash: string;
-	validator: string|null;
+	validator: string | null;
 	spec: {
 		specVersion: number;
 	};
