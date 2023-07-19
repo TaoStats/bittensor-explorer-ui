@@ -100,14 +100,13 @@ const logoContainerStyle = css`
 `;
 
 const logoStyle = (theme: Theme) => css`
-	width: 250px;
+	width: 120px;
   margin: 0px auto;
   display: block;
   max-width: 100%;
 
 	${theme.breakpoints.down("md")} {
 		margin-bottom: 12px;
-		width: 160px;
 	}
 `;
 

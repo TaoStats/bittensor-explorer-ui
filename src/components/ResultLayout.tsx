@@ -136,11 +136,10 @@ const contentStyle = css`
 const logoStyle = (theme: Theme) => css`
 	margin-right: auto;
 	display: block;
-	width: 250px;
+	width: 120px;
 
 	${theme.breakpoints.down("md")} {
 		margin-bottom: 12px;
-		width: 160px;
 	}
 `;
 
