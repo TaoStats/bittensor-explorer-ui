@@ -90,15 +90,15 @@ export const SearchPage = () => {
 
 	if (!forceLoading) {
 		if (extrinsicByHash.data) {
-			return <Navigate to={`/${network.name}/extrinsic/${extrinsicByHash.data.id}`} replace />;
+			return <Navigate to={`/extrinsic/${extrinsicByHash.data.id}`} replace />;
 		}
 
 		if (blockByHash.data || blockByHeight.data) {
-			return <Navigate to={`/${network.name}/block/${blockByHash.data?.id || blockByHeight.data?.id}`} replace />;
+			return <Navigate to={`/block/${blockByHash.data?.id || blockByHeight.data?.id}`} replace />;
 		}
 
 		if (account.data) {
-			return <Navigate to={`/${network.name}/account/${account.data.id}`} replace />;
+			return <Navigate to={`/account/${account.data.id}`} replace />;
 		}
 	}
 

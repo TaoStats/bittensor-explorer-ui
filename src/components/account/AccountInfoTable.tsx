@@ -2,10 +2,8 @@
 import { HTMLAttributes } from "react";
 import { isEthereumAddress } from "@polkadot/util-crypto";
 
-import { useNetwork } from "../../hooks/useNetwork";
 import { Account } from "../../model/account";
 import { Resource } from "../../model/resource";
-import { encodeAddress } from "../../utils/formatAddress";
 
 import {InfoTable, InfoTableAttribute } from "../InfoTable";
 
@@ -19,8 +17,6 @@ const AccountInfoTableAttribute = InfoTableAttribute<Account>;
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	const {network, account, ...tableProps} = props;
 
-	const networkData = useNetwork(network);
-
 	return (
 		<InfoTable
 			data={account.data}
@@ -30,18 +26,6 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			error={account.error}
 			{...tableProps}
 		>
-			<AccountInfoTableAttribute
-				label={`${networkData?.displayName} address`}
-				render={(data) => encodeAddress(data.address, data.runtimeSpec.metadata.ss58Prefix)}
-				copyToClipboard={(data) => encodeAddress(data.address, data.runtimeSpec.metadata.ss58Prefix)}
-				hide={(data) => isEthereumAddress(data.address)}
-			/>
-			<AccountInfoTableAttribute
-				label="Substrate address"
-				render={(data) => encodeAddress(data.address, 42)}
-				copyToClipboard={(data) => encodeAddress(data.address, 42)}
-				hide={(data) => isEthereumAddress(data.address)}
-			/>
 			<AccountInfoTableAttribute
 				label={(data) => isEthereumAddress(data.address) ? "Address" : "Public key"}
 				render={(data) => data.address}

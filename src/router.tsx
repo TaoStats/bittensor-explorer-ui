@@ -68,7 +68,7 @@ export const router = createBrowserRouter([
 
 					const encodedAddress = encodeAddress(address, network.prefix);
 					if (address !== encodedAddress) {
-						return redirect(`/${network.name}/account/${encodedAddress}`);
+						return redirect(`/account/${encodedAddress}`);
 					}
 
 					return null;

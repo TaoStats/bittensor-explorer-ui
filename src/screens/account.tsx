@@ -1,8 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Tooltip } from "@mui/material";
-import { InfoOutlined } from "@mui/icons-material";
 import { css, Theme } from "@emotion/react";
 
 import { AccountAvatar } from "../components/AccountAvatar";
@@ -66,14 +64,6 @@ const portfolioStyle = (theme: Theme) => css`
 	}
 `;
 
-const portfolioInfoIconStyle = css`
-	height: 30px;
-	font-size: 20px;
-	opacity: .5;
-	vertical-align: text-bottom;
-	margin-left: 4px;
-`;
-
 export type AccountPageParams = {
 	address: string;
 };
@@ -128,14 +118,6 @@ export const AccountPage = () => {
 				<Card css={portfolioStyle} data-test="account-portfolio">
 					<CardHeader>
 						Account Balance
-						<Tooltip
-							arrow
-							placement="top"
-							enterTouchDelay={0}
-							title="Includes only supported networks with conversion rate to USD."
-						>
-							<InfoOutlined css={portfolioInfoIconStyle} />
-						</Tooltip>
 					</CardHeader>
 					<AccountPortfolio
 						balances={balances}
