@@ -2,8 +2,8 @@
 import { Outlet, useLoaderData } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
+import Logo from "../assets/logo.png";
 import Background from "../assets/detail-page-bgr.svg";
-import { ReactComponent as Logo } from "../assets/calamar-logo-export-02.svg";
 
 import { Network } from "../model/network";
 
@@ -77,17 +77,17 @@ const topBarStyle = (theme: Theme) => css`
 	padding: 16px;
 	margin: 0 -16px;
 	margin-top: -16px;
-	min-height: 130px;
 	box-sizing: border-box;
 	z-index: 1000;
 
 	flex: 0 0 auto;
 
+	background-color: ${theme.palette.primary.dark};
+
 	${theme.breakpoints.up("md")} {
 		margin: 0 -32px;
 		margin-top: -24px;
-		padding: 0 32px;
-		padding-top: 24px;
+		padding: 2.5rem 4rem;
 	}
 `;
 
@@ -103,10 +103,14 @@ const topBarContentStyle = (theme: Theme) => css`
 	}
 `;
 
-const topBarRowStyle = css`
+const topBarRowStyle = (theme: Theme) => css`
 	display: flex;
 	align-items: center;
 	flex: 1 1 auto;
+
+	${theme.breakpoints.down("md")} {
+		justify-content: center;
+	}
 `;
 
 const contentWrapperStyle = (theme: Theme) => css`
@@ -131,18 +135,12 @@ const contentStyle = css`
 
 const logoStyle = (theme: Theme) => css`
 	margin-right: auto;
-
-	> svg {
-		display: block;
-		width: 250px;
-	}
+	display: block;
+	width: 250px;
 
 	${theme.breakpoints.down("md")} {
 		margin-bottom: 12px;
-
-		> svg {
-			width: 160px;
-		}
+		width: 160px;
 	}
 `;
 
@@ -151,10 +149,14 @@ const searchInputStyle = css`
 	flex: 1 1 auto;
 `;
 
-const footerStyle = css`
-	> div {
-		max-width: 1500px;
-	}
+const footerStyle = (theme: Theme) => css`
+	flex: 0 0 auto;
+
+  background-color: ${theme.palette.primary.dark};
+
+  > div {
+    max-width: 1000px;
+  }
 `;
 
 export type ResultLayoutLoaderData = {
@@ -171,8 +173,8 @@ export const ResultLayout = () => {
 				<div css={topBarStyle} data-test="top-bar">
 					<div css={topBarContentStyle}>
 						<div css={topBarRowStyle}>
-							<Link css={logoStyle} to="/">
-								<Logo />
+							<Link to='/'>
+								<img src={Logo} css={logoStyle} />
 							</Link>
 						</div>
 						<div css={topBarRowStyle}>

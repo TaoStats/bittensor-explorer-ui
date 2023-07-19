@@ -69,7 +69,6 @@ const buttonStyle = (theme: Theme) => css`
 	border-radius: 8px;
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;
-	border: 1px solid ${theme.palette.primary.dark};
 
 	.MuiButton-startIcon {
 		display: none;

@@ -99,11 +99,16 @@ const backgroundStyle = css`
 const logoContainerStyle = css`
 `;
 
-const logoStyle = css`
-  width: 160px;
+const logoStyle = (theme: Theme) => css`
+	width: 250px;
   margin: 0px auto;
   display: block;
   max-width: 100%;
+
+	${theme.breakpoints.down("md")} {
+		margin-bottom: 12px;
+		width: 160px;
+	}
 `;
 
 const subtitleStyle = (theme: Theme) => css`
@@ -146,6 +151,11 @@ const headerStyle = (theme: Theme) => css`
   align-items: center;
   padding: 2.5rem 4rem;
   background-color: ${theme.palette.primary.dark};
+
+	${theme.breakpoints.down("md")} {
+		flex-direction: column;
+		padding: 16px;
+	}
 `;
 
 const footerStyle = (theme: Theme) => css`
