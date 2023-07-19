@@ -55,11 +55,10 @@ export enum AccountPortfolioChartMode {
 export type AccountPortfolioChartProps = HTMLAttributes<HTMLDivElement> & {
 	balances: AccountBalance[];
 	usdRates: UsdRates;
-	mode: AccountPortfolioChartMode;
 };
 
 export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
-	const {balances, usdRates, mode, ...divProps} = props;
+	const {balances, usdRates, ...divProps} = props;
 
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -69,70 +68,40 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 			return [];
 		}
 
-		if (mode === AccountPortfolioChartMode.BY_NETWORK) {
-			return balances
-				.filter(balance => balance.balance?.total.greaterThan(0) && usdRates[balance.network.name])
-				.map(balance => {
-					const rate = usdRates[balance.network.name]!;
-					const usdValue = balance.balance!.total.mul(rate);
-
-					return {
-						value: usdValue.toNumber(),
-						name: balance.network.displayName,
-						itemStyle: {
-							color: balance.network.color || "gray"
-						},
-						additionalData: {
-							network: balance.network,
-							formatted: formatCurrency(
-								balance.balance!.total,
-								balance.network.symbol,
-								{
-									decimalPlaces: "optimal",
-									usdRate: rate
-								}
-							),
-							formattedUsdValue: formatCurrency(usdValue, "USD", {decimalPlaces: "optimal"})
-						}
-					};
-				})
-				.sort((a, b) => b.value - a.value);
-		} else {
-			return [
-				{
-					name: "Free",
-					sum: usdBalanceSum(balances, "free", usdRates),
-					itemStyle: {
-						color: theme.palette.primary.main,
-					}
-				},
-				{
-					name: "Reserved",
-					sum: usdBalanceSum(balances, "reserved", usdRates),
-					itemStyle: {
-						color: theme.palette.primary.main,
-						decal: {
-							color: "#00000050",
-							dashArrayX: [1, 0],
-							dashArrayY: [2, 5],
-							symbolSize: 2,
-							rotation: Math.PI / 6
-						}
+		return [
+			{
+				name: "Free",
+				sum: usdBalanceSum(balances, "free", usdRates),
+				itemStyle: {
+					color: theme.palette.primary.main,
+				}
+			},
+			{
+				name: "Reserved",
+				sum: usdBalanceSum(balances, "reserved", usdRates),
+				itemStyle: {
+					color: theme.palette.primary.main,
+					decal: {
+						color: "#00000050",
+						dashArrayX: [1, 0],
+						dashArrayY: [2, 5],
+						symbolSize: 2,
+						rotation: Math.PI / 6
 					}
 				}
-			]
-				.filter(it => it.sum.greaterThan(0))
-				.map(({sum, ...it}) => {
-					return {
-						...it,
-						value: sum.toNumber(),
-						additionalData: {
-							formattedUsdValue: formatCurrency(sum, "USD", {decimalPlaces: "optimal"})
-						}
-					};
-				});
-		}
-	}, [balances, usdRates, mode, theme]);
+			}
+		]
+			.filter(it => it.sum.greaterThan(0))
+			.map(({sum, ...it}) => {
+				return {
+					...it,
+					value: sum.toNumber(),
+					additionalData: {
+						formattedUsdValue: formatCurrency(sum, "USD", {decimalPlaces: "optimal"})
+					}
+				};
+			});
+	}, [balances, usdRates, theme]);
 
 	const options = useMemo<PieChartOptions>(() => {
 		if (totalData.length === 0) {
@@ -145,21 +114,10 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 					const {name, data, percent} = params as CallbackDataParams;
 					const {network, formatted, formattedUsdValue} = (data as any).additionalData;
 
-					if (mode === AccountPortfolioChartMode.BY_NETWORK) {
-						return `
-							<div data-class="title">
-								<img src="${network.icon}" data-class="icon" />
-								${network.displayName}
-							</div>
-							<div data-class="value">${formatted}</div>
-							<div data-class="usd-value">${formattedUsdValue} (${percent}%)</div>
-						`;
-					} else {
-						return `
-							<div data-class="title">${name}</div>
-							<div data-class="value">${formattedUsdValue} (${percent}%)</div>
-						`;
-					}
+					return `
+						<div data-class="title">${name}</div>
+						<div data-class="value">${formattedUsdValue} (${percent}%)</div>
+					`;
 				}
 			},
 			legend: {
@@ -183,13 +141,13 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 				]
 			},
 		};
-	}, [totalData, isSmallScreen, mode]);
+	}, [totalData, isSmallScreen]);
 
 	return (
 		<PieChart
 			options={options}
 			css={chartStyle}
-			data-test={`account-portfolio-chart-${mode.toLowerCase()}`}
+			data-test={`account-portfolio-chart-${AccountPortfolioChartMode.BY_TYPE.toLowerCase()}`}
 			{...divProps}
 		/>
 	);

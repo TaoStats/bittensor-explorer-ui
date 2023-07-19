@@ -151,12 +151,13 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 					<div>{formatCurrency(stats.reserved, "USD", {decimalPlaces: "optimal"})}</div>
 				</div>
 			</div>
-			<AccountPortfolioChart
-				css={chartStyle}
-				balances={balances.data}
-				usdRates={usdRates.data}
-				mode={chartMode}
-			/>
+			{chartMode == AccountPortfolioChartMode.BY_TYPE &&
+				<AccountPortfolioChart
+					css={chartStyle}
+					balances={balances.data}
+					usdRates={usdRates.data}
+				/>
+			}
 		</div>
 	);
 };
