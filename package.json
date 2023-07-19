@@ -44,8 +44,7 @@
     "test:debug": "playwright test --debug",
     "test:report": "playwright show-report test/report",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
-    "update-networks": "ts-node scripts/update-networks/main.ts"
+    "lint:fix": "eslint ./src --fix"
   },
   "eslintConfig": {
     "extends": [
