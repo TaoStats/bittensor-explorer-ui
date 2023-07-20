@@ -64,7 +64,6 @@ export const PieChart = (props: PieChartProps) => {
 	}, [options]);
 
 	const refreshChart = useCallback(() => {
-		console.log("refresh");
 		if (!echartRef.current) {
 			return;
 		}
@@ -78,7 +77,6 @@ export const PieChart = (props: PieChartProps) => {
 			echartRef.current = echarts.init(containerRef.current);
 
 			echartRef.current.on("finished", () => {
-				console.log("finished");
 				window.dispatchEvent(new CustomEvent("chart-finished", {
 					detail: {
 						echartRef: echartRef.current,

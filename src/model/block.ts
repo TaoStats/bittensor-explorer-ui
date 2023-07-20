@@ -2,11 +2,13 @@ import { RuntimeSpec } from "./runtimeSpec";
 
 export type Block = {
 	id: string;
-	hash: string;
-	height: number;
-	timestamp: string;
-	parentHash: string;
-	validator: string|null;
+	timestamp: Date;
 	specVersion: number;
+	height: bigint;
+	hash: string;
+	parentHash: string;
+	stateRoot: string;
+	extrinsicRoot: string;
+	validator: string | null;
 	runtimeSpec: RuntimeSpec;
 }

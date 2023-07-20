@@ -1,5 +1,8 @@
 import type { PlaywrightTestConfig } from "@playwright/test";
 import { devices } from "@playwright/test";
+import dotenv from "dotenv";
+
+dotenv.config({ path: ".env" });
 
 type Config = PlaywrightTestConfig & {
 	screenshotsDir: string;
@@ -16,9 +19,9 @@ const config: Config = {
 	timeout: 60 * 1000,
 	expect: {
 		/**
-     * Maximum time expect() should wait for the condition to be met.
-     * For example in `await expect(locator).toHaveText();`
-     */
+	 * Maximum time expect() should wait for the condition to be met.
+	 * For example in `await expect(locator).toHaveText();`
+	 */
 		timeout: 5000
 	},
 	/* Run tests in files in parallel */

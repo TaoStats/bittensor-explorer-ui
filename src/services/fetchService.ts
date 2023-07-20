@@ -6,5 +6,6 @@ export async function fetchIndexer<T = any>(query: string, variables: object = {
 }
 
 export async function fetchDictionary<T = any>(query: string, variables: object = {}) {
+	console.log(query);
 	return fetchGraphql<T>(DICTIONARY_ENDPOINT, query, variables);
 }

@@ -1,10 +1,10 @@
-import { ItemsConnection } from "../model/itemsConnection";
+import { ResponseItems } from "../model/itemsConnection";
 import { MainSquidTransfer } from "../model/main-squid/mainSquidTransfer";
 import { PaginationOptions } from "../model/paginationOptions";
 import { Transfer } from "../model/transfer";
 
 import { addRuntimeSpecs } from "../utils/addRuntimeSpec";
-import { extractConnectionItems } from "../utils/extractConnectionItems";
+import { extractItems } from "../utils/extractItems";
 import { rawAmountToDecimal } from "../utils/number";
 
 import { fetchIndexer } from "./fetchService";
@@ -32,7 +32,7 @@ async function fetchTransfers(
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
 	// FIXME:
-	const response = await fetchIndexer<{ transfersConnection: ItemsConnection<MainSquidTransfer> }>(
+	const response = await fetchIndexer<{ transfersConnection: ResponseItems<MainSquidTransfer> }>(
 		`query ($first: Int!, $after: String, $filter: TransferWhereInput, $order: [TransferOrderByInput!]!) {
 			transfersConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
 				edges {
@@ -76,7 +76,7 @@ async function fetchTransfers(
 		}
 	);
 
-	const items = extractConnectionItems(response.transfersConnection, pagination, unifyMainSquidTransfer);
+	const items = extractItems(response.transfersConnection, pagination, unifyMainSquidTransfer);
 	// const itemsWithRuntimeSpec = await addRuntimeSpecs(items, () => "latest");
 	// FIXME:
 	// const transfers = await addExtrinsicsInfo(itemsWithRuntimeSpec);

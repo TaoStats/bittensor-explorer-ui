@@ -20,44 +20,40 @@ export const router = createBrowserRouter([
 				index: true,
 				element: <HomePage />
 			},
-			{
-				path: "extrinsic/:id",
-				element: <ExtrinsicPage />,
-			},
-			{
-				path: "search",
-				element: <SearchPage />,
-			},
-			{
-				path: "block/:id",
-				element: <BlockPage />,
-			},
-			{
-				path: "account/:address",
-				element: <AccountPage />,
-				loader: ({ params }) => {
-					const { address } = params;
+			// {
+			// 	path: "extrinsic/:id",
+			// 	element: <ExtrinsicPage />,
+			// },
+			// {
+			// 	path: "search",
+			// 	element: <SearchPage />,
+			// },
+			// {
+			// 	path: "block/:id",
+			// 	element: <BlockPage />,
+			// },
+			// {
+			// 	path: "account/:address",
+			// 	element: <AccountPage />,
+			// 	loader: ({ params }) => {
+			// 		const { address } = params;
 
-					if (!address) {
-						return null;
-					}
+			// 		if (!address) {
+			// 			return null;
+			// 		}
 
-					const encodedAddress = encodeAddress(address, 42); // FIXME:
-					if (address !== encodedAddress) {
-						return redirect(`/account/${encodedAddress}`);
-					}
+			// 		const encodedAddress = encodeAddress(address, 42); // FIXME:
+			// 		if (address !== encodedAddress) {
+			// 			return redirect(`/account/${encodedAddress}`);
+			// 		}
 
-					return null;
-				}
-			},
-			{
-				path: "event/:id",
-				element: <EventPage />,
-			},
-			{
-				path: "latest-extrinsics",
-				element: <Navigate to=".." replace />,
-			},
+			// 		return null;
+			// 	}
+			// },
+			// {
+			// 	path: "event/:id",
+			// 	element: <EventPage />,
+			// },
 			{
 				path: "*",
 				element: <NotFoundPage />,

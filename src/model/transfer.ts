@@ -4,17 +4,12 @@ import { RuntimeSpec } from "./runtimeSpec";
 
 export type Transfer = {
 	id: string;
-	direction: string;
-	accountPublicKey: string;
-	blockNumber: number;
-	timestamp: string;
-	extrinsicHash: string|null;
-	fromPublicKey: string;
-	toPublicKey: string;
+	from: string;
+	to: string;
 	amount: Decimal;
-	success: boolean;
+	blockNumber: bigint;
+	extrinsicId: number;
+
+	timestamp: string;
 	runtimeSpec: RuntimeSpec;
-	extrinsic: {
-		id: string;
-	} | null;
 }

@@ -14,7 +14,7 @@ export type BlockInfoTableProps = {
 const BlockInfoTableAttribute = InfoTableAttribute<Block>;
 
 export const BlockInfoTable = (props: BlockInfoTableProps) => {
-	const { block} = props;
+	const { block } = props;
 
 	return (
 		<InfoTable
@@ -29,18 +29,18 @@ export const BlockInfoTable = (props: BlockInfoTableProps) => {
 				render={(data) =>
 					<Time time={data.timestamp} utc />
 				}
-				hide={(data) => data.height === 0}
+				hide={(data) => data.height.toString() === "0"}
 			/>
 			<BlockInfoTableAttribute
 				label="Block time"
 				render={(data) =>
 					<Time time={data.timestamp} fromNow />
 				}
-				hide={(data) => data.height === 0}
+				hide={(data) => data.height.toString() === "0"}
 			/>
 			<BlockInfoTableAttribute
 				label="Block height"
-				render={(data) => data.height}
+				render={(data) => data.height.toString()}
 			/>
 			<BlockInfoTableAttribute
 				label="Hash"

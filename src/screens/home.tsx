@@ -34,12 +34,14 @@ const subtitleStyle = (theme: Theme) => css`
 `;
 
 export const HomePage = () => {
-	const extrinsics = useExtrinsicsWithoutTotalCount(
-		undefined,
-		"id_DESC"
-	);
-	const blocks = useBlocks(undefined, "id_DESC");
-	const transfers = useTransfers(undefined, "id_DESC");
+	// const extrinsics = useExtrinsicsWithoutTotalCount(
+	// 	undefined,
+	// 	"id_DESC"
+	// );
+	const blocks = useBlocks(undefined, "HEIGHT_DESC");
+	// const transfers = useTransfers(undefined, "id_DESC");
+
+	console.log("blocks = ", blocks);
 
 	return (
 		<div css={contentStyle}>
@@ -47,19 +49,6 @@ export const HomePage = () => {
 				<h1 css={subtitleStyle}>Block explorer for Bittensor ecosystem</h1>
 				<Card>
 					<TabbedContent>
-						<TabPane
-							label="Extrinsics"
-							count={extrinsics.pagination.totalCount}
-							loading={extrinsics.loading}
-							error={extrinsics.error}
-							value="extrinsics"
-						>
-							<ExtrinsicsTable
-								extrinsics={extrinsics}
-								showAccount
-								showTime
-							/>
-						</TabPane>
 						<TabPane
 							label="Blocks"
 							count={blocks.pagination.totalCount}
@@ -73,8 +62,20 @@ export const HomePage = () => {
 								showTime
 							/>
 						</TabPane>
-
-						<TabPane
+						{/* <TabPane
+							label="Extrinsics"
+							count={extrinsics.pagination.totalCount}
+							loading={extrinsics.loading}
+							error={extrinsics.error}
+							value="extrinsics"
+						>
+							<ExtrinsicsTable
+								extrinsics={extrinsics}
+								showAccount
+								showTime
+							/>
+						</TabPane> */}
+						{/* <TabPane
 							label="Transfers"
 							count={transfers.pagination.totalCount}
 							loading={transfers.loading}
@@ -85,7 +86,7 @@ export const HomePage = () => {
 								transfers={transfers}
 								showTime
 							/>
-						</TabPane>
+						</TabPane> */}
 					</TabbedContent>
 				</Card>
 			</div>

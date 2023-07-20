@@ -47,11 +47,11 @@ function EventsTable(props: EventsTableProps) {
 				label="Name"
 				render={(event) =>
 					<ButtonLink
-						to={`/search?query=${event.palletName}.${event.eventName}`}
+						to={`/search?query=${event.module}.${event.event}`}
 						size="small"
 						color="secondary"
 					>
-						{event.palletName}.{event.eventName}
+						{event.module}.{event.event}
 					</ButtonLink>
 				}
 			/>
@@ -69,17 +69,17 @@ function EventsTable(props: EventsTableProps) {
 				label="Parameters"
 				colCss={parametersColCss(showExtrinsic)}
 				render={(event) => {
-					if (!event.args) {
+					if (!event.data) {
 						return null;
 					}
 
 					return (
 						<DataViewer
-							data={event.args}
+							data={event.data}
 							metadata={getEventMetadataByName(
 								event.runtimeSpec.metadata,
-								event.palletName,
-								event.eventName
+								event.module,
+								event.event
 							)?.args}
 							runtimeSpec={event.runtimeSpec}
 							copyToClipboard

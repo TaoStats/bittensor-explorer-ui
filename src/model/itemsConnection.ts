@@ -1,7 +1,5 @@
-export type ItemsConnection<T = any> = {
-	edges: {
-		node: T
-	}[],
+export type ResponseItems<T = any> = {
+	nodes: T[],
 	pageInfo: {
 		startCursor: string;
 		endCursor: string;

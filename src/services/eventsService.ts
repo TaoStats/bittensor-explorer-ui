@@ -1,12 +1,12 @@
 import { ArchiveEvent } from "../model/archive/archiveEvent";
 import { ExplorerSquidEvent } from "../model/explorer-squid/explorerSquidEvent";
 import { Event } from "../model/event";
-import { ItemsConnection } from "../model/itemsConnection";
+import { ResponseItems } from "../model/itemsConnection";
 import { ItemsResponse } from "../model/itemsResponse";
 import { PaginationOptions } from "../model/paginationOptions";
 import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { upperFirst } from "../utils/string";
-import { extractConnectionItems } from "../utils/extractConnectionItems";
+import { extractItems } from "../utils/extractItems";
 
 import { getRuntimeSpec } from "./runtimeService";
 import { fetchDictionary } from "./fetchService";
@@ -168,7 +168,7 @@ async function getArchiveEvents(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
-	const response = await fetchDictionary<{ eventsConnection: ItemsConnection<ArchiveEvent> }>(
+	const response = await fetchDictionary<{ eventsConnection: ResponseItems<ArchiveEvent> }>(
 		`query ($first: Int!, $after: String, $filter: EventWhereInput, $order: [EventOrderByInput!]!) {
 			eventsConnection(orderBy: $order, where: $filter, first: $first, after: $after) {
 				edges {
@@ -209,7 +209,7 @@ async function getArchiveEvents(
 		}
 	);
 
-	const items = extractConnectionItems(response.eventsConnection, pagination, unifyArchiveEvent);
+	const items = extractItems(response.eventsConnection, pagination, unifyArchiveEvent);
 	const events = await addRuntimeSpecs(items, it => it.specVersion);
 
 	return events;
@@ -223,7 +223,7 @@ async function getExplorerSquidEvents(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
-	const response = await fetchDictionary<{ eventsConnection: ItemsConnection<ExplorerSquidEvent> }>(
+	const response = await fetchDictionary<{ eventsConnection: ResponseItems<ExplorerSquidEvent> }>(
 		`query ($first: Int!, $after: String, $filter: EventWhereInput, $order: [EventOrderByInput!]!) {
 			eventsConnection(orderBy: $order, where: $filter, first: $first, after: $after) {
 				edges {
@@ -262,7 +262,7 @@ async function getExplorerSquidEvents(
 		}
 	);
 
-	const data = extractConnectionItems(response.eventsConnection, pagination, unifyExplorerSquidEvent);
+	const data = extractItems(response.eventsConnection, pagination, unifyExplorerSquidEvent);
 	const dataWithRuntimeSpecs = await addRuntimeSpecs(data, it => it.specVersion);
 	const events = await addEventsArgs(dataWithRuntimeSpecs);
 

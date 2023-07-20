@@ -1,24 +1,11 @@
-import { RuntimeSpec } from "../model/runtimeSpec";
+import { RuntimeSpec, RuntimeSpecResponse } from "../model/runtimeSpec";
 import { decodeMetadata } from "../utils/decodeMetadata";
 import { uniq } from "../utils/uniq";
 import { fetchDictionary } from "./fetchService";
 
-export async function getRuntimeSpecVersions() {
-	// FIXME:
-	const response = await fetchDictionary<{ metadata: { specVersion: number }[] }>(
-		`query {
-				metadata(orderBy: specVersion_DESC) {
-					specVersion
-				}
-			}
-		`
-	);
-
-	return response.metadata.map(it => it.specVersion);
-}
-
 export async function getRuntimeSpec(specVersion: "latest"): Promise<RuntimeSpec>;
 export async function getRuntimeSpec(specVersion: number | "latest"): Promise<RuntimeSpec | undefined>;
+
 export async function getRuntimeSpec(specVersion: number | "latest"): Promise<RuntimeSpec | undefined> {
 	if (specVersion === "latest") {
 		return getLatestRuntimeSpec();
@@ -30,7 +17,7 @@ export async function getRuntimeSpec(specVersion: number | "latest"): Promise<Ru
 
 export async function getLatestRuntimeSpec() {
 	// FIXME:
-	const response = await fetchDictionary<{ spec: Omit<RuntimeSpec, "metadata">[] }>(
+	const response = await fetchDictionary<{ spec: RuntimeSpecResponse[] }>(
 		`
 			query {
 				spec: metadata(orderBy: specVersion_DESC, limit: 1) {
@@ -67,29 +54,28 @@ export async function getRuntimeSpecs(
 		specVersions = specVersions.filter(it => it !== "latest");
 	}
 
-	// FIXME:
-	const response = await fetchDictionary<{ specs: Omit<RuntimeSpec, "metadata">[] }>(
+	const response = await fetchDictionary<{ specVersions: { nodes: RuntimeSpecResponse[] } }>(
 		`
-			query ($specVersions: [Int!]!) {
-				specs: metadata(where: {specVersion_in: $specVersions}, orderBy: specVersion_DESC) {
-					id
-					blockHash
-					blockHeight
-					specName
-					specVersion
-					hex
+			query ($specVersions: [String!]!) {
+				specVersions(filter: {id: {in: $specVersions} }, orderBy: BLOCK_ID_DESC) {
+					nodes {
+						id
+						blockHeight
+						metadata
+					}
 				}
 			}
 		`,
 		{
-			specVersions: uniq(specVersions)
+			specVersions: uniq(specVersions).map((version) => version.toString())
 		}
 	);
 
-	for (const spec of response.specs) {
-		specs[spec.specVersion] = {
-			...spec,
-			metadata: decodeMetadata(spec.hex)
+	for (const spec of response.specVersions.nodes) {
+		specs[spec.id] = {
+			id: spec.id,
+			blockHeight: spec.blockHeight,
+			metadata: decodeMetadata(spec.metadata)
 		};
 	}
 

@@ -223,8 +223,6 @@ function DataViewer(props: DataViewerProps) {
 
 	const [mode, setMode] = useState<DataViewerMode>(defaultMode || MODES.find(Boolean) as DataViewerMode);
 
-	console.log("render");
-
 	const copyToClipboardValue = useMemo(() => {
 		if (Array.isArray(data) || typeof data === "object") {
 			return JSON.stringify(data, null, 4);

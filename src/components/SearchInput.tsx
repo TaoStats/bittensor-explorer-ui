@@ -69,7 +69,6 @@ function SearchInput(props: SearchInputProps) {
 
 	const [qs] = useSearchParams();
 	const query = qs.get("query");
-	// console.log(qs, query);
 
 	const [search, setSearch] = useState<string>(query || "");
 
@@ -77,7 +76,6 @@ function SearchInput(props: SearchInputProps) {
 
 	// const handleNetworkSelect = useCallback((isUserAction: boolean) => {
 	// 	if (isUserAction && persistNetwork) {
-	// 		console.log("store", network);
 	// 		localStorage.setItem("network", network);
 	// 	}
 

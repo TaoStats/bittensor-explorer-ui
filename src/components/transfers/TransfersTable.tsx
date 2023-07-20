@@ -38,14 +38,14 @@ function TransfersTable(props: TransfersTableProps) {
 			pagination={transfers.pagination}
 			data-test="transfers-table"
 		>
-			<TransfersTableAttribute
+			{/* <TransfersTableAttribute
 				label="Extrinsic"
 				render={(transfer) => transfer.extrinsic &&
 					<Link to={`/extrinsic/${transfer.extrinsic.id}`}>
 						{transfer.extrinsic.id}
 					</Link>
 				}
-			/>
+			/> */}
 			<TransfersTableAttribute
 				label="From"
 				render={(transfer) =>

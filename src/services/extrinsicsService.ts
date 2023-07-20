@@ -1,11 +1,11 @@
 import { ArchiveExtrinsic } from "../model/archive/archiveExtrinsic";
 import { ExplorerSquidExtrinsic } from "../model/explorer-squid/explorerSquidExtrinsic";
-import { ItemsConnection } from "../model/itemsConnection";
+import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { decodeAddress } from "../utils/formatAddress";
 import { lowerFirst, upperFirst } from "../utils/string";
-import { extractConnectionItems } from "../utils/extractConnectionItems";
+import { extractItems } from "../utils/extractItems";
 
 import { getRuntimeSpec } from "./runtimeService";
 import { Extrinsic } from "../model/extrinsic";
@@ -121,7 +121,7 @@ export async function getExtrinsics(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 	// FIXME:
-	const response = await fetchDictionary<{ extrinsicsConnection: ItemsConnection<ArchiveExtrinsic> }>(
+	const response = await fetchDictionary<{ extrinsicsConnection: ResponseItems<ArchiveExtrinsic> }>(
 		`query ($first: Int!, $after: String, $filter: ExtrinsicWhereInput, $order: [ExtrinsicOrderByInput!]!) {
 			extrinsicsConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
 				edges {
@@ -167,7 +167,7 @@ export async function getExtrinsics(
 		}
 	);
 
-	const items = extractConnectionItems(response.extrinsicsConnection, pagination, unifyArchiveExtrinsic);
+	const items = extractItems(response.extrinsicsConnection, pagination, unifyArchiveExtrinsic);
 	const extrinsics = await addRuntimeSpecs(items, it => it.specVersion);
 
 	return extrinsics;
@@ -182,7 +182,7 @@ async function getExplorerSquidExtrinsics(
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
 	// FIXME:
-	const response = await fetchDictionary<{ extrinsicsConnection: ItemsConnection<ExplorerSquidExtrinsic> }>(
+	const response = await fetchDictionary<{ extrinsicsConnection: ResponseItems<ExplorerSquidExtrinsic> }>(
 		`query ($first: Int!, $after: String, $filter: ExtrinsicWhereInput, $order: [ExtrinsicOrderByInput!]!) {
 			extrinsicsConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
 				edges {
@@ -226,7 +226,7 @@ async function getExplorerSquidExtrinsics(
 		}
 	);
 
-	const items = extractConnectionItems(response.extrinsicsConnection, pagination, unifyExplorerSquidExtrinsic);
+	const items = extractItems(response.extrinsicsConnection, pagination, unifyExplorerSquidExtrinsic);
 	const extrinsics = await addRuntimeSpecs(items, it => it.specVersion);
 
 	return extrinsics;

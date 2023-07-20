@@ -14,8 +14,6 @@ export function balanceSum(balances: AccountBalance[] | undefined, type: keyof O
 }
 
 export function usdBalanceSum(balances: AccountBalance[] | undefined, type: keyof Omit<Balance, "updatedAt">, usdRates: UsdRates | undefined) {
-	console.log(balances);
-	console.log(usdRates);
 	return Decimal.sum(new Decimal(0), ...(balances || []).map(it =>
 		it.balance?.[type].mul(
 			(usdRates || {})[it.network.name] || 0
