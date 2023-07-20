@@ -3,20 +3,26 @@ import { grey } from "@mui/material/colors";
 import { css } from "@emotion/react";
 
 const customColors = {
-	neutral: "#606060"
+	neutral: "#ff9900"
 };
 
 export const theme = createTheme({
 	palette: {
 		primary: {
-			main: "#ff646d",
-			contrastText: "#ffffff",
-			light: "#a8a8a8",
-			dark: "#181818",
+			main: "#21252b",
+			light: "#444",
+			dark: "#1c1c1c"
 		},
 		secondary: {
-			main: "#14a1c0",
-			contrastText: "#ffffff"
+			main: "#d9d9d9",
+			light: "#fff",
+			dark: "#a8a8a8"
+		},
+		success: {
+			main: "#14dec2"
+		},
+		error: {
+			main: "#ff7a7a"
 		},
 		neutral: {
 			main: customColors.neutral,
@@ -26,7 +32,7 @@ export const theme = createTheme({
 		}
 	},
 	typography: {
-		fontFamily: "\"Open Sans\", sans-serif",
+		fontFamily: "inter,sans-serif",
 		button: {
 			fontSize: 18,
 			fontWeight: 700,
