@@ -17,9 +17,9 @@ const objectKeyValue = css`
 	min-width: 250px;
 `;
 
-const numberKeyStyle = css`
+const numberKeyStyle = (theme: Theme) => css`
 	margin-right: 8px;
-	color: #6f2fab;
+	color: ${theme.palette.success.main};
 
 	&::after {
 		content: attr(data-content);
@@ -42,7 +42,7 @@ const literalValueStyle = css`
 const stringValueStyle = (theme: Theme) => css`
 	${literalValueStyle}
 
-	color: ${theme.palette.primary.dark};
+	color: ${theme.palette.text.primary};
 `;
 
 const numberValueStyle = (theme: Theme) => css`

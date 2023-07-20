@@ -19,8 +19,9 @@ const tableStyle = css`
 	min-width: 860px;
 `;
 
-const cellStyle = css`
+const cellStyle = (theme: Theme) => css`
 	word-break: break-all;
+	border-bottom: 1px solid ${theme.palette.primary.light};
 
 	&:first-of-type {
 		padding-left: 0;

@@ -27,7 +27,6 @@ const contentStyle = (theme: Theme) => css`
 	z-index: 100;
 
 	font-size: 15px;
-	color: ${theme.palette.primary.light};
 
 	a {
 		color: inherit;
@@ -75,7 +74,6 @@ const linksStyle = css`
 const iconStyle = (theme: Theme) => css`
 	display: block;
 	font-size: 1.25em;
-	color: ${alpha(theme.palette.primary.light, .8)};
 `;
 
 export const Footer = (props: HTMLAttributes<HTMLDivElement>) => {

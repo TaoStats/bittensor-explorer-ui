@@ -9,9 +9,13 @@ const customColors = {
 export const theme = createTheme({
 	palette: {
 		primary: {
-			main: "#21252b",
+			main: "#000",
 			light: "#444",
-			dark: "#1c1c1c"
+			dark: "#1a1a1a"
+		},
+		text: {
+			primary: "#d9d9d9",
+			secondary: "#fff"
 		},
 		secondary: {
 			main: "#d9d9d9",
@@ -57,8 +61,10 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: ({theme}) => css`
 					padding: 6px 32px;
+					color: ${theme.palette.primary.main};
+					background-color: ${theme.palette.success.main};
 					&:hover {
-						background-color: ${theme.palette.secondary.main};
+						background-color: ${theme.palette.neutral.main};
 					}
 				`,
 				sizeSmall: css`

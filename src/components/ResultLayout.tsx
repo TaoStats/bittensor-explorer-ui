@@ -3,7 +3,6 @@ import { Outlet, useLoaderData } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
 import Logo from "../assets/logo.png";
-import Background from "../assets/detail-page-bgr.svg";
 
 import { Network } from "../model/network";
 
@@ -19,6 +18,8 @@ const containerStyle = (theme: Theme) => css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	background-color: ${theme.palette.primary.main};
+	color: ${theme.palette.text.primary};
 
 	${theme.breakpoints.up("sm")} {
 		--content-wrapper-min-height: 500px;
@@ -37,40 +38,6 @@ const containerStyle = (theme: Theme) => css`
 	}
 `;
 
-const backgroundStyle = css`
-	position: absolute;
-	left: 0;
-	margin: 0;
-	width: 100%;
-	height: 100%;
-	min-height: 100vh;
-	z-index: -1;
-
-	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: var(--content-wrapper-min-height);
-		background-color: white;
-		background-position: center bottom;
-		background-size: 100% auto;
-		background-repeat: no-repeat;
-		background-image: url(${Background});
-	}
-
-	&::after {
-		content: '';
-		position: absolute;
-		top: var(--content-wrapper-min-height);
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: #def9fb;
-	}
-`;
-
 const topBarStyle = (theme: Theme) => css`
 	position: relative;
 	top: 0;
@@ -81,8 +48,6 @@ const topBarStyle = (theme: Theme) => css`
 	z-index: 1000;
 
 	flex: 0 0 auto;
-
-	background-color: ${theme.palette.primary.dark};
 
 	${theme.breakpoints.up("md")} {
 		margin: 0 -32px;
@@ -162,8 +127,6 @@ const searchInputStyle = (theme: Theme) => css`
 const footerStyle = (theme: Theme) => css`
 	flex: 0 0 auto;
 
-  background-color: ${theme.palette.primary.dark};
-
   > div {
     max-width: 1000px;
   }
@@ -178,7 +141,6 @@ export const ResultLayout = () => {
 
 	return (
 		<div css={containerStyle}>
-			<div css={backgroundStyle} data-test="background" />
 			<div css={contentWrapperStyle}>
 				<div css={topBarStyle} data-test="top-bar">
 					<div css={topBarContentStyle}>

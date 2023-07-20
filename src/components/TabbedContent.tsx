@@ -4,9 +4,9 @@ import { Theme, css } from "@emotion/react";
 import { CircularProgress, Tab, TabProps, Tabs } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Warning";
 
-const tabsWrapperStyle = css`
+const tabsWrapperStyle = (theme: Theme) => css`
 	margin-bottom: 16px;
-	border-bottom: solid 1px rgba(0, 0, 0, 0.12);
+	border-bottom: solid 1px ${theme.palette.secondary.dark};
 `;
 
 const tabsStyle = (theme: Theme) => css`
@@ -24,9 +24,13 @@ const tabStyle = (theme: Theme) => css`
 	align-items: center;
 
 	&.Mui-selected {
-		color: ${theme.palette.secondary.main};
+		color: ${theme.palette.neutral.main};
 		font-weight: 700;
-		background-color: #f5f5f5;
+		background-color: ${theme.palette.primary.light};
+	}
+
+	&:hover {
+		color: ${theme.palette.neutral.main};
 	}
 `;
 
@@ -43,11 +47,7 @@ const tabErrorStyle = css`
 
 const tabLoadingStyle = (theme: Theme) => css`
 	margin-left: 8px;
-	color: rgba(0, 0, 0, 0.6);
-
-	.Mui-selected & {
-		color: ${theme.palette.secondary.main};
-	}
+	color: ${theme.palette.secondary.main};
 `;
 
 export type TabPaneProps = Omit<TabProps, "children"> & PropsWithChildren<{

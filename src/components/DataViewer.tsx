@@ -14,7 +14,7 @@ import { DataViewerValueJson } from "./DataViewerValueJson";
 import { DataViewerValueParsed } from "./DataViewerValueParsed";
 import { Devtool } from "./Devtool";
 
-const dataViewerStyle = css`
+const dataViewerStyle = (theme: Theme) => css`
 	display: flex;
 	padding: 12px;
 	height: 100%;
@@ -23,7 +23,8 @@ const dataViewerStyle = css`
 	flex-direction: column;
 	flex: 1 1 auto;
 
-	background-color: #f5f5f5;
+	color: ${theme.palette.text.primary};
+	background-color: ${theme.palette.primary.light};
 	border-radius: 8px;
 
 	line-height: 24px;
@@ -107,21 +108,23 @@ const modeButtonStyle = css`
 	line-height: 24px;
 `;
 
-const fullscreenButtonStyle = css`
+const fullscreenButtonStyle = (theme: Theme) => css`
 	padding: 2px;
 	margin-left: 8px;
+	color: ${theme.palette.text.primary};
 `;
 
 const copyButtonStyle = css`
 	padding: 2px;
 `;
 
-const closeButtonStyle = css`
+const closeButtonStyle = (theme: Theme) => css`
 	position: absolute;
 	top: 0;
 	right: 0;
 	margin: 12px;
 	padding: 0;
+	color: ${theme.palette.text.primary};
 
 	z-index: 10;
 `;

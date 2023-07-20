@@ -6,7 +6,7 @@ const cardStyle = (theme: Theme) => css`
 	position: relative;
 	border-radius: 8px;
 	padding: 24px;
-	background-color: white;
+	background-color: ${theme.palette.primary.dark};
 	margin: 16px 0;
 
 	::after {
