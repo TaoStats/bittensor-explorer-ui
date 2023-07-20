@@ -13,15 +13,13 @@ import { SearchPage } from "./screens/search";
 
 export const router = createBrowserRouter([
 	{
-		id: "home",
-		path: "/",
-		element: <HomePage />,
-	},
-	{
-		id: "root",
-		path: "*",
+
 		element: <ResultLayout />,
 		children: [
+			{
+				index: true,
+				element: <HomePage />
+			},
 			{
 				path: "extrinsic/:id",
 				element: <ExtrinsicPage />,

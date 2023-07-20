@@ -49,8 +49,11 @@ export const theme = createTheme({
 				disableElevation: true,
 			},
 			styleOverrides: {
-				root: css`
+				root: ({theme}) => css`
 					padding: 6px 32px;
+					&:hover {
+						background-color: ${theme.palette.secondary.main};
+					}
 				`,
 				sizeSmall: css`
 					padding: 2px 10px;
