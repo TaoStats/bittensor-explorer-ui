@@ -92,25 +92,23 @@ const topBarStyle = (theme: Theme) => css`
 `;
 
 const topBarContentStyle = (theme: Theme) => css`
-	max-width: 1500px;
 	margin: auto;
 	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	flex-direction: column;
 
 	${theme.breakpoints.up("md")} {
 		flex-direction: row;
-		align-items: center;
 	}
 `;
 
-const topBarRowStyle = (theme: Theme) => css`
+const topBarRowStyle = css`
 	display: flex;
-	align-items: center;
-	flex: 1 1 auto;
-
-	${theme.breakpoints.down("md")} {
-		justify-content: center;
-	}
+	max-width: 1000px;
+	min-width: 45%;
+	text-align: center;
+	justify-content: center;
 `;
 
 const contentWrapperStyle = (theme: Theme) => css`
@@ -143,9 +141,22 @@ const logoStyle = (theme: Theme) => css`
 	}
 `;
 
-const searchInputStyle = css`
-	width: 100%;
-	flex: 1 1 auto;
+const searchInputStyle = (theme: Theme) => css`
+  flex: 1 1 auto;
+
+  .MuiInputBase-root {
+    .MuiInputBase-input,
+    .MuiSelect-select {
+      padding: 16px 24px;
+    }
+  }
+
+  ${theme.breakpoints.up("md")} {
+    .MuiButton-root {
+      padding-left: 52px;
+      padding-right: 52px;
+    }
+  }
 `;
 
 const footerStyle = (theme: Theme) => css`
@@ -171,11 +182,9 @@ export const ResultLayout = () => {
 			<div css={contentWrapperStyle}>
 				<div css={topBarStyle} data-test="top-bar">
 					<div css={topBarContentStyle}>
-						<div css={topBarRowStyle}>
-							<Link to='/'>
-								<img src={Logo} css={logoStyle} />
-							</Link>
-						</div>
+						<Link to='/'>
+							<img src={Logo} css={logoStyle} />
+						</Link>
 						<div css={topBarRowStyle}>
 							<SearchInput css={searchInputStyle} defaultNetwork={network?.name} key={network?.name} />
 						</div>
