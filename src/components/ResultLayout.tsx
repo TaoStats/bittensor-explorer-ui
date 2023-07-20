@@ -2,8 +2,8 @@
 import { Outlet, useLoaderData } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
+import Logo from "../assets/logo.png";
 import Background from "../assets/detail-page-bgr.svg";
-import { ReactComponent as Logo } from "../assets/calamar-logo-export-02.svg";
 
 import { Network } from "../model/network";
 
@@ -77,36 +77,38 @@ const topBarStyle = (theme: Theme) => css`
 	padding: 16px;
 	margin: 0 -16px;
 	margin-top: -16px;
-	min-height: 130px;
 	box-sizing: border-box;
 	z-index: 1000;
 
 	flex: 0 0 auto;
 
+	background-color: ${theme.palette.primary.dark};
+
 	${theme.breakpoints.up("md")} {
 		margin: 0 -32px;
 		margin-top: -24px;
-		padding: 0 32px;
-		padding-top: 24px;
+		padding: 2.5rem 4rem;
 	}
 `;
 
 const topBarContentStyle = (theme: Theme) => css`
-	max-width: 1500px;
 	margin: auto;
 	display: flex;
+	align-items: center;
+	justify-content: space-between;
 	flex-direction: column;
 
 	${theme.breakpoints.up("md")} {
 		flex-direction: row;
-		align-items: center;
 	}
 `;
 
 const topBarRowStyle = css`
 	display: flex;
-	align-items: center;
-	flex: 1 1 auto;
+	max-width: 1000px;
+	min-width: 45%;
+	text-align: center;
+	justify-content: center;
 `;
 
 const contentWrapperStyle = (theme: Theme) => css`
@@ -131,30 +133,40 @@ const contentStyle = css`
 
 const logoStyle = (theme: Theme) => css`
 	margin-right: auto;
-
-	> svg {
-		display: block;
-		width: 250px;
-	}
+	display: block;
+	width: 120px;
 
 	${theme.breakpoints.down("md")} {
 		margin-bottom: 12px;
-
-		> svg {
-			width: 160px;
-		}
 	}
 `;
 
-const searchInputStyle = css`
-	width: 100%;
-	flex: 1 1 auto;
+const searchInputStyle = (theme: Theme) => css`
+  flex: 1 1 auto;
+
+  .MuiInputBase-root {
+    .MuiInputBase-input,
+    .MuiSelect-select {
+      padding: 16px 24px;
+    }
+  }
+
+  ${theme.breakpoints.up("md")} {
+    .MuiButton-root {
+      padding-left: 52px;
+      padding-right: 52px;
+    }
+  }
 `;
 
-const footerStyle = css`
-	> div {
-		max-width: 1500px;
-	}
+const footerStyle = (theme: Theme) => css`
+	flex: 0 0 auto;
+
+  background-color: ${theme.palette.primary.dark};
+
+  > div {
+    max-width: 1000px;
+  }
 `;
 
 export type ResultLayoutLoaderData = {
@@ -170,11 +182,9 @@ export const ResultLayout = () => {
 			<div css={contentWrapperStyle}>
 				<div css={topBarStyle} data-test="top-bar">
 					<div css={topBarContentStyle}>
-						<div css={topBarRowStyle}>
-							<Link css={logoStyle} to="/">
-								<Logo />
-							</Link>
-						</div>
+						<Link to='/'>
+							<img src={Logo} css={logoStyle} />
+						</Link>
 						<div css={topBarRowStyle}>
 							<SearchInput css={searchInputStyle} defaultNetwork={network?.name} key={network?.name} />
 						</div>

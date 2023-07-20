@@ -18,27 +18,19 @@ import { config } from "./config";
 
 export const router = createBrowserRouter([
 	{
-		id: "home",
-		path: "/",
-		loader: ({ params }) => {
-			// const { network: networkName } = params;
-			const network = getNetwork("polkadot", false);
-
-			return { network };
-		},
-		element: <HomePage />,
-	},
-	{
 		id: "root",
-		path: "*",
-		loader: ({ params }) => {
-			// const { network: networkName } = params;
+		path: "/",
+		loader: () => {
 			const network = getNetwork("polkadot", false);
 
 			return { network };
 		},
 		element: <ResultLayout />,
 		children: [
+			{
+				index: true,
+				element: <HomePage />
+			},
 			{
 				path: "extrinsic/:id",
 				element: <ExtrinsicPage />,
