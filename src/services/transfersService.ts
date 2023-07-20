@@ -1,9 +1,11 @@
 import { ItemsConnection } from "../model/itemsConnection";
 import { MainSquidTransfer } from "../model/main-squid/mainSquidTransfer";
 import { PaginationOptions } from "../model/paginationOptions";
+import { Transfer } from "../model/transfer";
 
 import { addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { extractConnectionItems } from "../utils/extractConnectionItems";
+import { rawAmountToDecimal } from "../utils/number";
 
 import { fetchIndexer } from "./fetchService";
 
@@ -74,10 +76,25 @@ async function fetchTransfers(
 		}
 	);
 
-	// const items = extractConnectionItems(response.transfersConnection, pagination, unifyMainSquidTransfer);
+	const items = extractConnectionItems(response.transfersConnection, pagination, unifyMainSquidTransfer);
 	// const itemsWithRuntimeSpec = await addRuntimeSpecs(items, () => "latest");
 	// FIXME:
 	// const transfers = await addExtrinsicsInfo(itemsWithRuntimeSpec);
 
-	return response.transfersConnection;
+	return items;
+}
+
+function unifyMainSquidTransfer(transfer: MainSquidTransfer): Omit<Transfer, "runtimeSpec" | "extrinsic"> {
+
+	return {
+		...transfer,
+		accountPublicKey: transfer.account.publicKey,
+		blockNumber: transfer.transfer.blockNumber,
+		timestamp: transfer.transfer.timestamp,
+		extrinsicHash: transfer.transfer.extrinsicHash,
+		amount: rawAmountToDecimal(transfer.transfer.amount),
+		success: transfer.transfer.success,
+		fromPublicKey: transfer.transfer.from.publicKey,
+		toPublicKey: transfer.transfer.to.publicKey,
+	};
 }

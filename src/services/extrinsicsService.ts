@@ -68,7 +68,7 @@ export async function getExtrinsicsByName(
 
 	// return extrinsics;
 
-	return getExtrinsics(filter, order, pagination, false);
+	return getExtrinsics(filter, order, false, pagination);
 }
 
 /*** PRIVATE ***/
@@ -116,8 +116,8 @@ async function getArchiveExtrinsic(filter?: ExtrinsicsFilter) {
 export async function getExtrinsics(
 	filter: ExtrinsicsFilter | undefined,
 	order: ExtrinsicsOrder = "id_DESC",
+	fetchTotalCount: boolean,
 	pagination: PaginationOptions,
-	fetchTotalCount = true
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 	// FIXME:

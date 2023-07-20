@@ -10,7 +10,7 @@ import { DataError } from "../utils/error";
 import { usePagination } from "./usePagination";
 
 export function usePaginatedResource<T = any, F extends any[] = any[]>(
-	fetchItems: (...args: [...F, PaginationOptions]) => ItemsResponse<T>|Promise<ItemsResponse<T>>,
+	fetchItems: (...args: [...F, PaginationOptions]) => ItemsResponse<T> | Promise<ItemsResponse<T>>,
 	args: F,
 	options?: FetchOptions
 ) {
@@ -37,7 +37,7 @@ export function usePaginatedResource<T = any, F extends any[] = any[]>(
 
 				setData(items.data);
 				pagination.set(items.pagination);
-			} catch(e) {
+			} catch (e) {
 				if (e instanceof DataError) {
 					rollbar.error(e);
 					setError(e);

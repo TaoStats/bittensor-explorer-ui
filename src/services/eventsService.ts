@@ -8,8 +8,8 @@ import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { upperFirst } from "../utils/string";
 import { extractConnectionItems } from "../utils/extractConnectionItems";
 
-import { fetchArchive, fetchExplorerSquid } from "./fetchService";
 import { getRuntimeSpec } from "./runtimeService";
+import { fetchDictionary } from "./fetchService";
 
 export type EventsFilter =
 	{ id_eq: string; }
@@ -94,7 +94,7 @@ export async function getEvents(
 /*** PRIVATE ***/
 
 async function getArchiveEvent(filter: EventsFilter) {
-	const response = await fetchArchive<{ events: ArchiveEvent[] }>(
+	const response = await fetchDictionary<{ events: ArchiveEvent[] }>(
 		`query ($filter: EventWhereInput) {
 			events(limit: 1, offset: 0, where: $filter, orderBy: id_DESC) {
 				id
@@ -128,7 +128,7 @@ async function getArchiveEvent(filter: EventsFilter) {
 }
 
 async function getExplorerSquidEvent(filter: EventsFilter) {
-	const response = await fetchExplorerSquid<{ events: ExplorerSquidEvent[] }>(
+	const response = await fetchDictionary<{ events: ExplorerSquidEvent[] }>(
 		`query ($filter: EventWhereInput) {
 			events(limit: 1, offset: 0, where: $filter, orderBy: id_DESC) {
 				id
@@ -168,7 +168,7 @@ async function getArchiveEvents(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
-	const response = await fetchArchive<{ eventsConnection: ItemsConnection<ArchiveEvent> }>(
+	const response = await fetchDictionary<{ eventsConnection: ItemsConnection<ArchiveEvent> }>(
 		`query ($first: Int!, $after: String, $filter: EventWhereInput, $order: [EventOrderByInput!]!) {
 			eventsConnection(orderBy: $order, where: $filter, first: $first, after: $after) {
 				edges {
@@ -223,7 +223,7 @@ async function getExplorerSquidEvents(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
-	const response = await fetchExplorerSquid<{ eventsConnection: ItemsConnection<ExplorerSquidEvent> }>(
+	const response = await fetchDictionary<{ eventsConnection: ItemsConnection<ExplorerSquidEvent> }>(
 		`query ($first: Int!, $after: String, $filter: EventWhereInput, $order: [EventOrderByInput!]!) {
 			eventsConnection(orderBy: $order, where: $filter, first: $first, after: $after) {
 				edges {
@@ -270,7 +270,7 @@ async function getExplorerSquidEvents(
 }
 
 async function getArchiveEventArgs(eventIds: string[]) {
-	const response = await fetchArchive<{ events: { id: string, args: any }[] }>(
+	const response = await fetchDictionary<{ events: { id: string, args: any }[] }>(
 		`
 			query($ids: [String!]) {
 				events(where: { id_in: $ids }) {

@@ -6,8 +6,7 @@ import { PaginationOptions } from "../model/paginationOptions";
 
 import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { extractConnectionItems } from "../utils/extractConnectionItems";
-
-import { fetchArchive, fetchExplorerSquid } from "./fetchService";
+import { fetchDictionary } from "./fetchService";
 
 export type BlocksFilter =
 	{ id_eq: string; }
@@ -33,7 +32,7 @@ export async function getBlocks(
 /*** PRIVATE ***/
 
 async function getArchiveBlock(filter: BlocksFilter) {
-	const response = await fetchArchive<{ blocks: ArchiveBlock[] }>(
+	const response = await fetchDictionary<{ blocks: ArchiveBlock[] }>(
 		`query ($filter: BlockWhereInput) {
 			blocks(limit: 1, offset: 0, where: $filter, orderBy: id_DESC) {
 				id
@@ -59,7 +58,7 @@ async function getArchiveBlock(filter: BlocksFilter) {
 }
 
 async function getExplorerSquidBlock(filter: BlocksFilter) {
-	const response = await fetchExplorerSquid<{ blocks: ExplorerSquidBlock[] }>(
+	const response = await fetchDictionary<{ blocks: ExplorerSquidBlock[] }>(
 		`query ($filter: BlockWhereInput) {
 			blocks(limit: 1, offset: 0, where: $filter, orderBy: id_DESC) {
 				id
@@ -89,7 +88,7 @@ async function getArchiveBlocks(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
-	const response = await fetchArchive<{ blocksConnection: ItemsConnection<ArchiveBlock> }>(
+	const response = await fetchDictionary<{ blocksConnection: ItemsConnection<ArchiveBlock> }>(
 		`query ($first: Int!, $after: String, $filter: BlockWhereInput, $order: [BlockOrderByInput!]!) {
 			blocksConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
 				edges {
@@ -135,7 +134,7 @@ async function getExplorerSquidBlocks(
 ) {
 	const after = pagination.offset === 0 ? null : pagination.offset.toString();
 
-	const response = await fetchExplorerSquid<{ blocksConnection: ItemsConnection<ExplorerSquidBlock> }>(
+	const response = await fetchDictionary<{ blocksConnection: ItemsConnection<ExplorerSquidBlock> }>(
 		`query ($first: Int!, $after: String, $filter: BlockWhereInput, $order: [BlockOrderByInput!]!) {
 			blocksConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
 				edges {
