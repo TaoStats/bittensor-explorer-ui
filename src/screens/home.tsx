@@ -41,8 +41,6 @@ export const HomePage = () => {
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
 	// const transfers = useTransfers(undefined, "id_DESC");
 
-	console.log("blocks = ", blocks);
-
 	return (
 		<div css={contentStyle}>
 			<div css={contentInner}>

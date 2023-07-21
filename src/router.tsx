@@ -28,10 +28,10 @@ export const router = createBrowserRouter([
 			// 	path: "search",
 			// 	element: <SearchPage />,
 			// },
-			// {
-			// 	path: "block/:id",
-			// 	element: <BlockPage />,
-			// },
+			{
+				path: "block/:id",
+				element: <BlockPage />,
+			},
 			// {
 			// 	path: "account/:address",
 			// 	element: <AccountPage />,

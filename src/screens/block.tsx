@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 
 import { BlockInfoTable } from "../components/blocks/BlockInfoTable";
-import { CallsTable } from "../components/calls/CallsTable";
 import { Card, CardHeader } from "../components/Card";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
@@ -20,7 +19,7 @@ export type BlockPageParams = {
 export const BlockPage = () => {
 	const { id } = useParams() as BlockPageParams;
 
-	const block = useBlock({ id_eq: id });
+	const block = useBlock({ id: { equalTo: id } });
 
 	const extrinsics = useExtrinsics({ blockId_eq: id }, "id_DESC");
 	const events = useEvents({ blockId_eq: id }, "id_DESC");
