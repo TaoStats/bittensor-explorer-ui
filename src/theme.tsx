@@ -48,8 +48,7 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: ({theme}) => css`
 					font-weight: 700;
-					font-family: "Google Sans", sans-serif;
-					color: ${theme.palette.secondary.main};
+					color: ${theme.palette.success.main};
 				`
 			}
 		},
@@ -61,10 +60,10 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: ({theme}) => css`
 					padding: 6px 32px;
-					color: ${theme.palette.primary.main};
-					background-color: ${theme.palette.success.main};
+					color: ${theme.palette.primary.light};
+					background-color: ${theme.palette.neutral.main};
 					&:hover {
-						background-color: ${theme.palette.neutral.main};
+						background-color: ${theme.palette.success.main};
 					}
 				`,
 				sizeSmall: css`
@@ -198,9 +197,10 @@ export const theme = createTheme({
 						}
 					}
 				`,
-				input: css`
+				input: ({theme}) => css`
 					border-radius: inherit;
-					background-color: ${grey[100]};
+					background-color: ${theme.palette.primary.dark};
+					color: ${theme.palette.secondary.light};
 					height: 24px;
 					padding: 12px 16px;
 

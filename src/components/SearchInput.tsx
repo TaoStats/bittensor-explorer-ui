@@ -5,56 +5,17 @@ import { Button, FormGroup, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { css, Theme } from "@emotion/react";
 
-// import NetworkSelect from "./NetworkSelect";
-
 const formGroupStyle = css`
 	flex-direction: row;
 	justify-content: center;
 	flex-wrap: nowrap;
 `;
 
-// const networkSelectStyle = (theme: Theme) => css`
-// 	border-top-right-radius: 0;
-// 	border-bottom-right-radius: 0;
-
-// 	&, &:hover, &.Mui-focused {
-// 		.MuiOutlinedInput-notchedOutline {
-// 			border-color: #c4cdd5;
-// 			border-right: none;
-// 		}
-// 	}
-
-// 	&::after {
-// 		position: absolute;
-// 		right: 0;
-// 		content: '';
-// 		display: block;
-// 		width: 1px;
-// 		height: 24px;
-// 		background-color: #c4cdd5;
-// 		z-index: 10;
-// 	}
-
-// 	${theme.breakpoints.down("sm")} {
-// 		.MuiListItemIcon-root {
-// 			min-width: 0;
-// 		}
-
-// 		.MuiListItemText-root {
-// 			display: none;
-// 		}
-// 	}
-// `;
-
 const textFieldStyle = css`
 	.MuiInputBase-root {
 		border-radius: 0;
 		border-top-left-radius: 8px;
 		border-bottom-left-radius: 8px;
-
-		.MuiOutlinedInput-notchedOutline {
-			// border-left: none;
-		}
 
 		&, &:hover, &.Mui-focused {
 			.MuiOutlinedInput-notchedOutline {
@@ -102,25 +63,13 @@ export type SearchInputProps = FormHTMLAttributes<HTMLFormElement> & {
 function SearchInput(props: SearchInputProps) {
 	const { defaultNetwork, persistNetwork, onNetworkChange, ...restProps } = props;
 
-	// console.log("default network", defaultNetwork);
-
 	const [qs] = useSearchParams();
 	const query = qs.get("query");
-	// console.log(qs, query);
 
 	const [network, setNetwork] = useState<string | undefined>(defaultNetwork);
 	const [search, setSearch] = useState<string>(query || "");
 
 	const navigate = useNavigate();
-
-	// const handleNetworkSelect = useCallback((network: string, isUserAction: boolean) => {
-	// 	if (isUserAction && persistNetwork) {
-	// 		console.log("store", network);
-	// 		localStorage.setItem("network", network);
-	// 	}
-
-	// 	setNetwork(network);
-	// }, [persistNetwork]);
 
 	const handleSubmit = useCallback(
 		(e: any) => {
@@ -152,11 +101,6 @@ function SearchInput(props: SearchInputProps) {
 	return (
 		<form {...restProps} onSubmit={handleSubmit}>
 			<FormGroup row css={formGroupStyle}>
-				{/* <NetworkSelect
-					css={networkSelectStyle}
-					onChange={handleNetworkSelect}
-					value={network}
-				/> */}
 				<TextField
 					css={textFieldStyle}
 					fullWidth

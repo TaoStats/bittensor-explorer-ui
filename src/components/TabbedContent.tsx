@@ -1,20 +1,24 @@
 /** @jsxImportSource @emotion/react */
 import { Children, cloneElement, PropsWithChildren, ReactElement, ReactNode, useState } from "react";
 import { Theme, css } from "@emotion/react";
-import { CircularProgress, Tab, TabProps, Tabs } from "@mui/material";
+import { Tab, TabProps, Tabs } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Warning";
 
-const tabsWrapperStyle = (theme: Theme) => css`
+import LoadingSpinner from "../assets/loading.gif";
+
+const tabsWrapperStyle = css`
 	margin-bottom: 16px;
-	border-bottom: solid 1px ${theme.palette.secondary.dark};
 `;
 
 const tabsStyle = (theme: Theme) => css`
 	margin-bottom: -1px;
 
 	.MuiTabs-indicator {
-		height: 3px;
-		background-color: ${theme.palette.secondary.main};
+		height: 4px;
+		width: 9px !important;
+		transition: all .5s;
+    -webkit-transition: all .5s;
+		background-color: ${theme.palette.success.main};
 	}
 `;
 
@@ -22,11 +26,12 @@ const tabStyle = (theme: Theme) => css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	padding: 0px;
+	margin-right: 32px;
 
 	&.Mui-selected {
 		color: ${theme.palette.neutral.main};
 		font-weight: 700;
-		background-color: ${theme.palette.primary.light};
 	}
 
 	&:hover {
@@ -45,9 +50,9 @@ const tabErrorStyle = css`
 	color: #ef5350;
 `;
 
-const tabLoadingStyle = (theme: Theme) => css`
+const tabLoadingStyle = css`
 	margin-left: 8px;
-	color: ${theme.palette.secondary.main};
+	width: 22px;
 `;
 
 export type TabPaneProps = Omit<TabProps, "children"> & PropsWithChildren<{
@@ -95,7 +100,7 @@ export const TabbedContent = (props: TabbedContentProps) => {
 					<>
 						<span>{label}</span>
 						{Number.isInteger(count) && <span data-test="count" css={tabCountStyle}>({count})</span>}
-						{(loading) && <CircularProgress css={tabLoadingStyle} size={14} />}
+						{(loading) && <img src={LoadingSpinner} css={tabLoadingStyle} />}
 						{!!error && <ErrorIcon css={tabErrorStyle} />}
 					</>
 				}

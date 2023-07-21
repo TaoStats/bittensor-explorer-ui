@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { FaDiscord } from "react-icons/fa";
 import { Twitter } from "@mui/icons-material";
-import { alpha } from "@mui/material";
 import { css, Theme } from "@emotion/react";
 import { HTMLAttributes } from "react";
 
@@ -29,8 +28,12 @@ const contentStyle = (theme: Theme) => css`
 	font-size: 15px;
 
 	a {
-		color: inherit;
+		color: ${theme.palette.success.main};
 		text-decoration: none;
+	}
+
+	a:hover {
+		color: ${theme.palette.success.light};
 	}
 
 	${theme.breakpoints.down("md")} {
@@ -71,7 +74,7 @@ const linksStyle = css`
 	z-index: 10;
 `;
 
-const iconStyle = (theme: Theme) => css`
+const iconStyle = css`
 	display: block;
 	font-size: 1.25em;
 `;
