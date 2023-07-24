@@ -10,9 +10,7 @@ export async function addRuntimeSpec<T>(response: T | undefined, getSpecVersion:
 	}
 
 	const specVersion = getSpecVersion(response);
-	// FIXME:
-	// const spec = await getRuntimeSpec(specVersion);
-	const spec = {};
+	const spec = await getRuntimeSpec(specVersion);
 
 	return {
 		...response,

@@ -48,16 +48,13 @@ export const HomePage = () => {
 				<Card>
 					<TabbedContent>
 						<TabPane
-							label="Blocks"
+							label='Blocks'
 							count={blocks.pagination.totalCount}
 							loading={blocks.loading}
 							error={blocks.error}
-							value="blocks"
+							value='blocks'
 						>
-							<BlocksTable
-								blocks={blocks}
-								showTime
-							/>
+							<BlocksTable blocks={blocks} showTime />
 						</TabPane>
 						{/* <TabPane
 							label="Extrinsics"
@@ -73,11 +70,11 @@ export const HomePage = () => {
 							/>
 						</TabPane> */}
 						<TabPane
-							label="Transfers"
+							label='Transfers'
 							count={transfers.pagination.totalCount}
 							loading={transfers.loading}
 							error={transfers.error}
-							value="transfers"
+							value='transfers'
 						>
 							<TransfersTable
 								transfers={transfers}
