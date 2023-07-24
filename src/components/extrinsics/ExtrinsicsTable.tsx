@@ -2,10 +2,10 @@ import { Extrinsic } from "../../model/extrinsic";
 import { PaginatedResource } from "../../model/paginatedResource";
 
 import { AccountAddress } from "../AccountAddress";
+import { BlockTimestamp } from "../BlockTimestamp";
 import { ButtonLink } from "../ButtonLink";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
-import { Time } from "../Time";
 
 export type ExtrinsicsTableProps = {
 	extrinsics: PaginatedResource<Extrinsic>,
@@ -70,7 +70,7 @@ function ExtrinsicsTable(props: ExtrinsicsTableProps) {
 				<ExtrinsicsTableAttribute
 					label="Time"
 					render={(extrinsic) =>
-						<Time time={extrinsic.timestamp} fromNow tooltip utc />
+						<BlockTimestamp blockHeight={extrinsic.blockHeight} fromNow tooltip utc />
 					}
 				/>
 			}

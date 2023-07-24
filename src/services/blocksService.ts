@@ -7,9 +7,9 @@ import { extractItems } from "../utils/extractItems";
 import { fetchDictionary } from "./fetchService";
 
 export type BlocksFilter =
-	{ id: object; }
-	| { hash: object; }
-	| { height: object; };
+	{ id: string; }
+	| { hash: string; }
+	| { height: number; };
 
 export type BlocksOrder = string | string[];
 

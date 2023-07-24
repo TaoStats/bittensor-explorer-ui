@@ -2,13 +2,10 @@ import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 import { Transfer } from "../model/transfer";
 
-import { addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
-
 import { fetchIndexer } from "./fetchService";
 
 export type TransfersFilter = string;
-
 export type TransfersOrder = string | string[];
 
 export async function getTransfers(
@@ -28,7 +25,6 @@ async function fetchTransfers(
 ) {
 	const offset = pagination.offset;
 
-	// FIXME:
 	const response = await fetchIndexer<{ transfers: ResponseItems<Transfer> }>(
 		`query ($first: Int!, $offset: Int!, $filter: TransferFilter, $order: [TransfersOrderBy!]!) {
 			transfers(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
@@ -56,11 +52,7 @@ async function fetchTransfers(
 			order,
 		}
 	);
-	// TODO:
 	const items = extractItems(response.transfers, pagination, (x) => x);
-	const itemsWithRuntimeSpec = await addRuntimeSpecs(items, () => "latest");
-	// TODO:
-	// const transfers = await addExtrinsicsInfo(itemsWithRuntimeSpec);
 
-	return itemsWithRuntimeSpec;
+	return items;
 }

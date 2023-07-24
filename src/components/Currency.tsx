@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import { Tooltip } from "@mui/material";
 import Decimal from "decimal.js";
 
-import { formatCurrency, FormatCurrencyOptions } from "../utils/number";
+import { formatCurrency, FormatCurrencyOptions, rawAmountToDecimal } from "../utils/number";
 
 const wrapperStyle = css`
 	display: inline-block;
@@ -20,7 +20,7 @@ const usdValueStyle = css`
 `;
 
 export type CurrencyProps = HTMLAttributes<HTMLDivElement> & {
-	amount: Decimal;
+	amount: bigint;
 	currency: string;
 	decimalPlaces?: FormatCurrencyOptions["decimalPlaces"];
 	minimalUsdValue?: Decimal;
@@ -30,13 +30,18 @@ export type CurrencyProps = HTMLAttributes<HTMLDivElement> & {
 }
 
 export const Currency = (props: CurrencyProps) => {
-	const {amount, currency, decimalPlaces, usdRate, minimalUsdValue, showFullInTooltip, showUsdValue, ...divProps} = props;
+	const { amount, currency, decimalPlaces, usdRate, minimalUsdValue, showFullInTooltip, showUsdValue, ...divProps } = props;
+	const amountDecimal = rawAmountToDecimal(amount.toString());
 
-	const usdValue = useMemo(() => usdRate && amount.mul(usdRate), [amount, usdRate]);
+	const usdValue = useMemo(() => usdRate && amountDecimal.mul(usdRate), [amount, usdRate]);
 
 	let amountContent = (
-		<div css={amount.isZero() && zeroAmountStyle}>
-			{formatCurrency(amount, currency, {decimalPlaces, minimalUsdValue, usdRate})}
+		<div css={amountDecimal.isZero() && zeroAmountStyle}>
+			{formatCurrency(amountDecimal, currency, {
+				decimalPlaces,
+				minimalUsdValue,
+				usdRate,
+			})}
 		</div>
 	);
 
@@ -45,7 +50,7 @@ export const Currency = (props: CurrencyProps) => {
 			<Tooltip
 				arrow
 				placement="top"
-				title={formatCurrency(amount, currency)}
+				title={formatCurrency(amountDecimal, currency)}
 			>
 				{amountContent}
 			</Tooltip>
