@@ -4,12 +4,10 @@ import { PaginationOptions } from "../model/paginationOptions";
 
 import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
+
 import { fetchDictionary } from "./fetchService";
 
-export type BlocksFilter =
-	{ id: string; }
-	| { hash: string; }
-	| { height: number; };
+export type BlocksFilter = object;
 
 export type BlocksOrder = string | string[];
 
@@ -75,8 +73,6 @@ export async function getBlocks(
 
 	const data = extractItems(response.blocks, pagination, transformBlock);
 	const blocks = await addRuntimeSpecs(data, it => it.specVersion);
-
-	console.log("okay after adding runtime specs");
 
 	return blocks;
 }

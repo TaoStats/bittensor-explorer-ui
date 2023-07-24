@@ -53,7 +53,7 @@ export const SearchPage = () => {
 	const maybeName = query && !maybeHash && !maybeHeight;
 
 	const extrinsicByHash = useExtrinsic({ hash_eq: query }, { skip: !maybeHash });
-	const blockByHash = useBlock({ hash_eq: query }, { skip: !maybeHash });
+	const blockByHash = useBlock({ hash: { equalTo: query } }, { skip: !maybeHash });
 
 	const account = useAccount(query, {
 		// extrinsic and block has precedence before account because the hashes may collide
@@ -62,7 +62,7 @@ export const SearchPage = () => {
 		waitUntil: extrinsicByHash.loading || blockByHash.loading
 	});
 
-	const blockByHeight = useBlock({ height_eq: parseInt(query) }, { skip: !maybeHeight });
+	const blockByHeight = useBlock({ height: { equalTo: parseInt(query) } }, { skip: !maybeHeight });
 
 	const extrinsicsByName = useExtrinsicsByName(query, "id_DESC", { skip: !maybeName });
 	const eventsByName = useEventsByName(query, "id_DESC", { skip: !maybeName });
