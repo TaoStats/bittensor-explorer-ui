@@ -41,7 +41,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 				label="Block"
 				render={(data) =>
 					<Link
-						to={`/block/${data.blockId}`}
+						to={`/block/${data.blockHeight}`}
 					>
 						{data.blockHeight}
 					</Link>
@@ -50,7 +50,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 			/>
 			<EventInfoTableAttribute
 				label="Extrinsic"
-				render={(data) => data.extrinsicId &&
+				render={(data) => data.extrinsicId != null &&
 					<Link
 						to={`/extrinsic/${data.extrinsicId}`}
 					>
@@ -59,7 +59,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 				}
 				copyToClipboard={(data) => data.extrinsicId}
 			/>
-			<EventInfoTableAttribute
+			{/* <EventInfoTableAttribute
 				label="Call"
 				render={(data) => data.callId &&
 					<Link
@@ -69,7 +69,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 					</Link>
 				}
 				copyToClipboard={(data) => data.callId}
-			/>
+			/> */}
 			<EventInfoTableAttribute
 				label="Name"
 				render={(data) =>

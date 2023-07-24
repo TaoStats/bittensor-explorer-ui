@@ -58,7 +58,7 @@ function EventsTable(props: EventsTableProps) {
 			{showExtrinsic && (
 				<EventsItemsTableAttribute
 					label="Extrinsic"
-					render={(event) => event.extrinsicId && (
+					render={(event) => event.extrinsicId != null && (
 						<Link to={`/extrinsic/${event.extrinsicId}`}>
 							{event.extrinsicId}
 						</Link>

@@ -119,7 +119,7 @@ export const InfoTableAttribute = <T extends object = any, A extends any[] = []>
 			<TableCell css={[valueCellStyle, valueCellStyleOverride]}>
 				<div css={valueStyle}>
 					{render(_data, ..._additionalData)}
-					{copyToClipboard?.(_data, ..._additionalData) &&
+					{copyToClipboard?.(_data, ..._additionalData) != null &&
 						<CopyToClipboardButton
 							css={copyButtonStyle}
 							value={copyToClipboard(_data, ..._additionalData)}
