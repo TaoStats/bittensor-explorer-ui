@@ -3,7 +3,6 @@ import { PaginationOptions } from "../model/paginationOptions";
 import { Transfer } from "../model/transfer";
 
 import { extractItems } from "../utils/extractItems";
-
 import { fetchIndexer } from "./fetchService";
 
 export type TransfersFilter = object;
