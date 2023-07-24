@@ -17,7 +17,7 @@ type ExtrinsicPageParams = {
 export const ExtrinsicPage = () => {
 	const { id } = useParams() as ExtrinsicPageParams;
 
-	const extrinsic = useExtrinsic({ id_eq: id });
+	const extrinsic = useExtrinsic({ id: { equalTo: id } });
 	const events = useEvents({ extrinsicId_eq: id }, "id_ASC");
 
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);

@@ -64,7 +64,7 @@ export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
 
 	const account = useAccount(address);
-	const extrinsics = useExtrinsics({ signerAddress_eq: address });
+	const extrinsics = useExtrinsics({ signer: { equalTo: address } });
 	const transfers = useTransfers({ accountAddress_eq: address });
 
 	const usdRates = useUsdRates();

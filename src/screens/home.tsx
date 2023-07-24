@@ -36,7 +36,7 @@ const subtitleStyle = (theme: Theme) => css`
 export const HomePage = () => {
 	const extrinsics = useExtrinsicsWithoutTotalCount(
 		undefined,
-		"ID_DESC"
+		"BLOCK_HEIGHT_DESC"
 	);
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
 	const transfers = useTransfers(undefined, "BLOCK_NUMBER_DESC");

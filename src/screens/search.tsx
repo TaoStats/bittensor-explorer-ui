@@ -52,7 +52,7 @@ export const SearchPage = () => {
 	const maybeAddress = isAddress(query);
 	const maybeName = query && !maybeHash && !maybeHeight;
 
-	const extrinsicByHash = useExtrinsic({ hash_eq: query }, { skip: !maybeHash });
+	const extrinsicByHash = useExtrinsic({ txHash: { equalTo: query } }, { skip: !maybeHash });
 	const blockByHash = useBlock({ hash_eq: query }, { skip: !maybeHash });
 
 	const account = useAccount(query, {
@@ -64,7 +64,7 @@ export const SearchPage = () => {
 
 	const blockByHeight = useBlock({ height_eq: parseInt(query) }, { skip: !maybeHeight });
 
-	const extrinsicsByName = useExtrinsicsByName(query, "id_DESC", { skip: !maybeName });
+	const extrinsicsByName = useExtrinsicsByName(query, "BLOCK_HEIGHT_DESC", { skip: !maybeName });
 	const eventsByName = useEventsByName(query, "id_DESC", { skip: !maybeName });
 
 	const allResources = [extrinsicByHash, blockByHash, account, blockByHeight, extrinsicsByName, eventsByName];

@@ -11,14 +11,10 @@ export type Extrinsic = {
 	args: string[];
 	nonce: number;
 	signer: string;
-	signature: string|null;
 	version: number;
-	tip: bigint|null;
-	fee: bigint|null;
+	tip: bigint;
 	blockId: string;
 	timestamp: Date;
 	specVersion: number;
 	runtimeSpec: RuntimeSpec;
-	callName: string;
-	palletName: string;
 }
