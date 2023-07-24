@@ -50,7 +50,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 			/>
 			<EventInfoTableAttribute
 				label="Extrinsic"
-				render={(data) => data.extrinsicId &&
+				render={(data) => data.extrinsicId != null &&
 					<Link
 						to={`/extrinsic/${data.extrinsicId}`}
 					>

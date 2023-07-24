@@ -53,8 +53,7 @@ export async function getEventsByName(
 export async function getEvents(
 	filter: EventsFilter,
 	order: EventsOrder = "BLOCK_HEIGHT_DESC",
-	pagination: PaginationOptions,
-	fetchTotalCount = true
+	pagination: PaginationOptions
 ) {
 	const offset = pagination.offset;
 
@@ -72,7 +71,6 @@ export async function getEvents(
 					hasPreviousPage
 					startCursor
 				}
-				${fetchTotalCount ? "totalCount" : ""}
 			}
 		}`,
 		{
