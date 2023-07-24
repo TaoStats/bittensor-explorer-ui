@@ -68,13 +68,15 @@ export async function getBlocks(
 		{
 			first: pagination.limit,
 			offset,
-			filter: filter,
+			filter,
 			order,
 		}
 	);
 
 	const data = extractItems(response.blocks, pagination, transformBlock);
 	const blocks = await addRuntimeSpecs(data, it => it.specVersion);
+
+	console.log("okay after adding runtime specs");
 
 	return blocks;
 }

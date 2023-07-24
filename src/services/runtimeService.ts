@@ -17,19 +17,21 @@ export async function getRuntimeSpec(specVersion: number | "latest"): Promise<Ru
 
 export async function getLatestRuntimeSpec() {
 	// FIXME:
-	const response = await fetchDictionary<{ spec: RuntimeSpecResponse[] }>(
+	const response = await fetchDictionary<{ specVersions: { nodes: RuntimeSpecResponse[] } }>(
 		`
 			query {
-				spec: metadata(orderBy: BLOCK_HEIGHT_DESC, limit: 1) {
-					id
-					blockHeight
-					hex
+				specVersions(orderBy: BLOCK_HEIGHT_DESC, first: 1) {
+					nodes {
+						id
+						blockHeight
+						hex
+					}
 				}
 			}
 		`
 	);
 
-	const spec = response.spec[0]!;
+	const spec = response.specVersions.nodes[0]!;
 
 	return {
 		...spec,

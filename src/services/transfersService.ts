@@ -1,5 +1,4 @@
 import { ResponseItems } from "../model/itemsConnection";
-import { MainSquidTransfer } from "../model/main-squid/mainSquidTransfer";
 import { PaginationOptions } from "../model/paginationOptions";
 import { Transfer } from "../model/transfer";
 
@@ -9,8 +8,7 @@ import { rawAmountToDecimal } from "../utils/number";
 
 import { fetchIndexer } from "./fetchService";
 
-export type TransfersFilter =
-	{ accountAddress_eq: string };
+export type TransfersFilter = string;
 
 export type TransfersOrder = string | string[];
 
@@ -29,34 +27,19 @@ async function fetchTransfers(
 	order: TransfersOrder = "id_DESC",
 	pagination: PaginationOptions,
 ) {
-	const after = pagination.offset === 0 ? null : pagination.offset.toString();
+	const offset = pagination.offset;
 
 	// FIXME:
-	const response = await fetchIndexer<{ transfersConnection: ResponseItems<MainSquidTransfer> }>(
-		`query ($first: Int!, $after: String, $filter: TransferWhereInput, $order: [TransferOrderByInput!]!) {
-			transfersConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
-				edges {
-					node {
-						id
-						transfer {
-							id
-							amount
-							blockNumber
-							success
-							timestamp
-							extrinsicHash
-							to {
-								publicKey
-							}
-							from {
-								publicKey
-							}
-						}
-						account {
-							publicKey
-						}
-						direction
-					}
+	const response = await fetchIndexer<{ transfers: ResponseItems<Transfer> }>(
+		`query ($first: Int!, $offset: Int!, $filter: TransferFilter, $order: [TransfersOrderBy!]!) {
+			transfers(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+				nodes {
+					id
+					from
+					to
+					amount
+					extrinsicId
+					blockNumber
 				}
 				pageInfo {
 					endCursor
@@ -69,32 +52,16 @@ async function fetchTransfers(
 		}`,
 		{
 			first: pagination.limit,
-			after,
-			// FIXME:
-			// filter: transfersFilterToMainSquidFilter(filter),
+			offset,
+			filter,
 			order,
 		}
 	);
-
-	const items = extractItems(response.transfersConnection, pagination, unifyMainSquidTransfer);
-	// const itemsWithRuntimeSpec = await addRuntimeSpecs(items, () => "latest");
-	// FIXME:
+	// TODO:
+	const items = extractItems(response.transfers, pagination, (x) => x);
+	const itemsWithRuntimeSpec = await addRuntimeSpecs(items, () => "latest");
+	// TODO:
 	// const transfers = await addExtrinsicsInfo(itemsWithRuntimeSpec);
 
-	return items;
-}
-
-function unifyMainSquidTransfer(transfer: MainSquidTransfer): Omit<Transfer, "runtimeSpec" | "extrinsic"> {
-
-	return {
-		...transfer,
-		accountPublicKey: transfer.account.publicKey,
-		blockNumber: transfer.transfer.blockNumber,
-		timestamp: transfer.transfer.timestamp,
-		extrinsicHash: transfer.transfer.extrinsicHash,
-		amount: rawAmountToDecimal(transfer.transfer.amount),
-		success: transfer.transfer.success,
-		fromPublicKey: transfer.transfer.from.publicKey,
-		toPublicKey: transfer.transfer.to.publicKey,
-	};
+	return itemsWithRuntimeSpec;
 }

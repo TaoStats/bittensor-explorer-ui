@@ -4,7 +4,7 @@ import { NETWORK_CONFIG } from "../config";
 const supportedFiatCurrencies = ["USD"];
 
 export function rawAmountToDecimal(amount: string | undefined) {
-	const { decimals } = NETWORK_CONFIG; // TODO:
+	const { decimals } = NETWORK_CONFIG;
 	const scale = new Decimal(10).pow(decimals * -1);
 	return new Decimal(amount || 0).mul(scale);
 }

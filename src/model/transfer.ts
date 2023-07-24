@@ -2,14 +2,17 @@ import Decimal from "decimal.js";
 
 import { RuntimeSpec } from "./runtimeSpec";
 
-export type Transfer = {
+export type TransferResponse = {
 	id: string;
 	from: string;
 	to: string;
-	amount: Decimal;
+	amount: bigint;
 	blockNumber: bigint;
 	extrinsicId: number;
+}
 
-	timestamp: string;
+export type Transfer = TransferResponse & {
+	amount: Decimal;
+	timestamp: Date;
 	runtimeSpec: RuntimeSpec;
 }

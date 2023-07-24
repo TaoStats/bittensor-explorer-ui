@@ -39,7 +39,7 @@ export const HomePage = () => {
 	// 	"id_DESC"
 	// );
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
-	// const transfers = useTransfers(undefined, "id_DESC");
+	const transfers = useTransfers(undefined, "BLOCK_NUMBER_DESC");
 
 	return (
 		<div css={contentStyle}>
@@ -72,7 +72,7 @@ export const HomePage = () => {
 								showTime
 							/>
 						</TabPane> */}
-						{/* <TabPane
+						<TabPane
 							label="Transfers"
 							count={transfers.pagination.totalCount}
 							loading={transfers.loading}
@@ -83,7 +83,7 @@ export const HomePage = () => {
 								transfers={transfers}
 								showTime
 							/>
-						</TabPane> */}
+						</TabPane>
 					</TabbedContent>
 				</Card>
 			</div>
