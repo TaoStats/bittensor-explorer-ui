@@ -3,6 +3,7 @@ import { PaginationOptions } from "../model/paginationOptions";
 import { Transfer } from "../model/transfer";
 
 import { extractItems } from "../utils/extractItems";
+
 import { fetchIndexer } from "./fetchService";
 
 export type TransfersFilter = object;
@@ -10,7 +11,7 @@ export type TransfersOrder = string | string[];
 
 export async function getTransfers(
 	filter: TransfersFilter | undefined,
-	order: TransfersOrder = "BLOCK_HEIGHT_DESC",
+	order: TransfersOrder = "BLOCK_NUMBER_DESC",
 	pagination: PaginationOptions,
 ) {
 	return fetchTransfers(filter, order, pagination);
@@ -20,7 +21,7 @@ export async function getTransfers(
 
 async function fetchTransfers(
 	filter: TransfersFilter | undefined,
-	order: TransfersOrder = "BLOCK_HEIGHT_DESC",
+	order: TransfersOrder = "BLOCK_NUMBER_DESC",
 	pagination: PaginationOptions,
 ) {
 	const offset = pagination.offset;
