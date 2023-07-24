@@ -70,6 +70,7 @@ export async function getExtrinsics(
 				nodes {
 					id
 					txHash
+					module
 					call
 					signer
 					success

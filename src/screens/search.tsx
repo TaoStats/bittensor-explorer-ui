@@ -19,7 +19,6 @@ import { useExtrinsic } from "../hooks/useExtrinsic";
 import { useExtrinsicsByName } from "../hooks/useExtrinsicsByName";
 import { useEventsByName } from "../hooks/useEventsByName";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useRootLoaderData } from "../hooks/useRootLoaderData";
 
 const queryStyle = css`
 	font-weight: normal;
@@ -40,8 +39,6 @@ const loadingStyle = css`
 `;
 
 export const SearchPage = () => {
-	const { network } = useRootLoaderData();
-
 	const [qs] = useSearchParams();
 	const query = qs.get("query") || "";
 
