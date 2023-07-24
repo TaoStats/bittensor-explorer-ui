@@ -13,7 +13,7 @@ export type EventPageParams = {
 export const EventPage = () => {
 	const { id } = useParams() as EventPageParams;
 
-	const event = useEvent({ id_eq: id });
+	const event = useEvent({ id: { equalTo: id } });
 
 	useDOMEventTrigger("data-loaded", !event.loading);
 
