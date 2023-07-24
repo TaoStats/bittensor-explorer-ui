@@ -50,10 +50,10 @@ export const router = createBrowserRouter([
 			// 		return null;
 			// 	}
 			// },
-			// {
-			// 	path: "event/:id",
-			// 	element: <EventPage />,
-			// },
+			{
+				path: "event/:id",
+				element: <EventPage />,
+			},
 			{
 				path: "*",
 				element: <NotFoundPage />,

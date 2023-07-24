@@ -19,7 +19,7 @@ export const ExtrinsicPage = () => {
 	const { id } = useParams() as ExtrinsicPageParams;
 
 	const extrinsic = useExtrinsic({ id_eq: id });
-	const events = useEvents({ extrinsicId_eq: id }, "id_ASC");
+	const events = useEvents({ extrinsicId: { equalTo: id } }, "BLOCK_HEIGHT_ASC");
 
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
 

@@ -65,7 +65,7 @@ export const SearchPage = () => {
 	const blockByHeight = useBlock({ height: { equalTo: parseInt(query) } }, { skip: !maybeHeight });
 
 	const extrinsicsByName = useExtrinsicsByName(query, "id_DESC", { skip: !maybeName });
-	const eventsByName = useEventsByName(query, "id_DESC", { skip: !maybeName });
+	const eventsByName = useEventsByName(query, "BLOCK_HEIGHT_DESC", { skip: !maybeName });
 
 	const allResources = [extrinsicByHash, blockByHash, account, blockByHeight, extrinsicsByName, eventsByName];
 	const multipleResultsResources = [extrinsicsByName, eventsByName];

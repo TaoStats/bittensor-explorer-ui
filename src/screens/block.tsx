@@ -22,7 +22,7 @@ export const BlockPage = () => {
 	const block = useBlock({ id: { equalTo: id } });
 
 	const extrinsics = useExtrinsics({ blockId_eq: id }, "id_DESC");
-	const events = useEvents({ blockId_eq: id }, "id_DESC");
+	const events = useEvents({ blockHeight: { equalTo: id } }, "BLOCK_HEIGHT_DESC");
 
 	useDOMEventTrigger("data-loaded", !block.loading && !extrinsics.loading && !events.loading);
 
