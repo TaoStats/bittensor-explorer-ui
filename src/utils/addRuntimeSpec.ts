@@ -23,21 +23,11 @@ export async function addRuntimeSpec<T>(response: T | undefined, getSpecVersion:
 
 export async function addRuntimeSpecs<T>(response: ItemsResponse<T>, getSpecVersion: (data: T) => number | "latest") {
 	const specVersions = uniq(response.data.map(getSpecVersion));
-
-	// FIXME:
-	// const specs = await getRuntimeSpecs(specVersions);
-
-	// const items = response.data.map(it => ({
-	// 	...it,
-	// 	runtimeSpec: specs[getSpecVersion(it)]!
-	// }));
-
+	const specs = await getRuntimeSpecs(specVersions);
 	const items = response.data.map(it => ({
 		...it,
-		runtimeSpec: {}
+		runtimeSpec: specs[getSpecVersion(it)]!
 	}));
-
-
 	return {
 		...response,
 		data: items

@@ -14,7 +14,7 @@ export type BlocksFilter =
 export type BlocksOrder = string | string[];
 
 export async function getBlock(filter: BlocksFilter) {
-	const response = await fetchDictionary<{blocks: ResponseItems<Block>}>(
+	const response = await fetchDictionary<{ blocks: ResponseItems<Block> }>(
 		`query ($filter: BlockFilter) {
 			blocks(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
 				nodes {

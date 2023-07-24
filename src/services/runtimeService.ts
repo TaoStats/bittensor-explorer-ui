@@ -20,12 +20,9 @@ export async function getLatestRuntimeSpec() {
 	const response = await fetchDictionary<{ spec: RuntimeSpecResponse[] }>(
 		`
 			query {
-				spec: metadata(orderBy: specVersion_DESC, limit: 1) {
+				spec: metadata(orderBy: BLOCK_HEIGHT_DESC, limit: 1) {
 					id
-					blockHash
 					blockHeight
-					specName
-					specVersion
 					hex
 				}
 			}
@@ -57,11 +54,11 @@ export async function getRuntimeSpecs(
 	const response = await fetchDictionary<{ specVersions: { nodes: RuntimeSpecResponse[] } }>(
 		`
 			query ($specVersions: [String!]!) {
-				specVersions(filter: {id: {in: $specVersions} }, orderBy: BLOCK_ID_DESC) {
+				specVersions(filter: {id: {in: $specVersions} }, orderBy: BLOCK_HEIGHT_DESC) {
 					nodes {
 						id
 						blockHeight
-						metadata
+						hex
 					}
 				}
 			}
@@ -75,7 +72,7 @@ export async function getRuntimeSpecs(
 		specs[spec.id] = {
 			id: spec.id,
 			blockHeight: spec.blockHeight,
-			metadata: decodeMetadata(spec.metadata)
+			metadata: decodeMetadata(spec.hex)
 		};
 	}
 
