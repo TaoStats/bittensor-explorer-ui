@@ -8,7 +8,7 @@ import { Time } from "../Time";
 
 export type BlocksTableProps = {
 	blocks: PaginatedResource<Block>,
-	showValidator: boolean,
+	showValidator?: boolean,
 	showTime?: boolean;
 };
 

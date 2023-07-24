@@ -56,7 +56,6 @@ export const HomePage = () => {
 						>
 							<BlocksTable
 								blocks={blocks}
-								showValidator
 								showTime
 							/>
 						</TabPane>
