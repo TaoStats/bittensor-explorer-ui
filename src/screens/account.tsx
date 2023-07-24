@@ -65,7 +65,7 @@ export const AccountPage = () => {
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics({ signerAddress_eq: address });
-	const transfers = useTransfers({ accountAddress_eq: address });
+	const transfers = useTransfers({ from: { equalTo: address }, or: { to: { equalTo: address } } });
 
 	const usdRates = useUsdRates();
 
