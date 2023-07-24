@@ -94,7 +94,7 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 					</ButtonLink>
 				}
 			/>
-			<ExtrinsicInfoTableAttribute
+			{/* <ExtrinsicInfoTableAttribute
 				label="Parameters"
 				render={(data) =>
 					<DataViewer
@@ -104,7 +104,7 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 						copyToClipboard
 					/>
 				}
-			/>
+			/> */}
 			<ExtrinsicInfoTableAttribute
 				label="Error"
 				render={(data) => <DataViewer data={data.error} copyToClipboard />}

@@ -34,10 +34,10 @@ const subtitleStyle = (theme: Theme) => css`
 `;
 
 export const HomePage = () => {
-	// const extrinsics = useExtrinsicsWithoutTotalCount(
-	// 	undefined,
-	// 	"id_DESC"
-	// );
+	const extrinsics = useExtrinsicsWithoutTotalCount(
+		undefined,
+		"ID_DESC"
+	);
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
 	const transfers = useTransfers(undefined, "BLOCK_NUMBER_DESC");
 
@@ -59,7 +59,7 @@ export const HomePage = () => {
 								showTime
 							/>
 						</TabPane>
-						{/* <TabPane
+						<TabPane
 							label="Extrinsics"
 							count={extrinsics.pagination.totalCount}
 							loading={extrinsics.loading}
@@ -71,7 +71,7 @@ export const HomePage = () => {
 								showAccount
 								showTime
 							/>
-						</TabPane> */}
+						</TabPane>
 						<TabPane
 							label="Transfers"
 							count={transfers.pagination.totalCount}

@@ -1,15 +1,15 @@
-import { ArchiveExtrinsic } from "../model/archive/archiveExtrinsic";
-import { ExplorerSquidExtrinsic } from "../model/explorer-squid/explorerSquidExtrinsic";
+import { Extrinsic } from "../model/extrinsic";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
+
 import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { decodeAddress } from "../utils/formatAddress";
 import { lowerFirst, upperFirst } from "../utils/string";
 import { extractItems } from "../utils/extractItems";
 
 import { getRuntimeSpec } from "./runtimeService";
-import { Extrinsic } from "../model/extrinsic";
 import { fetchDictionary } from "./fetchService";
+import { getBlock } from "./blocksService";
 
 export type ExtrinsicsFilter =
 	{ id_eq: string; }
@@ -22,12 +22,40 @@ export type ExtrinsicsFilter =
 export type ExtrinsicsOrder = string | string[];
 
 export async function getExtrinsic(filter: ExtrinsicsFilter) {
-	return getArchiveExtrinsic(filter);
+	const response = await fetchDictionary<{ extrinsics: ResponseItems<Extrinsic> }>(
+		`query ($filter: ExtrinsicFilter) {
+			extrinsics(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
+				nodes {
+					id
+					txHash
+					call
+					signer
+					success
+					tip
+					version
+					blockHeight
+					args
+				}
+			}
+		}`,
+		{
+			filter: extrinsicFilterToArchiveFilter(filter),
+		}
+	);
+
+	const data = response.extrinsics.nodes[0] && unifyArchiveExtrinsic(response.extrinsics.nodes[0]);
+
+	const blockResponse = await getBlock({ height: { equalTo: data.blockHeight } });
+	const newData = { ...data, specVersion: blockResponse.specVersion, timestamp: blockResponse.timestamp };
+
+	const extrinsic = addRuntimeSpec(newData, it => it.specVersion);
+
+	return extrinsic;
 }
 
 export async function getExtrinsicsByName(
 	name: string,
-	order: ExtrinsicsOrder = "id_DESC",
+	order: ExtrinsicsOrder = "ID_DESC",
 	pagination: PaginationOptions,
 ) {
 	let [palletName = "", callName = ""] = name.split(".");
@@ -71,84 +99,27 @@ export async function getExtrinsicsByName(
 	return getExtrinsics(filter, order, false, pagination);
 }
 
-/*** PRIVATE ***/
-
-async function getArchiveExtrinsic(filter?: ExtrinsicsFilter) {
-	// FIXME:
-	const response = await fetchDictionary<{ extrinsics: ArchiveExtrinsic[] }>(
-		`query ($filter: ExtrinsicWhereInput) {
-			extrinsics(limit: 1, offset: 0, where: $filter, orderBy: id_DESC) {
-				id
-				hash
-				call {
-					name
-					args
-				}
-				block {
-					id
-					hash
-					height
-					timestamp
-					spec {
-						specVersion
-					}
-				}
-				signature
-				indexInBlock
-				success
-				tip
-				fee
-				error
-				version
-			}
-		}`,
-		{
-			filter: extrinsicFilterToArchiveFilter(filter),
-		}
-	);
-
-	const data = response.extrinsics[0] && unifyArchiveExtrinsic(response.extrinsics[0]);
-	const extrinsic = addRuntimeSpec(data, it => it.specVersion);
-
-	return extrinsic;
-}
-
 export async function getExtrinsics(
 	filter: ExtrinsicsFilter | undefined,
-	order: ExtrinsicsOrder = "id_DESC",
+	order: ExtrinsicsOrder = "ID_DESC",
 	fetchTotalCount: boolean,
 	pagination: PaginationOptions,
 ) {
-	const after = pagination.offset === 0 ? null : pagination.offset.toString();
-	// FIXME:
-	const response = await fetchDictionary<{ extrinsicsConnection: ResponseItems<ArchiveExtrinsic> }>(
-		`query ($first: Int!, $after: String, $filter: ExtrinsicWhereInput, $order: [ExtrinsicOrderByInput!]!) {
-			extrinsicsConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
-				edges {
-					node {
-						id
-						hash
-						call {
-							name
-							args
-						}
-						block {
-							id
-							hash
-							height
-							timestamp
-							spec {
-								specVersion
-							}
-						}
-						signature
-						indexInBlock
-						success
-						tip
-						fee
-						error
-						version
-					}
+	const offset = pagination.offset;
+
+	const response = await fetchDictionary<{ extrinsics: ResponseItems<Extrinsic> }>(
+		`query ($first: Int!, $offset: Int!, $filter: ExtrinsicFilter, $order: [ExtrinsicsOrderBy!]!) {
+			extrinsics(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+				nodes {
+					id
+					txHash
+					call
+					signer
+					success
+					tip
+					version
+					blockHeight
+					args
 				}
 				pageInfo {
 					endCursor
@@ -161,112 +132,38 @@ export async function getExtrinsics(
 		}`,
 		{
 			first: pagination.limit,
-			after,
+			offset,
 			filter: extrinsicFilterToArchiveFilter(filter),
 			order,
 		}
 	);
 
-	const items = extractItems(response.extrinsicsConnection, pagination, unifyArchiveExtrinsic);
-	const extrinsics = await addRuntimeSpecs(items, it => it.specVersion);
+	const items = extractItems(response.extrinsics, pagination, unifyArchiveExtrinsic);
+
+	const promises = items.data.map(async (item) => {
+		const response = await getBlock({ height: { equalTo: item.blockHeight } });
+		return { ...item, specVersion: response.specVersion, timestamp: response.timestamp };
+	});
+	const data = await Promise.all(promises);
+	const newItems = {...items, data: data};
+
+	const extrinsics = await addRuntimeSpecs(newItems, it => it.specVersion);
 
 	return extrinsics;
 }
 
-async function getExplorerSquidExtrinsics(
-	filter: ExtrinsicsFilter | undefined,
-	order: ExtrinsicsOrder = "id_DESC",
-	pagination: PaginationOptions,
-	fetchTotalCount = true
-) {
-	const after = pagination.offset === 0 ? null : pagination.offset.toString();
+/*** PRIVATE ***/
 
-	// FIXME:
-	const response = await fetchDictionary<{ extrinsicsConnection: ResponseItems<ExplorerSquidExtrinsic> }>(
-		`query ($first: Int!, $after: String, $filter: ExtrinsicWhereInput, $order: [ExtrinsicOrderByInput!]!) {
-			extrinsicsConnection(first: $first, after: $after, where: $filter, orderBy: $order) {
-				edges {
-					node {
-						id
-						extrinsicHash
-						block {
-							id
-							hash
-							height
-							timestamp
-							specVersion
-						}
-						mainCall {
-							callName
-							palletName
-						}
-						indexInBlock
-						success
-						tip
-						fee
-						signerPublicKey
-						error
-						version
-					}
-				}
-				pageInfo {
-					endCursor
-					hasNextPage
-					hasPreviousPage
-					startCursor
-				}
-				${fetchTotalCount ? "totalCount" : ""}
-			}
-		}`,
-		{
-			first: pagination.limit,
-			after,
-			filter: extrinsicFilterToExplorerSquidFilter(filter),
-			order,
-		}
-	);
-
-	const items = extractItems(response.extrinsicsConnection, pagination, unifyExplorerSquidExtrinsic);
-	const extrinsics = await addRuntimeSpecs(items, it => it.specVersion);
-
-	return extrinsics;
-}
-
-function unifyArchiveExtrinsic(extrinsic: ArchiveExtrinsic): Omit<Extrinsic, "runtimeSpec"> {
-	const [palletName, callName] = extrinsic.call.name.split(".") as [string, string];
+function unifyArchiveExtrinsic(extrinsic: Extrinsic): Omit<Extrinsic, "runtimeSpec"> {
+	const [palletName, callName] = extrinsic.call.split(".") as [string, string];
 
 	return {
 		...extrinsic,
-		blockId: extrinsic.block.id,
-		blockHeight: extrinsic.block.height,
-		timestamp: extrinsic.block.timestamp,
 		callName,
 		palletName,
-		args: extrinsic.call.args,
-		signer: extrinsic.signature?.address?.value || extrinsic.signature?.address || null,
-		signature: extrinsic.signature?.signature?.value || extrinsic.signature?.signature || null,
+		signature: null,
 		fee: extrinsic.fee ? BigInt(extrinsic.fee) : null,
-		tip: extrinsic.tip ? BigInt(extrinsic.tip) : null,
-		specVersion: extrinsic.block.spec.specVersion
-	};
-}
-
-function unifyExplorerSquidExtrinsic(extrinsic: ExplorerSquidExtrinsic): Omit<Extrinsic, "runtimeSpec"> {
-	return {
-		...extrinsic,
-		hash: extrinsic.extrinsicHash,
-		blockId: extrinsic.block.id,
-		blockHeight: extrinsic.block.height,
-		timestamp: extrinsic.block.timestamp,
-		callName: extrinsic.mainCall.callName,
-		palletName: extrinsic.mainCall.palletName,
-		args: null,
-		signer: extrinsic.signerPublicKey,
-		signature: null, // TODO is present in archive but not here
-		error: extrinsic.error && JSON.parse(extrinsic.error),
-		fee: extrinsic.fee ? BigInt(extrinsic.fee) : null,
-		tip: extrinsic.tip ? BigInt(extrinsic.tip) : null,
-		specVersion: extrinsic.block.specVersion
+		tip: null,
 	};
 }
 
@@ -275,7 +172,13 @@ function extrinsicFilterToArchiveFilter(filter?: ExtrinsicsFilter) {
 		return undefined;
 	}
 
-	if ("blockId_eq" in filter) {
+	if ("id_eq" in filter) {
+		return {
+			id: {
+				equalTo: filter.id_eq
+			}
+		};
+	} else if ("blockId_eq" in filter) {
 		return {
 			block: {
 				id_eq: filter.blockId_eq
@@ -296,38 +199,6 @@ function extrinsicFilterToArchiveFilter(filter?: ExtrinsicsFilter) {
 				name_eq: ("callName_eq" in filter)
 					? `${filter.palletName_eq}.${filter.callName_eq}`
 					: filter.palletName_eq
-			}
-		};
-	}
-
-	return filter;
-}
-
-function extrinsicFilterToExplorerSquidFilter(filter?: ExtrinsicsFilter) {
-	if (!filter) {
-		return undefined;
-	}
-
-	if ("hash_eq" in filter) {
-		return {
-			extrinsicHash_eq: filter.hash_eq
-		};
-	} else if ("blockId_eq" in filter) {
-		return {
-			block: {
-				id_eq: filter.blockId_eq
-			}
-		};
-	} else if ("signerAddress_eq" in filter) {
-		const publicKey = decodeAddress(filter.signerAddress_eq);
-
-		return {
-			signerPublicKey_eq: publicKey
-		};
-	} else if ("palletName_eq" in filter) {
-		return {
-			mainCall: {
-				...filter
 			}
 		};
 	}

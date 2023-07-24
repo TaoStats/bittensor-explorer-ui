@@ -2,7 +2,6 @@
 import { useParams } from "react-router-dom";
 
 import { Card, CardHeader } from "../components/Card";
-import { CallsTable } from "../components/calls/CallsTable";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import EventsTable from "../components/events/EventsTable";
 import { ExtrinsicInfoTable } from "../components/extrinsics/ExtrinsicInfoTable";
