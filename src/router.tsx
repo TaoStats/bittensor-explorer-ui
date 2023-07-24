@@ -20,10 +20,10 @@ export const router = createBrowserRouter([
 				index: true,
 				element: <HomePage />
 			},
-			// {
-			// 	path: "extrinsic/:id",
-			// 	element: <ExtrinsicPage />,
-			// },
+			{
+				path: "extrinsic/:id",
+				element: <ExtrinsicPage />,
+			},
 			// {
 			// 	path: "search",
 			// 	element: <SearchPage />,

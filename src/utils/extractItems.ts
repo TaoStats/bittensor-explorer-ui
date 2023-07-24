@@ -8,6 +8,13 @@ export function extractItems<R = any, T = any, A extends any[] = any[]>(
 	transformNode: (node: T, ...a: A) => R,
 	...additionalArgs: A
 ): ItemsResponse<R> {
+	if (!resp || !resp.nodes) return {
+		data: [],
+		pagination: {
+			...pagination,
+			hasNextPage: false
+		}
+	};
 	return {
 		data: resp.nodes.map((node) => transformNode(node, ...additionalArgs)),
 		pagination: {

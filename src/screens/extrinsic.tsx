@@ -2,7 +2,6 @@
 import { useParams } from "react-router-dom";
 
 import { Card, CardHeader } from "../components/Card";
-import { CallsTable } from "../components/calls/CallsTable";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import EventsTable from "../components/events/EventsTable";
 import { ExtrinsicInfoTable } from "../components/extrinsics/ExtrinsicInfoTable";
@@ -18,7 +17,7 @@ type ExtrinsicPageParams = {
 export const ExtrinsicPage = () => {
 	const { id } = useParams() as ExtrinsicPageParams;
 
-	const extrinsic = useExtrinsic({ id_eq: id });
+	const extrinsic = useExtrinsic({ id: { equalTo: id } });
 	const events = useEvents({ extrinsicId: { equalTo: id } }, "BLOCK_HEIGHT_ASC");
 
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
