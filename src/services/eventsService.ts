@@ -1,4 +1,3 @@
-import { ArchiveEvent } from "../model/archive/archiveEvent";
 import { Event } from "../model/event";
 import { ResponseItems } from "../model/itemsConnection";
 import { ItemsResponse } from "../model/itemsResponse";

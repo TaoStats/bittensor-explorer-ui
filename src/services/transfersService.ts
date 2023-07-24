@@ -4,7 +4,6 @@ import { Transfer } from "../model/transfer";
 
 import { addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
-import { rawAmountToDecimal } from "../utils/number";
 
 import { fetchIndexer } from "./fetchService";
 
