@@ -41,9 +41,9 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 				label="Block"
 				render={(data) =>
 					<Link
-						to={`/block/${data.blockId}`}
+						to={`/block/${data.blockHeight.toString()}`}
 					>
-						{data.blockHeight}
+						{data.blockHeight.toString()}
 					</Link>
 				}
 				copyToClipboard={(data) => data.blockHeight.toString()}
@@ -59,7 +59,8 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 				}
 				copyToClipboard={(data) => data.extrinsicId}
 			/>
-			<EventInfoTableAttribute
+			{/** FIXME: */}
+			{/* <EventInfoTableAttribute
 				label="Call"
 				render={(data) => data.callId &&
 					<Link
@@ -69,8 +70,8 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 					</Link>
 				}
 				copyToClipboard={(data) => data.callId}
-			/>
-			<EventInfoTableAttribute
+			/> */}
+			{/* <EventInfoTableAttribute
 				label="Name"
 				render={(data) =>
 					<ButtonLink
@@ -93,7 +94,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 					/>
 				}
 				hide={(data) => !data.args}
-			/>
+			/> */}
 			<EventInfoTableAttribute
 				label="Spec version"
 				render={(data) => data.specVersion}

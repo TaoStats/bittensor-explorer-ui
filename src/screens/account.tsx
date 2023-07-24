@@ -18,42 +18,41 @@ import { useUsdRates } from "../hooks/useUsdRates";
 import { useTransfers } from "../hooks/useTransfers";
 
 const accountInfoStyle = css`
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
 const avatarStyle = css`
-	vertical-align: text-bottom;
-	margin-left: 12px;
+  vertical-align: text-bottom;
+  margin-left: 12px;
 `;
 
 const accountLabel = css`
-	margin-left: 8px;
-	font-weight: 400;
+  margin-left: 8px;
+  font-weight: 400;
 `;
 
-const accountLabelName = css`
-`;
+const accountLabelName = css``;
 
 const accountLabelAddress = css`
-	opacity: .5;
+  opacity: 0.5;
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-	flex: 0 0 auto;
-	width: 400px;
+  flex: 0 0 auto;
+  width: 400px;
 
-	${theme.breakpoints.down("lg")} {
-		width: auto;
-	}
+  ${theme.breakpoints.down("lg")} {
+    width: auto;
+  }
 `;
 
 const portfolioInfoIconStyle = css`
-	height: 30px;
-	font-size: 20px;
-	opacity: .5;
-	vertical-align: text-bottom;
-	margin-left: 4px;
+  height: 30px;
+  font-size: 20px;
+  opacity: 0.5;
+  vertical-align: text-bottom;
+  margin-left: 4px;
 `;
 
 export type AccountPageParams = {
@@ -65,11 +64,19 @@ export const AccountPage = () => {
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics({ signer: { equalTo: address } });
-	const transfers = useTransfers({ accountAddress_eq: address });
+	const transfers = useTransfers({
+		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
+	});
 
 	const usdRates = useUsdRates();
 
-	useDOMEventTrigger("data-loaded", !account.loading && !extrinsics.loading && !transfers.loading && !usdRates.loading);
+	useDOMEventTrigger(
+		"data-loaded",
+		!account.loading &&
+      !extrinsics.loading &&
+      !transfers.loading &&
+      !usdRates.loading
+	);
 
 	useEffect(() => {
 		if (extrinsics.pagination.offset === 0) {
@@ -81,28 +88,31 @@ export const AccountPage = () => {
 	return (
 		<>
 			<CardRow>
-				<Card css={accountInfoStyle} data-test="account-info">
+				<Card css={accountInfoStyle} data-test='account-info'>
 					<CardHeader>
-						Account
-						{(account.loading || account.data) &&
+            Account
+						{(account.loading || account.data) && (
 							<AccountAvatar address={address} size={32} css={avatarStyle} />
-						}
+						)}
 						<span css={accountLabel}>
-							{account.data?.identity?.display
-								? <span css={accountLabelName}>{account.data?.identity?.display}</span>
-								: <span css={accountLabelAddress}>{address}</span>
-							}
+							{account.data?.identity?.display ? (
+								<span css={accountLabelName}>
+									{account.data?.identity?.display}
+								</span>
+							) : (
+								<span css={accountLabelAddress}>{address}</span>
+							)}
 						</span>
 					</CardHeader>
 				</Card>
-				<Card css={portfolioStyle} data-test="account-portfolio">
+				<Card css={portfolioStyle} data-test='account-portfolio'>
 					<CardHeader>
-						Portfolio
+            Portfolio
 						<Tooltip
 							arrow
-							placement="top"
+							placement='top'
 							enterTouchDelay={0}
-							title="Includes only supported networks with conversion rate to USD."
+							title='Includes only supported networks with conversion rate to USD.'
 						>
 							<InfoOutlined css={portfolioInfoIconStyle} />
 						</Tooltip>
@@ -114,31 +124,31 @@ export const AccountPage = () => {
 					/> */}
 				</Card>
 			</CardRow>
-			{account.data &&
-				<Card data-test="account-related-items">
+			{account.data && (
+				<Card data-test='account-related-items'>
 					<TabbedContent>
 						<TabPane
-							label="Extrinsics"
+							label='Extrinsics'
 							count={extrinsics.pagination.totalCount}
 							loading={extrinsics.loading}
 							error={extrinsics.error}
-							value="extrinsics"
+							value='extrinsics'
 						>
 							<ExtrinsicsTable extrinsics={extrinsics} showTime />
 						</TabPane>
-						
+
 						<TabPane
-							label="Transfers"
+							label='Transfers'
 							count={transfers.pagination.totalCount}
 							loading={transfers.loading}
 							error={transfers.error}
-							value="transfers"
+							value='transfers'
 						>
 							<TransfersTable transfers={transfers} showTime />
 						</TabPane>
 					</TabbedContent>
 				</Card>
-			}
+			)}
 		</>
 	);
 };
