@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { useMemo } from "react";
 import { Tooltip } from "@mui/material";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 
 import { encodeAddress } from "../utils/formatAddress";
 import { shortenHash } from "../utils/shortenHash";
@@ -13,6 +13,10 @@ import CopyToClipboardButton, { CopyToClipboardButtonProps } from "./CopyToClipb
 const accountAddressStyle = css`
 	display: inline-flex;
 	align-items: center;
+`;
+
+const linkStyle = (theme: Theme) => css`
+color: ${theme.palette.neutral.main} !important;
 `;
 
 const iconStyle = css`
@@ -51,7 +55,7 @@ export const AccountAddress = (props: AccountLinkProps) => {
 
 		if (link) {
 			content = (
-				<Link to={`/account/${address}`}>
+				<Link to={`/account/${address}`} css={linkStyle}>
 					{content}
 				</Link>
 			);

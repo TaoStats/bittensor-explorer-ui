@@ -23,7 +23,7 @@ const contentStyle = css`
 
 const contentInner = css`
   box-sizing: border-box;
-  max-width: 1500px;
+  max-width: 1800px;
   margin: 0 auto;
   margin-top: 64px;
   margin-bottom: 48px;

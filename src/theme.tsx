@@ -23,7 +23,8 @@ export const theme = createTheme({
 			dark: "#a8a8a8"
 		},
 		success: {
-			main: "#14dec2"
+			main: "#14dec2",
+			dark: "#7f7f7f"
 		},
 		error: {
 			main: "#ff7a7a"
@@ -47,7 +48,7 @@ export const theme = createTheme({
 		MuiLink: {
 			styleOverrides: {
 				root: ({theme}) => css`
-					font-weight: bold;
+					font-weight: 500;
 					color: ${theme.palette.success.main};
 				`
 			}
@@ -68,7 +69,7 @@ export const theme = createTheme({
 				`,
 				sizeSmall: css`
 					padding: 2px 10px;
-					font-size: 16px;
+					font-size: 14px;
 					font-weight: 400;
 				`,
 				text: ({theme, ownerState}) => css`
@@ -234,8 +235,11 @@ export const theme = createTheme({
 					line-height: 1.3em;
 					padding: 9px 10px;
 				`,
-				head: css`
+				head: ({theme}) => css`
+					font-size: 12px;
 					font-weight: 500;
+					text-transform: uppercase;
+					color: ${theme.palette.success.dark} !important;
 				`
 			}
 		},

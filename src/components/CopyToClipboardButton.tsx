@@ -5,7 +5,7 @@ import { css, Theme } from "@emotion/react";
 
 const buttonStyle = (theme: Theme) => css`
 	padding: 0;
-	color: ${theme.palette.text.primary};
+	color: ${theme.palette.success.dark};
 `;
 
 export type CopyToClipboardButtonProps = Omit<IconButtonProps, "value"|"size"> & {

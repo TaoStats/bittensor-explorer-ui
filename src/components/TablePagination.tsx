@@ -20,7 +20,7 @@ const buttonStyle = (theme: Theme) => css`
 	margin-left: 8px;
 
 	&:hover {
-		background-color: ${theme.palette.success.dark};
+		background-color: ${theme.palette.success.light};
 	}
 
 	&.Mui-disabled {

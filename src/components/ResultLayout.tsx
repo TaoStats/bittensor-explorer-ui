@@ -91,7 +91,7 @@ const contentWrapperStyle = (theme: Theme) => css`
 `;
 
 const contentStyle = css`
-	max-width: 1500px;
+	max-width: 1800px;
 	margin: auto;
 	margin-top: 40px;
 `;
@@ -123,11 +123,11 @@ const searchInputStyle = (theme: Theme) => css`
 	}
 `;
 
-const footerStyle = (theme: Theme) => css`
+const footerStyle = css`
 	flex: 0 0 auto;
 
   > div {
-    max-width: 1000px;
+    max-width: 1500px;
   }
 `;
 
