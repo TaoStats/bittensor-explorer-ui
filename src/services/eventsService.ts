@@ -62,8 +62,11 @@ export async function getEvents(
 			events(orderBy: $order, filter: $filter, first: $first, offset: $offset) {
 				nodes {
 					id
+					module
+					event
 					blockHeight
 					extrinsicId
+					data
 				}
 				pageInfo {
 					endCursor
@@ -86,13 +89,15 @@ export async function getEvents(
 	const promises = items.data.map(async (item) => {
 		const response = await getBlock({ height: { equalTo: item.blockHeight } });
 		if (!response) return;
-		
+
 		return { ...item, specVersion: response.specVersion, timestamp: response.timestamp };
 	});
 	const data = await Promise.all(promises);
-	const newItems = {...items, data: data};
+	const newItems = { ...items, data: data };
 
 	const events = await addRuntimeSpecs(newItems, it => it?.specVersion ?? "latest");
+
+	console.log("getEvents: ", events);
 
 	return events;
 }
