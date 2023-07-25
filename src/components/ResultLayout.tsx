@@ -112,16 +112,15 @@ const searchInputStyle = (theme: Theme) => css`
   .MuiInputBase-root {
     .MuiInputBase-input,
     .MuiSelect-select {
-      padding: 16px 24px;
+      padding: 12px 24px;
+			font-size: 17px;
     }
   }
 
-  ${theme.breakpoints.up("md")} {
-    .MuiButton-root {
-      padding-left: 52px;
-      padding-right: 52px;
-    }
-  }
+	.MuiButton-root {
+		text-transform: uppercase;
+		color: black;
+	}
 `;
 
 const footerStyle = (theme: Theme) => css`

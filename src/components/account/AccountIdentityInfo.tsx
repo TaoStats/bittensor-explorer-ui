@@ -31,8 +31,6 @@ const identityItemStyle = css`
 	}
 
 	.MuiLink-root {
-		font-weight: 400;
-		font-family: 'Open Sans';
 		color: inherit;
 	}
 `;

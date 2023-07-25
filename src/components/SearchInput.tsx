@@ -19,8 +19,7 @@ const textFieldStyle = css`
 
 		&, &:hover, &.Mui-focused {
 			.MuiOutlinedInput-notchedOutline {
-				border-color: #c4cdd5;
-				border-right: none;
+				border: none;
 			}
 		}
 	}
@@ -30,6 +29,9 @@ const buttonStyle = (theme: Theme) => css`
 	border-radius: 8px;
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;
+	font-size: 13px;
+	font-weight: 500;
+	letter-spacing: .1em;
 
 	.MuiButton-startIcon {
 		display: none;

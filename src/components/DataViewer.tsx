@@ -24,7 +24,7 @@ const dataViewerStyle = (theme: Theme) => css`
 	flex: 1 1 auto;
 
 	color: ${theme.palette.text.primary};
-	background-color: ${theme.palette.primary.light};
+	background-color: ${theme.palette.text.secondary};
 	border-radius: 8px;
 
 	line-height: 24px;

@@ -25,7 +25,7 @@ const contentStyle = (theme: Theme) => css`
 
 	z-index: 100;
 
-	font-size: 15px;
+	font-size: 13px;
 
 	a {
 		color: ${theme.palette.success.main};

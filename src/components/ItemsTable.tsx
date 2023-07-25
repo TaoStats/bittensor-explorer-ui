@@ -21,7 +21,7 @@ const tableStyle = css`
 
 const cellStyle = (theme: Theme) => css`
 	word-break: break-all;
-	border-bottom: 1px solid ${theme.palette.primary.light};
+	border-bottom: 1px solid ${theme.palette.text.secondary};
 
 	&:first-of-type {
 		padding-left: 0;

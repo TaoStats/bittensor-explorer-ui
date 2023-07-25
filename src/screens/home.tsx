@@ -35,7 +35,8 @@ const subtitleStyle = (theme: Theme) => css`
   margin: 0;
   margin-bottom: 4rem;
   text-align: center;
-  color: ${theme.palette.text.secondary};
+	font-weight: 500;
+  color: ${theme.palette.secondary.light};
 `;
 
 export const HomePage = () => {

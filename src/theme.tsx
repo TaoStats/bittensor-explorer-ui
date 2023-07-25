@@ -9,16 +9,16 @@ const customColors = {
 export const theme = createTheme({
 	palette: {
 		primary: {
-			main: "#000",
-			light: "#444",
+			main: "#121212",
+			light: "#1c1c1c",
 			dark: "#1a1a1a"
 		},
 		text: {
 			primary: "#d9d9d9",
-			secondary: "#fff"
+			secondary: "#444"
 		},
 		secondary: {
-			main: "#d9d9d9",
+			main: "#9c9c9c",
 			light: "#fff",
 			dark: "#a8a8a8"
 		},
@@ -47,7 +47,7 @@ export const theme = createTheme({
 		MuiLink: {
 			styleOverrides: {
 				root: ({theme}) => css`
-					font-weight: 700;
+					font-weight: bold;
 					color: ${theme.palette.success.main};
 				`
 			}
@@ -60,10 +60,10 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: ({theme}) => css`
 					padding: 6px 32px;
-					color: ${theme.palette.primary.light};
-					background-color: ${theme.palette.neutral.main};
+					color: ${theme.palette.text.secondary};
+					background-color: ${theme.palette.text.primary};
 					&:hover {
-						background-color: ${theme.palette.success.main};
+						background-color: ${theme.palette.secondary.light};
 					}
 				`,
 				sizeSmall: css`
@@ -154,13 +154,13 @@ export const theme = createTheme({
 				`,
 				input: css`
 					height: 24px;
-					padding: 12px 16px;
 
 					color: black;
 
 					&::placeholder {
 						color: #999999;
 						opacity: 1;
+						font-size: 13px;
 					}
 				`
 			}
@@ -183,6 +183,7 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: css`
 					border-radius: 8px;
+					border: none;
 
 					&:hover {
 						.MuiOutlinedInput-notchedOutline {
@@ -227,11 +228,14 @@ export const theme = createTheme({
 		MuiTableCell: {
 			styleOverrides: {
 				root: css`
-					font-size: 16px;
-					line-height: 22px;
+					font-size: 14px;
+					font-weight: 400;
+					letter-spacing: .05em;
+					line-height: 1.3em;
+					padding: 9px 10px;
 				`,
 				head: css`
-					font-weight: 700;
+					font-weight: 500;
 				`
 			}
 		},

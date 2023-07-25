@@ -25,7 +25,7 @@ const buttonStyle = (theme: Theme) => css`
 
 	&.Mui-disabled {
 		color: ${theme.palette.primary.dark};
-		background-color: ${theme.palette.primary.light};
+		background-color: ${theme.palette.text.secondary};
 	}
 `;
 

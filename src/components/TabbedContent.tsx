@@ -12,10 +12,12 @@ const tabsWrapperStyle = css`
 
 const tabsStyle = (theme: Theme) => css`
 	margin-bottom: -1px;
+	min-height: 32px;
 
 	.MuiTabs-indicator {
 		height: 4px;
 		width: 9px !important;
+		bottom: inherit;
 		transition: all .5s;
     -webkit-transition: all .5s;
 		background-color: ${theme.palette.success.main};
@@ -28,14 +30,15 @@ const tabStyle = (theme: Theme) => css`
 	align-items: center;
 	padding: 0px;
 	margin-right: 32px;
+	color: ${theme.palette.secondary.main};
+	justify-content: flex-start;
+	min-width: inherit;
+	min-height: inherit;
+	font-weight: 500;
+	letter-spacing: .1em;
 
 	&.Mui-selected {
-		color: ${theme.palette.neutral.main};
-		font-weight: 700;
-	}
-
-	&:hover {
-		color: ${theme.palette.neutral.main};
+		color: ${theme.palette.secondary.light};
 	}
 `;
 
