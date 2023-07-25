@@ -22,7 +22,7 @@ export const valueStyle = css`
 
 export const valueTypeStyle = css`
 	margin-bottom: 8px;
-	font-weight: 700;
+	font-weight: 500;
 	flex: 1 1 auto;
 `;
 

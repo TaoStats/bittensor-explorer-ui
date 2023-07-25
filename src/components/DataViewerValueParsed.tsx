@@ -22,7 +22,7 @@ const valueTableStyle = css`
 
 	td:first-of-type {
 		font-weight: 400;
-		font-size: 16px;
+		font-size: 14px;
 		line-height: 22px;
 	}
 `;
@@ -47,7 +47,7 @@ const objectKeyCellStyle = css`
 `;
 
 const objectKeyStyle = css`
-	font-weight: 700;
+	font-weight: 500;
 	word-break: break-all;
 	box-sizing: border-box;
 	width: 180px;

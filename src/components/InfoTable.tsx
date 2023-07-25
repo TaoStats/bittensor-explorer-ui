@@ -28,16 +28,13 @@ const attributeStyle = css`
 		vertical-align: top;
 		line-height: 24px;
 	}
-
-	&:last-child > td {
-		padding-bottom: 0;
-	}
 `;
 
 const labelCellStyle = (theme: Theme) => css`
 	width: 200px;
 	padding-left: 0;
-	font-weight: 700;
+	font-weight: 500;
+	border: none;
 
 	${theme.breakpoints.down("sm")} {
 		width: auto;
@@ -50,6 +47,7 @@ const labelCellStyle = (theme: Theme) => css`
 const valueCellStyle = (theme: Theme) => css`
 	word-break: break-all;
 	padding-right: 0;
+	border: none;
 
 	${theme.breakpoints.down("sm")} {
 		padding-left: 0;

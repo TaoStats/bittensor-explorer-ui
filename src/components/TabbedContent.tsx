@@ -14,13 +14,35 @@ const tabsStyle = (theme: Theme) => css`
 	margin-bottom: -1px;
 	min-height: 32px;
 
+	.MuiTab-root {
+		text-transform: uppercase;
+
+		& > span {
+			padding-bottom: 4px;
+		}
+
+		& > span:first-child::after {
+			position: absolute;
+			content: '';
+			width: 0px;
+			height: 4px;
+			background-color: ${theme.palette.success.main};;
+			transition: all .5s;
+			-webkit-transition: all .5s;
+			display: inline-block;
+			bottom: 0;
+			left: 0;
+		}
+	}
+
+	.MuiTab-root:hover, .MuiTab-root.Mui-selected {
+		& > span:first-child::after {
+			width: 9px;
+		}
+	}
+
 	.MuiTabs-indicator {
-		height: 4px;
-		width: 9px !important;
-		bottom: inherit;
-		transition: all .5s;
-    -webkit-transition: all .5s;
-		background-color: ${theme.palette.success.main};
+		display: none;
 	}
 `;
 

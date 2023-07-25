@@ -31,15 +31,15 @@ const cardHeaderStyle = css`
 	padding-bottom: 48px;
 	align-items: center;
 
-	font-weight: 700;
-	font-size: 24px;
+	font-weight: 500;
+	font-size: 18px;
 	line-height: 32px;
+	letter-spacing: .1em;
 
 	word-break: break-all;
 
 	[data-class=copy-button] {
 		vertical-align: text-bottom;
-		margin: 6px 0;
 		margin-left: 16px;
 	}
 `;

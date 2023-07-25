@@ -32,7 +32,7 @@ const statIconStyle = css`
 `;
 
 const statTitleStyle = css`
-	font-weight: 900;
+	font-weight: 500;
 	margin-top: auto;
 `;
 
