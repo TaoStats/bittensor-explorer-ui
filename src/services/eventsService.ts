@@ -2,7 +2,7 @@ import { Event } from "../model/event";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 
-import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
+import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
 
 import { fetchDictionary } from "./fetchService";
@@ -84,22 +84,7 @@ export async function getEvents(
 		}
 	);
 
-	const items = extractItems(response.events, pagination, transformEvent);
-
-	const promises = items.data.map(async (item) => {
-		const response = await getBlock({ height: { equalTo: item.blockHeight } });
-		if (!response) return;
-
-		return { ...item, specVersion: response.specVersion, timestamp: response.timestamp };
-	});
-	const data = await Promise.all(promises);
-	const newItems = { ...items, data: data };
-
-	const events = await addRuntimeSpecs(newItems, it => it?.specVersion ?? "latest");
-
-	console.log("getEvents: ", events);
-
-	return events;
+	return extractItems(response.events, pagination, transformEvent);
 }
 
 /*** PRIVATE ***/

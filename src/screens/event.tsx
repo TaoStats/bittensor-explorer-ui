@@ -17,13 +17,16 @@ export const EventPage = () => {
 
 	useDOMEventTrigger("data-loaded", !event.loading);
 
-	return (<>
-		<Card>
-			<CardHeader>
-				Event #{id}
-				<CopyToClipboardButton value={id} />
-			</CardHeader>
-			<EventInfoTable event={event} />
-		</Card>
-	</>);
+	return (
+		event.data ? 
+			<>
+				<Card>
+					<CardHeader>
+						Event #{id}
+						<CopyToClipboardButton value={id} />
+					</CardHeader>
+					<EventInfoTable event={event} />
+				</Card>
+			</>: <></>
+	);
 };

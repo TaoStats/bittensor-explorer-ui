@@ -91,25 +91,12 @@ export async function getExtrinsics(
 		{
 			first: pagination.limit,
 			offset,
-			filter: filter,
+			filter,
 			order,
 		}
 	);
 
-	const items = extractItems(response.extrinsics, pagination, transformExtrinsic);
-
-	const promises = items.data.map(async (item) => {
-		const response = await getBlock({ height: { equalTo: item.blockHeight } });
-		if (!response) return;
-
-		return { ...item, specVersion: response.specVersion, timestamp: response.timestamp };
-	});
-	const data = await Promise.all(promises);
-	const newItems = { ...items, data: data };
-
-	const extrinsics = await addRuntimeSpecs(newItems, it => it?.specVersion ?? "latest");
-
-	return extrinsics;
+	return extractItems(response.extrinsics, pagination, transformExtrinsic);
 }
 
 /*** PRIVATE ***/

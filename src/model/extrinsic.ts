@@ -14,7 +14,7 @@ export type Extrinsic = {
 	version: number;
 	tip: bigint;
 	blockId: string;
-	timestamp: Date;
-	specVersion: number;
-	runtimeSpec: RuntimeSpec;
+	timestamp?: Date;
+	specVersion?: number;
+	runtimeSpec?: RuntimeSpec;
 }

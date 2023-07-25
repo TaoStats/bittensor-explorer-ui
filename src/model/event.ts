@@ -7,8 +7,7 @@ export type Event = {
 	blockHeight: bigint;
 	data: string[];
 
-	timestamp: string;
-	specVersion: number;
+	specVersion?: number;
 	extrinsicId: string | null;
-	runtimeSpec: RuntimeSpec;
+	runtimeSpec?: RuntimeSpec;
 }
