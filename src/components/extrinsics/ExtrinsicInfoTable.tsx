@@ -15,15 +15,17 @@ import DataViewer from "../DataViewer";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { Link } from "../Link";
 import { Time } from "../Time";
+import { BlockTimestamp } from "../BlockTimestamp";
+import { NETWORK_CONFIG } from "../../config";
 
 export type ExtrinsicInfoTableProps = {
 	extrinsic: Resource<Extrinsic>;
-}
+};
 
 const ExtrinsicInfoTableAttribute = InfoTableAttribute<Extrinsic>;
 
 export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
-	const {extrinsic} = props;
+	const { extrinsic } = props;
 
 	return (
 		<InfoTable
@@ -35,11 +37,15 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 		>
 			<ExtrinsicInfoTableAttribute
 				label='Timestamp'
-				render={(data) => <Time time={data.timestamp} timezone utc />}
+				render={(data) => (
+					<BlockTimestamp blockHeight={data.blockHeight} timezone utc />
+				)}
 			/>
 			<ExtrinsicInfoTableAttribute
 				label='Block time'
-				render={(data) => <Time time={data.timestamp} fromNow />}
+				render={(data) => (
+					<BlockTimestamp blockHeight={data.blockHeight} fromNow />
+				)}
 			/>
 			<ExtrinsicInfoTableAttribute
 				label='Hash'
@@ -61,13 +67,12 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 					data.signer && (
 						<AccountAddress
 							address={data.signer}
-							prefix={data.runtimeSpec.metadata.ss58Prefix}
+							prefix={NETWORK_CONFIG.prefix}
 						/>
 					)
 				}
 				copyToClipboard={(data) =>
-					data.signer &&
-          encodeAddress(data.signer, data.runtimeSpec.metadata.ss58Prefix)
+					data.signer && encodeAddress(data.signer, NETWORK_CONFIG.prefix)
 				}
 				hide={(data) => !data.signer}
 			/>
@@ -128,10 +133,10 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 				}
 				hide={(data) => !data.signature}
 			/> */}
-			<ExtrinsicInfoTableAttribute
+			{/* <ExtrinsicInfoTableAttribute
 				label='Spec version'
 				render={(data) => data.specVersion}
-			/>
+			/> */}
 		</InfoTable>
 	);
 };

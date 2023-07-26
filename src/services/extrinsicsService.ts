@@ -1,12 +1,8 @@
 import { Extrinsic } from "../model/extrinsic";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
-
-import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
-
 import { fetchDictionary } from "./fetchService";
-import { getBlock } from "./blocksService";
 
 export type ExtrinsicsFilter = object;
 
@@ -35,15 +31,7 @@ export async function getExtrinsic(filter: ExtrinsicsFilter) {
 	);
 
 	const data = response.extrinsics.nodes[0] && transformExtrinsic(response.extrinsics.nodes[0]);
-	if (!data) return;
-
-	const blockResponse = await getBlock({ height: { equalTo: data.blockHeight } });
-	if (!blockResponse) return;
-	const newData = { ...data, specVersion: blockResponse.specVersion, timestamp: blockResponse.timestamp };
-
-	const extrinsic = addRuntimeSpec(newData, it => it.specVersion);
-
-	return extrinsic;
+	return data;
 }
 
 export async function getExtrinsicsByName(

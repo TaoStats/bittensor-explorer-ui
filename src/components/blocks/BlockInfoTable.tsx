@@ -34,7 +34,7 @@ export const BlockInfoTable = (props: BlockInfoTableProps) => {
 			<BlockInfoTableAttribute
 				label="Block time"
 				render={(data) =>
-					<Time time={data.timestamp} fromNow />
+					<Time time={data.timestamp} fromNow utc />
 				}
 				hide={(data) => data.height.toString() === "0"}
 			/>
@@ -50,9 +50,10 @@ export const BlockInfoTable = (props: BlockInfoTableProps) => {
 			<BlockInfoTableAttribute
 				label="Parent hash"
 				render={(data) =>
-					<Link to={`/search?query=${data.parentHash}`}>
-						{data.parentHash}
-					</Link>
+					data.height > 1 ? 
+						<Link to={`/block/${(BigInt(data.height) - BigInt(1)).toString()}`}>
+							{data.parentHash}
+						</Link> : <>{data.parentHash}</>
 				}
 				copyToClipboard={(data) => data.parentHash}
 			/>

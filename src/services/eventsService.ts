@@ -1,12 +1,8 @@
 import { Event } from "../model/event";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
-
-import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
-
 import { fetchDictionary } from "./fetchService";
-import { getBlock } from "./blocksService";
 
 export type EventsFilter = object;
 
@@ -20,6 +16,9 @@ export async function getEvent(filter: EventsFilter) {
 					id
 					blockHeight
 					extrinsicId
+					module
+					event
+					data
 				}
 			}
 		}`,
@@ -29,15 +28,7 @@ export async function getEvent(filter: EventsFilter) {
 	);
 
 	const data = response.events.nodes[0] && transformEvent(response.events.nodes[0]);
-	if (!data) return;
-
-	const blockResponse = await getBlock({ height: { equalTo: data.blockHeight } });
-	if (!blockResponse) return;
-	const newData = { ...data, specVersion: blockResponse.specVersion, timestamp: blockResponse.timestamp };
-
-	const event = addRuntimeSpec(newData, it => it.specVersion);
-
-	return event;
+	return data;
 }
 
 export async function getEventsByName(

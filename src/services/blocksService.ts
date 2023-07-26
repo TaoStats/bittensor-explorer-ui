@@ -26,7 +26,7 @@ export async function getBlock(filter: BlocksFilter) {
 			}
 		}`,
 		{
-			filter: filter,
+			filter,
 		}
 	);
 

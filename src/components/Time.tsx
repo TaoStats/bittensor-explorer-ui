@@ -41,8 +41,14 @@ export const Time = (props: TimeProps) => {
 
 	useEffect(() => {
 		if (fromNow) {
-			const interval = setInterval(() =>
-				setFromNowFormatted(formatDistanceToNowStrict(new Date(time), {addSuffix: true, locale: enGB}))
+			const interval = setInterval(() =>{
+				setFromNowFormatted(
+					formatDistanceToNowStrict(new Date(`${time}${utc ? "Z": ""}`), {
+						addSuffix: true,
+						locale: enGB,
+					})
+				);
+			}
 			);
 
 			return () => clearInterval(interval);

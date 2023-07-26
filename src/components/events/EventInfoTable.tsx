@@ -48,53 +48,39 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 					label="Extrinsic"
 					render={(data) => data.extrinsicId != null &&
 					<Link
-						to={`/extrinsic/${data.extrinsicId}`}
+						to={`/extrinsic/${data.blockHeight}-${data.extrinsicId}`}
 					>
-						{data.extrinsicId}
+						{`${data.blockHeight}-${data.extrinsicId}`}
 					</Link>
 					}
 					copyToClipboard={(data) => data.extrinsicId}
 				/>
-				{/** FIXME: */}
-				{/* <EventInfoTableAttribute
-				label="Call"
-				render={(data) => data.callId &&
-					<Link
-						to={`/call/${data.callId}`}
-					>
-						{data.callId}
-					</Link>
-				}
-				copyToClipboard={(data) => data.callId}
-			/> */}
-				{/* <EventInfoTableAttribute
-				label="Name"
-				render={(data) =>
-					<ButtonLink
-						to={`/search?query=${data.palletName}.${data.eventName}`}
-						size="small"
-						color="secondary"
-					>
-						{data.palletName}.{data.eventName}
-					</ButtonLink>
-				}
-			/>
-			<EventInfoTableAttribute
-				label="Parameters"
-				render={(data) =>
-					<DataViewer
-						data={data.args}
-						metadata={getEventMetadataByName(data.runtimeSpec.metadata, data.palletName, data.eventName)?.args}
-						runtimeSpec={data.runtimeSpec}
-						copyToClipboard
-					/>
-				}
-				hide={(data) => !data.args}
-			/> */}
 				<EventInfoTableAttribute
-					label="Spec version"
-					render={(data) => data.specVersion}
+					label="Name"
+					render={(data) =>
+						<ButtonLink
+							to={`/search?query=${data.module}.${data.event}`}
+							size="small"
+							color="secondary"
+						>
+							{data.module}.{data.event}
+						</ButtonLink>
+					}
 				/>
+				{/** FIXME: */}
+				
+				{/* <EventInfoTableAttribute
+					label="Parameters"
+					render={(data) =>
+						<DataViewer
+							data={data.args}
+							metadata={getEventMetadataByName(data.runtimeSpec.metadata, data.palletName, data.eventName)?.args}
+							runtimeSpec={data.runtimeSpec}
+							copyToClipboard
+						/>
+					}
+					hide={(data) => !data.args}
+				/> */}
 			</InfoTable>: <></>
 	);
 };

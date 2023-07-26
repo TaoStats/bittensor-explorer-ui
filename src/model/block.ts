@@ -2,7 +2,7 @@ import { RuntimeSpec } from "./runtimeSpec";
 
 export type Block = {
 	id: string;
-	timestamp: Date;
+	timestamp: string;
 	specVersion: number;
 	height: bigint;
 	hash: string;
