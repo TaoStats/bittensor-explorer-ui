@@ -59,6 +59,7 @@ export async function getEvents(
 					extrinsicId
 					data
 				}
+				totalCount
 				pageInfo {
 					endCursor
 					hasNextPage

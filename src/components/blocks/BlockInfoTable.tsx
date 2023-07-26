@@ -1,8 +1,5 @@
 import { Block } from "../../model/block";
 import { Resource } from "../../model/resource";
-import { encodeAddress } from "../../utils/formatAddress";
-
-import { AccountAddress } from "../AccountAddress";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { Link } from "../Link";
 import { Time } from "../Time";
@@ -56,22 +53,6 @@ export const BlockInfoTable = (props: BlockInfoTableProps) => {
 						</Link> : <>{data.parentHash}</>
 				}
 				copyToClipboard={(data) => data.parentHash}
-			/>
-			<BlockInfoTableAttribute
-				label="Validator"
-				render={(data) => data.validator &&
-					<AccountAddress
-						address={data.validator}
-						prefix={data.runtimeSpec.metadata.ss58Prefix}
-					/>
-				}
-				copyToClipboard={(data) => data.validator &&
-					encodeAddress(
-						data.validator,
-						data.runtimeSpec.metadata.ss58Prefix
-					)
-				}
-				hide={(data) => !data.validator}
 			/>
 			<BlockInfoTableAttribute
 				label="Spec version"

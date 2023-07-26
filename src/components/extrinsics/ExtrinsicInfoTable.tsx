@@ -14,9 +14,10 @@ import { ButtonLink } from "../ButtonLink";
 import DataViewer from "../DataViewer";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { Link } from "../Link";
-import { Time } from "../Time";
 import { BlockTimestamp } from "../BlockTimestamp";
 import { NETWORK_CONFIG } from "../../config";
+import { useBlock } from "../../hooks/useBlock";
+import { useRuntimeSpec } from "../../hooks/useRuntimeSpec";
 
 export type ExtrinsicInfoTableProps = {
 	extrinsic: Resource<Extrinsic>;
@@ -26,6 +27,10 @@ const ExtrinsicInfoTableAttribute = InfoTableAttribute<Extrinsic>;
 
 export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 	const { extrinsic } = props;
+	const block = useBlock({ id: { equalTo: extrinsic.data?.blockHeight } });
+	const { runtimeSpec, loading: loadingRuntimeSpec } = useRuntimeSpec(
+		block?.data?.specVersion
+	);
 
 	return (
 		<InfoTable
@@ -86,40 +91,38 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 					/>
 				)}
 			/>
-			{/* <ExtrinsicInfoTableAttribute
+			<ExtrinsicInfoTableAttribute
 				label='Name'
 				render={(data) => (
 					<ButtonLink
-						to={`/search?query=${data.palletName}.${data.callName}`}
+						to={`/search?query=${data.module}.${data.call}`}
 						size='small'
 						color='secondary'
 					>
-						{data.palletName}.{data.callName}
+						{data.module}.{data.call}
 					</ButtonLink>
 				)}
-			/> */}
-			{/* <ExtrinsicInfoTableAttribute
-				label="Parameters"
-				render={(data) =>
-					<DataViewer
-						data={data.args}
-						metadata={getCallMetadataByName(data.runtimeSpec.metadata, data.palletName, data.callName)?.args}
-						runtimeSpec={data.runtimeSpec}
-						copyToClipboard
-					/>
-				}
-			/> */}
-			{/* <ExtrinsicInfoTableAttribute
-				label='Error'
-				render={(data) => <DataViewer data={data.error} copyToClipboard />}
-				hide={(data) => !data.error}
 			/>
-			<ExtrinsicInfoTableAttribute
-				label='Fee'
-				render={(data) => data.fee?.toString()}
-				hide={(data) => !data.fee || data.fee === BigInt(0)}
-			/>
-			<ExtrinsicInfoTableAttribute
+			{!loadingRuntimeSpec && runtimeSpec ? (
+				<ExtrinsicInfoTableAttribute
+					label='Parameters'
+					render={(data) => (
+						<DataViewer
+							data={data.args}
+							metadata={
+								getCallMetadataByName(runtimeSpec.metadata, data.module, data.call)?.args
+							}
+							runtimeSpec={runtimeSpec}
+							copyToClipboard
+						/>
+					)}
+				/>
+			) : (
+				<></>
+			)}
+
+			{/* TODO: */}
+			{/* <ExtrinsicInfoTableAttribute
 				label='Signature'
 				render={(data) =>
 					data.signature && (
@@ -132,10 +135,6 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 					)
 				}
 				hide={(data) => !data.signature}
-			/> */}
-			{/* <ExtrinsicInfoTableAttribute
-				label='Spec version'
-				render={(data) => data.specVersion}
 			/> */}
 		</InfoTable>
 	);

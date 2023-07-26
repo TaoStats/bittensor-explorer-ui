@@ -15,6 +15,7 @@ export async function getExtrinsic(filter: ExtrinsicsFilter) {
 				nodes {
 					id
 					txHash
+					module
 					call
 					signer
 					success
@@ -39,7 +40,8 @@ export async function getExtrinsicsByName(
 	order: ExtrinsicsOrder = "ID_DESC",
 	pagination: PaginationOptions,
 ) {
-	const filter: ExtrinsicsFilter = { call: { equalTo: name } };
+	const [module, call] = name.split(".");
+	const filter: ExtrinsicsFilter = { and: [{module: {equalTo: module}}, { call: { equalTo: call } }] };
 
 	return getExtrinsics(filter, order, false, pagination);
 }
@@ -83,8 +85,6 @@ export async function getExtrinsics(
 			order,
 		}
 	);
-
-	console.log("getExtrinsics: ", response);
 
 	return extractItems(response.extrinsics, pagination, transformExtrinsic);
 }

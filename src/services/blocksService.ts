@@ -2,7 +2,7 @@ import { Block } from "../model/block";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 
-import { addRuntimeSpec, addRuntimeSpecs } from "../utils/addRuntimeSpec";
+import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
 
 import { fetchDictionary } from "./fetchService";
@@ -30,10 +30,8 @@ export async function getBlock(filter: BlocksFilter) {
 		}
 	);
 
-	const data = response.blocks.nodes[0] && transformBlock(response.blocks.nodes[0]);
-	const block = await addRuntimeSpec(data, it => it.specVersion);
-
-	return block;
+	const data = response.blocks?.nodes[0] && transformBlock(response.blocks.nodes[0]);
+	return data;
 }
 
 export async function getBlocks(
@@ -71,10 +69,7 @@ export async function getBlocks(
 		}
 	);
 
-	const data = extractItems(response.blocks, pagination, transformBlock);
-	const blocks = await addRuntimeSpecs(data, it => it.specVersion);
-
-	return blocks;
+	return extractItems(response.blocks, pagination, transformBlock);
 }
 
 const transformBlock = (block: Block): Block => {

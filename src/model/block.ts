@@ -1,5 +1,3 @@
-import { RuntimeSpec } from "./runtimeSpec";
-
 export type Block = {
 	id: string;
 	timestamp: string;
@@ -9,6 +7,4 @@ export type Block = {
 	parentHash: string;
 	stateRoot: string;
 	extrinsicRoot: string;
-	validator: string | null;
-	runtimeSpec: RuntimeSpec;
 }

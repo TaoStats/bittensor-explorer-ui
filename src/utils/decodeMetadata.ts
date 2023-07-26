@@ -3,11 +3,18 @@ import { Si1Variant } from "@polkadot/types/interfaces";
 import { getSiName } from "@polkadot/types/metadata/util";
 import { DecodedCall, DecodedEvent, DecodedMetadata, DecodedPallet } from "../model/decodedMetadata";
 
+const toCamelCase = (str: string) => str.toLowerCase().replace(/([-_][a-z])/g, group =>
+	group
+		.toUpperCase()
+		.replace("-", "")
+		.replace("_", "")
+);
+
 function decodeCall(lookup: PortableRegistry, call: Si1Variant) {
 	const { fields } = call;
 
 	const decodedCall: DecodedCall = {
-		name: call.name.toString(),
+		name: toCamelCase(call.name.toString()),
 		args: []
 	};
 
