@@ -44,15 +44,21 @@ const topBarStyle = (theme: Theme) => css`
 	padding: 16px;
 	margin: 0 -16px;
 	margin-top: -16px;
+	margin-left: auto;
+	margin-right: auto;
 	box-sizing: border-box;
 	z-index: 1000;
+	max-width: 1800px;
 
 	flex: 0 0 auto;
 
 	${theme.breakpoints.up("md")} {
 		margin: 0 -32px;
 		margin-top: -24px;
-		padding: 2.5rem 4rem;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 2.5rem 0px;
+		padding-left: 68px;
 	}
 `;
 
@@ -106,14 +112,15 @@ const logoStyle = (theme: Theme) => css`
 	}
 `;
 
-const searchInputStyle = (theme: Theme) => css`
+const searchInputStyle = css`
   flex: 1 1 auto;
 
   .MuiInputBase-root {
     .MuiInputBase-input,
     .MuiSelect-select {
       padding: 12px 24px;
-			font-size: 17px;
+			font-size: 15px;
+			font-weight: 300;
     }
   }
 

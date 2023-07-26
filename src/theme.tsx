@@ -70,7 +70,7 @@ export const theme = createTheme({
 				sizeSmall: css`
 					padding: 2px 10px;
 					font-size: 14px;
-					font-weight: 400;
+					font-weight: 300;
 				`,
 				text: ({theme, ownerState}) => css`
 					${ownerState.color && ownerState.color !== "inherit" && css`
@@ -162,6 +162,7 @@ export const theme = createTheme({
 						color: #999999;
 						opacity: 1;
 						font-size: 13px;
+						letter-spacing: 0;
 					}
 				`
 			}
@@ -218,28 +219,6 @@ export const theme = createTheme({
 		MuiTable: {
 			styleOverrides: {
 				root: css`
-					& > thead > tr > th, & > tbody > tr > td {
-						border: none !important;
-					}
-
-					& > tbody > tr {
-						background-color: #1a1a1a;
-					}
-				
-					& > tbody > tr:nth-child(odd) {
-						background-color: rgba(18,18,18,.86);
-						-webkit-box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
-						-moz-box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
-						box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
-						border-radius: 4px;
-					}
-				
-					& > thead > tr > th:first-child, & > tbody > tr > td:first-child {
-						padding-left: 20px;
-					}
-					& > thead > tr > th:last-child, & > tbody > tr > td:last-child {
-						padding-right: 20px;
-					}
 				`
 			}
 		},
@@ -256,12 +235,13 @@ export const theme = createTheme({
 		},
 		MuiTableCell: {
 			styleOverrides: {
-				root: css`
+				root: ({theme}) => css`
 					font-size: 14px;
-					font-weight: 400;
+					font-weight: 300;
 					letter-spacing: .05em;
 					line-height: 1.3em;
 					padding: 9px 10px;
+					border-bottom: 1px solid ${theme.palette.text.secondary};
 				`,
 				head: ({theme}) => css`
 					font-size: 12px;

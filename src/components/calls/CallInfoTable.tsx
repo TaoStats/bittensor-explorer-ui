@@ -1,7 +1,5 @@
-import { Chip } from "@mui/material";
-
-import CrossIcon from "../../assets/cross-icon.png";
-import CheckIcon from "../../assets/check-icon.png";
+/** @jsxImportSource @emotion/react */
+import { css, Theme } from "@mui/material";
 
 import { Call } from "../../model/call";
 import { Resource } from "../../model/resource";
@@ -22,6 +20,16 @@ export type CallInfoTableProps = {
 }
 
 const CallInfoTableAttribute = InfoTableAttribute<Call>;
+
+const successStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.success.main};
+`;
+
+const failedStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.error.main};
+`;
 
 export const CallInfoTable = (props: CallInfoTableProps) => {
 	const {network, call} = props;
@@ -91,11 +99,13 @@ export const CallInfoTable = (props: CallInfoTableProps) => {
 			<CallInfoTableAttribute
 				label="Result"
 				render={(data) =>
-					<Chip
-						variant="outlined"
-						icon={<img src={data.success ? CheckIcon : CrossIcon}  />}
-						label={data.success ? "Success" : "Fail"}
-					/>
+					<>
+						{
+							data.success ?
+								<span css={successStyle}>&#x1F5F9;</span> :
+								<span css={failedStyle}>&#x1F5F5;</span>
+						}
+					</>
 				}
 			/>
 			<CallInfoTableAttribute

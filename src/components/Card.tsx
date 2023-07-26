@@ -28,13 +28,13 @@ const cardStyle = (theme: Theme) => css`
 
 const cardHeaderStyle = css`
 	display: block;
-	padding-bottom: 48px;
+	padding: 0px 20px 48px;
 	align-items: center;
 
 	font-weight: 500;
 	font-size: 18px;
 	line-height: 32px;
-	letter-spacing: .1em;
+	letter-spacing: 0;
 
 	word-break: break-all;
 

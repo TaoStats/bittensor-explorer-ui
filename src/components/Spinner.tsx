@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import LoadingSpinner from "../assets/loading.gif";
 
 const spinnerStyle = css`
-	width: 120px;
+	width: 40px;
 `;
 
 const Spinner = () => {

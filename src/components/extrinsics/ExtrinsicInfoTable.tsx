@@ -1,7 +1,5 @@
-import { Chip } from "@mui/material";
-
-import CrossIcon from "../../assets/cross-icon.png";
-import CheckIcon from "../../assets/check-icon.png";
+/** @jsxImportSource @emotion/react */
+import { css, Theme } from "@mui/material";
 
 import { Extrinsic } from "../../model/extrinsic";
 import { Resource } from "../../model/resource";
@@ -22,6 +20,16 @@ export type ExtrinsicInfoTableProps = {
 }
 
 const ExtrinsicInfoTableAttribute = InfoTableAttribute<Extrinsic>;
+
+const successStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.success.main};
+`;
+
+const failedStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.error.main};
+`;
 
 export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 	const {network, extrinsic} = props;
@@ -77,11 +85,13 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 			<ExtrinsicInfoTableAttribute
 				label="Result"
 				render={(data) =>
-					<Chip
-						variant="outlined"
-						icon={<img src={data.success ? CheckIcon : CrossIcon}  />}
-						label={data.success ? "Success" : "Fail"}
-					/>
+					<>
+						{
+							data.success ?
+								<span css={successStyle}>&#x1F5F9;</span> :
+								<span css={failedStyle}>&#x1F5F5;</span>
+						}
+					</>
 				}
 			/>
 			<ExtrinsicInfoTableAttribute

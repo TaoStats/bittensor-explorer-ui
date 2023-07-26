@@ -1,7 +1,5 @@
-import { Chip } from "@mui/material";
-
-import CrossIcon from "../../assets/cross-icon.png";
-import CheckIcon from "../../assets/check-icon.png";
+/** @jsxImportSource @emotion/react */
+import { css, Theme } from "@mui/material";
 
 import { PaginatedResource } from "../../model/paginatedResource";
 import { Transfer } from "../../model/transfer";
@@ -20,6 +18,16 @@ export type TransfersTableProps = {
 };
 
 const TransfersTableAttribute = ItemsTableAttribute<Transfer>;
+
+const successStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.success.main};
+`;
+
+const failedStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.error.main};
+`;
 
 function TransfersTable(props: TransfersTableProps) {
 	const {
@@ -87,11 +95,13 @@ function TransfersTable(props: TransfersTableProps) {
 				label="Success"
 				colCss={{width: 180}}
 				render={(transfer) =>
-					<Chip
-						variant="outlined"
-						icon={<img src={transfer.success ? CheckIcon : CrossIcon}  />}
-						label={transfer.success ? "Success" : "Fail"}
-					/>
+					<>
+						{
+							transfer.success ?
+								<span css={successStyle}>&#x1F5F9;</span> :
+								<span css={failedStyle}>&#x1F5F5;</span>
+						}
+					</>
 				}
 			/>
 			{showTime &&

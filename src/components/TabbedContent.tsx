@@ -13,6 +13,7 @@ const tabsWrapperStyle = css`
 const tabsStyle = (theme: Theme) => css`
 	margin-bottom: -1px;
 	min-height: 32px;
+	padding: 0px 20px;
 
 	.MuiTab-root {
 		text-transform: uppercase;
@@ -56,6 +57,7 @@ const tabStyle = (theme: Theme) => css`
 	justify-content: flex-start;
 	min-width: inherit;
 	min-height: inherit;
+	font-size: 17px;
 	font-weight: 500;
 	letter-spacing: .1em;
 

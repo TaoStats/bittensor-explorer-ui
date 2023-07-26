@@ -24,7 +24,6 @@ const dataViewerStyle = (theme: Theme) => css`
 	flex: 1 1 auto;
 
 	color: ${theme.palette.text.primary};
-	background-color: ${theme.palette.text.secondary};
 	border-radius: 8px;
 
 	line-height: 24px;
@@ -78,10 +77,24 @@ const scrollAreaStyle = css`
 		margin: 0 12px;
 		width: auto !important;
 	}
+
+	::-webkit-scrollbar-track {
+		background-color: #181818;
+	}
+	
+	::-webkit-scrollbar-thumb {
+		background-color: #252525;
+	}
+	
+	::-webkit-scrollbar {
+		width: 0.45em;
+		height: 0.45em;
+	}
 `;
 
 const controlsStyle = css`
 	display: flex;
+	margin-left: 12px;
 	margin-bottom: 12px;
 	align-items: center;
 	font-size: 14px;
@@ -103,7 +116,7 @@ const modeButtonsStyle = css`
 
 const modeButtonStyle = css`
 	font-size: 14px;
-	font-weight: 600;
+	font-weight: 500;
 	padding: 0 8px;
 	line-height: 24px;
 `;
