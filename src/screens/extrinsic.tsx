@@ -16,9 +16,18 @@ type ExtrinsicPageParams = {
 
 export const ExtrinsicPage = () => {
 	const { id } = useParams() as ExtrinsicPageParams;
+	const [blockHeight, extrinsicId] = id.split("-");
 
 	const extrinsic = useExtrinsic({ id: { equalTo: id } });
-	const events = useEvents({ extrinsicId: { equalTo: id } }, "BLOCK_HEIGHT_ASC");
+	const events = useEvents(
+		{
+			and: [
+				{ extrinsicId: { equalTo: parseInt(extrinsicId ?? "") } },
+				{ blockHeight: { equalTo: parseInt(blockHeight ?? "") } },
+			],
+		},
+		"BLOCK_HEIGHT_ASC"
+	);
 
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
 
@@ -26,26 +35,26 @@ export const ExtrinsicPage = () => {
 		<>
 			<Card>
 				<CardHeader>
-					Extrinsic #{id}
+          Extrinsic #{id}
 					<CopyToClipboardButton value={id} />
 				</CardHeader>
 				<ExtrinsicInfoTable extrinsic={extrinsic} />
 			</Card>
-			{extrinsic.data &&
+			{extrinsic.data && (
 				<Card>
 					<TabbedContent>
 						<TabPane
-							label="Events"
+							label='Events'
 							count={events.pagination.totalCount}
 							loading={events.loading}
 							error={events.error}
-							value="events"
+							value='events'
 						>
 							<EventsTable events={events} />
 						</TabPane>
 					</TabbedContent>
 				</Card>
-			}
+			)}
 		</>
 	);
 };

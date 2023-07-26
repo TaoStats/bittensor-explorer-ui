@@ -44,13 +44,13 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 			<ExtrinsicInfoTableAttribute
 				label='Block time'
 				render={(data) => (
-					<BlockTimestamp blockHeight={data.blockHeight} fromNow />
+					<BlockTimestamp blockHeight={data.blockHeight} fromNow utc />
 				)}
 			/>
 			<ExtrinsicInfoTableAttribute
 				label='Hash'
-				render={(data) => data.extrinsicHash}
-				copyToClipboard={(data) => data.extrinsicHash}
+				render={(data) => data.txHash}
+				copyToClipboard={(data) => data.txHash}
 			/>
 			<ExtrinsicInfoTableAttribute
 				label='Block'

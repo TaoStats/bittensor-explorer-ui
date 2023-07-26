@@ -1,5 +1,3 @@
-import { RuntimeSpec } from "./runtimeSpec";
-
 export type Extrinsic = {
 	id: string;
 	module: string;
@@ -7,7 +5,7 @@ export type Extrinsic = {
 	blockHeight: bigint;
 	success: boolean;
 	isSigned: boolean;
-	extrinsicHash: string;
+	txHash: string;
 	args: string[];
 	nonce: number;
 	signer: string;

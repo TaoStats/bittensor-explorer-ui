@@ -9,7 +9,6 @@ import { useTransfers } from "../hooks/useTransfers";
 import TransfersTable from "../components/transfers/TransfersTable";
 import { useBlocks } from "../hooks/useBlocks";
 import BlocksTable from "../components/blocks/BlocksTable";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 const contentStyle = css`
   position: relative;

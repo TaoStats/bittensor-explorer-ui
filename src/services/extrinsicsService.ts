@@ -84,6 +84,8 @@ export async function getExtrinsics(
 		}
 	);
 
+	console.log("getExtrinsics: ", response);
+
 	return extractItems(response.extrinsics, pagination, transformExtrinsic);
 }
 
