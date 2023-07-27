@@ -3,20 +3,31 @@ import { grey } from "@mui/material/colors";
 import { css } from "@emotion/react";
 
 const customColors = {
-	neutral: "#606060"
+	neutral: "#ff9900"
 };
 
 export const theme = createTheme({
 	palette: {
 		primary: {
-			main: "#ff646d",
-			contrastText: "#ffffff",
-			light: "#a8a8a8",
-			dark: "#181818",
+			main: "#121212",
+			light: "#1c1c1c",
+			dark: "#1a1a1a"
+		},
+		text: {
+			primary: "#d9d9d9",
+			secondary: "#444"
 		},
 		secondary: {
-			main: "#14a1c0",
-			contrastText: "#ffffff"
+			main: "#9c9c9c",
+			light: "#fff",
+			dark: "#a8a8a8"
+		},
+		success: {
+			main: "#14dec2",
+			dark: "#7f7f7f"
+		},
+		error: {
+			main: "#ff7a7a"
 		},
 		neutral: {
 			main: customColors.neutral,
@@ -26,7 +37,7 @@ export const theme = createTheme({
 		}
 	},
 	typography: {
-		fontFamily: "\"Open Sans\", sans-serif",
+		fontFamily: "inter,sans-serif",
 		button: {
 			fontSize: 18,
 			fontWeight: 700,
@@ -37,9 +48,8 @@ export const theme = createTheme({
 		MuiLink: {
 			styleOverrides: {
 				root: ({theme}) => css`
-					font-weight: 700;
-					font-family: "Google Sans", sans-serif;
-					color: ${theme.palette.secondary.main};
+					font-weight: 500;
+					color: ${theme.palette.success.main};
 				`
 			}
 		},
@@ -51,14 +61,16 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: ({theme}) => css`
 					padding: 6px 32px;
+					color: ${theme.palette.text.secondary};
+					background-color: ${theme.palette.text.primary};
 					&:hover {
-						background-color: ${theme.palette.secondary.main};
+						background-color: ${theme.palette.secondary.light};
 					}
 				`,
 				sizeSmall: css`
 					padding: 2px 10px;
-					font-size: 16px;
-					font-weight: 400;
+					font-size: 14px;
+					font-weight: 300;
 				`,
 				text: ({theme, ownerState}) => css`
 					${ownerState.color && ownerState.color !== "inherit" && css`
@@ -143,13 +155,14 @@ export const theme = createTheme({
 				`,
 				input: css`
 					height: 24px;
-					padding: 12px 16px;
 
 					color: black;
 
 					&::placeholder {
 						color: #999999;
 						opacity: 1;
+						font-size: 13px;
+						letter-spacing: 0;
 					}
 				`
 			}
@@ -172,6 +185,7 @@ export const theme = createTheme({
 			styleOverrides: {
 				root: css`
 					border-radius: 8px;
+					border: none;
 
 					&:hover {
 						.MuiOutlinedInput-notchedOutline {
@@ -186,9 +200,10 @@ export const theme = createTheme({
 						}
 					}
 				`,
-				input: css`
+				input: ({theme}) => css`
 					border-radius: inherit;
-					background-color: ${grey[100]};
+					background-color: ${theme.palette.primary.dark};
+					color: ${theme.palette.secondary.light};
 					height: 24px;
 					padding: 12px 16px;
 
@@ -199,6 +214,12 @@ export const theme = createTheme({
 				notchedOutline: css`
 					border-color: ${grey[300]};
 				`,
+			}
+		},
+		MuiTable: {
+			styleOverrides: {
+				root: css`
+				`
 			}
 		},
 		MuiTableRow: {
@@ -214,12 +235,19 @@ export const theme = createTheme({
 		},
 		MuiTableCell: {
 			styleOverrides: {
-				root: css`
-					font-size: 16px;
-					line-height: 22px;
+				root: ({theme}) => css`
+					font-size: 14px;
+					font-weight: 300;
+					letter-spacing: .05em;
+					line-height: 1.3em;
+					padding: 9px 10px;
+					border-bottom: 1px solid ${theme.palette.text.secondary};
 				`,
-				head: css`
-					font-weight: 700;
+				head: ({theme}) => css`
+					font-size: 12px;
+					font-weight: 500;
+					text-transform: uppercase;
+					color: ${theme.palette.success.dark} !important;
 				`
 			}
 		},
@@ -243,7 +271,7 @@ export const theme = createTheme({
 				root: css`
 					border: none;
 					height: auto;
-					font-size: 16px;
+					font-size: 14px;
 					justify-content: flex-start;
 				`,
 				icon: css`

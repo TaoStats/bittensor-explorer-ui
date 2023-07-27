@@ -28,11 +28,11 @@ const valueTableStyle = css`
     padding: 0;
   }
 
-  td:first-of-type {
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 22px;
-  }
+	td:first-of-type {
+		font-weight: 400;
+		font-size: 14px;
+		line-height: 22px;
+	}
 `;
 
 const arrayIndexCellStyle = css`
@@ -55,14 +55,14 @@ const objectKeyCellStyle = css`
 `;
 
 const objectKeyStyle = css`
-  font-weight: 700;
-  word-break: break-all;
-  box-sizing: border-box;
-  width: 180px;
-  padding: 6px 0;
-  padding-right: 32px;
-  position: sticky;
-  top: 0;
+	font-weight: 500;
+	word-break: break-all;
+	box-sizing: border-box;
+	width: 180px;
+	padding: 6px 0;
+	padding-right: 32px;
+	position: sticky;
+	top: 0;
 `;
 
 const kindStyle = css`

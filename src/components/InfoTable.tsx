@@ -20,6 +20,30 @@ const tableStyles = (theme: Theme) => css`
 			display: block;
 		}
 	}
+
+	& > thead > tr > th, & > tbody > tr > td {
+		border: none !important;
+	}
+
+	& > tbody > tr {
+		background-color: #1a1a1a;
+	}
+
+	& > tbody > tr:nth-child(odd) {
+		background-color: rgba(18,18,18,.86);
+		-webkit-box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
+		-moz-box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
+		box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
+		border-radius: 4px;
+	}
+
+	& > thead > tr > th:first-child, & > tbody > tr > td:first-child {
+		padding-left: 20px;
+	}
+
+	& > thead > tr > th:last-child, & > tbody > tr > td:last-child {
+		padding-right: 20px;
+	}
 `;
 
 const attributeStyle = css`
@@ -28,16 +52,12 @@ const attributeStyle = css`
 		vertical-align: top;
 		line-height: 24px;
 	}
-
-	&:last-child > td {
-		padding-bottom: 0;
-	}
 `;
 
 const labelCellStyle = (theme: Theme) => css`
 	width: 200px;
 	padding-left: 0;
-	font-weight: 700;
+	border: none;
 
 	${theme.breakpoints.down("sm")} {
 		width: auto;
@@ -50,6 +70,7 @@ const labelCellStyle = (theme: Theme) => css`
 const valueCellStyle = (theme: Theme) => css`
 	word-break: break-all;
 	padding-right: 0;
+	border: none;
 
 	${theme.breakpoints.down("sm")} {
 		padding-left: 0;

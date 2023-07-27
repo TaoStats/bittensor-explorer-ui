@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css, Theme } from "@emotion/react";
+import { css } from "@emotion/react";
 
 import { Card } from "../components/Card";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
@@ -18,19 +18,10 @@ const contentStyle = css`
 
 const contentInner = css`
   box-sizing: border-box;
-  max-width: 1500px;
+  max-width: 1800px;
   margin: 0 auto;
   margin-top: 64px;
   margin-bottom: 48px;
-  padding: 0 16px;
-`;
-
-const subtitleStyle = (theme: Theme) => css`
-  position: relative;
-  margin: 0;
-  margin-bottom: 4rem;
-  text-align: center;
-  color: ${theme.palette.text.primary};
 `;
 
 export const HomePage = () => {
@@ -44,7 +35,6 @@ export const HomePage = () => {
 	return (
 		<div css={contentStyle}>
 			<div css={contentInner}>
-				<h1 css={subtitleStyle}>Block explorer for Bittensor ecosystem</h1>
 				<Card>
 					<TabbedContent>
 						<TabPane

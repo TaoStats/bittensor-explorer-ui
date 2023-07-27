@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { HTMLAttributes, useMemo } from "react";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 import { Tooltip } from "@mui/material";
 import Decimal from "decimal.js";
 
@@ -14,9 +14,10 @@ const zeroAmountStyle = css`
 	opacity: .65;
 `;
 
-const usdValueStyle = css`
+const usdValueStyle = (theme: Theme) => css`
 	font-size: 15px;
 	opacity: .75;
+	color: ${theme.palette.secondary.dark};
 `;
 
 export type CurrencyProps = HTMLAttributes<HTMLDivElement> & {

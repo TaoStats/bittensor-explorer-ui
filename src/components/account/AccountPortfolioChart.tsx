@@ -118,18 +118,25 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 						<div data-class="title">${name}</div>
 						<div data-class="value">${formattedUsdValue} (${percent}%)</div>
 					`;
-				}
+				},
+				textStyle: {
+					color: "black"
+				},
 			},
 			legend: {
 				textStyle: {
 					width: 85,
-					overflow: "truncate"
+					overflow: "truncate",
+					color: "white"
 				},
 				orient: isSmallScreen ? "horizontal" : "vertical",
 				top: isSmallScreen ? "auto" : "center",
 				left: isSmallScreen ? "center" : 275,
 				bottom: isSmallScreen ? 0 : "auto",
-				height: isSmallScreen ? "auto" : 140
+				height: isSmallScreen ? "auto" : 140,
+				itemStyle: {
+					color: "white",
+				}
 			},
 			series: {
 				radius: [60, 100],

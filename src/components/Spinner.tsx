@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { CircularProgress } from "@mui/material";
 import { css } from "@emotion/react";
 
+import LoadingSpinner from "../assets/loading.gif";
+
 const spinnerStyle = css`
-	color: #9af0f7;
+	width: 40px;
 `;
 
 const Spinner = () => {
-	return <CircularProgress css={spinnerStyle} size={54} thickness={6} />;
+	return <img src={LoadingSpinner} css={spinnerStyle} />;
 };
 
 export default Spinner;

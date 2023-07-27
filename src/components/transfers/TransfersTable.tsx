@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { PaginatedResource } from "../../model/paginatedResource";
 import { Transfer } from "../../model/transfer";
 

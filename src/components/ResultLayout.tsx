@@ -3,7 +3,6 @@ import { Outlet } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
 import Logo from "../assets/logo.png";
-import Background from "../assets/detail-page-bgr.svg";
 
 import SearchInput from "./SearchInput";
 import { Link } from "./Link";
@@ -15,6 +14,8 @@ const containerStyle = (theme: Theme) => css`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	background-color: ${theme.palette.primary.main};
+	color: ${theme.palette.text.primary};
 
 	${theme.breakpoints.up("sm")} {
 		--content-wrapper-min-height: 500px;
@@ -33,57 +34,27 @@ const containerStyle = (theme: Theme) => css`
 	}
 `;
 
-const backgroundStyle = css`
-	position: absolute;
-	left: 0;
-	margin: 0;
-	width: 100%;
-	height: 100%;
-	min-height: 100vh;
-	z-index: -1;
-
-	&::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: var(--content-wrapper-min-height);
-		background-color: white;
-		background-position: center bottom;
-		background-size: 100% auto;
-		background-repeat: no-repeat;
-		background-image: url(${Background});
-	}
-
-	&::after {
-		content: '';
-		position: absolute;
-		top: var(--content-wrapper-min-height);
-		left: 0;
-		right: 0;
-		bottom: 0;
-		background-color: #def9fb;
-	}
-`;
-
 const topBarStyle = (theme: Theme) => css`
 	position: relative;
 	top: 0;
 	padding: 16px;
 	margin: 0 -16px;
 	margin-top: -16px;
+	margin-left: auto;
+	margin-right: auto;
 	box-sizing: border-box;
 	z-index: 1000;
+	max-width: 1800px;
 
 	flex: 0 0 auto;
-
-	background-color: ${theme.palette.primary.dark};
 
 	${theme.breakpoints.up("md")} {
 		margin: 0 -32px;
 		margin-top: -24px;
-		padding: 2.5rem 4rem;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 2.5rem 0px;
+		padding-left: 68px;
 	}
 `;
 
@@ -122,7 +93,7 @@ const contentWrapperStyle = (theme: Theme) => css`
 `;
 
 const contentStyle = css`
-	max-width: 1500px;
+	max-width: 1800px;
 	margin: auto;
 	margin-top: 40px;
 `;
@@ -137,38 +108,35 @@ const logoStyle = (theme: Theme) => css`
 	}
 `;
 
-const searchInputStyle = (theme: Theme) => css`
+const searchInputStyle = css`
   flex: 1 1 auto;
 
   .MuiInputBase-root {
     .MuiInputBase-input,
     .MuiSelect-select {
-      padding: 16px 24px;
+      padding: 12px 24px;
+			font-size: 15px;
+			font-weight: 300;
     }
   }
 
-  ${theme.breakpoints.up("md")} {
-    .MuiButton-root {
-      padding-left: 52px;
-      padding-right: 52px;
-    }
-  }
+	.MuiButton-root {
+		text-transform: uppercase;
+		color: black;
+	}
 `;
 
-const footerStyle = (theme: Theme) => css`
+const footerStyle = css`
 	flex: 0 0 auto;
 
-  background-color: ${theme.palette.primary.dark};
-
   > div {
-    max-width: 1000px;
+    max-width: 1500px;
   }
 `;
 
 export const ResultLayout = () => {
 	return (
 		<div css={containerStyle}>
-			<div css={backgroundStyle} data-test="background" />
 			<div css={contentWrapperStyle}>
 				<div css={topBarStyle} data-test="top-bar">
 					<div css={topBarContentStyle}>

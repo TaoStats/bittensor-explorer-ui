@@ -6,7 +6,7 @@ const cardStyle = (theme: Theme) => css`
 	position: relative;
 	border-radius: 8px;
 	padding: 24px;
-	background-color: white;
+	background-color: ${theme.palette.primary.dark};
 	margin: 16px 0;
 
 	::after {
@@ -28,18 +28,18 @@ const cardStyle = (theme: Theme) => css`
 
 const cardHeaderStyle = css`
 	display: block;
-	padding-bottom: 48px;
+	padding: 0px 20px 48px;
 	align-items: center;
 
-	font-weight: 700;
-	font-size: 24px;
+	font-weight: 500;
+	font-size: 18px;
 	line-height: 32px;
+	letter-spacing: 0;
 
 	word-break: break-all;
 
 	[data-class=copy-button] {
 		vertical-align: text-bottom;
-		margin: 6px 0;
 		margin-left: 16px;
 	}
 `;

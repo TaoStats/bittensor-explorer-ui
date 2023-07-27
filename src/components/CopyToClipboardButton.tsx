@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { useCallback, useState } from "react";
 import { IconButton, IconButtonProps, Tooltip } from "@mui/material";
-import { css } from "@emotion/react";
+import { css, Theme } from "@emotion/react";
 
-const buttonStyle = css`
+const buttonStyle = (theme: Theme) => css`
 	padding: 0;
+	color: ${theme.palette.success.dark};
 `;
 
 export type CopyToClipboardButtonProps = Omit<IconButtonProps, "value"|"size"> & {

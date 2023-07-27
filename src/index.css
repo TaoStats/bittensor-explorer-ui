@@ -1,5 +1,8 @@
 body {
 	position: relative;
 	margin: 0;
-	font-family: "Open Sans", sans-serif;
+	font-family: inter,sans-serif;
+	line-height: 1.3em;
+	letter-spacing: .05em;
+	font-size: 17px;
 }

@@ -14,18 +14,18 @@ const buttonStyle = (theme: Theme) => css`
 	padding: 4px;
 
 	border-radius: 4px;
-	color: white;
-	background-color: ${theme.palette.secondary.main};
+	color: ${theme.palette.primary.main};
+	background-color: ${theme.palette.success.main};
 
 	margin-left: 8px;
 
 	&:hover {
-		background-color: ${theme.palette.secondary.dark};
+		background-color: ${theme.palette.success.light};
 	}
 
 	&.Mui-disabled {
-		color: white;
-		background-color: #dcdcdc;
+		color: ${theme.palette.primary.dark};
+		background-color: ${theme.palette.text.secondary};
 	}
 `;
 

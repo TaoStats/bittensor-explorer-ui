@@ -17,10 +17,36 @@ import { TableSortToggle } from "./TableSortToggle";
 const tableStyle = css`
 	table-layout: fixed;
 	min-width: 860px;
+
+	& > thead > tr > th, & > tbody > tr > td {
+		border: none !important;
+	}
+
+	& > tbody > tr {
+		background-color: #1a1a1a;
+	}
+
+	& > tbody > tr:nth-child(odd) {
+		background-color: rgba(18,18,18,.86);
+		-webkit-box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
+		-moz-box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
+		box-shadow: inset 0 0 8px 0 rgba(255,255,255,.05);
+		border-radius: 4px;
+	}
+
+	& > thead > tr > th:first-child, & > tbody > tr > td:first-child {
+		padding-left: 20px;
+	}
+
+	& > thead > tr > th:last-child, & > tbody > tr > td:last-child {
+		padding-right: 20px;
+	}
 `;
 
-const cellStyle = css`
+const cellStyle = (theme: Theme) => css`
 	word-break: break-all;
+	border: none;
+	color: ${theme.palette.secondary.dark};
 
 	&:first-of-type {
 		padding-left: 0;
@@ -28,10 +54,6 @@ const cellStyle = css`
 
 	&:last-of-type {
 		padding-right: 0;
-	}
-
-	[data-class=card] > [data-class=table]:last-of-type tbody tr:last-of-type & {
-		padding-bottom: 0;
 	}
 `;
 

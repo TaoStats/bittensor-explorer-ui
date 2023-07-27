@@ -11,7 +11,7 @@ import CopyToClipboardButton from "./CopyToClipboardButton";
 import { DataViewerValueJson } from "./DataViewerValueJson";
 import { DataViewerValueParsed } from "./DataViewerValueParsed";
 
-const dataViewerStyle = css`
+const dataViewerStyle = (theme: Theme) => css`
 	display: flex;
 	padding: 12px;
 	height: 100%;
@@ -20,7 +20,7 @@ const dataViewerStyle = css`
 	flex-direction: column;
 	flex: 1 1 auto;
 
-	background-color: #f5f5f5;
+	color: ${theme.palette.text.primary};
 	border-radius: 8px;
 
 	line-height: 24px;
@@ -74,10 +74,24 @@ const scrollAreaStyle = css`
 		margin: 0 12px;
 		width: auto !important;
 	}
+
+	::-webkit-scrollbar-track {
+		background-color: #181818;
+	}
+	
+	::-webkit-scrollbar-thumb {
+		background-color: #252525;
+	}
+	
+	::-webkit-scrollbar {
+		width: 0.45em;
+		height: 0.45em;
+	}
 `;
 
 const controlsStyle = css`
 	display: flex;
+	margin-left: 12px;
 	margin-bottom: 12px;
 	align-items: center;
 	font-size: 14px;
@@ -99,26 +113,28 @@ const modeButtonsStyle = css`
 
 const modeButtonStyle = css`
 	font-size: 14px;
-	font-weight: 600;
+	font-weight: 500;
 	padding: 0 8px;
 	line-height: 24px;
 `;
 
-const fullscreenButtonStyle = css`
+const fullscreenButtonStyle = (theme: Theme) => css`
 	padding: 2px;
 	margin-left: 8px;
+	color: ${theme.palette.text.primary};
 `;
 
 const copyButtonStyle = css`
 	padding: 2px;
 `;
 
-const closeButtonStyle = css`
+const closeButtonStyle = (theme: Theme) => css`
 	position: absolute;
 	top: 0;
 	right: 0;
 	margin: 12px;
 	padding: 0;
+	color: ${theme.palette.text.primary};
 
 	z-index: 10;
 `;

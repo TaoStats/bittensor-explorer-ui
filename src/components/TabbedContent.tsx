@@ -1,20 +1,49 @@
 /** @jsxImportSource @emotion/react */
 import { Children, cloneElement, PropsWithChildren, ReactElement, ReactNode, useState } from "react";
 import { Theme, css } from "@emotion/react";
-import { CircularProgress, Tab, TabProps, Tabs } from "@mui/material";
+import { Tab, TabProps, Tabs } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Warning";
+
+import LoadingSpinner from "../assets/loading.gif";
 
 const tabsWrapperStyle = css`
 	margin-bottom: 16px;
-	border-bottom: solid 1px rgba(0, 0, 0, 0.12);
 `;
 
 const tabsStyle = (theme: Theme) => css`
 	margin-bottom: -1px;
+	min-height: 32px;
+	padding: 0px 20px;
+
+	.MuiTab-root {
+		text-transform: uppercase;
+
+		& > span {
+			padding-bottom: 4px;
+		}
+
+		& > span:first-child::after {
+			position: absolute;
+			content: '';
+			width: 0px;
+			height: 4px;
+			background-color: ${theme.palette.success.main};;
+			transition: all .5s;
+			-webkit-transition: all .5s;
+			display: inline-block;
+			bottom: 0;
+			left: 0;
+		}
+	}
+
+	.MuiTab-root:hover, .MuiTab-root.Mui-selected {
+		& > span:first-child::after {
+			width: 9px;
+		}
+	}
 
 	.MuiTabs-indicator {
-		height: 3px;
-		background-color: ${theme.palette.secondary.main};
+		display: none;
 	}
 `;
 
@@ -22,11 +51,18 @@ const tabStyle = (theme: Theme) => css`
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	padding: 0px;
+	margin-right: 32px;
+	color: ${theme.palette.secondary.main};
+	justify-content: flex-start;
+	min-width: inherit;
+	min-height: inherit;
+	font-size: 17px;
+	font-weight: 500;
+	letter-spacing: .1em;
 
 	&.Mui-selected {
-		color: ${theme.palette.secondary.main};
-		font-weight: 700;
-		background-color: #f5f5f5;
+		color: ${theme.palette.secondary.light};
 	}
 `;
 
@@ -41,13 +77,9 @@ const tabErrorStyle = css`
 	color: #ef5350;
 `;
 
-const tabLoadingStyle = (theme: Theme) => css`
+const tabLoadingStyle = css`
 	margin-left: 8px;
-	color: rgba(0, 0, 0, 0.6);
-
-	.Mui-selected & {
-		color: ${theme.palette.secondary.main};
-	}
+	width: 22px;
 `;
 
 export type TabPaneProps = Omit<TabProps, "children"> & PropsWithChildren<{
@@ -95,7 +127,7 @@ export const TabbedContent = (props: TabbedContentProps) => {
 					<>
 						<span>{label}</span>
 						{Number.isInteger(count) && <span data-test="count" css={tabCountStyle}>({count})</span>}
-						{(loading) && <CircularProgress css={tabLoadingStyle} size={14} />}
+						{(loading) && <img src={LoadingSpinner} css={tabLoadingStyle} />}
 						{!!error && <ErrorIcon css={tabErrorStyle} />}
 					</>
 				}

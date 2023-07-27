@@ -17,14 +17,9 @@ const textFieldStyle = css`
 		border-top-left-radius: 8px;
 		border-bottom-left-radius: 8px;
 
-		.MuiOutlinedInput-notchedOutline {
-			// border-left: none;
-		}
-
 		&, &:hover, &.Mui-focused {
 			.MuiOutlinedInput-notchedOutline {
-				border-color: #c4cdd5;
-				border-right: none;
+				border: none;
 			}
 		}
 	}
@@ -34,6 +29,9 @@ const buttonStyle = (theme: Theme) => css`
 	border-radius: 8px;
 	border-top-left-radius: 0px;
 	border-bottom-left-radius: 0px;
+	font-size: 13px;
+	font-weight: 500;
+	letter-spacing: .1em;
 
 	.MuiButton-startIcon {
 		display: none;
@@ -66,21 +64,12 @@ export type SearchInputProps = FormHTMLAttributes<HTMLFormElement> & {
 function SearchInput(props: SearchInputProps) {
 	const { persistNetwork, onNetworkChange, ...restProps } = props;
 
-
 	const [qs] = useSearchParams();
 	const query = qs.get("query");
 
 	const [search, setSearch] = useState<string>(query || "");
 
 	const navigate = useNavigate();
-
-	// const handleNetworkSelect = useCallback((isUserAction: boolean) => {
-	// 	if (isUserAction && persistNetwork) {
-	// 		localStorage.setItem("network", network);
-	// 	}
-
-	// 	setNetwork(network);
-	// }, [persistNetwork]);
 
 	const handleSubmit = useCallback(
 		(e: any) => {
@@ -97,11 +86,6 @@ function SearchInput(props: SearchInputProps) {
 	return (
 		<form {...restProps} onSubmit={handleSubmit}>
 			<FormGroup row css={formGroupStyle}>
-				{/* <NetworkSelect
-					css={networkSelectStyle}
-					onChange={handleNetworkSelect}
-					value={network}
-				/> */}
 				<TextField
 					css={textFieldStyle}
 					fullWidth

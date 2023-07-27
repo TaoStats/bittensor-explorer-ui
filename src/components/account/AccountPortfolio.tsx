@@ -43,7 +43,7 @@ const valueStyle = (theme: Theme) => css`
 
 const valueTypeStyle = (theme: Theme) => css`
 	margin-bottom: 8px;
-	font-weight: 700;
+	font-weight: 500;
 
 	${theme.breakpoints.down("sm")} {
 		flex: 1 1 auto;
