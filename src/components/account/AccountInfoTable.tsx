@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { HTMLAttributes } from "react";
-import { isEthereumAddress } from "@polkadot/util-crypto";
+import { encodeAddress, isEthereumAddress } from "@polkadot/util-crypto";
 
 import { Account } from "../../model/account";
 import { Resource } from "../../model/resource";
-import { encodeAddress } from "../../utils/formatAddress";
 
 import {InfoTable, InfoTableAttribute } from "../InfoTable";
+import { NETWORK_CONFIG } from "../../config";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	network: string;
@@ -16,8 +16,7 @@ export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 const AccountInfoTableAttribute = InfoTableAttribute<Account>;
 
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
-	const {network, account, ...tableProps} = props;
-
+	const { account, ...tableProps } = props;
 
 	return (
 		<InfoTable
@@ -29,16 +28,9 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			{...tableProps}
 		>
 			<AccountInfoTableAttribute
-				label="Bittensor Address"
-				render={(data) => encodeAddress(data.address, data.runtimeSpec.metadata.ss58Prefix)}
-				copyToClipboard={(data) => encodeAddress(data.address, data.runtimeSpec.metadata.ss58Prefix)}
-				hide={(data) => isEthereumAddress(data.address)}
-			/>
-			<AccountInfoTableAttribute
 				label="Substrate address"
-				render={(data) => encodeAddress(data.address, 42)}
-				copyToClipboard={(data) => encodeAddress(data.address, 42)}
-				hide={(data) => isEthereumAddress(data.address)}
+				render={(data) => encodeAddress(data.address, NETWORK_CONFIG.prefix)}
+				copyToClipboard={(data) => encodeAddress(data.address, NETWORK_CONFIG.prefix)}
 			/>
 			<AccountInfoTableAttribute
 				label={(data) => isEthereumAddress(data.address) ? "Address" : "Public key"}

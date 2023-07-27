@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { HTMLAttributes, useMemo, useState } from "react";
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { HTMLAttributes, useMemo } from "react";
 import { Theme, css } from "@emotion/react";
 
 import { AccountBalance } from "../../model/accountBalance";
@@ -13,7 +12,7 @@ import { ErrorMessage } from "../ErrorMessage";
 import Loading from "../Loading";
 import NotFound from "../NotFound";
 
-import { AccountPortfolioChartMode, AccountPortfolioChart } from "./AccountPortfolioChart";
+import { AccountPortfolioChart } from "./AccountPortfolioChart";
 
 const chartStyle = css`
 	margin: 0 auto;
@@ -64,31 +63,6 @@ const notFoundStyle = css`
 	max-width: 300px;
 `;
 
-const switchStyle = (theme: Theme) => css`
-	position: absolute;
-	top: 48px;
-	right: 48px;
-	margin: 4px 0;
-
-	.MuiToggleButton-root {
-		padding: 0 10px;
-		font-size: 14px;
-	}
-
-	${theme.breakpoints.down("md")} {
-		top: 24px;
-		right: 24px;
-	}
-
-	${theme.breakpoints.down("sm")} {
-		position: relative;
-		top: -28px;
-		right: auto;
-		display: flex;
-		justify-content: center;
-	}
-`;
-
 export type AccountPortfolioProps = HTMLAttributes<HTMLDivElement> & {
 	balances: Resource<AccountBalance[]>;
 	usdRates: Resource<UsdRates>;
@@ -96,8 +70,6 @@ export type AccountPortfolioProps = HTMLAttributes<HTMLDivElement> & {
 
 export const AccountPortfolio = (props: AccountPortfolioProps) => {
 	const {balances, usdRates} = props;
-
-	const [chartMode, setChartMode] = useState<AccountPortfolioChartMode>(AccountPortfolioChartMode.BY_NETWORK);
 
 	const stats = useMemo(() => {
 		return {
@@ -131,10 +103,6 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 
 	return (
 		<div>
-			<ToggleButtonGroup css={switchStyle} value={chartMode} exclusive onChange={(_, mode) => setChartMode(mode)}>
-				<ToggleButton size="small" value={AccountPortfolioChartMode.BY_NETWORK}>By network</ToggleButton>
-				<ToggleButton size="small" value={AccountPortfolioChartMode.BY_TYPE}>By type</ToggleButton>
-			</ToggleButtonGroup>
 			<div css={valuesStyle}>
 				<div css={valueStyle} data-test="porfolio-total">
 					<div css={valueTypeStyle}>Total</div>
@@ -155,7 +123,6 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 				css={chartStyle}
 				balances={balances.data}
 				usdRates={usdRates.data}
-				mode={chartMode}
 			/>
 		</div>
 	);
