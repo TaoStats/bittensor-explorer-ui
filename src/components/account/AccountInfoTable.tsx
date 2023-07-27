@@ -5,11 +5,10 @@ import { encodeAddress, isEthereumAddress } from "@polkadot/util-crypto";
 import { Account } from "../../model/account";
 import { Resource } from "../../model/resource";
 
-import {InfoTable, InfoTableAttribute } from "../InfoTable";
+import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { NETWORK_CONFIG } from "../../config";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
-	network: string;
 	account: Resource<Account>;
 }
 

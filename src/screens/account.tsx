@@ -14,6 +14,7 @@ import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import { useUsdRates } from "../hooks/useUsdRates";
 import { useTransfers } from "../hooks/useTransfers";
+import { AccountInfoTable } from "../components/account/AccountInfoTable";
 
 const accountInfoStyle = css`
   display: flex;
@@ -94,6 +95,7 @@ export const AccountPage = () => {
 							)}
 						</span>
 					</CardHeader>
+					<AccountInfoTable account={account} />
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
 					<CardHeader>

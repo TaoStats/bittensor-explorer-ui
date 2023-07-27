@@ -19,7 +19,7 @@ const ADDRESS_TYPES = [
 ];
 
 const valueTableStyle = css`
-  width: fit-content;
+  width: max-content;
   word-break: initial;
 
   th,
@@ -43,7 +43,7 @@ const arrayIndexStyle = css`
   font-weight: 300;
   word-break: break-all;
   box-sizing: border-box;
-  width: fit-content;
+  width: max-content;
   padding: 6px 0;
   padding-right: 16px;
   position: sticky;
