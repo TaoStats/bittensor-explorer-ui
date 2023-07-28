@@ -9,29 +9,12 @@ import { Link } from "./Link";
 import { Footer } from "./Footer";
 
 const containerStyle = (theme: Theme) => css`
-	--content-wrapper-min-height: 450px;
-
+	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	background-color: ${theme.palette.primary.main};
 	color: ${theme.palette.text.primary};
-
-	${theme.breakpoints.up("sm")} {
-		--content-wrapper-min-height: 500px;
-	}
-
-	${theme.breakpoints.up("md")} {
-		--content-wrapper-min-height: 600px;
-	}
-
-	${theme.breakpoints.up("lg")} {
-		--content-wrapper-min-height: 750px;
-	}
-
-	${theme.breakpoints.up("xl")} {
-		--content-wrapper-min-height: 1250px;
-	}
 `;
 
 const topBarStyle = (theme: Theme) => css`
