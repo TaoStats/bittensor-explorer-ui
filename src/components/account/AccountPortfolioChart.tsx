@@ -57,8 +57,8 @@ export type AccountPortfolioChartProps = HTMLAttributes<HTMLDivElement> & {
 };
 
 export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
-	const {balance, taoPrice, ...divProps} = props;
-
+	const { balance, taoPrice, ...divProps } = props;
+	
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 

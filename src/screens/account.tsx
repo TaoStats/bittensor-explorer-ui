@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
@@ -16,7 +16,11 @@ import { useTransfers } from "../hooks/useTransfers";
 import { AccountInfoTable } from "../components/account/AccountInfoTable";
 import { AccountPortfolio } from "../components/account/AccountPortfolio";
 import { useTaoPrice } from "../hooks/useTaoPrice";
-import { useBalance } from "../hooks/useBalance";
+import { useApi } from "../contexts";
+import { Balance } from "../model/balance";
+import { Resource } from "../model/resource";
+import Decimal from "decimal.js";
+import { rawAmountToDecimal } from "../utils/number";
 
 const accountInfoStyle = css`
   display: flex;
@@ -54,8 +58,52 @@ export type AccountPageParams = {
 
 export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
+	const {
+		state: { api, apiState },
+	} = useApi();
 
-	const balance = useBalance(address);
+	const fetchBalance = async () => {
+		if (!api || apiState !== "READY") {
+			setBalance({
+				...balance,
+				loading: true,
+				notFound: false,
+				data: undefined,
+			});
+		} else {
+			setBalance({
+				...balance,
+				loading: true,
+			});
+			const res = await api.query.system.account(address);
+			let free = new Decimal(0);
+			let reserved = new Decimal(0);
+			if (!res.isEmpty) {
+				const accountData = await res.toJSON();
+				const {
+					data: { free: _free, reserved: _reserved },
+				} = accountData;
+				free = rawAmountToDecimal(_free);
+				reserved = rawAmountToDecimal(_reserved);
+			}
+			setBalance({
+				...balance,
+				data: {
+					reserved,
+					free,
+					total: free.add(reserved),
+				},
+				loading: false,
+				notFound: false,
+			});
+		}
+	};
+	const [balance, setBalance] = useState<Resource<Balance>>({
+		loading: true,
+		notFound: false,
+		refetch: fetchBalance,
+	});
+
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics({ signer: { equalTo: address } });
 	const transfers = useTransfers({
@@ -63,6 +111,10 @@ export const AccountPage = () => {
 	});
 
 	const taoPrice = useTaoPrice();
+
+	useEffect(() => {
+		fetchBalance();
+	}, [api, apiState]);
 
 	useDOMEventTrigger(
 		"data-loaded",

@@ -49,7 +49,8 @@ export function formatCurrency(value: number | Decimal, currency: string, option
 	// Intl formats fiat currencies using proper symbols like $
 	if (supportedFiatCurrencies.includes(currency.toUpperCase())) {
 		return Intl.NumberFormat("en-US", {
-			style: "currency",
+			// FIXME:
+			style: "decimal", 
 			currency,
 			maximumFractionDigits: options.compact ? 3 : decimalPlaces,
 			notation: options.compact ? "compact" : undefined

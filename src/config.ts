@@ -22,7 +22,7 @@ export const config = {
 export const DICTIONARY_ENDPOINT = process.env.REACT_APP_DICTIONARY_ENDPOINT || "https://api.subquery.network/sq/TaoStats/bittensor-dictionary";
 export const INDEXER_ENDPOINT = process.env.REACT_APP_INDEXER_ENDPOINT || "https://api.subquery.network/sq/TaoStats/bittensor-indexer";
 export const PRICE_DATA_ENDPOINT = "https://api.mexc.com/api/v3/avgPrice?symbol=TAOUSDT";
-export const RPC_ENDPOINT = process.env.REACT_APP_RPC_ENDPOINT;
+export const RPC_ENDPOINT = process.env.REACT_APP_RPC_ENDPOINT || "wss://entrypoint-finney.opentensor.ai:443";
 
 export const NETWORK_CONFIG = {
 	currency: "TAO",

@@ -49,16 +49,17 @@ function savePriceUpdatedAt(time: number) {
 }
 
 async function fetchTaoPrice(): Promise<Decimal> {
-	const res = await fetch(PRICE_DATA_ENDPOINT, {
-		method: "GET",
-		headers: {
-			"Content-Type": "application/json",
-		}
-	});
-	try {
-		const data = await res.json();
-		return new Decimal(data.price || "0");
-	} catch {
-		throw new Error("Failed to fetch TAO price");
-	}
+	return new Decimal(1);
+	// const res = await fetch(PRICE_DATA_ENDPOINT, {
+	// 	method: "GET",
+	// 	headers: {
+	// 		"Content-Type": "application/json",
+	// 	}
+	// });
+	// try {
+	// 	const data = await res.json();
+	// 	return new Decimal(data.price || "0");
+	// } catch {
+	// 	throw new Error("Failed to fetch TAO price");
+	// }
 }

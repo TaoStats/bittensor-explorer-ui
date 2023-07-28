@@ -101,7 +101,9 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 				<div css={valueStyle} data-test='porfolio-total'>
 					<div css={valueTypeStyle}>Total</div>
 					<div>
-						{formatCurrency(balance.data.total, "USD", { decimalPlaces: "optimal" })}
+						{formatCurrency(balance.data.total, "USD", {
+							decimalPlaces: "optimal",
+						})}
 					</div>
 				</div>
 				<div css={separatorStyle} />
