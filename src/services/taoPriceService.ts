@@ -51,8 +51,6 @@ function savePriceUpdatedAt(time: number) {
 async function fetchTaoPrice(): Promise<Decimal> {
 	const res = await fetch(PRICE_DATA_ENDPOINT, {
 		method: "GET",
-		mode: "no-cors",
-
 		headers: {
 			"Content-Type": "application/json",
 		}
