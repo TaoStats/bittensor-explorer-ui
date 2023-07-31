@@ -7,7 +7,6 @@ import Logo from "../assets/logo.png";
 import SearchInput from "./SearchInput";
 import { Link } from "./Link";
 import { Footer } from "./Footer";
-import { ApiContextProvider } from "../contexts";
 
 const containerStyle = (theme: Theme) => css`
 	min-height: 100vh;
@@ -133,9 +132,7 @@ export const ResultLayout = () => {
 					</div>
 				</div>
 				<div css={contentStyle}>
-					<ApiContextProvider>
-						<Outlet />
-					</ApiContextProvider>
+					<Outlet />
 				</div>
 			</div>
 			<Footer css={footerStyle} />
