@@ -26,7 +26,7 @@ export const ExtrinsicPage = () => {
 				{ blockHeight: { equalTo: parseInt(blockHeight ?? "") } },
 			],
 		},
-		"BLOCK_HEIGHT_ASC"
+		"NATURAL"
 	);
 
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
