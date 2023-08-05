@@ -9,7 +9,7 @@ import Loading from "../Loading";
 import NotFound from "../NotFound";
 import { Theme } from "@mui/material";
 import TaoIcon from "../../assets/tao_icon.png";
-import { formatNumber } from "../../utils/number";
+import { formatNumber, nFormatter } from "../../utils/number";
 
 const stakingDataBlock = css`
   width: 100%;
@@ -184,7 +184,7 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 					</div>
 				</div>
 			</div>
-			<StatItem title='Market Cap' value={`$ ${formatNumber(stats.data.marketCap)}`} />
+			<StatItem title='Market Cap' value={`$${nFormatter(stats.data.marketCap, 2)}`} />
 			<StatItem
 				title='Total Issuance'
 				value={`${formatNumber(stats.data.currentSupply)} 𝞃`}
