@@ -97,7 +97,7 @@ const priceUp = css`
   font-size: 15px;
   font-weight: 600;
   padding-left: 8px;
-  color: #7AFFF7;
+  color: #7afff7;
 `;
 
 const priceDown = css`
@@ -184,14 +184,27 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 					</div>
 				</div>
 			</div>
-			<StatItem title='Market Cap' value={`$${nFormatter(stats.data.marketCap, 2)}`} />
+			<StatItem
+				title='Market Cap'
+				value={`$${nFormatter(stats.data.marketCap, 2)}`}
+			/>
+			<StatItem
+				title='24h Volume'
+				value={`$${nFormatter(stats.data.volume24h, 2)}`}
+			/>
 			<StatItem
 				title='Total Issuance'
 				value={`${formatNumber(stats.data.currentSupply)} 𝞃`}
 			/>
-			<StatItem title='Total Supply' value={`${formatNumber(stats.data.totalSupply)} 𝞃`} />
+			<StatItem
+				title='Total Supply'
+				value={`${formatNumber(stats.data.totalSupply)} 𝞃`}
+			/>
 			{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
-			<StatItem title='Validating APR' value={`${stats.data.validationAPY} %`} />
+			<StatItem
+				title='Validating APR'
+				value={`${stats.data.validationAPY} %`}
+			/>
 			<StatItem title='Staking APR' value={`${stats.data.stakingAPY} %`} />
 		</div>
 	);

@@ -13,5 +13,6 @@ export async function getStats() {
 		validationAPY: data["validating_apy"],
 		totalSupply: data["total_supply"],
 		currentSupply: data["current_supply"],
+		volume24h: data["24h_volume"],
 	} as Stats;
 }
