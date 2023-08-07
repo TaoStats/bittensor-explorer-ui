@@ -15,11 +15,36 @@ const stakingDataBlock = css`
   width: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: center;
+
+  @media only screen and (max-width: 1279px) {
+    padding-right: 0;
+  }
 `;
 
 const stakingDataBox = css`
   padding: 0 35px 0 0;
+
+  @media only screen and (max-width: 1279px) {
+    padding: 0 26px 0 0;
+  }
+  @media only screen and (max-width: 799px) {
+    width: 33%;
+    padding: 0;
+    padding-bottom: 5px;
+  }
+  @media only screen and (max-width: 479px) {
+    width: 50%;
+    padding: 0;
+    padding-bottom: 5px;
+  }
+  :last-child {
+    padding-right: 0;
+  }
+`;
+
+const priceBox = css`
+  padding: 0;
 `;
 
 const statItemLabel = (theme: Theme) => css`
@@ -27,18 +52,25 @@ const statItemLabel = (theme: Theme) => css`
   font-size: 13px;
   color: ${theme.palette.secondary.dark};
   letter-spacing: 0.01em;
+  @media only screen and (max-width: 479px) {
+    font-size: 11px;
+  }
 `;
 
 const statItemValue = (theme: Theme) => css`
-  font-weight: 400;
+  font-weight: 300;
   color: ${theme.palette.secondary.light};
-  margin: 0 0 6px;
+  margin: 0;
   line-height: 1.3em;
+
+  @media only screen and (max-width: 479px) {
+    font-size: 15px;
+  }
 `;
 
 const bittensorBlock = css`
   width: auto;
-  padding: 0 27px 0 0;
+  padding: 8px 27px 8px 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -107,6 +139,11 @@ const priceDown = css`
   color: #ff7a7a;
 `;
 
+const statItems = css`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
 type StatItemProps = {
 	title: string;
 	value: string | number;
@@ -158,7 +195,7 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 				<div css={taoIcon}>
 					<img src={TaoIcon} alt='Taostats Tao Icon' />
 				</div>
-				<div css={stakingDataBox}>
+				<div css={priceBox}>
 					<div css={stakingDataLabelContainer}>
 						<label css={statItemLabel}>Bittensor price</label>
 						<div css={stakingDataLabelTag}>TAO</div>
@@ -184,28 +221,30 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 					</div>
 				</div>
 			</div>
-			<StatItem
-				title='Market Cap'
-				value={`$${nFormatter(stats.data.marketCap, 2)}`}
-			/>
-			<StatItem
-				title='24h Volume'
-				value={`$${nFormatter(stats.data.volume24h, 2)}`}
-			/>
-			<StatItem
-				title='Total Issuance'
-				value={`${formatNumber(stats.data.currentSupply)} 𝞃`}
-			/>
-			<StatItem
-				title='Total Supply'
-				value={`${formatNumber(stats.data.totalSupply)} 𝞃`}
-			/>
-			{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
-			<StatItem
-				title='Validating APR'
-				value={`${stats.data.validationAPY} %`}
-			/>
-			<StatItem title='Staking APR' value={`${stats.data.stakingAPY} %`} />
+			<div css={statItems}>
+				<StatItem
+					title='Market Cap'
+					value={`$${nFormatter(stats.data.marketCap, 2)}`}
+				/>
+				<StatItem
+					title='24h Volume'
+					value={`$${nFormatter(stats.data.volume24h, 2)}`}
+				/>
+				<StatItem
+					title='Total Issuance'
+					value={`${formatNumber(stats.data.currentSupply)} 𝞃`}
+				/>
+				<StatItem
+					title='Total Supply'
+					value={`${formatNumber(stats.data.totalSupply)} 𝞃`}
+				/>
+				{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
+				<StatItem
+					title='Validating APR'
+					value={`${stats.data.validationAPY} %`}
+				/>
+				<StatItem title='Staking APR' value={`${stats.data.stakingAPY} %`} />
+			</div>
 		</div>
 	);
 };
