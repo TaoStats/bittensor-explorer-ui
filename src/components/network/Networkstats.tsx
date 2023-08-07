@@ -44,7 +44,7 @@ const stakingDataBox = css`
 `;
 
 const priceBox = css`
-  padding: 0;
+  padding: 0 35px 0 0;
 `;
 
 const statItemLabel = (theme: Theme) => css`
@@ -63,8 +63,15 @@ const statItemValue = (theme: Theme) => css`
   margin: 0;
   line-height: 1.3em;
 
-  @media only screen and (max-width: 479px) {
+  @media only screen and (max-width: 1279px) {
     font-size: 15px;
+  }
+  @media only screen and (max-width: 767px) {
+    font-size: 14px;
+  }
+  @media only screen and (max-width: 639px) {
+    font-size: 13px;
+    letter-spacing: 0.02em;
   }
 `;
 
@@ -121,7 +128,7 @@ const priceValue = (theme: Theme) => css`
   font-weight: 300;
   color: ${theme.palette.secondary.light};
   margin: 0;
-  line-height: 30px;
+  line-height: 1.3;
   font-size: 30px;
 `;
 
@@ -240,10 +247,10 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 				/>
 				{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
 				<StatItem
-					title='Validating APR'
+					title='Validating APY'
 					value={`${stats.data.validationAPY}%`}
 				/>
-				<StatItem title='Staking APR' value={`${stats.data.stakingAPY}%`} />
+				<StatItem title='Staking APY' value={`${stats.data.stakingAPY}%`} />
 			</div>
 		</div>
 	);
