@@ -72,13 +72,13 @@ export const TokenDistribution = (props: TokenDistributionProps) => {
 				<div css={valueStyle}>
 					<div css={valueTypeStyle}>Total issuance</div>
 					<div>
-						{formatNumber(stats.data.totalSupply, {
+						{formatNumber(stats.data.token.totalSupply, {
 							compact: true,
 						})}
 					</div>
 				</div>
 			</div>
-			<TokenDistributionChart css={chartStyle} stats={stats.data} />
+			<TokenDistributionChart css={chartStyle} token={stats.data.token} />
 		</div>
 	);
 };

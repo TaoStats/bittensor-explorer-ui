@@ -7,7 +7,7 @@ import { CallbackDataParams } from "echarts/types/dist/shared";
 import { formatNumber } from "../../utils/number";
 
 import { PieChart, PieChartOptions } from "../PieChart";
-import { Stats } from "../../model/stats";
+import { Tokenomics } from "../../model/stats";
 
 export const chartStyle = css`
   .ECharts-tooltip {
@@ -26,51 +26,47 @@ export const chartStyle = css`
   }
 `;
 
-export type TokenDistributionChartProps =
-	HTMLAttributes<HTMLDivElement> & {
-		stats: Stats;
-	};
+export type TokenDistributionChartProps = HTMLAttributes<HTMLDivElement> & {
+	token: Tokenomics;
+};
 
-export const TokenDistributionChart = (
-	props: TokenDistributionChartProps
-) => {
-	const { stats, ...divProps } = props;
+export const TokenDistributionChart = (props: TokenDistributionChartProps) => {
+	const { token, ...divProps } = props;
 
 	const theme = useTheme();
 	const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
 	const totalData = useMemo(() => {
-		if (!stats) {
+		if (!token) {
 			return [];
 		}
 
 		return [
 			{
 				name: "Total issuance",
-				value: stats.totalSupply,
+				value: token.totalSupply,
 				itemStyle: {
 					color: theme.palette.secondary.light,
-				}
-			
+				},
 			},
 			{
 				name: "Circulating",
-				value: stats.currentSupply,
+				value: token.currentSupply,
 				itemStyle: {
 					color: theme.palette.success.main,
 				},
 			},
 			{
 				name: "Staked",
-				// FIXME: 
-				// value: stats.stakingTotalStake,
+				// FIXME:
+				// value: token.stakingTotalStake,
 				value: 100,
 				itemStyle: {
 					color: lighten(theme.palette.primary.main, 0.5),
 				},
 			},
 		].filter((it) => it.value > 0);
-	}, [stats]);
+	}, [token]);
 
 	const options = useMemo<PieChartOptions>(() => {
 		return {
@@ -101,9 +97,7 @@ export const TokenDistributionChart = (
 				formatter: (name) => {
 					const item = totalData.find((it) => it.name === name);
 					const value = item!.value;
-					const percent = ((value * 100) / stats.totalSupply).toFixed(
-						2
-					);
+					const percent = ((value * 100) / token.totalSupply).toFixed(2);
 					return `${name}\n${formatNumber(value, {
 						compact: true,
 					})} (${percent}%)`;

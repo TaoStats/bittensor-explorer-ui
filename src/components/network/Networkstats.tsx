@@ -10,6 +10,7 @@ import NotFound from "../NotFound";
 import { Theme } from "@mui/material";
 import TaoIcon from "../../assets/tao_icon.png";
 import { formatNumber, nFormatter } from "../../utils/number";
+import Decimal from "decimal.js";
 
 const stakingDataBlock = css`
   width: 100%;
@@ -148,7 +149,6 @@ const priceDown = css`
 
 const statItems = css`
   display: flex;
-  flex-wrap: wrap;
 `;
 
 type StatItemProps = {
@@ -196,6 +196,8 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 		return null;
 	}
 
+	const { token, chain } = stats.data;
+
 	return (
 		<div css={stakingDataBlock}>
 			<div css={bittensorBlock}>
@@ -208,22 +210,22 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 						<div css={stakingDataLabelTag}>TAO</div>
 					</div>
 					<div css={stakingDataPrice}>
-						<div css={priceValue}>${stats.data.price}</div>
+						<div css={priceValue}>${token.price}</div>
 						<span
 							css={
-								stats.data.priceChange24h > 0
+								token.priceChange24h > 0
 									? priceUp
-									: stats.data.priceChange24h < 0
+									: token.priceChange24h < 0
 										? priceDown
 										: ""
 							}
 						>
-							{stats.data.priceChange24h > 0
+							{token.priceChange24h > 0
 								? "▴"
-								: stats.data.priceChange24h < 0
+								: token.priceChange24h < 0
 									? "▾"
 									: ""}
-							{` ${stats.data.priceChange24h}%`}
+							{` ${token.priceChange24h}%`}
 						</span>
 					</div>
 				</div>
@@ -231,26 +233,39 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 			<div css={statItems}>
 				<StatItem
 					title='Market Cap'
-					value={`$${nFormatter(stats.data.marketCap, 2)}`}
+					value={`$${nFormatter(token.marketCap, 2)}`}
 				/>
 				<StatItem
 					title='24h Volume'
-					value={`$${nFormatter(stats.data.volume24h, 2)}`}
+					value={`$${nFormatter(token.volume24h, 2)}`}
 				/>
 				<StatItem
 					title='Total Issuance'
-					value={`${formatNumber(stats.data.currentSupply)} 𝞃`}
+					value={`${formatNumber(token.currentSupply)} 𝞃`}
 				/>
 				<StatItem
 					title='Total Supply'
-					value={`${formatNumber(stats.data.totalSupply)} 𝞃`}
+					value={`${formatNumber(token.totalSupply)} 𝞃`}
 				/>
 				{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
+				<StatItem title='Validating APY' value={`${token.validationAPY}%`} />
+				<StatItem title='Staking APY' value={`${token.stakingAPY}%`} />
 				<StatItem
-					title='Validating APY'
-					value={`${stats.data.validationAPY}%`}
+					title='Finalized blocks'
+					value={formatNumber(new Decimal(chain.blocksFinalized.toString()))}
 				/>
-				<StatItem title='Staking APY' value={`${stats.data.stakingAPY}%`} />
+				<StatItem
+					title='Signed extrinsics'
+					value={formatNumber(new Decimal(chain.extrinsicsSigned.toString()))}
+				/>
+				<StatItem
+					title='Accounts'
+					value={formatNumber(new Decimal(chain.accounts.toString()))}
+				/>
+				<StatItem
+					title='Transfers'
+					value={formatNumber(new Decimal(chain.transfers.toString()))}
+				/>
 			</div>
 		</div>
 	);

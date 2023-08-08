@@ -1,4 +1,4 @@
-export type Stats = {
+export type Tokenomics = {
 	price: number;
 	priceChange24h: number;
 	volume24h: number;
@@ -7,4 +7,16 @@ export type Stats = {
 	validationAPY: number;
 	totalSupply: number;
 	currentSupply: number;
+};
+
+export type ChainStats = {
+	blocksFinalized: bigint;
+	extrinsicsSigned: bigint;
+	accounts: bigint;
+	transfers: bigint;
+};
+
+export type Stats = {
+	token: Tokenomics;
+	chain: ChainStats;
 }
