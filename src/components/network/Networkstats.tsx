@@ -136,7 +136,7 @@ const priceUp = css`
   font-size: 15px;
   font-weight: 300;
   padding-left: 8px;
-  color: #7afff7;
+  color: #7aff97;
 `;
 
 const priceDown = css`
