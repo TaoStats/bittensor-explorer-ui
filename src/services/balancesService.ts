@@ -59,3 +59,27 @@ const transformItem = (item: AccountResponse): Balance => {
 		updatedAt: item.updatedAt
 	} as Balance;
 };
+
+export async function getBalance(filter: BalancesFilter) {
+	const response = await fetchIndexer<{ accounts: ResponseItems<AccountResponse> }>(
+		`query ($filter: BlockFilter) {
+			accounts(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
+				nodes {
+                    address
+                    createdAt
+                    updatedAt
+                    balanceFree
+                    balanceReserved
+                    balanceStaked
+                    balanceTotal
+				}
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	const data = response.accounts?.nodes[0] && transformItem(response.accounts.nodes[0]);
+	return data;
+}
