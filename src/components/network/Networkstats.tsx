@@ -11,36 +11,16 @@ import { Theme } from "@mui/material";
 import TaoIcon from "../../assets/tao_icon.png";
 import { formatNumber, nFormatter } from "../../utils/number";
 import Decimal from "decimal.js";
+import { StatItem } from "./StatItem";
 
 const stakingDataBlock = css`
   width: 100%;
   display: flex;
   align-items: center;
 
-  @media only screen and (max-width: 1279px) {
-    padding-right: 0;
-  }
-`;
-
-const stakingDataBox = css`
-  padding: 0;
-  flex: 1 1 0;
-
-  @media only screen and (max-width: 1279px) {
-    padding: 0 26px 0 0;
-  }
-  @media only screen and (max-width: 799px) {
-    width: 33%;
-    padding: 0;
-    padding-bottom: 5px;
-  }
-  @media only screen and (max-width: 479px) {
-    width: 50%;
-    padding: 0;
-    padding-bottom: 5px;
-  }
-  :last-child {
-    padding-right: 0;
+  @media only screen and (max-width: 1399px) {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
@@ -55,24 +35,6 @@ const statItemLabel = (theme: Theme) => css`
   letter-spacing: 0.01em;
   @media only screen and (max-width: 479px) {
     font-size: 11px;
-  }
-`;
-
-const statItemValue = (theme: Theme) => css`
-  font-weight: 300;
-  color: ${theme.palette.secondary.light};
-  margin: 0;
-  line-height: 1.3em;
-
-  @media only screen and (max-width: 1279px) {
-    font-size: 15px;
-  }
-  @media only screen and (max-width: 767px) {
-    font-size: 14px;
-  }
-  @media only screen and (max-width: 639px) {
-    font-size: 13px;
-    letter-spacing: 0.02em;
   }
 `;
 
@@ -130,6 +92,9 @@ const priceValue = (theme: Theme) => css`
   margin: 0;
   line-height: 1.3;
   font-size: 30px;
+  @media only screen and (max-width: 1199px) {
+    font-size: 24px;
+  }
 `;
 
 const priceUp = css`
@@ -151,38 +116,26 @@ const statItems = css`
   flex-direction: column;
   gap: 8px;
   flex-grow: 1;
+  @media only screen and (max-width: 1399px) {
+    width: 100%;
+  }
 `;
 
 const statItemsRow = css`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   width: 100%;
+  @media only screen and (max-width: 1199px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media only screen and (max-width: 767px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const priceContainer = css`
   display: flex;
 `;
-
-const marketInfo = css`
-  display: flex;
-  width: 100%;
-  margin-left: 8px;
-`;
-
-type StatItemProps = {
-	title: string;
-	value: string | number;
-};
-
-const StatItem = (props: StatItemProps) => {
-	const { title, value } = props;
-
-	return (
-		<div css={stakingDataBox}>
-			<label css={statItemLabel}>{title}</label>
-			<div css={statItemValue}>{value}</div>
-		</div>
-	);
-};
 
 export type NetworkInfoTableProps = {
 	stats: Resource<Stats>;
@@ -248,7 +201,9 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 						</div>
 					</div>
 				</div>
-				<div css={marketInfo}>
+			</div>
+			<div css={statItems}>
+				<div css={statItemsRow}>
 					<StatItem
 						title='Market Cap'
 						value={`$${nFormatter(token.marketCap, 2)}`}
@@ -257,18 +212,7 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 						title='24h Volume'
 						value={`$${nFormatter(token.volume24h, 2)}`}
 					/>
-				</div>
-			</div>
-			<div css={statItems}>
-				<div css={statItemsRow}>
-					<StatItem
-						title='Total Issuance'
-						value={`${formatNumber(token.currentSupply)} 𝞃`}
-					/>
-					<StatItem
-						title='Total Supply'
-						value={`${formatNumber(token.totalSupply)} 𝞃`}
-					/>
+
 					{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
 					<StatItem title='Validating APY' value={`${token.validationAPY}%`} />
 					<StatItem title='Staking APY' value={`${token.stakingAPY}%`} />

@@ -7,6 +7,7 @@ export type Tokenomics = {
 	validationAPY: number;
 	totalSupply: number;
 	currentSupply: number;
+	delegatedSupply: number;
 };
 
 export type ChainStats = {
