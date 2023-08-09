@@ -1,5 +1,61 @@
-export type BalancesFilter = object;
+import { AccountResponse, Balance } from "../model/balance";
+import { ResponseItems } from "../model/itemsConnection";
+import { PaginationOptions } from "../model/paginationOptions";
+import { extractItems } from "../utils/extractItems";
+import { fetchIndexer } from "./fetchService";
 
-export async function getBalances(filter: BalancesFilter) {
-    
+export type BalancesFilter = object;
+export type BalancesOrder = string;
+
+export async function getBalances(
+	filter: BalancesFilter | undefined,
+	order: BalancesOrder = "ID_ASC",
+	pagination: PaginationOptions
+) {
+	const offset = pagination.offset;
+
+	const response = await fetchIndexer<{ accounts: ResponseItems<AccountResponse> }>(
+		`query ($first: Int!, $offset: Int!, $filter: AccountFilter, $order: [AccountsOrderBy!]!) {
+			accounts(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+				nodes {
+                    address
+                    createdAt
+                    updatedAt
+                    balanceFree
+                    balanceReserved
+                    balanceStaked
+                    balanceTotal
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+					hasPreviousPage
+					startCursor
+				}
+				${filter !== undefined ? "totalCount" : ""}
+			}
+		}`,
+		{
+			first: pagination.limit,
+			offset,
+			filter,
+			order,
+		}
+	);
+
+	return extractItems(response.accounts, pagination, transformItem);
 }
+
+
+const transformItem = (item: AccountResponse): Balance => { 
+	return {
+		id: item.address,
+		address: item.address,
+		free: item.balanceFree,
+		reserved: item.balanceReserved,
+		staked: item.blaanceStaked,
+		total: item.balanceTotal,
+		createdAt: item.createdAt,
+		updatedAt: item.updatedAt
+	} as Balance;
+};

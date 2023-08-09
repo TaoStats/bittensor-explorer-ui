@@ -4,10 +4,10 @@ import { useMediaQuery } from "@mui/material";
 import { css, Theme, useTheme } from "@emotion/react";
 import { CallbackDataParams } from "echarts/types/dist/shared";
 
-import { formatCurrency } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 
 import { PieChart, PieChartOptions } from "../PieChart";
-import { Balance } from "../../model/balance";
+import { AccountBalance, Balance } from "../../model/balance";
 import Decimal from "decimal.js";
 
 const chartStyle = (theme: Theme) => css`
@@ -52,7 +52,7 @@ export enum AccountPortfolioChartMode {
 }
 
 export type AccountPortfolioChartProps = HTMLAttributes<HTMLDivElement> & {
-	balance: Balance | undefined;
+	balance: AccountBalance | undefined;
 	taoPrice: Decimal | undefined;
 };
 
@@ -70,14 +70,14 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 		return [
 			{
 				name: "Free",
-				sum: balance.free.mul(taoPrice),
+				sum: rawAmountToDecimal(balance.free.toString()).mul(taoPrice),
 				itemStyle: {
 					color: theme.palette.primary.main,
 				}
 			},
 			{
 				name: "Reserved",
-				sum: balance.reserved.mul(taoPrice),
+				sum: rawAmountToDecimal(balance.reserved.toString()).mul(taoPrice),
 				itemStyle: {
 					color: theme.palette.primary.main,
 					decal: {

@@ -11,6 +11,8 @@ import { useBlocks } from "../hooks/useBlocks";
 import BlocksTable from "../components/blocks/BlocksTable";
 import { NetworkStats } from "../components/network";
 import { useStats } from "../hooks/useStats";
+import { useBalances } from "../hooks/useBalances";
+import BalancesTable from "../components/balances/BalancesTable";
 
 const contentStyle = css`
   position: relative;
@@ -43,6 +45,7 @@ export const HomePage = () => {
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
 	const transfers = useTransfers(undefined, "BLOCK_NUMBER_DESC");
 	const stats = useStats();
+	const balances = useBalances(undefined, "BALANCE_TOTAL_DESC");
 
 	return (
 		<div css={contentStyle}>
@@ -87,12 +90,12 @@ export const HomePage = () => {
 						</TabPane>
 						<TabPane
 							label='Top holders'
-							count={transfers.pagination.totalCount}
-							loading={transfers.loading}
-							error={transfers.error}
-							value='transfers'
+							count={balances.pagination.totalCount}
+							loading={balances.loading}
+							error={balances.error}
+							value='top_holders'
 						>
-							<TransfersTable transfers={transfers} showTime />
+							<BalancesTable balances={balances} />
 						</TabPane>
 					</TabbedContent>
 				</Card>

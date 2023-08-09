@@ -17,10 +17,8 @@ import { AccountInfoTable } from "../components/account/AccountInfoTable";
 import { AccountPortfolio } from "../components/account/AccountPortfolio";
 import { useTaoPrice } from "../hooks/useTaoPrice";
 import { useApi } from "../contexts";
-import { Balance } from "../model/balance";
+import { AccountBalance } from "../model/balance";
 import { Resource } from "../model/resource";
-import Decimal from "decimal.js";
-import { rawAmountToDecimal } from "../utils/number";
 
 const accountInfoStyle = css`
   display: flex;
@@ -76,29 +74,28 @@ export const AccountPage = () => {
 				loading: true,
 			});
 			const res = await api.query.system.account(address);
-			let free = new Decimal(0);
-			let reserved = new Decimal(0);
+			let free = BigInt(0);
+			let reserved = BigInt(0);
 			if (!res.isEmpty) {
 				const accountData = await res.toJSON();
-				const {
-					data: { free: _free, reserved: _reserved },
-				} = accountData;
-				free = rawAmountToDecimal(_free);
-				reserved = rawAmountToDecimal(_reserved);
+				const { data } = accountData;
+				free = BigInt(data.free.toString());
+				reserved = BigInt(data.reserved.toString());
 			}
 			setBalance({
 				...balance,
 				data: {
 					reserved,
 					free,
-					total: free.add(reserved),
+					total: free + reserved,
+					staked: BigInt(0),
 				},
 				loading: false,
 				notFound: false,
 			});
 		}
 	};
-	const [balance, setBalance] = useState<Resource<Balance>>({
+	const [balance, setBalance] = useState<Resource<AccountBalance>>({
 		loading: true,
 		notFound: false,
 		refetch: fetchBalance,
