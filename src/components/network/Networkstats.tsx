@@ -15,7 +15,6 @@ import Decimal from "decimal.js";
 const stakingDataBlock = css`
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
 
   @media only screen and (max-width: 1279px) {
@@ -24,7 +23,8 @@ const stakingDataBlock = css`
 `;
 
 const stakingDataBox = css`
-  padding: 0 35px 0 0;
+  padding: 0;
+  flex: 1 1 0;
 
   @media only screen and (max-width: 1279px) {
     padding: 0 26px 0 0;
@@ -77,11 +77,10 @@ const statItemValue = (theme: Theme) => css`
 `;
 
 const bittensorBlock = css`
-  width: auto;
   padding: 8px 27px 8px 0;
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const taoIcon = css`
@@ -149,6 +148,24 @@ const priceDown = css`
 
 const statItems = css`
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+`;
+
+const statItemsRow = css`
+  display: flex;
+  width: 100%;
+`;
+
+const priceContainer = css`
+  display: flex;
+`;
+
+const marketInfo = css`
+  display: flex;
+  width: 100%;
+  margin-left: 8px;
 `;
 
 type StatItemProps = {
@@ -201,71 +218,80 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 	return (
 		<div css={stakingDataBlock}>
 			<div css={bittensorBlock}>
-				<div css={taoIcon}>
-					<img src={TaoIcon} alt='Taostats Tao Icon' />
-				</div>
-				<div css={priceBox}>
-					<div css={stakingDataLabelContainer}>
-						<label css={statItemLabel}>Bittensor price</label>
-						<div css={stakingDataLabelTag}>TAO</div>
+				<div css={priceContainer}>
+					<div css={taoIcon}>
+						<img src={TaoIcon} alt='Taostats Tao Icon' />
 					</div>
-					<div css={stakingDataPrice}>
-						<div css={priceValue}>${token.price}</div>
-						<span
-							css={
-								token.priceChange24h > 0
-									? priceUp
+					<div css={priceBox}>
+						<div css={stakingDataLabelContainer}>
+							<label css={statItemLabel}>Bittensor price</label>
+							<div css={stakingDataLabelTag}>TAO</div>
+						</div>
+						<div css={stakingDataPrice}>
+							<div css={priceValue}>${token.price}</div>
+							<span
+								css={
+									token.priceChange24h > 0
+										? priceUp
+										: token.priceChange24h < 0
+											? priceDown
+											: ""
+								}
+							>
+								{token.priceChange24h > 0
+									? "▴"
 									: token.priceChange24h < 0
-										? priceDown
-										: ""
-							}
-						>
-							{token.priceChange24h > 0
-								? "▴"
-								: token.priceChange24h < 0
-									? "▾"
-									: ""}
-							{` ${token.priceChange24h}%`}
-						</span>
+										? "▾"
+										: ""}
+								{` ${token.priceChange24h}%`}
+							</span>
+						</div>
 					</div>
+				</div>
+				<div css={marketInfo}>
+					<StatItem
+						title='Market Cap'
+						value={`$${nFormatter(token.marketCap, 2)}`}
+					/>
+					<StatItem
+						title='24h Volume'
+						value={`$${nFormatter(token.volume24h, 2)}`}
+					/>
 				</div>
 			</div>
 			<div css={statItems}>
-				<StatItem
-					title='Market Cap'
-					value={`$${nFormatter(token.marketCap, 2)}`}
-				/>
-				<StatItem
-					title='24h Volume'
-					value={`$${nFormatter(token.volume24h, 2)}`}
-				/>
-				<StatItem
-					title='Total Issuance'
-					value={`${formatNumber(token.currentSupply)} 𝞃`}
-				/>
-				<StatItem
-					title='Total Supply'
-					value={`${formatNumber(token.totalSupply)} 𝞃`}
-				/>
-				{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
-				<StatItem title='Validating APY' value={`${token.validationAPY}%`} />
-				<StatItem title='Staking APY' value={`${token.stakingAPY}%`} />
-				<StatItem
-					title='Finalized blocks'
-					value={formatNumber(new Decimal(chain.blocksFinalized.toString()))}
-				/>
-				<StatItem
-					title='Signed extrinsics'
-					value={formatNumber(new Decimal(chain.extrinsicsSigned.toString()))}
-				/>
-				<StatItem
-					title='Accounts'
-					value={formatNumber(new Decimal(chain.accounts.toString()))}
-				/>
-				<StatItem
-					title='Transfers'
-					value={formatNumber(new Decimal(chain.transfers.toString()))}
-				/>
+				<div css={statItemsRow}>
+					<StatItem
+						title='Total Issuance'
+						value={`${formatNumber(token.currentSupply)} 𝞃`}
+					/>
+					<StatItem
+						title='Total Supply'
+						value={`${formatNumber(token.totalSupply)} 𝞃`}
+					/>
+					{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
+					<StatItem title='Validating APY' value={`${token.validationAPY}%`} />
+					<StatItem title='Staking APY' value={`${token.stakingAPY}%`} />
+				</div>
+
+				<div css={statItemsRow}>
+					<StatItem
+						title='Finalized blocks'
+						value={formatNumber(new Decimal(chain.blocksFinalized.toString()))}
+					/>
+					<StatItem
+						title='Signed extrinsics'
+						value={formatNumber(new Decimal(chain.extrinsicsSigned.toString()))}
+					/>
+					<StatItem
+						title='Accounts'
+						value={formatNumber(new Decimal(chain.accounts.toString()))}
+					/>
+					<StatItem
+						title='Transfers'
+						value={formatNumber(new Decimal(chain.transfers.toString()))}
+					/>
+				</div>
 			</div>
 		</div>
 	);

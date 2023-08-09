@@ -26,6 +26,15 @@ const contentInner = css`
   margin-bottom: 48px;
 `;
 
+const statsContainer = css`
+  width: 75%;
+  flex-grow: 0;
+`;
+
+const chartContainer = css`
+  flex-grow: 1;
+`;
+
 // const tokenDistributionStyle = (theme: Theme) => css`
 //   flex: 0 0 auto;
 //   width: 400px;
@@ -48,13 +57,10 @@ export const HomePage = () => {
 		<div css={contentStyle}>
 			<div css={contentInner}>
 				<CardRow>
-					<Card>
+					<Card css={statsContainer}>
 						<NetworkStats stats={stats} />
 					</Card>
-					{/* <Card css={tokenDistributionStyle}>
-						<CardHeader>Token Distribution</CardHeader>
-						<TokenDistribution stats={stats} />
-					</Card> */}
+					<Card css={chartContainer}></Card>
 				</CardRow>
 				<Card>
 					<TabbedContent>
