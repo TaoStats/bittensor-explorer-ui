@@ -85,6 +85,15 @@ export const HomePage = () => {
 						>
 							<TransfersTable transfers={transfers} showTime />
 						</TabPane>
+						<TabPane
+							label='Top holders'
+							count={transfers.pagination.totalCount}
+							loading={transfers.loading}
+							error={transfers.error}
+							value='transfers'
+						>
+							<TransfersTable transfers={transfers} showTime />
+						</TabPane>
 					</TabbedContent>
 				</Card>
 			</div>
