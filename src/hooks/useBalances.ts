@@ -3,10 +3,9 @@ import { BalancesFilter, BalancesOrder, getBalances } from "../services/balances
 import { usePaginatedResource } from "./usePaginatedResource";
 
 export function useBalances(
-	network: string,
 	filter: BalancesFilter | undefined,
 	order?: BalancesOrder,
 	options?: FetchOptions
 ) {
-	return usePaginatedResource(getBalances, [network, filter, order], options);
+	return usePaginatedResource(getBalances, [filter, order], options);
 }
