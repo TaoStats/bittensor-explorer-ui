@@ -47,7 +47,7 @@ export async function getBalances(
 }
 
 
-const transformItem = (item: AccountResponse): Balance => { 
+const transformItem = (item: AccountResponse): Balance => {
 	return {
 		id: item.address,
 		address: item.address,
@@ -62,7 +62,7 @@ const transformItem = (item: AccountResponse): Balance => {
 
 export async function getBalance(filter: BalancesFilter) {
 	const response = await fetchIndexer<{ accounts: ResponseItems<AccountResponse> }>(
-		`query ($filter: BlockFilter) {
+		`query ($filter: AccountFilter) {
 			accounts(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
 				nodes {
                     address
