@@ -2,7 +2,6 @@ import { Block } from "../model/block";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 
-import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { extractItems } from "../utils/extractItems";
 
 import { fetchDictionary } from "./fetchService";

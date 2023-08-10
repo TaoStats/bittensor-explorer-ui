@@ -3,7 +3,7 @@ import { HTMLAttributes } from "react";
 import { Theme, css } from "@emotion/react";
 
 import { Resource } from "../../model/resource";
-import { formatCurrency } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 
 import { ErrorMessage } from "../ErrorMessage";
 import Loading from "../Loading";
@@ -11,7 +11,7 @@ import NotFound from "../NotFound";
 
 import { AccountPortfolioChart } from "./AccountPortfolioChart";
 import Decimal from "decimal.js";
-import { Balance } from "../../model/balance";
+import { AccountBalance } from "../../model/balance";
 
 const chartStyle = css`
   margin: 0 auto;
@@ -62,7 +62,7 @@ const notFoundStyle = css`
 `;
 
 export type AccountPortfolioProps = HTMLAttributes<HTMLDivElement> & {
-	balance: Resource<Balance>;
+	balance: Resource<AccountBalance>;
 	taoPrice: Resource<Decimal>;
 };
 
@@ -73,7 +73,7 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 		return <Loading />;
 	}
 
-	if (balance.notFound || balance.data?.total.eq(0)) {
+	if (balance.notFound || balance.data?.total === BigInt(0)) {
 		return (
 			<NotFound css={notFoundStyle}>
 				No balance
@@ -101,7 +101,7 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 				<div css={valueStyle} data-test='porfolio-total'>
 					<div css={valueTypeStyle}>Total</div>
 					<div>
-						{formatCurrency(balance.data.total, "USD", {
+						{formatCurrency(rawAmountToDecimal(balance.data.total.toString()), "USD", {
 							decimalPlaces: "optimal",
 						})}
 					</div>
@@ -110,14 +110,14 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 				<div css={valueStyle} data-test='porfolio-free'>
 					<div css={valueTypeStyle}>Free</div>
 					<div>
-						{formatCurrency(balance.data.free, "USD", { decimalPlaces: "optimal" })}
+						{formatCurrency(rawAmountToDecimal(balance.data.free.toString()), "USD", { decimalPlaces: "optimal" })}
 					</div>
 				</div>
 				<div css={separatorStyle} />
 				<div css={valueStyle} data-test='porfolio-reserved'>
-					<div css={valueTypeStyle}>Reserved</div>
+					<div css={valueTypeStyle}>Staked</div>
 					<div>
-						{formatCurrency(balance.data.reserved, "USD", {
+						{formatCurrency(rawAmountToDecimal(balance.data.staked.toString()), "USD", {
 							decimalPlaces: "optimal",
 						})}
 					</div>

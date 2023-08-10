@@ -12,6 +12,8 @@ import BlocksTable from "../components/blocks/BlocksTable";
 import { NetworkStats } from "../components/network";
 import { useStats } from "../hooks/useStats";
 import { TokenDistributionChart } from "../components/network/TokenDistributionChart";
+import { useBalances } from "../hooks/useBalances";
+import BalancesTable from "../components/balances/BalancesTable";
 
 const contentStyle = css`
   position: relative;
@@ -55,6 +57,7 @@ export const HomePage = () => {
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
 	const transfers = useTransfers(undefined, "BLOCK_NUMBER_DESC");
 	const stats = useStats();
+	const balances = useBalances(undefined, "BALANCE_TOTAL_DESC");
 
 	return (
 		<div css={contentStyle}>
@@ -97,6 +100,15 @@ export const HomePage = () => {
 							value='transfers'
 						>
 							<TransfersTable transfers={transfers} showTime />
+						</TabPane>
+						<TabPane
+							label='Accounts'
+							count={balances.pagination.totalCount}
+							loading={balances.loading}
+							error={balances.error}
+							value='accounts'
+						>
+							<BalancesTable balances={balances} />
 						</TabPane>
 					</TabbedContent>
 				</Card>

@@ -10,13 +10,11 @@ import { ApiContextProvider } from "./contexts";
 
 function App() {
 	return (
-		<ApiContextProvider>
-			<RollbarProvider instance={rollbar}>
-				<ThemeProvider theme={theme}>
-					<RouterProvider router={router} />
-				</ThemeProvider>
-			</RollbarProvider>
-		</ApiContextProvider>
+		<RollbarProvider instance={rollbar}>
+			<ThemeProvider theme={theme}>
+				<RouterProvider router={router} />
+			</ThemeProvider>
+		</RollbarProvider>
 	);
 }
 
