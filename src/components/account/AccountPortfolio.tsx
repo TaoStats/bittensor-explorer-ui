@@ -115,9 +115,9 @@ export const AccountPortfolio = (props: AccountPortfolioProps) => {
 				</div>
 				<div css={separatorStyle} />
 				<div css={valueStyle} data-test='porfolio-reserved'>
-					<div css={valueTypeStyle}>Reserved</div>
+					<div css={valueTypeStyle}>Staked</div>
 					<div>
-						{formatCurrency(rawAmountToDecimal(balance.data.reserved.toString()), "USD", {
+						{formatCurrency(rawAmountToDecimal(balance.data.staked.toString()), "USD", {
 							decimalPlaces: "optimal",
 						})}
 					</div>

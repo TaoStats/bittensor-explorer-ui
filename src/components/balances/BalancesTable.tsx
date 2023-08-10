@@ -33,20 +33,8 @@ function BalancesTable(props: BalancesTableProps) {
 					<AccountAddress
 						address={decodeAddress(balance.address)}
 						prefix={NETWORK_CONFIG.prefix}
-						copyToClipboard="normal"
+						copyToClipboard='normal'
 						shorten
-					/>
-				)}
-			/>
-
-			<BalancesItemsTableAttribute
-				label='Total'
-				render={(balance) => (
-					<Currency
-						amount={balance.total}
-						currency={NETWORK_CONFIG.currency}
-						decimalPlaces='optimal'
-						showFullInTooltip
 					/>
 				)}
 			/>
@@ -64,10 +52,22 @@ function BalancesTable(props: BalancesTableProps) {
 			/>
 
 			<BalancesItemsTableAttribute
-				label='Reserved'
+				label='Staked'
 				render={(balance) => (
 					<Currency
-						amount={balance.reserved}
+						amount={balance.staked}
+						currency={NETWORK_CONFIG.currency}
+						decimalPlaces='optimal'
+						showFullInTooltip
+					/>
+				)}
+			/>
+
+			<BalancesItemsTableAttribute
+				label='Total'
+				render={(balance) => (
+					<Currency
+						amount={balance.total}
 						currency={NETWORK_CONFIG.currency}
 						decimalPlaces='optimal'
 						showFullInTooltip
@@ -78,7 +78,7 @@ function BalancesTable(props: BalancesTableProps) {
 			<BalancesItemsTableAttribute
 				label='Last update'
 				render={(balance) => (
-					<Link to={`/search?query=${balance.updatedAt}`}>
+					<Link to={`/block/${balance.updatedAt.toString()}`}>
 						{balance.updatedAt.toString()}
 					</Link>
 				)}

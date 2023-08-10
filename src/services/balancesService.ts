@@ -53,7 +53,7 @@ const transformItem = (item: AccountResponse): Balance => {
 		address: item.address,
 		free: item.balanceFree,
 		reserved: item.balanceReserved,
-		staked: item.blaanceStaked,
+		staked: item.balanceStaked,
 		total: item.balanceTotal,
 		createdAt: item.createdAt,
 		updatedAt: item.updatedAt

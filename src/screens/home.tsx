@@ -89,11 +89,11 @@ export const HomePage = () => {
 							<TransfersTable transfers={transfers} showTime />
 						</TabPane>
 						<TabPane
-							label='Top holders'
+							label='Accounts'
 							count={balances.pagination.totalCount}
 							loading={balances.loading}
 							error={balances.error}
-							value='top_holders'
+							value='accounts'
 						>
 							<BalancesTable balances={balances} />
 						</TabPane>

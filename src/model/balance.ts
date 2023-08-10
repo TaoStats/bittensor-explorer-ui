@@ -6,7 +6,7 @@ export type AccountResponse = {
 	updatedAt: bigint;
 	balanceFree: bigint;
 	balanceReserved: bigint;
-	blaanceStaked: bigint;
+	balanceStaked: bigint;
 	balanceTotal: bigint;
 };
 
