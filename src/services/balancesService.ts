@@ -42,7 +42,6 @@ export async function getBalances(
 			order,
 		}
 	);
-	export type BalancesOrder = string;
 
 	return extractItems(response.accounts, pagination, transformItem);
 }
