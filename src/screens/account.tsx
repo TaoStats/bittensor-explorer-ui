@@ -48,6 +48,18 @@ const portfolioStyle = (theme: Theme) => css`
   }
 `;
 
+const accountHeader = css`
+  display: flex;
+  align-items: center;
+`;
+
+const infoSection = css`
+  display: flex;
+  @media only screen and (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
+
 export type AccountPageParams = {
 	address: string;
 };
@@ -81,9 +93,9 @@ export const AccountPage = () => {
 
 	return (
 		<>
-			<CardRow>
+			<CardRow css={ infoSection }>
 				<Card css={accountInfoStyle} data-test='account-info'>
-					<CardHeader>
+					<CardHeader css={accountHeader}>
             Account
 						{(account.loading || account.data) && (
 							<AccountAvatar address={address} size={32} css={avatarStyle} />
@@ -98,7 +110,7 @@ export const AccountPage = () => {
 							)}
 						</span>
 					</CardHeader>
-					<AccountInfoTable account={account} />
+					<AccountInfoTable info={{ account, balance }} />
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
 					<CardHeader>Account Balance</CardHeader>
