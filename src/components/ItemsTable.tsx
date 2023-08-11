@@ -139,6 +139,7 @@ export type ItemsTableProps<
 		| undefined
 		| null
 	)[];
+	showRank?: boolean;
 };
 
 export const ItemsTable = <
@@ -159,6 +160,7 @@ export const ItemsTable = <
 		sort,
 		pagination,
 		children,
+		showRank,
 		...restProps
 	} = props;
 
@@ -192,6 +194,7 @@ export const ItemsTable = <
 					</colgroup>
 					<TableHead>
 						<TableRow>
+							{showRank ? <TableCell>Rank</TableCell> : <></>}
 							{Children.map(
 								children,
 								(child) =>
@@ -223,11 +226,12 @@ export const ItemsTable = <
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data?.map((item) => (
+						{data?.map((item, index) => (
 							<TableRow key={item.id}>
+								{showRank ? <TableCell>{(pagination?.offset || 0) + index + 1}</TableCell> : <></>}
 								{Children.map(
 									children,
-									(child) => child && cloneElement(child, { _data: item, _additionalData: additionalData })
+									(child) => child && cloneElement(child, { _data: item, _additionalData: additionalData})
 								)}
 							</TableRow>
 						))}
