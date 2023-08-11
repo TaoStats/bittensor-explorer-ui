@@ -52,7 +52,7 @@ function BalancesTable(props: BalancesTableProps) {
 			/>
 
 			<BalancesItemsTableAttribute
-				label='Staked'
+				label='Delegated'
 				render={(balance) => (
 					<Currency
 						amount={balance.staked}

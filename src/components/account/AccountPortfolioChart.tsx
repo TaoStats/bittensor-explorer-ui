@@ -30,8 +30,8 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 				<Chart
 					options={{
 						labels: [
-							`Free: ${free.toFixed(2).toString()} TAO (${free.div(total).mul(100).toFixed(2)}%)`,
-							`Staked: ${staked.toFixed(2).toString()} TAO (${staked.div(total).mul(100).toFixed(2)}%)`
+							`Delegated: ${staked.toFixed(2).toString()} TAO (${staked.div(total).mul(100).toFixed(2)}%)`,
+							`Free: ${free.toFixed(2).toString()} TAO (${free.div(total).mul(100).toFixed(2)}%)`
 						],
 						colors: [ theme.palette.success.main, theme.palette.neutral.main ],
 						dataLabels: {
@@ -82,8 +82,8 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 						},
 					}}
 					series={[
-						free.toNumber(),
 						staked.toNumber(),
+						free.toNumber(),
 					]}
 					type='donut'
 					height={400}
