@@ -28,8 +28,8 @@ import { TableSortOptions, TableSortOptionsProps } from "./TableSortOptions";
 import { TableSortToggle } from "./TableSortToggle";
 
 const tableStyle = css`
-  table-layout: fixed;
-  min-width: 860px;
+  table-layout: auto;
+  min-width: 400px;
 
   & > thead > tr > th,
   & > tbody > tr > td {
