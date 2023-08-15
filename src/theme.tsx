@@ -288,6 +288,20 @@ export const theme = createTheme({
 					}
 				`
 			}
+		},
+		MuiList: {
+			styleOverrides: {
+				root: css`
+					background: #1a1a1a;
+				`,
+			},
+		},
+		MuiMenu: {
+			styleOverrides: {
+				paper: css`
+					border-radius: 0;
+				`,
+			}
 		}
 	}
 });

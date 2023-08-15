@@ -1,8 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { css, IconButton } from "@mui/material";
+import { css, IconButton, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
 import { Theme } from "@emotion/react";
+import { Pagination, usePagination } from "../hooks/usePagination";
+import { useState } from "react";
 
 const paginationStyle = css`
 	display: flex;
@@ -29,34 +31,54 @@ const buttonStyle = (theme: Theme) => css`
 	}
 `;
 
-export type TablePaginationProps = {
-	offset: number;
-	limit: number;
-	hasNextPage?: boolean;
-	hideOnSinglePage?: boolean;
-	setPreviousPage: () => void;
-	setNextPage: () => void;
-};
+const pageOptions = (theme: Theme) => css`
+	background-color: ${theme.palette.secondary.dark};
+`;
+
+export type TablePaginationProps = Pagination;
 
 export function TablePagination(props: TablePaginationProps) {
 	const {
 		offset,
+		limit,
 		hasNextPage = true,
-		hideOnSinglePage = true,
 		setPreviousPage,
 		setNextPage,
+		set: setPaginationOptions,
 	} = props;
+	const { pageSizes } = usePagination();
 
-	if (hideOnSinglePage && offset === 0 && !hasNextPage) {
-		return null;
-	}
+	const onPageSizeChange = (e: SelectChangeEvent<number>) => { 
+		const size = e.target.value as number;
+		setPaginationOptions({...props, limit: size});
+	};
 
 	return (
 		<div css={paginationStyle}>
-			<IconButton css={buttonStyle} disabled={offset === 0} onClick={() => setPreviousPage()}>
+			<IconButton
+				css={buttonStyle}
+				disabled={offset === 0}
+				onClick={() => setPreviousPage()}
+			>
 				<ChevronLeft />
 			</IconButton>
-			<IconButton css={buttonStyle} disabled={!hasNextPage} onClick={() => setNextPage()}>
+			<Select
+				labelId='demo-simple-select-label'
+				id='demo-simple-select'
+				sx={{ height: "32px", ml: "8px" }}
+				css={pageOptions}
+				value={limit}
+				onChange={onPageSizeChange}
+			>
+				{pageSizes.map((size, index) => (
+					<MenuItem value={size} key={index}>{size}</MenuItem>
+				))}
+			</Select>
+			<IconButton
+				css={buttonStyle}
+				disabled={!hasNextPage}
+				onClick={() => setNextPage()}
+			>
 				<ChevronRight />
 			</IconButton>
 		</div>

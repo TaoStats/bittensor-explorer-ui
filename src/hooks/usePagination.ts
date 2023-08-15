@@ -11,6 +11,7 @@ export type Pagination = PaginationState & {
 	set: (pagination: Partial<PaginationState>) => void;
 	setPreviousPage: () => void;
 	setNextPage: () => void;
+	pageSizes: number[];
 };
 
 export type UsePaginationProps = {
@@ -18,6 +19,7 @@ export type UsePaginationProps = {
 };
 
 export function usePagination(limit = 10) {
+	const pageSizes = [10, 25, 50, 100];
 	const [state, setState] = useState<PaginationState>({
 		limit,
 		offset: 0,
@@ -51,6 +53,7 @@ export function usePagination(limit = 10) {
 	return useMemo(
 		() => ({
 			...state,
+			pageSizes,
 			set,
 			setPreviousPage,
 			setNextPage,
