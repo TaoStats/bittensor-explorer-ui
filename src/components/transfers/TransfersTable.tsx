@@ -2,13 +2,23 @@
 
 import { PaginatedResource } from "../../model/paginatedResource";
 import { Transfer } from "../../model/transfer";
-
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
 import { NETWORK_CONFIG } from "../../config";
 import { BlockTimestamp } from "../BlockTimestamp";
+import { css, Theme } from "@mui/material";
+
+const dirIn = (theme: Theme) => css`
+  color: ${theme.palette.success.main};
+`;
+
+const dirOut = (theme: Theme) => css`
+  color: ${theme.palette.neutral.main};
+`;
 
 export type TransfersTableProps = {
 	transfers: PaginatedResource<Transfer>;
@@ -16,7 +26,7 @@ export type TransfersTableProps = {
 	direction?: {
 		show: boolean;
 		source: string;
-	}
+	};
 };
 
 const TransfersTableAttribute = ItemsTableAttribute<Transfer>;
@@ -51,16 +61,24 @@ function TransfersTable(props: TransfersTableProps) {
 						address={transfer.from}
 						prefix={prefix}
 						shorten
+						link={
+							direction?.show && transfer.to !== direction?.source
+								? false
+								: true
+						}
 						copyToClipboard='small'
 					/>
 				)}
 			/>
-			{
-				direction?.show && <TransfersTableAttribute
-				label=''
-				render={() => "div"}
-			/>
-			}
+			{direction?.show && (
+				<TransfersTableAttribute
+					label=''
+					render={(transfer) => {
+						const dir = transfer.from === direction?.source ? "out" : "in";
+						return dir === "out" ? <ArrowForwardIcon css={dirOut} />: <ArrowBackIcon css={dirIn} />;
+					}}
+				/>
+			)}
 			<TransfersTableAttribute
 				label='To'
 				render={(transfer) => (
@@ -69,6 +87,11 @@ function TransfersTable(props: TransfersTableProps) {
 						prefix={prefix}
 						shorten
 						copyToClipboard='small'
+						link={
+							direction?.show && transfer.from !== direction?.source
+								? false
+								: true
+						}
 					/>
 				)}
 			/>
@@ -87,9 +110,14 @@ function TransfersTable(props: TransfersTableProps) {
 				<TransfersTableAttribute
 					label='Time'
 					colCss={{ width: 200 }}
-					render={(transfer) =>
-						<BlockTimestamp blockHeight={transfer.blockNumber} fromNow utc tooltip />
-					}
+					render={(transfer) => (
+						<BlockTimestamp
+							blockHeight={transfer.blockNumber}
+							fromNow
+							utc
+							tooltip
+						/>
+					)}
 				/>
 			)}
 		</ItemsTable>
