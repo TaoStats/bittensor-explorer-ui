@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { NETWORK_CONFIG } from "../../config";
 import { Balance } from "../../model/balance";
 import { PaginatedResource } from "../../model/paginatedResource";
@@ -26,6 +27,7 @@ function BalancesTable(props: BalancesTableProps) {
 			error={balances.error}
 			pagination={balances.pagination}
 			data-test='balances-table'
+			showRank
 		>
 			<BalancesItemsTableAttribute
 				label='Account'
