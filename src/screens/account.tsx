@@ -96,7 +96,7 @@ export const AccountPage = () => {
 			<CardRow css={ infoSection }>
 				<Card css={accountInfoStyle} data-test='account-info'>
 					<CardHeader css={accountHeader}>
-            Account
+						Account
 						{(account.loading || account.data) && (
 							<AccountAvatar address={address} size={32} css={avatarStyle} />
 						)}
@@ -110,7 +110,7 @@ export const AccountPage = () => {
 							)}
 						</span>
 					</CardHeader>
-					<AccountInfoTable info={{ account, balance }} />
+					<AccountInfoTable info={{ account, balance, price: taoPrice.data?.toNumber() }} />
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
 					<CardHeader>Account Balance</CardHeader>
@@ -137,7 +137,7 @@ export const AccountPage = () => {
 							error={transfers.error}
 							value='transfers'
 						>
-							<TransfersTable transfers={transfers} showTime />
+							<TransfersTable transfers={transfers} showTime direction={{show: true, source: address}} />
 						</TabPane>
 					</TabbedContent>
 				</Card>
