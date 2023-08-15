@@ -137,7 +137,7 @@ export const AccountPage = () => {
 							error={transfers.error}
 							value='transfers'
 						>
-							<TransfersTable transfers={transfers} showTime />
+							<TransfersTable transfers={transfers} showTime direction={{show: true, source: address}} />
 						</TabPane>
 					</TabbedContent>
 				</Card>

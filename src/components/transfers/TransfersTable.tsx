@@ -13,12 +13,16 @@ import { BlockTimestamp } from "../BlockTimestamp";
 export type TransfersTableProps = {
 	transfers: PaginatedResource<Transfer>;
 	showTime?: boolean;
+	direction?: {
+		show: boolean;
+		source: string;
+	}
 };
 
 const TransfersTableAttribute = ItemsTableAttribute<Transfer>;
 
 function TransfersTable(props: TransfersTableProps) {
-	const { transfers, showTime } = props;
+	const { transfers, showTime, direction } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
@@ -51,6 +55,12 @@ function TransfersTable(props: TransfersTableProps) {
 					/>
 				)}
 			/>
+			{
+				direction?.show && <TransfersTableAttribute
+				label=''
+				render={() => "div"}
+			/>
+			}
 			<TransfersTableAttribute
 				label='To'
 				render={(transfer) => (
