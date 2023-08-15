@@ -1,4 +1,5 @@
 import Decimal from "decimal.js";
+import { TAOSTATS_DATA_ENDPOINT } from "../config";
 export const USD_RATES_REFRESH_RATE = 5 * 60 * 1000; // 5 minutes
 
 export async function getTaoPrice() {
@@ -35,7 +36,7 @@ function loadPrice() {
 }
 
 function savePrice(price: Decimal) {
-	localStorage.setItem("tao-price", JSON.stringify(price));
+	localStorage.setItem("tao-price", price.toFixed(2));
 }
 
 function loadPriceUpdatedAt() {
@@ -47,17 +48,11 @@ function savePriceUpdatedAt(time: number) {
 }
 
 async function fetchTaoPrice(): Promise<Decimal> {
-	return new Decimal(1);
-	// const res = await fetch(PRICE_DATA_ENDPOINT, {
-	// 	method: "GET",
-	// 	headers: {
-	// 		"Content-Type": "application/json",
-	// 	}
-	// });
-	// try {
-	// 	const data = await res.json();
-	// 	return new Decimal(data.price || "0");
-	// } catch {
-	// 	throw new Error("Failed to fetch TAO price");
-	// }
+	const res = await fetch(TAOSTATS_DATA_ENDPOINT);
+	try {
+		const [data] = await res.json();
+		return new Decimal(data.price || "0");
+	} catch {
+		throw new Error("Failed to fetch TAO price");
+	}
 }

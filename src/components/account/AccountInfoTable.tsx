@@ -8,19 +8,24 @@ import { Resource } from "../../model/resource";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { NETWORK_CONFIG } from "../../config";
 import { AccountBalance } from "../../model/balance";
-import { rawAmountToDecimal } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
 		account: Resource<Account>;
 		balance: Resource<AccountBalance>;
+		price: number | undefined;
 	};
 }
 
 const AccountInfoTableAttribute = InfoTableAttribute<Account & AccountBalance>;
 
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
-	const { info: { account, balance }, ...tableProps } = props;
+	const { info: { account, balance, price }, ...tableProps } = props;
+
+	const total = rawAmountToDecimal(balance.data?.total.toString());
+
+	console.log("Price = ", price);
 
 	return (
 		<InfoTable
@@ -47,10 +52,8 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			/>
 			<AccountInfoTableAttribute
 				label='Total balance'
-				render={(data) => `${rawAmountToDecimal(data.total.toString()).toFixed(2).toString()} TAO`}
-				copyToClipboard={(data) =>
-					rawAmountToDecimal(data.total.toString()).toString()
-				}
+				render={() => `${total.toFixed(2).toString()} TAO (${formatCurrency(total.mul(price ?? 0), "USD", {decimalPlaces: 2})} USD)`}
+				copyToClipboard={() =>total.toFixed(2).toString()}
 			/>
 		</InfoTable>
 	);

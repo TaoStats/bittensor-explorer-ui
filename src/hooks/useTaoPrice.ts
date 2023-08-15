@@ -10,6 +10,8 @@ export function useTaoPrice(
 ) {
 	const taoPrice = useResource(getTaoPrice, [], options);
 
+	console.log("useTaoPrice: ", taoPrice);
+
 	useEffect(() => {
 		if (taoPrice.data) {
 			const nextRefetchAt = getPriceUpdatedAt() + USD_RATES_REFRESH_RATE;
