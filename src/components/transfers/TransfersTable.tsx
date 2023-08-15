@@ -2,8 +2,6 @@
 
 import { PaginatedResource } from "../../model/paginatedResource";
 import { Transfer } from "../../model/transfer";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
@@ -14,10 +12,12 @@ import { css, Theme } from "@mui/material";
 
 const dirIn = (theme: Theme) => css`
   color: ${theme.palette.success.main};
+  text-transform: uppercase;
 `;
 
 const dirOut = (theme: Theme) => css`
   color: ${theme.palette.neutral.main};
+  text-transform: uppercase;
 `;
 
 export type TransfersTableProps = {
@@ -75,7 +75,7 @@ function TransfersTable(props: TransfersTableProps) {
 					label=''
 					render={(transfer) => {
 						const dir = transfer.from === direction?.source ? "out" : "in";
-						return dir === "out" ? <ArrowForwardIcon css={dirOut} />: <ArrowBackIcon css={dirIn} />;
+						return <div css={dir === "out" ? dirOut : dirIn}>{dir}</div>;
 					}}
 				/>
 			)}
