@@ -2,8 +2,6 @@
 import { css } from "@emotion/react";
 
 import { Card, CardRow } from "../components/Card";
-import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
-import { useExtrinsicsWithoutTotalCount } from "../hooks/useExtrinsicsWithoutTotalCount";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useTransfers } from "../hooks/useTransfers";
 import TransfersTable from "../components/transfers/TransfersTable";
@@ -14,6 +12,8 @@ import { useStats } from "../hooks/useStats";
 import { TokenDistributionChart } from "../components/network/TokenDistributionChart";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
+import { useState } from "react";
+import { BalancesOrder } from "../services/balancesService";
 
 const contentStyle = css`
   position: relative;
@@ -53,7 +53,13 @@ export const HomePage = () => {
 	const blocks = useBlocks(undefined, "HEIGHT_DESC");
 	const transfers = useTransfers(undefined, "BLOCK_NUMBER_DESC");
 	const stats = useStats();
-	const balances = useBalances(undefined, "BALANCE_TOTAL_DESC");
+	const balancesInitialOrder = "BALANCE_TOTAL_DESC";
+	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(balancesInitialOrder);
+	const balances = useBalances(undefined, balanceSort);
+
+	const onSortChange = (sortKey: BalancesOrder) => { 
+		setBalanceSort(sortKey);
+	};
 
 	return (
 		<div css={contentStyle}>
@@ -95,7 +101,7 @@ export const HomePage = () => {
 							error={balances.error}
 							value='accounts'
 						>
-							<BalancesTable balances={balances} />
+							<BalancesTable balances={balances} onSortChange={onSortChange} initialSort={balancesInitialOrder} />
 						</TabPane>
 					</TabbedContent>
 				</Card>

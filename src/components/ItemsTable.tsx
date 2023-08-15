@@ -24,8 +24,8 @@ import { ErrorMessage } from "./ErrorMessage";
 import Loading from "./Loading";
 import NotFound from "./NotFound";
 import { TablePagination } from "./TablePagination";
-import { TableSortOptions, TableSortOptionsProps } from "./TableSortOptions";
-import { TableSortToggle } from "./TableSortToggle";
+import { TableColumnButton } from "./TableColumnButton";
+import { Ascending, Descending } from "./sortIcons";
 
 const tableStyle = css`
   table-layout: auto;
@@ -86,9 +86,7 @@ export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
 	colCss?: Interpolation<Theme>;
 	sortable?: boolean;
-	sortProperty?: S;
-	startDirection?: SortDirection;
-	sortOptions?: TableSortOptionsProps<S>["options"];
+	sortProperty?: string;
 	onSortChange?: (sortOrder: SortOrder<S>) => void;
 	render: ItemsTableDataFn<T, A, ReactNode>;
 	colSpan?: ItemsTableDataFn<T, A, number>;
@@ -140,6 +138,7 @@ export type ItemsTableProps<
 		| null
 	)[];
 	showRank?: boolean;
+	onSortChange?: (property: string | undefined) => void;
 };
 
 export const ItemsTable = <
@@ -161,6 +160,7 @@ export const ItemsTable = <
 		pagination,
 		children,
 		showRank,
+		onSortChange,
 		...restProps
 	} = props;
 
@@ -195,43 +195,43 @@ export const ItemsTable = <
 					<TableHead>
 						<TableRow>
 							{showRank ? <TableCell>Rank</TableCell> : <></>}
-							{Children.map(
-								children,
-								(child) =>
-									child && (
-										<TableCell css={cellStyle}>
-											{child.props.label}
-											{child.props.sortable && (
-												<>
-													{child.props.sortOptions && (
-														<TableSortOptions
-															options={child.props.sortOptions}
-															value={sort}
-															onChange={child.props.onSortChange}
-														/>
-													)}
-													{!child.props.sortOptions && (
-														<TableSortToggle
-															sortProperty={child.props.sortProperty}
-															startDirection={child.props.startDirection}
-															value={sort}
-															onChange={child.props.onSortChange}
-														/>
-													)}
-												</>
-											)}
-										</TableCell>
-									)
-							)}
+							{Children.map(children, (child) => {
+								if (!child) return null;
+								const { label, sortable, sortProperty } = child.props;
+								if (sortable !== true)
+									return <TableCell css={cellStyle}>{label}</TableCell>;
+								return (
+									<TableCell css={cellStyle}>
+										<TableColumnButton
+											icon={
+												sort?.property === sortProperty ? (
+													sort?.direction === SortDirection.ASC ? (
+														<Ascending />
+													) : (
+														<Descending />
+													)
+												) : null
+											}
+											onClick={() => onSortChange && onSortChange(sortProperty)}
+										>
+											{label}
+										</TableColumnButton>
+									</TableCell>
+								);
+							})}
 						</TableRow>
 					</TableHead>
 					<TableBody>
 						{data?.map((item, index) => (
 							<TableRow key={item.id}>
-								{showRank ? <TableCell>{(pagination?.offset || 0) + index + 1}</TableCell> : <></>}
+								{showRank ? (
+									<TableCell>{(pagination?.offset || 0) + index + 1}</TableCell>
+								) : (
+									<></>
+								)}
 								{Children.map(
 									children,
-									(child) => child && cloneElement(child, { _data: item, _additionalData: additionalData})
+									(child) => child && cloneElement(child, { _data: item, _additionalData: additionalData })
 								)}
 							</TableRow>
 						))}

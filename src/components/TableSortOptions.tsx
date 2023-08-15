@@ -57,30 +57,6 @@ export const TableSortOptions = <T = any>(props: TableSortOptionsProps<T>) => {
 			>
 				{selectedOption?.label}
 			</TableColumnButton>
-			<Menu
-				anchorEl={anchorEl}
-				anchorOrigin={{
-					vertical: "top",
-					horizontal: "left"
-				}}
-				open={Boolean(anchorEl)}
-				onClose={() => setAnchorEl(null)}
-				css={sortOptionsStyle}
-			>
-				{options.map((option, index) =>
-					<MenuItem
-						key={index}
-						onClick={() => handleSortSelected({
-							property: option.value.property,
-							direction: option.value.direction
-						})}
-					>
-						{option.value.direction === SortDirection.ASC && <Ascending />}
-						{option.value.direction === SortDirection.DESC && <Descending />}
-						{option.label}
-					</MenuItem>
-				)}
-			</Menu>
 		</>
 	);
 };
