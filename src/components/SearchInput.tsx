@@ -91,7 +91,7 @@ function SearchInput(props: SearchInputProps) {
 					fullWidth
 					id="search"
 					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Extrinsic hash / account address / block hash / block height / extrinsic name / event name"
+					placeholder="Account / Block / Extrinsic / Hash"
 					value={search}
 				/>
 				<Button
