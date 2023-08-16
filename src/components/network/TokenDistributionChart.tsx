@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { HTMLAttributes } from "react";
-import { css } from "@emotion/react";
+import { css, useTheme } from "@emotion/react";
 import { Tokenomics } from "../../model/stats";
 
 import Chart from "react-apexcharts";
@@ -28,6 +28,7 @@ export type TokenDistributionChartProps = HTMLAttributes<HTMLDivElement> & {
 
 export const TokenDistributionChart = (props: TokenDistributionChartProps) => {
 	const { token } = props;
+	const theme = useTheme();
 
 	return (
 		<div css={chartContainer}>
@@ -65,7 +66,7 @@ export const TokenDistributionChart = (props: TokenDistributionChartProps) => {
 						show: true,
 						curve: "smooth",
 						lineCap: "butt",
-						colors: ["#121212"],
+						colors: [theme.palette.primary.dark],
 						width: 6,
 						dashArray: 0,
 					},
