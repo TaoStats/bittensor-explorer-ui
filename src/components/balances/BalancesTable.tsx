@@ -22,17 +22,21 @@ export type BalancesTableProps = {
 const BalancesItemsTableAttribute = ItemsTableAttribute<Balance>;
 
 const orderMappings = {
-	"free": {
+	free: {
 		[SortDirection.ASC]: "BALANCE_FREE_ASC",
 		[SortDirection.DESC]: "BALANCE_FREE_DESC",
 	},
-	"delegated": {
+	delegated: {
 		[SortDirection.ASC]: "BALANCE_STAKED_ASC",
 		[SortDirection.DESC]: "BALANCE_STAKED_DESC",
 	},
-	"total": {
+	total: {
 		[SortDirection.ASC]: "BALANCE_TOTAL_ASC",
 		[SortDirection.DESC]: "BALANCE_TOTAL_DESC",
+	},
+	updated_at: {
+		[SortDirection.ASC]: "UPDATED_AT_ASC",
+		[SortDirection.DESC]: "UPDATED_AT_DESC",
 	},
 };
 
@@ -143,6 +147,8 @@ function BalancesTable(props: BalancesTableProps) {
 
 			<BalancesItemsTableAttribute
 				label='Last update'
+				sortable
+				sortProperty='updated_at'
 				render={(balance) => (
 					<Link to={`/block/${balance.updatedAt.toString()}`}>
 						{balance.updatedAt.toString()}

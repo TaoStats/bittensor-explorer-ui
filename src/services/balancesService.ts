@@ -13,7 +13,9 @@ export type BalancesOrder =
   | "BALANCE_STAKED_ASC"
   | "BALANCE_STAKED_DESC"
   | "BALANCE_TOTAL_ASC"
-  | "BALANCE_TOTAL_DESC";
+  | "BALANCE_TOTAL_DESC"
+  | "UPDATED_AT_ASC"
+  | "UPDATED_AT_DESC";
 
 export async function getBalances(
 	filter: BalancesFilter | undefined,

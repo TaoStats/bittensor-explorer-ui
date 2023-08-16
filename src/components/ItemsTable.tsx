@@ -17,15 +17,13 @@ import {
 import { css, Interpolation, Theme } from "@emotion/react";
 
 import { Pagination } from "../hooks/usePagination";
-import { SortDirection } from "../model/sortDirection";
 import { SortOrder } from "../model/sortOrder";
 
 import { ErrorMessage } from "./ErrorMessage";
 import Loading from "./Loading";
 import NotFound from "./NotFound";
 import { TablePagination } from "./TablePagination";
-import { TableColumnButton } from "./TableColumnButton";
-import { Ascending, Descending } from "./sortIcons";
+import { SortDirection } from "../model/sortDirection";
 
 const tableStyle = css`
   table-layout: auto;
@@ -70,6 +68,60 @@ const cellStyle = (theme: Theme) => css`
 
   &:last-of-type {
     padding-right: 0;
+  }
+`;
+
+const activeHeader = (theme: Theme) => css`
+  color: ${theme.palette.secondary.light} !important;
+`;
+
+const sortableHeaderStyle = css`
+  position: relative;
+  cursor: pointer;
+  padding-left: 32px;
+
+  ::after,
+  ::bottom {
+    display: block;
+    font-size: 0.8em;
+    line-height: 9px;
+    font-weight: 500;
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%);
+    opacity: 1;
+  }
+
+  ::before {
+    position: absolute;
+    left: 5px;
+    content: '\\25B2';
+  }
+
+  ::after {
+    position: absolute;
+    left: 12px;
+    content: '\\25BC';
+  }
+`;
+
+const sortAsc = (theme: Theme) => css`
+  ::before {
+    color: ${theme.palette.secondary.light};
+  }
+
+  ::after {
+    color: ${theme.palette.success.dark};
+  }
+`;
+
+const sortDesc = (theme: Theme) => css`
+  ::after {
+    color: ${theme.palette.secondary.light};
+  }
+
+  ::before {
+    color: ${theme.palette.success.dark};
   }
 `;
 
@@ -200,22 +252,28 @@ export const ItemsTable = <
 								const { label, sortable, sortProperty } = child.props;
 								if (sortable !== true)
 									return <TableCell css={cellStyle}>{label}</TableCell>;
+
+								const isActive = sort?.property === sortProperty;
+
 								return (
-									<TableCell css={cellStyle}>
-										<TableColumnButton
-											icon={
-												sort?.property === sortProperty ? (
-													sort?.direction === SortDirection.ASC ? (
-														<Ascending />
-													) : (
-														<Descending />
-													)
-												) : null
-											}
-											onClick={() => onSortChange && onSortChange(sortProperty)}
-										>
-											{label}
-										</TableColumnButton>
+									<TableCell
+										css={[
+											cellStyle,
+											sortableHeaderStyle,
+											...(isActive
+												? [
+													activeHeader,
+													...(sort?.direction === SortDirection.ASC
+														? [sortAsc]
+														: sort?.direction === SortDirection.DESC
+															? [sortDesc]
+															: []),
+												]
+												: []),
+										]}
+										onClick={ () => onSortChange && onSortChange(sortProperty) }
+									>
+										{label}
 									</TableCell>
 								);
 							})}
@@ -231,7 +289,7 @@ export const ItemsTable = <
 								)}
 								{Children.map(
 									children,
-									(child) => child && cloneElement(child, { _data: item, _additionalData: additionalData })
+									(child) =>child && cloneElement(child, { _data: item, _additionalData: additionalData})
 								)}
 							</TableRow>
 						))}
