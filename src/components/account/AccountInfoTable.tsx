@@ -10,6 +10,7 @@ import { NETWORK_CONFIG } from "../../config";
 import { AccountBalance } from "../../model/balance";
 import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 import { u8aToHex } from "@polkadot/util";
+import { css } from "@emotion/react";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
@@ -25,8 +26,6 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	const { info: { account, balance, price }, ...tableProps } = props;
 
 	const total = rawAmountToDecimal(balance.data?.total.toString());
-
-	console.log("Price = ", price);
 
 	return (
 		<InfoTable
