@@ -41,7 +41,7 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 							show: true,
 							curve: "smooth",
 							lineCap: "butt",
-							colors: ["#121212"],
+							colors: ["#1a1a1a"],
 							width: 6,
 							dashArray: 0,
 						},
