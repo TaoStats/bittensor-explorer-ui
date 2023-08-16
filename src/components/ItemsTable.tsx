@@ -75,33 +75,33 @@ const activeHeader = (theme: Theme) => css`
   color: ${theme.palette.secondary.light} !important;
 `;
 
-const sortableHeaderStyle = css`
-  position: relative;
+const sortableHeaderBase = css`
   cursor: pointer;
-  padding-left: 28px;
+`;
 
+const sortableHeaderItem = css`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+`;
+
+const sortArrows = css`
   ::after,
   ::bottom {
     display: block;
-    line-height: 9px;
+    line-height: 8px;
     font-weight: 500;
-    top: 50%;
-    bottom: auto;
-    transform: translateY(-50%);
-    opacity: 1;
+	opacity: 1;
   }
 
   ::before {
-    position: absolute;
-    left: 5px;
     content: '\\25B2';
     font-size: 10px !important;
   }
 
   ::after {
-    position: absolute;
-    left: 12px;
-    content: '\\25BC';
+	margin-left: -4px;
+	content: '\\25BC';
     font-size: 10px !important;
   }
 `;
@@ -258,23 +258,27 @@ export const ItemsTable = <
 
 								return (
 									<TableCell
-										css={[
-											cellStyle,
-											sortableHeaderStyle,
-											...(isActive
-												? [
-													activeHeader,
-													...(sort?.direction === SortDirection.ASC
-														? [sortAsc]
-														: sort?.direction === SortDirection.DESC
-															? [sortDesc]
-															: []),
-												]
-												: []),
-										]}
-										onClick={ () => onSortChange && onSortChange(sortProperty) }
+										css={[cellStyle, sortableHeaderBase]}
+										onClick={() => onSortChange && onSortChange(sortProperty)}
 									>
-										{label}
+										<div css={sortableHeaderItem}>
+											{label}
+											<div
+												css={[
+													sortArrows,
+													...(isActive
+														? [
+															activeHeader,
+															...(sort?.direction === SortDirection.ASC
+																? [sortAsc]
+																: sort?.direction === SortDirection.DESC
+																	? [sortDesc]
+																	: []),
+														]
+														: []),
+												]}
+											></div>
+										</div>
 									</TableCell>
 								);
 							})}
