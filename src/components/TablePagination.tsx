@@ -55,16 +55,9 @@ export function TablePagination(props: TablePaginationProps) {
 
 	return (
 		<div css={paginationStyle}>
-			<IconButton
-				css={buttonStyle}
-				disabled={offset === 0}
-				onClick={() => setPreviousPage()}
-			>
-				<ChevronLeft />
-			</IconButton>
 			<Select
-				labelId='demo-simple-select-label'
-				id='demo-simple-select'
+				labelId="demo-simple-select-label"
+				id="demo-simple-select"
 				sx={{ height: "32px", ml: "8px" }}
 				css={pageOptions}
 				value={limit}
@@ -74,6 +67,13 @@ export function TablePagination(props: TablePaginationProps) {
 					<MenuItem value={size} key={index}>{size}</MenuItem>
 				))}
 			</Select>
+			<IconButton
+				css={buttonStyle}
+				disabled={offset === 0}
+				onClick={() => setPreviousPage()}
+			>
+				<ChevronLeft />
+			</IconButton>
 			<IconButton
 				css={buttonStyle}
 				disabled={!hasNextPage}
