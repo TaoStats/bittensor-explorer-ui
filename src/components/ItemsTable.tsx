@@ -78,12 +78,11 @@ const activeHeader = (theme: Theme) => css`
 const sortableHeaderStyle = css`
   position: relative;
   cursor: pointer;
-  padding-left: 32px;
+  padding-left: 28px;
 
   ::after,
   ::bottom {
     display: block;
-    font-size: 0.8em;
     line-height: 9px;
     font-weight: 500;
     top: 50%;
@@ -96,12 +95,14 @@ const sortableHeaderStyle = css`
     position: absolute;
     left: 5px;
     content: '\\25B2';
+    font-size: 10px !important;
   }
 
   ::after {
     position: absolute;
     left: 12px;
     content: '\\25BC';
+    font-size: 10px !important;
   }
 `;
 
