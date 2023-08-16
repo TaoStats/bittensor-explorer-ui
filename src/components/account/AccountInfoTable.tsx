@@ -10,7 +10,7 @@ import { NETWORK_CONFIG } from "../../config";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	account: Resource<Account>;
-}
+};
 
 const AccountInfoTableAttribute = InfoTableAttribute<Account>;
 
@@ -27,12 +27,14 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			{...tableProps}
 		>
 			<AccountInfoTableAttribute
-				label="Substrate address"
+				label='Substrate address'
 				render={(data) => encodeAddress(data.address, NETWORK_CONFIG.prefix)}
-				copyToClipboard={(data) => encodeAddress(data.address, NETWORK_CONFIG.prefix)}
+				copyToClipboard={(data) =>
+					encodeAddress(data.address, NETWORK_CONFIG.prefix)
+				}
 			/>
 			<AccountInfoTableAttribute
-				label={(data) => isEthereumAddress(data.address) ? "Address" : "Public key"}
+				label='Public key'
 				render={(data) => data.address}
 				copyToClipboard={(data) => data.address}
 			/>
