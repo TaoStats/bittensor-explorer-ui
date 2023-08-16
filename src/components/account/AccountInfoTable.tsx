@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { HTMLAttributes } from "react";
-import { encodeAddress, isEthereumAddress } from "@polkadot/util-crypto";
+import { decodeAddress, encodeAddress, isEthereumAddress } from "@polkadot/util-crypto";
 
 import { Account } from "../../model/account";
 import { Resource } from "../../model/resource";
@@ -9,6 +9,7 @@ import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { NETWORK_CONFIG } from "../../config";
 import { AccountBalance } from "../../model/balance";
 import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
+import { u8aToHex } from "@polkadot/util";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
@@ -44,11 +45,9 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 				}
 			/>
 			<AccountInfoTableAttribute
-				label={(data) =>
-					isEthereumAddress(data.address) ? "Address" : "Public key"
-				}
-				render={(data) => data.address}
-				copyToClipboard={(data) => data.address}
+				label="Public key"
+				render={(data) => u8aToHex(decodeAddress(data.address))}
+				copyToClipboard={(data) => u8aToHex(decodeAddress(data.address))}
 			/>
 			<AccountInfoTableAttribute
 				label='Total balance'
