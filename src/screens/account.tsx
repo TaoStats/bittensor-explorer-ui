@@ -17,6 +17,8 @@ import { AccountInfoTable } from "../components/account/AccountInfoTable";
 import { AccountPortfolio } from "../components/account/AccountPortfolio";
 import { useTaoPrice } from "../hooks/useTaoPrice";
 import { useBalance } from "../hooks/useBalance";
+import { StatItem } from "../components/network/StatItem";
+import { formatCurrency, rawAmountToDecimal } from "../utils/number";
 
 const accountInfoStyle = css`
   display: flex;
@@ -60,6 +62,15 @@ const infoSection = css`
   }
 `;
 
+const summary = css`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  @media only screen and (max-width: 767px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+
 export type AccountPageParams = {
 	address: string;
 };
@@ -73,6 +84,18 @@ export const AccountPage = () => {
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
 	});
+
+	const delegated = `${formatCurrency(
+		rawAmountToDecimal((balance?.data?.staked || 0).toString()),
+		"USD",
+		{ decimalPlaces: 2 }
+	)} TAO`;
+
+	const free = `${formatCurrency(
+		rawAmountToDecimal((balance?.data?.free || 0).toString()),
+		"USD",
+		{ decimalPlaces: 2 }
+	)} TAO`;
 
 	const taoPrice = useTaoPrice();
 
@@ -93,7 +116,7 @@ export const AccountPage = () => {
 
 	return (
 		<>
-			<CardRow css={ infoSection }>
+			<CardRow css={infoSection}>
 				<Card css={accountInfoStyle} data-test='account-info'>
 					<CardHeader css={accountHeader}>
 						Account
@@ -110,10 +133,21 @@ export const AccountPage = () => {
 							)}
 						</span>
 					</CardHeader>
-					<AccountInfoTable info={{ account, balance, price: taoPrice.data?.toNumber() }} />
+					<AccountInfoTable
+						info={{ account, balance, price: taoPrice.data?.toNumber() }}
+					/>
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
-					<CardHeader>Account Balance</CardHeader>
+					<div css={summary}>
+						<StatItem
+							title='Delegated'
+							value={delegated}
+						/>
+						<StatItem
+							title='Free'
+							value={free}
+						/>
+					</div>
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
 				</Card>
 			</CardRow>
@@ -137,7 +171,11 @@ export const AccountPage = () => {
 							error={transfers.error}
 							value='transfers'
 						>
-							<TransfersTable transfers={transfers} showTime direction={{show: true, source: address}} />
+							<TransfersTable
+								transfers={transfers}
+								showTime
+								direction={{ show: true, source: address }}
+							/>
 						</TabPane>
 					</TabbedContent>
 				</Card>

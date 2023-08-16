@@ -3,7 +3,7 @@ import { HTMLAttributes } from "react";
 import { css, useTheme } from "@emotion/react";
 import Chart from "react-apexcharts";
 
-import { rawAmountToDecimal } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 
 import { AccountBalance } from "../../model/balance";
 import Decimal from "decimal.js";
@@ -21,8 +21,11 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 	const theme = useTheme();
 
 	const free = rawAmountToDecimal(balance?.free.toString());
-	const staked = rawAmountToDecimal(balance?.staked.toString());
+	const delegated = rawAmountToDecimal(balance?.staked.toString());
 	const total = rawAmountToDecimal(balance?.total.toString());
+
+	const strFree = formatCurrency(free, "USD", { decimalPlaces: 2 });
+	const strDelegated = formatCurrency(delegated, "USD", { decimalPlaces: 2 });
 	
 	return (
 		total.isZero() ? <></>: 
@@ -30,8 +33,8 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 				<Chart
 					options={{
 						labels: [
-							`Delegated: ${staked.toFixed(2).toString()} TAO (${staked.div(total).mul(100).toFixed(2)}%)`,
-							`Free: ${free.toFixed(2).toString()} TAO (${free.div(total).mul(100).toFixed(2)}%)`
+							`Delegated: ${strDelegated} TAO (${delegated.div(total).mul(100).toFixed(2)}%)`,
+							`Free: ${strFree} TAO (${free.div(total).mul(100).toFixed(2)}%)`
 						],
 						colors: [ theme.palette.success.main, theme.palette.neutral.main ],
 						dataLabels: {
@@ -82,8 +85,8 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 						},
 					}}
 					series={[
-						staked.toNumber(),
-						free.toNumber(),
+						parseFloat(delegated.toFixed(2)),
+						parseFloat(free.toFixed(2)),
 					]}
 					type='donut'
 					height={400}

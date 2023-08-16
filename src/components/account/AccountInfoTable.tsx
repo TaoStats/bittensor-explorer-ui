@@ -10,6 +10,7 @@ import { NETWORK_CONFIG } from "../../config";
 import { AccountBalance } from "../../model/balance";
 import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 import { css } from "@emotion/react";
+import Decimal from "decimal.js";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
@@ -17,22 +18,25 @@ export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 		balance: Resource<AccountBalance>;
 		price: number | undefined;
 	};
-}
+};
 
 const AccountInfoTableAttribute = InfoTableAttribute<Account & AccountBalance>;
 
 const balanceContainer = css`
-	display: flex;
-	gap: 4px;
-	align-items: center;
+  display: flex;
+  gap: 4px;
+  align-items: center;
 `;
 
 const taoBalance = css`
-	font-weight: bold;
+  font-weight: bold;
 `;
 
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
-	const { info: { account, balance, price }, ...tableProps } = props;
+	const {
+		info: { account, balance, price },
+		...tableProps
+	} = props;
 
 	const total = rawAmountToDecimal(balance.data?.total.toString());
 
@@ -63,13 +67,25 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			/>
 			<AccountInfoTableAttribute
 				label='Total balance'
-				render={() =>
+				render={() => (
 					<div css={balanceContainer}>
-						<span css={taoBalance}>{`${total.toFixed(2).toString()} TAO`}</span>
-						<span>{`(${formatCurrency(total.mul(price ?? 0), "USD", { decimalPlaces: 2 })} USD)`}</span>
+						<span css={taoBalance}>
+							{`${formatCurrency(
+								new Decimal(total.toFixed(2).toString()),
+								"USD",
+								{ decimalPlaces: 2 }
+							)} TAO`}
+						</span>
+						<span>
+							{`(${formatCurrency(
+								total.mul(price ?? 0),
+								"USD",
+								{ decimalPlaces: 2 }
+							)} USD)`}
+						</span>
 					</div>
-				}
-				copyToClipboard={() =>total.toFixed(2).toString()}
+				)}
+				copyToClipboard={() => total.toFixed(2).toString()}
 			/>
 		</InfoTable>
 	);
