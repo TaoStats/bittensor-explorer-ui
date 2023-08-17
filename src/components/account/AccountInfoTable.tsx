@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useEffect, useState } from "react";
 import { decodeAddress, encodeAddress } from "@polkadot/util-crypto";
 
 import { Account } from "../../model/account";
@@ -8,10 +8,11 @@ import { Resource } from "../../model/resource";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { NETWORK_CONFIG } from "../../config";
 import { AccountBalance } from "../../model/balance";
-import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
+import { formatCurrency, formatNumber, rawAmountToDecimal } from "../../utils/number";
 import { u8aToHex } from "@polkadot/util";
 import { css } from "@emotion/react";
 import Decimal from "decimal.js";
+import { countBalanceItems } from "../../services/balancesService";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
@@ -40,6 +41,18 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	} = props;
 
 	const total = rawAmountToDecimal(balance.data?.total.toString());
+	const [rank, setRank] = useState<number>();
+
+	useEffect(() => {
+		const fetchRank = async () => {
+			if (balance.data?.total === undefined) return;
+			const _rank = await countBalanceItems({
+				balanceTotal: { greaterThan: balance.data?.total },
+			});
+			setRank(_rank + 1);
+		};
+		fetchRank();
+	}, [balance.data?.total]);
 
 	return (
 		<InfoTable
@@ -58,7 +71,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 				}
 			/>
 			<AccountInfoTableAttribute
-				label="Public key"
+				label='Public key'
 				render={(data) => u8aToHex(decodeAddress(data.address))}
 				copyToClipboard={(data) => u8aToHex(decodeAddress(data.address))}
 			/>
@@ -84,6 +97,12 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 				)}
 				copyToClipboard={() => total.toFixed(2).toString()}
 			/>
+			{rank !== undefined && (
+				<AccountInfoTableAttribute
+					label='Rank'
+					render={() => formatNumber(rank)}
+				/>
+			)}
 		</InfoTable>
 	);
 };

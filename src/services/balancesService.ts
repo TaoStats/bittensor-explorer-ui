@@ -6,16 +6,16 @@ import { fetchIndexer } from "./fetchService";
 
 export type BalancesFilter = object;
 export type BalancesOrder =
-  | "ID_ASC"
-  | "ID_DESC"
-  | "BALANCE_FREE_ASC"
-  | "BALANCE_FREE_DESC"
-  | "BALANCE_STAKED_ASC"
-  | "BALANCE_STAKED_DESC"
-  | "BALANCE_TOTAL_ASC"
-  | "BALANCE_TOTAL_DESC"
-  | "UPDATED_AT_ASC"
-  | "UPDATED_AT_DESC";
+	| "ID_ASC"
+	| "ID_DESC"
+	| "BALANCE_FREE_ASC"
+	| "BALANCE_FREE_DESC"
+	| "BALANCE_STAKED_ASC"
+	| "BALANCE_STAKED_DESC"
+	| "BALANCE_TOTAL_ASC"
+	| "BALANCE_TOTAL_DESC"
+	| "UPDATED_AT_ASC"
+	| "UPDATED_AT_DESC";
 
 export async function getBalances(
 	filter: BalancesFilter | undefined,
@@ -94,6 +94,20 @@ export async function getBalance(filter: BalancesFilter) {
 	);
 
 	const data =
-    response.accounts?.nodes[0] && transformItem(response.accounts.nodes[0]);
+		response.accounts?.nodes[0] && transformItem(response.accounts.nodes[0]);
 	return data;
+}
+
+export async function countBalanceItems(filter: BalancesFilter) {
+	const response = await fetchIndexer<{ accounts: ResponseItems<{ totalCount: number; }> }>(
+		`query ($filter: AccountFilter) {
+			accounts(filter: $filter) {
+				totalCount
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+	return response.accounts.totalCount;
 }
