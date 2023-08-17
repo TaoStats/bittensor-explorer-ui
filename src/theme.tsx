@@ -187,8 +187,8 @@ export const theme = createTheme({
 						border-radius: 4px;
 					}
 				`,
-				icon: css`
-					color: #0a0a0a;
+				icon: ({theme}) => css`
+					color: ${theme.palette.secondary.dark};
 				`
 			}
 		},
