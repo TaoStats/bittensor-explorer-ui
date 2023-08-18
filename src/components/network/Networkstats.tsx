@@ -219,14 +219,14 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 				</div>
 
 				<div css={statItemsRow}>
-					<StatItem
+					{/* <StatItem
 						title='Finalized blocks'
 						value={formatNumber(new Decimal(chain.blocksFinalized.toString()))}
 					/>
 					<StatItem
 						title='Signed extrinsics'
 						value={formatNumber(new Decimal(chain.extrinsicsSigned.toString()))}
-					/>
+					/> */}
 					<StatItem
 						title='Accounts'
 						value={formatNumber(new Decimal(chain.accounts.toString()))}

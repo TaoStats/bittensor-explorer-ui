@@ -66,11 +66,11 @@ export async function getStats(): Promise<Stats> {
 	};
 
 	const getChainStats = async (): Promise<ChainStats> => {
-		const dict = await getDictionaryStats();
+		// const dict = await getDictionaryStats();
 		const indexer = await getIndexerStats();
 
 		return {
-			...dict,
+			// ...dict,
 			...indexer
 		} as ChainStats;
 	};
