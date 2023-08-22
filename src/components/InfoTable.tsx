@@ -53,6 +53,7 @@ const tableStyles = (theme: Theme) => css`
   & > thead > tr > th:last-child,
   & > tbody > tr > td:last-child {
     padding-right: 20px;
+	padding-left: 20px;
   }
 `;
 

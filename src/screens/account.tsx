@@ -35,10 +35,10 @@ const accountLabel = css`
   font-weight: 400;
 `;
 
-const accountLabelName = css``;
-
 const accountLabelAddress = css`
   opacity: 0.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const portfolioStyle = (theme: Theme) => css`
@@ -52,7 +52,9 @@ const portfolioStyle = (theme: Theme) => css`
 
 const accountHeader = css`
   display: flex;
+  gap: 4px;
   align-items: center;
+  word-break: keep-all;
 `;
 
 const infoSection = css`
@@ -122,19 +124,13 @@ export const AccountPage = () => {
 			<CardRow css={infoSection}>
 				<Card css={accountInfoStyle} data-test='account-info'>
 					<CardHeader css={accountHeader}>
-						Account
+						<div css={{ display: "block" }}>Account</div>
 						{(account.loading || account.data) && (
 							<AccountAvatar address={address} size={32} css={avatarStyle} />
 						)}
-						<span css={accountLabel}>
-							{account.data?.identity?.display ? (
-								<span css={accountLabelName}>
-									{account.data?.identity?.display}
-								</span>
-							) : (
-								<span css={accountLabelAddress}>{address}</span>
-							)}
-						</span>
+						<div css={accountLabelAddress}>
+							{address}
+						</div>
 					</CardHeader>
 					<AccountInfoTable
 						info={{ account, balance, price: taoPrice.data?.toNumber() }}
@@ -142,14 +138,8 @@ export const AccountPage = () => {
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
 					<div css={summary}>
-						<StatItem
-							title='Delegated'
-							value={delegated}
-						/>
-						<StatItem
-							title='Free'
-							value={free}
-						/>
+						<StatItem title='Delegated' value={delegated} />
+						<StatItem title='Free' value={free} />
 					</div>
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
 				</Card>
