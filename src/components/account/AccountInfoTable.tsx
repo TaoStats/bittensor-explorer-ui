@@ -28,6 +28,7 @@ const balanceContainer = css`
   display: flex;
   gap: 4px;
   align-items: center;
+  flex-wrap: wrap;
 `;
 
 const taoBalance = css`
@@ -72,7 +73,9 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			<AccountInfoTableAttribute
 				label='Substrate address'
 				render={(data) => (
-					<div css={ addressItem }>{encodeAddress(data.address, NETWORK_CONFIG.prefix)}</div>
+					<div css={addressItem}>
+						{encodeAddress(data.address, NETWORK_CONFIG.prefix)}
+					</div>
 				)}
 				copyToClipboard={(data) =>
 					encodeAddress(data.address, NETWORK_CONFIG.prefix)
@@ -80,7 +83,9 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			/>
 			<AccountInfoTableAttribute
 				label='Public key'
-				render={(data) => u8aToHex(decodeAddress(data.address))}
+				render={(data) => (
+					<div css={addressItem}>{u8aToHex(decodeAddress(data.address))}</div>
+				)}
 				copyToClipboard={(data) => u8aToHex(decodeAddress(data.address))}
 			/>
 			<AccountInfoTableAttribute

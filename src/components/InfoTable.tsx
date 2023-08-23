@@ -66,9 +66,11 @@ const attributeStyle = css`
 `;
 
 const labelCellStyle = (theme: Theme) => css`
-  width: 140px;
+  width: 120px;
   padding-left: 0;
   border: none;
+  opacity: 0.8;
+  font-size: 12px;
 
   ${theme.breakpoints.down("sm")} {
     width: auto;
@@ -229,9 +231,7 @@ export const InfoTable = <T extends object, A extends any[] = []>(
 					<TableBody>
 						{Children.map(
 							children,
-							(child) =>
-								child &&
-                cloneElement(child, { _data: data, _additionalData: additionalData,})
+							(child) => child && cloneElement(child, { _data: data, _additionalData: additionalData, })
 						)}
 					</TableBody>
 				)}

@@ -73,6 +73,11 @@ const summary = css`
   }
 `;
 
+const accountTitle = css`
+  display: block;
+  opacity: 0.8;
+`;
+
 export type AccountPageParams = {
 	address: string;
 };
@@ -124,10 +129,10 @@ export const AccountPage = () => {
 			<CardRow css={infoSection}>
 				<Card css={accountInfoStyle} data-test='account-info'>
 					<CardHeader css={accountHeader}>
-						<div css={{ display: "block" }}>Account</div>
-						{(account.loading || account.data) && (
+						<div css={accountTitle}>Account</div>
+						{/* {(account.loading || account.data) && (
 							<AccountAvatar address={address} size={32} css={avatarStyle} />
-						)}
+						)} */}
 						<div css={accountLabelAddress}>
 							{address}
 						</div>
