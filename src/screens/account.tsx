@@ -50,11 +50,12 @@ const portfolioStyle = (theme: Theme) => css`
   }
 `;
 
-const accountHeader = css`
+const accountHeader = (theme: Theme) => css`
   display: flex;
   gap: 4px;
   align-items: center;
   word-break: keep-all;
+  color: ${theme.palette.text.primary};
 `;
 
 const infoSection = css`
@@ -76,6 +77,8 @@ const summary = css`
 const accountTitle = css`
   display: block;
   opacity: 0.8;
+  width: 144px;
+  font-size: 12px;
 `;
 
 export type AccountPageParams = {
