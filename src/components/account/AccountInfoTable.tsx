@@ -7,22 +7,28 @@ import { Resource } from "../../model/resource";
 
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
 import { NETWORK_CONFIG } from "../../config";
-import { AccountBalance } from "../../model/balance";
-import { formatCurrency, formatNumber, rawAmountToDecimal } from "../../utils/number";
+import { Balance } from "../../model/balance";
+import {
+	formatCurrency,
+	formatNumber,
+	rawAmountToDecimal,
+} from "../../utils/number";
 import { u8aToHex } from "@polkadot/util";
 import { css } from "@emotion/react";
 import Decimal from "decimal.js";
 import { countBalanceItems } from "../../services/balancesService";
+import { BlockTimestamp } from "../BlockTimestamp";
+import { Link } from "../Link";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
 		account: Resource<Account>;
-		balance: Resource<AccountBalance>;
+		balance: Resource<Balance>;
 		price: number | undefined;
 	};
 };
 
-const AccountInfoTableAttribute = InfoTableAttribute<Account & AccountBalance>;
+const AccountInfoTableAttribute = InfoTableAttribute<Account & Balance>;
 
 const balanceContainer = css`
   display: flex;
@@ -36,9 +42,24 @@ const taoBalance = css`
 `;
 
 const addressItem = css`
-	overflow: hidden;
-	text-overflow: ellipsis;
-	word-break: keep-all;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+`;
+
+const createdAt = css`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const blockLink = css`
+	::before {
+		content: '(';
+	}
+	::after {
+		content: ')';
+	}
 `;
 
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
@@ -88,6 +109,21 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 				)}
 				copyToClipboard={(data) => u8aToHex(decodeAddress(data.address))}
 			/>
+			{balance.data?.createdAt ? (
+				<AccountInfoTableAttribute
+					label='Created at'
+					render={(data) => (
+						<div css={createdAt}>
+							<BlockTimestamp blockHeight={data.createdAt} />
+							<Link href={`/block/${data.createdAt}`} css={ blockLink }>
+								{`Block ${data.createdAt}`}
+							</Link>
+						</div>
+					)}
+				/>
+			) : (
+				<></>
+			)}
 			<AccountInfoTableAttribute
 				label='Total balance'
 				render={() => (
