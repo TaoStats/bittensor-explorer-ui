@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
@@ -18,6 +18,10 @@ import { useTaoPrice } from "../hooks/useTaoPrice";
 import { useBalance } from "../hooks/useBalance";
 import { StatItem } from "../components/network/StatItem";
 import { formatCurrency, rawAmountToDecimal } from "../utils/number";
+import { useApi } from "../contexts";
+import { DelegateItem } from "../model/delegates";
+import { Resource } from "../model/resource";
+import { getDelegated } from "../services/delegatesService";
 
 const accountInfoStyle = css`
   display: flex;
@@ -76,7 +80,14 @@ export type AccountPageParams = {
 
 export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
-	const balance = useBalance({address: {equalTo: address}});
+	const balance = useBalance({ address: { equalTo: address } });
+	const {
+		state: { api },
+	} = useApi();
+	const [delegates, setDelegates] = useState<Resource<DelegateItem[]>>({
+		loading: false,
+		notFound: false,
+	} as Resource<DelegateItem[]>);
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics(
@@ -116,6 +127,16 @@ export const AccountPage = () => {
 		}
 	}, [extrinsics]);
 
+	useEffect(() => { 
+		if (!api || !api.isReady) return;
+		const doFetch = async () => { 
+			setDelegates({ ...delegates, loading: true });
+			const data = await getDelegated(api, address);
+			setDelegates({...delegates, loading: false, data});
+		};
+		doFetch();
+	}, [api]);
+
 	return (
 		<>
 			<CardRow css={infoSection}>
@@ -125,12 +146,15 @@ export const AccountPage = () => {
 						{/* {(account.loading || account.data) && (
 							<AccountAvatar address={address} size={32} css={avatarStyle} />
 						)} */}
-						<div css={accountLabelAddress}>
-							{address}
-						</div>
+						<div css={accountLabelAddress}>{address}</div>
 					</CardHeader>
 					<AccountInfoTable
-						info={{ account, balance, price: taoPrice.data?.toNumber() }}
+						info={{
+							account,
+							balance,
+							price: taoPrice.data?.toNumber(),
+							delegates,
+						}}
 					/>
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>

@@ -19,12 +19,14 @@ import Decimal from "decimal.js";
 import { countBalanceItems } from "../../services/balancesService";
 import { BlockTimestamp } from "../BlockTimestamp";
 import { Link } from "../Link";
+import { DelegateItem } from "../../model/delegates";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
 		account: Resource<Account>;
 		balance: Resource<Balance>;
 		price: number | undefined;
+		delegates: Resource<DelegateItem[]>;
 	};
 };
 
@@ -62,9 +64,14 @@ const blockLink = css`
   }
 `;
 
+const delegateContainer = css`
+  display: flex;
+  align-items: center;
+`;
+
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	const {
-		info: { account, balance, price },
+		info: { account, balance, price, delegates },
 		...tableProps
 	} = props;
 
@@ -85,7 +92,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	return (
 		<InfoTable
 			data={{ ...account.data, ...balance.data }}
-			loading={account.loading || balance.loading}
+			loading={account.loading || balance.loading || delegates.loading}
 			notFound={account.notFound || balance.notFound}
 			notFoundMessage="Account doesn't exist"
 			error={account.error || balance.error}
@@ -153,6 +160,23 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 					label='Rank'
 					render={() => formatNumber(rank)}
 				/>
+			)}
+			{delegates.data !== undefined && delegates.data.length ? (
+				<AccountInfoTableAttribute
+					label='Delegated balance'
+					render={() => (
+						<div css={balanceContainer}>
+							{delegates.data?.map((delegate, index) => (
+								<div css={delegateContainer} key={index}>
+									<div>{`${delegate.amount.toFixed(2)} TAO`}</div>
+									<Link to={`/account/${delegate.hotkey}`}>{ `  (${delegate.name})` }</Link>
+								</div>
+							))}
+						</div>
+					)}
+				/>
+			) : (
+				<></>
 			)}
 		</InfoTable>
 	);
