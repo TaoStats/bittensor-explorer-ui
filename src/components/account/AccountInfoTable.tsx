@@ -137,7 +137,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 								new Decimal(total.toFixed(2).toString()),
 								"USD",
 								{ decimalPlaces: 2 }
-							)} TAO`}
+							)} 𝞃`}
 						</span>
 						<span>
 							{`(${formatCurrency(total.mul(price ?? 0), "USD", {
