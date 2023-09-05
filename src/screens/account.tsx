@@ -97,7 +97,9 @@ export const AccountPage = () => {
 	);
 
 	const delegatesInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
-	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(delegatesInitialOrder);
+	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
+		delegatesInitialOrder
+	);
 	const delegates = useDelegates(
 		{ account: { equalTo: address } },
 		delegateSort
@@ -123,6 +125,7 @@ export const AccountPage = () => {
       !extrinsics.loading &&
       !transfers.loading &&
       !taoPrice.loading &&
+      !delegates.loading &&
       !delegateBalances.loading
 	);
 
@@ -145,7 +148,12 @@ export const AccountPage = () => {
 						<div css={accountLabelAddress}>{address}</div>
 					</CardHeader>
 					<AccountInfoTable
-						info={{ account, balance, delegates: delegateBalances, price: taoPrice.data?.toNumber() }}
+						info={{
+							account,
+							balance,
+							delegates: delegateBalances,
+							price: taoPrice.data?.toNumber(),
+						}}
 					/>
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
@@ -182,7 +190,7 @@ export const AccountPage = () => {
 								direction={{ show: true, source: address }}
 							/>
 						</TabPane>
-						
+
 						<TabPane
 							label='Delegation'
 							count={delegates.pagination.totalCount}

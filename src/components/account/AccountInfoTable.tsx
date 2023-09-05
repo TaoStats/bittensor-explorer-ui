@@ -81,8 +81,10 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	useEffect(() => {
 		const fetchRank = async () => {
 			if (balance.data?.total === undefined) return;
+			const total = balance.data.total;
+			if (total === BigInt(0)) return;
 			const _rank = await countBalanceItems({
-				balanceTotal: { greaterThan: balance.data?.total },
+				balanceTotal: { greaterThan: total },
 			});
 			setRank(_rank + 1);
 		};
