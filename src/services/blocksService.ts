@@ -8,7 +8,15 @@ import { fetchDictionary } from "./fetchService";
 
 export type BlocksFilter = object;
 
-export type BlocksOrder = string | string[];
+export type BlocksOrder =
+	| "ID_ASC"
+	| "ID_DESC"
+	| "HEIGHT_ASC"
+	| "HEIGHT_DESC"
+	| "EVENT_NUMBER_ASC"
+	| "EVENT_NUMBER_DESC"
+	| "EXTRINSIC_NUMBER_ASC"
+	| "EXTRINSIC_NUMBER_DESC";
 
 export async function getBlock(filter: BlocksFilter) {
 	const response = await fetchDictionary<{ blocks: ResponseItems<Block> }>(
@@ -50,6 +58,8 @@ export async function getBlocks(
 					timestamp
 					parentHash
 					specVersion
+					eventCount
+					extrinsicCount
 				}
 				pageInfo {
 					endCursor

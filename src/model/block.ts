@@ -7,4 +7,6 @@ export type Block = {
 	parentHash: string;
 	stateRoot: string;
 	extrinsicRoot: string;
+	eventCount: number;
+	extrinsicCount: number;
 }

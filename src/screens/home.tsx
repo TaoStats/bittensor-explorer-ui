@@ -13,6 +13,7 @@ import { useStats } from "../hooks/useStats";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
 import { useEffect, useState } from "react";
+import { BlocksOrder } from "../services/blocksService";
 import { BalancesOrder } from "../services/balancesService";
 import { TransfersOrder } from "../services/transfersService";
 import { useDelegates } from "../hooks/useDelegates";
@@ -53,8 +54,12 @@ const infoSection = css`
 `;
 
 export const HomePage = () => {
-	const blocks = useBlocks(undefined, "HEIGHT_DESC");
+	const blocksInitialOrder: BlocksOrder = "HEIGHT_DESC";
+	const [blockSort, setBlockSort] = useState<BlocksOrder>(blocksInitialOrder);
+	const blocks = useBlocks(undefined, blockSort);
+
 	const stats = useStats();
+
 
 	const balancesInitialOrder: BalancesOrder = "BALANCE_TOTAL_DESC";
 	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(balancesInitialOrder);
@@ -108,7 +113,13 @@ export const HomePage = () => {
 							error={blocks.error}
 							value='blocks'
 						>
-							<BlocksTable blocks={blocks} showTime />
+							<BlocksTable
+								blocks={blocks}
+								showTime
+								onSortChange={(sortKey: BlocksOrder) =>
+									setBlockSort(sortKey)
+								}
+								initialSort={blocksInitialOrder} />
 						</TabPane>
 						<TabPane
 							label='Transfers'
