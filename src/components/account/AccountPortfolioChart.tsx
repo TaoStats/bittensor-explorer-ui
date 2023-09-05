@@ -33,8 +33,8 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 				<Chart
 					options={{
 						labels: [
-							`Delegated: ${strDelegated} TAO (${delegated.div(total).mul(100).toFixed(2)}%)`,
-							`Free: ${strFree} TAO (${free.div(total).mul(100).toFixed(2)}%)`
+							`Delegated: ${strDelegated} 𝞃 (${delegated.div(total).mul(100).toFixed(2)}%)`,
+							`Free: ${strFree} 𝞃 (${free.div(total).mul(100).toFixed(2)}%)`
 						],
 						colors: [ theme.palette.success.main, theme.palette.neutral.main ],
 						dataLabels: {

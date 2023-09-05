@@ -25,7 +25,7 @@ export const TAOSTATS_DATA_ENDPOINT = process.env.REACT_APP_TAOSTATS_DATA_ENDPOI
 export const RPC_ENDPOINT = process.env.REACT_APP_RPC_ENDPOINT || "wss://entrypoint-finney.opentensor.ai:443";
 
 export const NETWORK_CONFIG = {
-	currency: "TAO",
+	currency: "𝞃",
 	decimals: 9,
 	prefix: 42,
 };

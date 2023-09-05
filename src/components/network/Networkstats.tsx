@@ -184,7 +184,7 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 					<div css={priceBox}>
 						<div css={stakingDataLabelContainer}>
 							<label css={statItemLabel}>Bittensor price</label>
-							<div css={stakingDataLabelTag}>TAO</div>
+							<div css={stakingDataLabelTag}>𝞃</div>
 						</div>
 						<div css={stakingDataPrice}>
 							<div css={priceValue}>${token.price}</div>

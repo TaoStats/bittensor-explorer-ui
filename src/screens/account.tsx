@@ -91,13 +91,13 @@ export const AccountPage = () => {
 		rawAmountToDecimal((balance?.data?.staked || 0).toString()),
 		"USD",
 		{ decimalPlaces: 2 }
-	)} TAO`;
+	)} 𝞃`;
 
 	const free = `${formatCurrency(
 		rawAmountToDecimal((balance?.data?.free || 0).toString()),
 		"USD",
 		{ decimalPlaces: 2 }
-	)} TAO`;
+	)} 𝞃`;
 
 	const taoPrice = useTaoPrice();
 
