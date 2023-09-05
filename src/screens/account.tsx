@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
@@ -19,6 +19,10 @@ import { useBalance } from "../hooks/useBalance";
 import { StatItem } from "../components/network/StatItem";
 import { formatCurrency, rawAmountToDecimal } from "../utils/number";
 import { useDelegateBalances } from "../hooks/useDelegateBalances";
+import { TransfersOrder } from "../services/transfersService";
+import { DelegatesOrder } from "../services/delegateService";
+import { useDelegates } from "../hooks/useDelegates";
+import DelegatesTable from "../components/delegates/DelegatesTable";
 
 const accountInfoStyle = css`
   display: flex;
@@ -87,9 +91,16 @@ export const AccountPage = () => {
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
 	});
-	const delegates = useDelegateBalances(
+	const delegateBalances = useDelegateBalances(
 		{ account: { equalTo: address } },
 		"AMOUNT_DESC"
+	);
+
+	const delegatesInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
+	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(delegatesInitialOrder);
+	const delegates = useDelegates(
+		{ account: { equalTo: address } },
+		delegateSort
 	);
 
 	const delegated = `${formatCurrency(
@@ -112,7 +123,7 @@ export const AccountPage = () => {
       !extrinsics.loading &&
       !transfers.loading &&
       !taoPrice.loading &&
-      !delegates.loading
+      !delegateBalances.loading
 	);
 
 	useEffect(() => {
@@ -134,7 +145,7 @@ export const AccountPage = () => {
 						<div css={accountLabelAddress}>{address}</div>
 					</CardHeader>
 					<AccountInfoTable
-						info={{ account, balance, delegates, price: taoPrice.data?.toNumber() }}
+						info={{ account, balance, delegates: delegateBalances, price: taoPrice.data?.toNumber() }}
 					/>
 				</Card>
 				<Card css={portfolioStyle} data-test='account-portfolio'>
@@ -169,6 +180,23 @@ export const AccountPage = () => {
 								transfers={transfers}
 								showTime
 								direction={{ show: true, source: address }}
+							/>
+						</TabPane>
+						
+						<TabPane
+							label='Delegation'
+							count={delegates.pagination.totalCount}
+							loading={delegates.loading}
+							error={delegates.error}
+							value='delegation'
+						>
+							<DelegatesTable
+								delegates={delegates}
+								showTime
+								onSortChange={(sortKey: DelegatesOrder) =>
+									setDelegateSort(sortKey)
+								}
+								initialSort={delegatesInitialOrder}
 							/>
 						</TabPane>
 					</TabbedContent>
