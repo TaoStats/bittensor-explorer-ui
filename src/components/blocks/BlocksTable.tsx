@@ -106,7 +106,7 @@ function ExtrinsicsTable(props: BlocksTableProps) {
 				}
 			/>
 			<BlocksTableAttribute
-				label="Event"
+				label="Events"
 				sortable
 				render={(block) =>
 					<>{block.eventCount}</>
@@ -114,7 +114,7 @@ function ExtrinsicsTable(props: BlocksTableProps) {
 				sortProperty='eventCount'
 			/>
 			<BlocksTableAttribute
-				label="Extrinsic"
+				label="Extrinsics"
 				sortable
 				render={(block) =>
 					<>{block.extrinsicCount}</>
