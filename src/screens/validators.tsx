@@ -23,7 +23,7 @@ export const ValidatorPage = () => {
 
 	const nominatorsInitialOrder: DelegateBalancesOrder = "AMOUNT_DESC";
 	const [nominatorSort, setNominatorSort] = useState<DelegateBalancesOrder>(nominatorsInitialOrder);
-	const nominators = useDelegateBalances({ delegate: { equalTo: address } }, nominatorSort);
+	const nominators = useDelegateBalances({ delegate: { equalTo: address }, amount: { notEqualTo: 0 } }, nominatorSort);
 
 	const delegatesInitialOrder: DelegatesOrder = "BLOCK_NUMBER_DESC";
 	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(delegatesInitialOrder);
