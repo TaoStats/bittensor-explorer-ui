@@ -1,4 +1,4 @@
-import { DelegateBalance, DelegateInfo } from "./../model/delegate";
+import { DelegateBalance, DelegateInfo, ValidatorBalance } from "./../model/delegate";
 import { Delegate } from "../model/delegate";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -40,6 +40,12 @@ export async function getDelegateBalances(
 	pagination: PaginationOptions,
 ) {
 	return fetchDelegateBalances(filter, order, pagination);
+}
+
+export async function getValidatorBalances(
+	filter: DelegateBalanceFilter | undefined,
+) {
+	return fetchValidatorBalances(filter);
 }
 
 /*** PRIVATE ***/
@@ -120,6 +126,28 @@ async function fetchDelegateBalances(
 	const items = extractItems(response.delegateBalances, pagination, addDelegateName);
 
 	return items;
+}
+
+async function fetchValidatorBalances(
+	filter: DelegateBalanceFilter | undefined,
+) {
+	const response = await fetchIndexer<{ delegateBalances: ValidatorBalance }>(
+		`query ($filter: DelegateBalanceFilter) {
+			delegateBalances(filter: $filter) {
+				aggregates {
+					sum {
+						amount
+					}
+				}
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	const data = response.delegateBalances?.aggregates?.sum?.amount || 0;
+	return data;
 }
 
 function addDelegateName<T extends { delegate: string; delegateName?: string; }>(item: T): T {

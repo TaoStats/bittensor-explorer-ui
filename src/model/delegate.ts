@@ -20,6 +20,10 @@ export type DelegateBalance = {
 	delegateName?: string;
 };
 
+export type ValidatorBalance = {
+	aggregates: any;
+};
+
 export type DelegateInfo = {
 	name: string;
 	url: string;
