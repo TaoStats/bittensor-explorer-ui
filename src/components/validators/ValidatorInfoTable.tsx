@@ -1,6 +1,9 @@
 import { NETWORK_CONFIG } from "../../config";
 import { Currency } from "../Currency";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
+import { DelegateInfo } from "../../model/delegate";
+
+import verifiedDelegates from "../../delegates.json";
 
 export type ValidatorInfoTableProps = {
 	account: string;
@@ -10,7 +13,8 @@ export type ValidatorInfoTableProps = {
 const ValidatorInfoTableAttribute = InfoTableAttribute<any>;
 
 export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
-	const { balance } = props;
+	const { account, balance } = props;
+	const info = (verifiedDelegates as Record<string, DelegateInfo>)[account];
 
 	const { currency } = NETWORK_CONFIG;
 
@@ -23,15 +27,15 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 			error={balance.error}
 		>
 			<ValidatorInfoTableAttribute
-				label="Account"	
-				render={(data) => data.account}
-				copyToClipboard={(data) => data.account}
+				label="Hotkey"	
+				render={() => info?.name ?? account}
+				copyToClipboard={() => account}
 			/>
 			<ValidatorInfoTableAttribute
-				label="Total balance"
-				render={(data) => (
+				label="Staked Amount"
+				render={() => (
 					<Currency
-						amount={data.balance.data}
+						amount={balance.data}
 						currency={currency}
 						decimalPlaces="optimal"
 						showFullInTooltip
