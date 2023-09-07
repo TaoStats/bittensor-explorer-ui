@@ -146,7 +146,7 @@ async function fetchValidatorBalances(
 		}
 	);
 
-	const data = response.delegateBalances?.aggregates?.sum?.amount || 0;
+	const data = response.delegateBalances?.aggregates?.sum?.amount ?? 0;
 	return data;
 }
 
