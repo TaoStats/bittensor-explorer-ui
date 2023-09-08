@@ -83,7 +83,7 @@ export const AccountAddress = (props: AccountLinkProps) => {
 		}
 
 		return content;
-	}, [address, encodeAddress, link]);
+	}, [address, encodeAddress, link, shorten]);
 
 	/*if (!icon) {
 		return <>{content}</>;

@@ -1,9 +1,14 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import { NETWORK_CONFIG } from "../../config";
 import { Currency } from "../Currency";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
-import { DelegateInfo } from "../../model/delegate";
 
-import verifiedDelegates from "../../delegates.json";
+const addressItem = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: keep-all;
+`;
 
 export type ValidatorInfoTableProps = {
 	account: string;
@@ -14,7 +19,6 @@ const ValidatorInfoTableAttribute = InfoTableAttribute<any>;
 
 export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 	const { account, balance } = props;
-	const info = (verifiedDelegates as Record<string, DelegateInfo>)[account];
 
 	const { currency } = NETWORK_CONFIG;
 
@@ -28,7 +32,7 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 		>
 			<ValidatorInfoTableAttribute
 				label="Hotkey"	
-				render={() => info?.name ?? account}
+				render={() => <div css={addressItem}>{account}</div>}
 				copyToClipboard={() => account}
 			/>
 			<ValidatorInfoTableAttribute

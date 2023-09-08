@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { DelegateBalancesOrder } from "../../services/delegateService";
 import { DelegateBalance } from "../../model/delegate";
+import useIsMobile from "../../hooks/useIsMobile";
 
 export type NominatorsTableProps = {
 	nominators: PaginatedResource<DelegateBalance>;
@@ -34,6 +35,8 @@ function NominatorsTable(props: NominatorsTableProps) {
 
 	const { initialSort, onSortChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
+
+	const isMobile = useIsMobile();
 
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
@@ -87,8 +90,8 @@ function NominatorsTable(props: NominatorsTableProps) {
 					<AccountAddress
 						address={nominator.account}
 						prefix={prefix}
-						shorten
 						link
+						shorten={isMobile}
 						copyToClipboard='small'
 					/>
 				)}
