@@ -9,7 +9,7 @@ type DictionaryStats = {
 };
 
 type IndexerStats = {
-	accounts: bigint;
+	activeAccounts: bigint;
 	transfers: bigint;
 };
 
@@ -37,14 +37,14 @@ async function getIndexerStats(): Promise<IndexerStats> {
 		`{
 			stats {
 				nodes {
-					accounts
+					activeAccounts
 					transfers
 				}
 			}
 		}`
 	);
 	const data = response.stats.nodes[0];
-	return data ?? { accounts: BigInt(0), transfers: BigInt(0) };
+	return data ?? { activeAccounts: BigInt(0), transfers: BigInt(0) };
 }
 
 export async function getStats(): Promise<Stats> {

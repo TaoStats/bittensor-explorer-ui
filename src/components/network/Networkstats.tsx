@@ -233,8 +233,8 @@ export const NetworkStats = (props: NetworkInfoTableProps) => {
 						value={formatNumber(new Decimal(chain.extrinsicsSigned.toString()))}
 					/>
 					<StatItem
-						title='Accounts'
-						value={formatNumber(new Decimal(chain.accounts.toString()))}
+						title='Active Accounts'
+						value={formatNumber(new Decimal(chain.activeAccounts.toString()))}
 					/>
 					<StatItem
 						title='Transfers'
