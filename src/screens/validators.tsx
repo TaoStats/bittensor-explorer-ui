@@ -55,7 +55,7 @@ export const ValidatorPage = () => {
 		nominatorsInitialOrder
 	);
 	const nominators = useDelegateBalances(
-		{ delegate: { equalTo: address }, amount: { greaterThan: 0 } },
+		{ delegate: { equalTo: address }, amount: { greaterThan: 1000000 } },
 		nominatorSort
 	);
 
@@ -64,7 +64,7 @@ export const ValidatorPage = () => {
 		delegatesInitialOrder
 	);
 	const delegates = useDelegates(
-		{ delegate: { equalTo: address } },
+		{ delegate: { equalTo: address }, amount: { greaterThan: 1000000 } },
 		delegateSort
 	);
 
