@@ -170,7 +170,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 						<div>
 							{delegates.data?.map(({ delegate, amount, delegateName }, index) => (
 								<div css={delegateContainer} key={index}>
-									<Link to={`/account/${delegate}`}>{`${delegateName ?? delegate}`}</Link>
+									<Link to={`/validators/${delegate}`}>{`${delegateName ?? delegate}`}</Link>
 									<span>
 										{`${formatCurrency(
 											rawAmountToDecimal(amount.toString()),
