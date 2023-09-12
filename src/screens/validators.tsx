@@ -25,6 +25,9 @@ import { AccountPortfolio } from "../components/account/AccountPortfolio";
 import { useBalance } from "../hooks/useBalance";
 import { MIN_DELEGATION_AMOUNT } from "../config";
 import { ButtonLink } from "../components/ButtonLink";
+import { useColdKey } from "../hooks/useColdKey";
+import { useValidatorStaked } from "../hooks/useValidatorStaked";
+import { rawAmountToDecimal } from "../utils/number";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -102,7 +105,10 @@ export const ValidatorPage = () => {
 	const info = (verifiedDelegates as Record<string, DelegateInfo>)[address];
 
 	const taoPrice = useTaoPrice();
-	
+
+	const coldKey = useColdKey(address);
+	const validatorStaked = useValidatorStaked(address, coldKey);
+
 	const validatorBalance = useBalance({ address: { equalTo: address } });
 
 	const balance = useValidatorBalance({ delegate: { equalTo: address } });
@@ -112,7 +118,10 @@ export const ValidatorPage = () => {
 		nominatorsInitialOrder
 	);
 	const nominators = useDelegateBalances(
-		{ delegate: { equalTo: address }, amount: { greaterThan: MIN_DELEGATION_AMOUNT } },
+		{
+			delegate: { equalTo: address },
+			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
+		},
 		nominatorSort
 	);
 
@@ -121,7 +130,10 @@ export const ValidatorPage = () => {
 		delegatesInitialOrder
 	);
 	const delegates = useDelegates(
-		{ delegate: { equalTo: address }, amount: { greaterThan: MIN_DELEGATION_AMOUNT } },
+		{
+			delegate: { equalTo: address },
+			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
+		},
 		delegateSort
 	);
 
@@ -148,28 +160,25 @@ export const ValidatorPage = () => {
 				<Card>
 					<CardHeader css={validatorHeader}>
 						<div css={validatorTitle}>Validator</div>
-						{
-							info?.name ?
-								<>
-									<div css={validatorAddress}>{info?.name}</div>
-									<span css={verifiedBadge}>verified</span>
-									{
-										info?.url &&
-											<img
-												src={WebSvg}
-												css={website}
-												onClick={() => navigateToAbsolutePath(info?.url)}
-											/>
-									}
-								</>
-								:
-								<div css={validatorAddress}>{address}</div>
-						}
+						{info?.name ? (
+							<>
+								<div css={validatorAddress}>{info?.name}</div>
+								<span css={verifiedBadge}>verified</span>
+								{info?.url && (
+									<img
+										src={WebSvg}
+										css={website}
+										onClick={() => navigateToAbsolutePath(info?.url)}
+									/>
+								)}
+							</>
+						) : (
+							<div css={validatorAddress}>{address}</div>
+						)}
 					</CardHeader>
-					{
-						info?.description &&
-							<div css={validatorDescription}>{info?.description}</div>
-					}
+					{info?.description && (
+						<div css={validatorDescription}>{info?.description}</div>
+					)}
 					<ValidatorInfoTable account={address} balance={balance} />
 					<div css={stakeButton}>
 						<ButtonLink
@@ -179,14 +188,14 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-							DELEGATE STAKE
+              DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
-				<Card css={portfolioStyle} data-test='account-portfolio'>
+				<Card css={portfolioStyle} data-test="account-portfolio">
 					<div css={summary}>
-						<StatItem title='Delegated' value={1} />
-						<StatItem title='Free' value={1} />
+						<StatItem title="Delegated" value={1} />
+						<StatItem title="Free" value={1} />
 					</div>
 					<AccountPortfolio balance={validatorBalance} taoPrice={taoPrice} />
 				</Card>
@@ -194,11 +203,11 @@ export const ValidatorPage = () => {
 			<Card>
 				<TabbedContent>
 					<TabPane
-						label='Nominator'
+						label="Nominator"
 						count={nominators.pagination.totalCount}
 						loading={nominators.loading}
 						error={nominators.error}
-						value='nominator'
+						value="nominator"
 					>
 						<NominatorsTable
 							nominators={nominators}
@@ -209,11 +218,11 @@ export const ValidatorPage = () => {
 						/>
 					</TabPane>
 					<TabPane
-						label='Delegation'
+						label="Delegation"
 						count={delegates.pagination.totalCount}
 						loading={delegates.loading}
 						error={delegates.error}
-						value='delegation'
+						value="delegation"
 					>
 						<DelegatesTable
 							delegates={delegates}
