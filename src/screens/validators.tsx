@@ -7,7 +7,7 @@ import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
 import { useDelegates } from "../hooks/useDelegates";
 import { useDelegateBalances } from "../hooks/useDelegateBalances";
 import { useValidatorBalance } from "../hooks/useValidatorBalance";
-import { Card, CardHeader } from "../components/Card";
+import { Card, CardHeader, CardRow } from "../components/Card";
 import { ValidatorInfoTable } from "../components/validators/ValidatorInfoTable";
 import { TabPane, TabbedContent } from "../components/TabbedContent";
 import DelegatesTable from "../components/delegates/DelegatesTable";
@@ -16,8 +16,15 @@ import {
 	DelegatesOrder,
 } from "../services/delegateService";
 import { useState } from "react";
+import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
+import { StatItem } from "../components/network/StatItem";
+import { useTaoPrice } from "../hooks/useTaoPrice";
+import { AccountPortfolio } from "../components/account/AccountPortfolio";
+import { useBalance } from "../hooks/useBalance";
+import { MIN_DELEGATION_AMOUNT } from "../config";
+import { ButtonLink } from "../components/ButtonLink";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -40,6 +47,51 @@ const validatorTitle = css`
   font-size: 12px;
 `;
 
+const verifiedBadge = css`
+  background-color: #7aff97;
+  color: #000;
+  font-size: 10px;
+  text-transform: uppercase;
+  padding: 0 5px;
+  font-weight: 500;
+  line-height: 22px;
+  margin-left: 10px;
+`;
+
+const website = css`
+  line-height: 18px;
+  margin-left: 5px;
+`;
+
+const validatorDescription = css`
+  padding: 0px 20px 20px;
+  display: block;
+  opacity: 0.8;
+  font-size: 12px;
+`;
+
+const stakeButton = css`
+  padding: 20px;
+`;
+
+const portfolioStyle = (theme: Theme) => css`
+  flex: 0 0 auto;
+  width: 400px;
+
+  ${theme.breakpoints.down("lg")} {
+    width: auto;
+  }
+`;
+
+const summary = css`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  @media only screen and (max-width: 767px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+
 export type ValidatorPageParams = {
 	address: string;
 };
@@ -48,6 +100,10 @@ export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
 	const info = (verifiedDelegates as Record<string, DelegateInfo>)[address];
 
+	const taoPrice = useTaoPrice();
+	
+	const validatorBalance = useBalance({ address: { equalTo: address } });
+
 	const balance = useValidatorBalance({ delegate: { equalTo: address } });
 
 	const nominatorsInitialOrder: DelegateBalancesOrder = "AMOUNT_DESC";
@@ -55,7 +111,7 @@ export const ValidatorPage = () => {
 		nominatorsInitialOrder
 	);
 	const nominators = useDelegateBalances(
-		{ delegate: { equalTo: address }, amount: { greaterThan: 1000000 } },
+		{ delegate: { equalTo: address }, amount: { greaterThan: MIN_DELEGATION_AMOUNT } },
 		nominatorSort
 	);
 
@@ -64,7 +120,7 @@ export const ValidatorPage = () => {
 		delegatesInitialOrder
 	);
 	const delegates = useDelegates(
-		{ delegate: { equalTo: address }, amount: { greaterThan: 1000000 } },
+		{ delegate: { equalTo: address }, amount: { greaterThan: MIN_DELEGATION_AMOUNT } },
 		delegateSort
 	);
 
@@ -75,13 +131,51 @@ export const ValidatorPage = () => {
 
 	return (
 		<>
-			<Card>
-				<CardHeader css={validatorHeader}>
-					<div css={validatorTitle}>Validator</div>
-					<div css={validatorAddress}>{info?.name ?? address}</div>
-				</CardHeader>
-				<ValidatorInfoTable account={address} balance={balance} />
-			</Card>
+			<CardRow>
+				<Card>
+					<CardHeader css={validatorHeader}>
+						<div css={validatorTitle}>Validator</div>
+						{
+							info?.name ?
+								<>
+									<div css={validatorAddress}>{info?.name}</div>
+									<span css={verifiedBadge}>verified</span>
+									{
+										info?.url &&
+											<a href={info?.url} css={website} target="_blank" rel="noreferrer">
+												<img src={WebSvg} alt="website" />
+											</a>
+									}
+								</>
+								:
+								<div css={validatorAddress}>{address}</div>
+						}
+					</CardHeader>
+					{
+						info?.description &&
+							<div css={validatorDescription}>{info?.description}</div>
+					}
+					<ValidatorInfoTable account={address} balance={balance} />
+					<div css={stakeButton}>
+						<ButtonLink
+							to={`https://delegate.taostats.io/staking?hkey=${address}`}
+							size="small"
+							variant="outlined"
+							color="secondary"
+							target="_blank"
+						>
+							DELEGATE STAKE
+						</ButtonLink>
+					</div>
+				</Card>
+				<Card css={portfolioStyle} data-test='account-portfolio'>
+					<div css={summary}>
+						<StatItem title='Delegated' value={1} />
+						<StatItem title='Free' value={1} />
+					</div>
+					<AccountPortfolio balance={validatorBalance} taoPrice={taoPrice} />
+				</Card>
+			</CardRow>
 			<Card>
 				<TabbedContent>
 					<TabPane

@@ -23,6 +23,7 @@ import { TransfersOrder } from "../services/transfersService";
 import { DelegatesOrder } from "../services/delegateService";
 import { useDelegates } from "../hooks/useDelegates";
 import DelegatesTable from "../components/delegates/DelegatesTable";
+import { MIN_DELEGATION_AMOUNT } from "../config";
 
 const accountInfoStyle = css`
   display: flex;
@@ -93,10 +94,8 @@ export const AccountPage = () => {
 	});
 	const delegateBalances = useDelegateBalances(
 		{
-			and: [
-				{ account: { equalTo: address } },
-				{ amount: { greaterThan: "1000000" } },
-			],
+			account: { equalTo: address },
+			amount: { greaterThan: MIN_DELEGATION_AMOUNT }
 		},
 		"AMOUNT_DESC"
 	);

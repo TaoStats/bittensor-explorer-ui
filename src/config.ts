@@ -29,3 +29,5 @@ export const NETWORK_CONFIG = {
 	decimals: 9,
 	prefix: 42,
 };
+
+export const MIN_DELEGATION_AMOUNT = 1000000;

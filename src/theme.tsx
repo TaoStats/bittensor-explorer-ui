@@ -84,7 +84,16 @@ export const theme = createTheme({
 							background-color: ${alpha(theme.palette[ownerState.color].main, .15)};
 						}
 					`}
-				`
+				`,
+				outlinedSecondary: css`
+						background-color: rgba(0, 0, 0, 0);
+						color: #fff;
+    					padding: 9px 23px !important;
+						&:hover {
+							background-color: #fff;
+							color: #000;
+						}
+				` 
 			}
 		},
 		MuiToggleButton: {
