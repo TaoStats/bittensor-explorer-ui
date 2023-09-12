@@ -61,6 +61,7 @@ const verifiedBadge = css`
 const website = css`
   line-height: 18px;
   margin-left: 5px;
+  cursor: pointer;
 `;
 
 const validatorDescription = css`
@@ -129,6 +130,18 @@ export const ValidatorPage = () => {
 		!balance.loading && !nominators.loading && !delegates.loading
 	);
 
+	const navigateToAbsolutePath = (path: any) => {
+		let url;
+
+		if (path.startsWith("http://") || path.startsWith("https://")) {
+			url = path;
+		} else {
+			url = "https://" + path;
+		}
+
+		window.open(url, "_blank");
+	};
+
 	return (
 		<>
 			<CardRow>
@@ -142,9 +155,11 @@ export const ValidatorPage = () => {
 									<span css={verifiedBadge}>verified</span>
 									{
 										info?.url &&
-											<a href={info?.url} css={website} target="_blank" rel="noreferrer">
-												<img src={WebSvg} alt="website" />
-											</a>
+											<img
+												src={WebSvg}
+												css={website}
+												onClick={() => navigateToAbsolutePath(info?.url)}
+											/>
 									}
 								</>
 								:
