@@ -13,6 +13,7 @@ import { formatNumber, nFormatter } from "../../utils/number";
 import Decimal from "decimal.js";
 import { StatItem } from "./StatItem";
 import { useEffect } from "react";
+import { useAppStats } from "../../contexts";
 
 const stakingDataBlock = css`
   width: 100%;
@@ -138,41 +139,19 @@ const priceContainer = css`
   display: flex;
 `;
 
-export type NetworkInfoTableProps = {
-	stats: Resource<Stats>;
-};
+export const NetworkStats = () => {
+	const { state: { tokenStats, tokenLoading, chainStats, chainLoading } } = useAppStats();
 
-export const NetworkStats = (props: NetworkInfoTableProps) => {
-	const { stats } = props;
-
-	if (stats.loading) {
+	if (tokenLoading || chainLoading) {
 		return <Loading />;
 	}
 
-	if (stats.notFound) {
+	if (tokenStats === undefined || chainStats === undefined) {
 		return <NotFound>Stats not found.</NotFound>;
 	}
 
-	if (stats.error) {
-		return (
-			<ErrorMessage
-				message='Unexpected error occured while fetching data'
-				details={stats.error.message}
-				showReported
-			/>
-		);
-	}
-
-	if (!stats.data) {
-		return null;
-	}
-
-	const { token, chain } = stats.data;
-
-	useEffect(() => {
-		const id = setInterval(() => stats.refetch(), 12 * 1000);
-		return () => clearInterval(id);
-	}, []);
+	const token = tokenStats;
+	const chain = chainStats;
 
 	return (
 		<div css={stakingDataBlock}>

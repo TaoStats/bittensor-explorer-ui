@@ -9,7 +9,6 @@ import DelegatesTable from "../components/delegates/DelegatesTable";
 import { useBlocks } from "../hooks/useBlocks";
 import BlocksTable from "../components/blocks/BlocksTable";
 import { NetworkStats, TokenDistributionChart } from "../components/network";
-import { useStats } from "../hooks/useStats";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
 import { useEffect, useState } from "react";
@@ -58,9 +57,6 @@ export const HomePage = () => {
 	const [blockSort, setBlockSort] = useState<BlocksOrder>(blocksInitialOrder);
 	const blocks = useBlocks(undefined, blockSort);
 
-	const stats = useStats();
-
-
 	const balancesInitialOrder: BalancesOrder = "BALANCE_TOTAL_DESC";
 	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(balancesInitialOrder);
 	const balances = useBalances(undefined, balanceSort);
@@ -98,7 +94,7 @@ export const HomePage = () => {
 			<div css={contentInner}>
 				<CardRow css={infoSection}>
 					<Card css={statsContainer}>
-						<NetworkStats stats={stats} />
+						<NetworkStats />
 					</Card>
 					<Card css={chartContainer}>
 						<TokenDistributionChart />
