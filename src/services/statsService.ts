@@ -47,33 +47,34 @@ async function getIndexerStats(): Promise<IndexerStats> {
 	return data ?? { activeAccounts: BigInt(0), transfers: BigInt(0) };
 }
 
+export const getTokenomics = async (): Promise<Tokenomics> => {
+	const res = await fetch(TAOSTATS_DATA_ENDPOINT);
+	const [data] = await res.json();
+
+	return {
+		price: data["price"],
+		priceChange24h: data["24h_change"],
+		marketCap: data["market_cap"],
+		stakingAPY: data["staking_apy"],
+		validationAPY: data["validating_apy"],
+		totalSupply: parseInt(data["total_supply"]),
+		currentSupply: parseInt(data["current_supply"]),
+		delegatedSupply: parseInt(data["delegated_supply"]),
+		volume24h: data["24h_volume"]
+	} as Tokenomics;
+};
+
+export const getChainStats = async (): Promise<ChainStats> => {
+	const dict = await getDictionaryStats();
+	const indexer = await getIndexerStats();
+
+	return {
+		...dict,
+		...indexer
+	} as ChainStats;
+};
+
 export async function getStats(): Promise<Stats> {
-	const getTokenomics = async (): Promise<Tokenomics> => {
-		const res = await fetch(TAOSTATS_DATA_ENDPOINT);
-		const [data] = await res.json();
-
-		return {
-			price: data["price"],
-			priceChange24h: data["24h_change"],
-			marketCap: data["market_cap"],
-			stakingAPY: data["staking_apy"],
-			validationAPY: data["validating_apy"],
-			totalSupply: parseInt(data["total_supply"]),
-			currentSupply: parseInt(data["current_supply"]),
-			delegatedSupply: parseInt(data["delegated_supply"]),
-			volume24h: data["24h_volume"]
-		} as Tokenomics;
-	};
-
-	const getChainStats = async (): Promise<ChainStats> => {
-		const dict = await getDictionaryStats();
-		const indexer = await getIndexerStats();
-
-		return {
-			...dict,
-			...indexer
-		} as ChainStats;
-	};
 
 	const token = await getTokenomics();
 	const chain = await getChainStats();
