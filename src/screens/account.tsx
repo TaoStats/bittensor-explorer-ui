@@ -101,7 +101,7 @@ export const AccountPage = () => {
 		delegatesInitialOrder
 	);
 	const delegates = useDelegates(
-		{ account: { equalTo: address } },
+		{ account: { equalTo: address }, amount: { greaterThan: 0 } },
 		delegateSort
 	);
 
