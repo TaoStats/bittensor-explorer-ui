@@ -7,7 +7,7 @@ import { InfoTable, InfoTableAttribute } from "../InfoTable";
 const addressItem = css`
   overflow: hidden;
   text-overflow: ellipsis;
-  word-break: keep-all;
+  white-space: nowrap;
 `;
 
 export type ValidatorInfoTableProps = {
