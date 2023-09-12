@@ -92,7 +92,12 @@ export const AccountPage = () => {
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
 	});
 	const delegateBalances = useDelegateBalances(
-		{ account: { equalTo: address } },
+		{
+			and: [
+				{ account: { equalTo: address } },
+				{ amount: { greaterThan: "1000000" } },
+			],
+		},
 		"AMOUNT_DESC"
 	);
 
@@ -101,7 +106,12 @@ export const AccountPage = () => {
 		delegatesInitialOrder
 	);
 	const delegates = useDelegates(
-		{ account: { equalTo: address }, amount: { greaterThan: 0 } },
+		{
+			and: [
+				{ account: { equalTo: address } },
+				{ amount: { greaterThan: "1000000" } },
+			],
+		},
 		delegateSort
 	);
 
