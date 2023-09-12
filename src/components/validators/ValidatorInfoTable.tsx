@@ -3,6 +3,8 @@ import { css } from "@emotion/react";
 import { NETWORK_CONFIG } from "../../config";
 import { Currency } from "../Currency";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
+import { useTotalIssuance } from "../../hooks/useTotalIssuance";
+import { rawAmountToDecimal } from "../../utils/number";
 
 const addressItem = css`
   overflow: hidden;
@@ -22,6 +24,15 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 
 	const { currency } = NETWORK_CONFIG;
 
+	const totalIssuance = useTotalIssuance();
+	const dominance =
+	balance.loading || totalIssuance === undefined
+		? 0
+		: (
+			(rawAmountToDecimal(balance.data).toNumber() /
+			totalIssuance.toNumber()) * 100
+		).toFixed(2);
+
 	return (
 		<InfoTable
 			data={props}
@@ -31,7 +42,7 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 			error={balance.error}
 		>
 			<ValidatorInfoTableAttribute
-				label="Hotkey"	
+				label="Hotkey"
 				render={() => <div css={addressItem}>{account}</div>}
 				copyToClipboard={() => account}
 			/>
@@ -45,6 +56,10 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 						showFullInTooltip
 					/>
 				)}
+			/>
+			<ValidatorInfoTableAttribute
+				label="Dominance"
+				render={() => <div>{dominance}%</div>}
 			/>
 		</InfoTable>
 	);
