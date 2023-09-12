@@ -5,9 +5,9 @@ import LoadingSpinner from "../../assets/loading.gif";
 import Chart from "react-apexcharts";
 import { StatItem } from "./StatItem";
 import { formatNumber, nFormatter } from "../../utils/number";
-import { useStats } from "../../hooks/useStats";
 import { useTotalIssuance } from "../../hooks/useTotalIssuance";
 import { useDelegatedSupply } from "../../hooks/useDelegatedSupply";
+import { useAppStats } from "../../contexts";
 
 const chartContainer = css`
   display: flex;
@@ -34,14 +34,14 @@ const spinnerContainer = css`
 export type TokenDistributionChartProps = HTMLAttributes<HTMLDivElement>;
 
 export const TokenDistributionChart = () => {
-	const stats = useStats();
-	const token = stats.data?.token;
+	const { state: { tokenLoading, tokenStats } } = useAppStats();
+	const token = tokenStats;
 	const theme = useTheme();
 	const totalIssuance = useTotalIssuance();
 	const delegated = useDelegatedSupply();
 
 	const loading =
-    stats.loading ||
+    tokenLoading ||
     token === undefined ||
     totalIssuance === undefined ||
     delegated === undefined;
