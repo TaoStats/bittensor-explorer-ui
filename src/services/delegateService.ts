@@ -23,6 +23,8 @@ export type DelegateBalancesOrder =
 	| "ID_DESC"
 	| "AMOUNT_ASC"
 	| "AMOUNT_DESC"
+	| "DELEGATE_FROM_ASC"
+	| "DELEGATE_FROM_DESC"
 	| "UPDATED_AT_ASC"
 	| "UPDATED_AT_DESC";
 
@@ -36,7 +38,7 @@ export async function getDelegates(
 
 export async function getDelegateBalances(
 	filter: DelegateBalanceFilter | undefined,
-	order: DelegateBalancesOrder = "UPDATED_AT_DESC",
+	order: DelegateBalancesOrder = "DELEGATE_FROM_DESC",
 	pagination: PaginationOptions,
 ) {
 	return fetchDelegateBalances(filter, order, pagination);
@@ -106,6 +108,7 @@ async function fetchDelegateBalances(
                     delegate
                     amount
 					updatedAt
+					delegateFrom
 				}
 				pageInfo {
 					endCursor

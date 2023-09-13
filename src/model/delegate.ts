@@ -18,6 +18,7 @@ export type DelegateBalance = {
 	amount: bigint;
 	updatedAt: bigint;
 	delegateName?: string;
+	delegateFrom: bigint;
 };
 
 export type ValidatorBalance = {
