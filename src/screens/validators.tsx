@@ -19,15 +19,9 @@ import { useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
-import { StatItem } from "../components/network/StatItem";
-import { useTaoPrice } from "../hooks/useTaoPrice";
-import { AccountPortfolio } from "../components/account/AccountPortfolio";
-import { useBalance } from "../hooks/useBalance";
 import { MIN_DELEGATION_AMOUNT } from "../config";
 import { ButtonLink } from "../components/ButtonLink";
-import { useColdKey } from "../hooks/useColdKey";
-import { useValidatorStaked } from "../hooks/useValidatorStaked";
-import { rawAmountToDecimal } from "../utils/number";
+import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -87,15 +81,6 @@ const portfolioStyle = (theme: Theme) => css`
   }
 `;
 
-const summary = css`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 100%;
-  @media only screen and (max-width: 767px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
-
 export type ValidatorPageParams = {
 	address: string;
 };
@@ -103,13 +88,6 @@ export type ValidatorPageParams = {
 export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
 	const info = (verifiedDelegates as Record<string, DelegateInfo>)[address];
-
-	const taoPrice = useTaoPrice();
-
-	const coldKey = useColdKey(address);
-	const validatorStaked = useValidatorStaked(address, coldKey);
-
-	const validatorBalance = useBalance({ address: { equalTo: address } });
 
 	const balance = useValidatorBalance({ delegate: { equalTo: address } });
 
@@ -188,16 +166,12 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-							DELEGATE STAKE
+              DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
 				<Card css={portfolioStyle} data-test="account-portfolio">
-					<div css={summary}>
-						<StatItem title="Delegated" value={1} />
-						<StatItem title="Free" value={1} />
-					</div>
-					<AccountPortfolio balance={validatorBalance} taoPrice={taoPrice} />
+					<ValidatorPortfolio hotkey={address} />
 				</Card>
 			</CardRow>
 			<Card>

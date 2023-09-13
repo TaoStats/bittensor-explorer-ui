@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useApi } from "../contexts";
 
-export function useColdKey(hotkey: any) {
+export function useColdKey(hotkey: string) {
 	const {
 		state: { api, apiState },
 	} = useApi();
