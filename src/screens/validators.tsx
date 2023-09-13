@@ -25,6 +25,7 @@ import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio"
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
+  flex-wrap: wrap;
   gap: 4px;
   align-items: center;
   word-break: keep-all;
@@ -40,7 +41,6 @@ const infoSection = css`
 
 const validatorInfo = css`
   display: flex;
-  flex-wrap: wrap;
   gap: 10px;
 `;
 
@@ -48,11 +48,6 @@ const validatorAddress = css`
   opacity: 0.5;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const validatorAddi = css`
-  display: flex;
-  gap: 5px;
 `;
 
 const validatorTitle = css`
@@ -156,18 +151,16 @@ export const ValidatorPage = () => {
 						{info?.name ? (
 							<div css={validatorInfo}>
 								<div css={validatorAddress}>{info?.name}</div>
-								<div css={validatorAddi}>
-									<div>
-										<span css={verifiedBadge}>verified</span>
-									</div>
-									{info?.url && (
-										<img
-											src={WebSvg}
-											css={website}
-											onClick={() => navigateToAbsolutePath(info?.url)}
-										/>
-									)}
+								<div>
+									<span css={verifiedBadge}>verified</span>
 								</div>
+								{info?.url && (
+									<img
+										src={WebSvg}
+										css={website}
+										onClick={() => navigateToAbsolutePath(info?.url)}
+									/>
+								)}
 							</div>
 						) : (
 							<div css={validatorAddress}>{address}</div>
