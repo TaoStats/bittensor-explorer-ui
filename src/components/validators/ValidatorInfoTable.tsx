@@ -3,8 +3,8 @@ import { css } from "@emotion/react";
 import { NETWORK_CONFIG } from "../../config";
 import { Currency } from "../Currency";
 import { InfoTable, InfoTableAttribute } from "../InfoTable";
-import { useTotalIssuance } from "../../hooks/useTotalIssuance";
 import { rawAmountToDecimal } from "../../utils/number";
+import { useAppStats } from "../../contexts";
 
 const addressItem = css`
   overflow: hidden;
@@ -23,14 +23,14 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 	const { account, balance } = props;
 
 	const { currency } = NETWORK_CONFIG;
-
-	const totalIssuance = useTotalIssuance();
+	
+	const { state: { tokenLoading, tokenStats } } = useAppStats();
 	const dominance =
-	balance.loading || totalIssuance === undefined
+	tokenLoading || tokenStats === undefined
 		? 0
 		: (
 			(rawAmountToDecimal(balance.data).toNumber() /
-			totalIssuance.toNumber()) * 100
+			tokenStats.delegatedSupply) * 100
 		).toFixed(2);
 
 	return (
