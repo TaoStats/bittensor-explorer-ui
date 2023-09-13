@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { css, useTheme } from "@emotion/react";
+import { css } from "@emotion/react";
 import LoadingSpinner from "../../assets/loading.gif";
-import Chart from "react-apexcharts";
 import { formatNumber, rawAmountToDecimal } from "../../utils/number";
 import { useColdKey } from "../../hooks/useColdKey";
 import { useValidatorStaked } from "../../hooks/useValidatorStaked";
 import { useValidatorBalance } from "../../hooks/useValidatorBalance";
 import { StatItem } from "../network/StatItem";
+import { DonutChart } from "../DonutChart";
 
 const chartContainer = css`
   display: flex;
@@ -64,8 +64,6 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
         rawAmountToDecimal(balance.data).toNumber()
 		).toFixed(2);
 
-	const theme = useTheme();
-
 	return loading ? (
 		<div css={spinnerContainer}>
 			<img src={LoadingSpinner} />
@@ -82,71 +80,17 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 					value={`${nomineesStakedFormatted} 𝞃`}
 				/>
 			</div>
-			<Chart
+			<DonutChart
 				options={{
 					labels: [
 						`Validator stake: ${validatorStakedFormatted} 𝞃 (${validatorStakedPercent}%)`,
 						`Delegated stake: ${nomineesStakedFormatted} 𝞃 (${nomineesStakedPercent}%)`,
 					],
-					colors: [theme.palette.success.main, theme.palette.neutral.main],
-					dataLabels: {
-						enabled: false,
-					},
-					tooltip: {
-						y: {
-							formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
-						},
-					},
-					stroke: {
-						show: true,
-						curve: "smooth",
-						lineCap: "butt",
-						colors: [theme.palette.primary.dark],
-						width: 6,
-						dashArray: 0,
-					},
-					responsive: [
-						{
-							breakpoint: 767,
-							options: {
-								chart: {
-									height: 320,
-								},
-								stroke: {
-									width: 4,
-								},
-							},
-						},
-						{
-							breakpoint: 599,
-							options: {
-								chart: {
-									height: 270,
-								},
-								stroke: {
-									width: 2,
-								},
-							},
-						},
-					],
-					legend: {
-						show: true,
-						position: "bottom",
-						horizontalAlign: "center",
-						floating: false,
-						fontSize: "13px",
-						labels: {
-							colors: undefined,
-							useSeriesColors: true,
-						},
-					},
 				}}
 				series={[
 					parseFloat(rawAmountToDecimal(validatorStaked).toFixed(2)),
 					parseFloat(nomineesStaked.toFixed(2)),
 				]}
-				type="donut"
-				height={400}
 			/>
 		</div>
 	);
