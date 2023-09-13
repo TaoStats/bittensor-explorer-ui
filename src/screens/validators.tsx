@@ -31,6 +31,13 @@ const validatorHeader = (theme: Theme) => css`
   color: ${theme.palette.text.primary};
 `;
 
+const infoSection = css`
+  display: flex;
+  @media only screen and (max-width: 767px) {
+    flex-direction: column;
+  }
+`;
+
 const validatorAddress = css`
   opacity: 0.5;
   overflow: hidden;
@@ -134,7 +141,7 @@ export const ValidatorPage = () => {
 
 	return (
 		<>
-			<CardRow>
+			<CardRow css={infoSection}>
 				<Card>
 					<CardHeader css={validatorHeader}>
 						<div css={validatorTitle}>Validator</div>
