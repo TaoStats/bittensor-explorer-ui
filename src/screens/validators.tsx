@@ -38,10 +38,21 @@ const infoSection = css`
   }
 `;
 
+const validatorInfo = css`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+`;
+
 const validatorAddress = css`
   opacity: 0.5;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const validatorAddi = css`
+  display: flex;
+  gap: 5px;
 `;
 
 const validatorTitle = css`
@@ -56,15 +67,12 @@ const verifiedBadge = css`
   color: #000;
   font-size: 10px;
   text-transform: uppercase;
-  padding: 0 5px;
+  padding: 5px;
   font-weight: 500;
-  line-height: 22px;
-  margin-left: 10px;
 `;
 
 const website = css`
   line-height: 18px;
-  margin-left: 5px;
   cursor: pointer;
 `;
 
@@ -146,17 +154,21 @@ export const ValidatorPage = () => {
 					<CardHeader css={validatorHeader}>
 						<div css={validatorTitle}>Validator</div>
 						{info?.name ? (
-							<>
+							<div css={validatorInfo}>
 								<div css={validatorAddress}>{info?.name}</div>
-								<span css={verifiedBadge}>verified</span>
-								{info?.url && (
-									<img
-										src={WebSvg}
-										css={website}
-										onClick={() => navigateToAbsolutePath(info?.url)}
-									/>
-								)}
-							</>
+								<div css={validatorAddi}>
+									<div>
+										<span css={verifiedBadge}>verified</span>
+									</div>
+									{info?.url && (
+										<img
+											src={WebSvg}
+											css={website}
+											onClick={() => navigateToAbsolutePath(info?.url)}
+										/>
+									)}
+								</div>
+							</div>
 						) : (
 							<div css={validatorAddress}>{address}</div>
 						)}
@@ -173,7 +185,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-              DELEGATE STAKE
+							DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
