@@ -92,6 +92,11 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 					dataLabels: {
 						enabled: false,
 					},
+					tooltip: {
+						y: {
+							formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
+						},
+					},
 					stroke: {
 						show: true,
 						curve: "smooth",
