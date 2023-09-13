@@ -18,7 +18,6 @@ export function useValidatorStaked(hotkey: any, coldkey: any) {
 					console.log("Failed to get cold key");
 					return;
 				}
-				console.log(value);
 				value && setStaked(value.toString());
 			}
 		);
