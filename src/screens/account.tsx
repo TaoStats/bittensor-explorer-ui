@@ -105,7 +105,7 @@ export const AccountPage = () => {
 				? {}
 				: {
 					updatedAt: {
-						greaterThan: blocksCount - (blocksCount % BigInt(1000))
+						greaterThan: (blocksCount - (blocksCount % BigInt(1000))).toString()
 					},
 				}),
 		},
