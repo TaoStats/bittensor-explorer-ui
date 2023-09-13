@@ -188,7 +188,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-              DELEGATE STAKE
+							DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
