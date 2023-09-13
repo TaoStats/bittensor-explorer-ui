@@ -96,6 +96,7 @@ export const AccountPage = () => {
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
 	});
+	const blocksCount = (chainLoading || !chainStats) ? BigInt(0) : BigInt(chainStats.blocksFinalized);
 	const delegateBalances = useDelegateBalances(
 		{
 			account: { equalTo: address },
@@ -104,7 +105,7 @@ export const AccountPage = () => {
 				? {}
 				: {
 					updatedAt: {
-						greaterThanOrEqualTo: (BigInt(chainStats.blocksFinalized) - BigInt(1000)).toString()
+						greaterThan: blocksCount - (blocksCount % BigInt(1000))
 					},
 				}),
 		},
