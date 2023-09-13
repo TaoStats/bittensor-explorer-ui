@@ -74,19 +74,19 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 		<div css={chartContainer}>
 			<div css={supplyInfo}>
 				<StatItem
-					title="Delegated from validator"
+					title="Validator stake"
 					value={`${validatorStakedFormatted} 𝞃`}
 				/>
 				<StatItem
-					title="Delegated from Nominees"
+					title="Delegated stake"
 					value={`${nomineesStakedFormatted} 𝞃`}
 				/>
 			</div>
 			<Chart
 				options={{
 					labels: [
-						`Delegated from validator: ${validatorStakedFormatted} 𝞃 (${validatorStakedPercent}%)`,
-						`Delegated from Nominees: ${nomineesStakedFormatted} 𝞃 (${nomineesStakedPercent}%)`,
+						`Validator stake: ${validatorStakedFormatted} 𝞃 (${validatorStakedPercent}%)`,
+						`Delegated stake: ${nomineesStakedFormatted} 𝞃 (${nomineesStakedPercent}%)`,
 					],
 					colors: [theme.palette.success.main, theme.palette.neutral.main],
 					dataLabels: {
