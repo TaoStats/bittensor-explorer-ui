@@ -2,7 +2,7 @@
 import { css, useTheme } from "@emotion/react";
 import LoadingSpinner from "../../assets/loading.gif";
 import Chart from "react-apexcharts";
-import { rawAmountToDecimal } from "../../utils/number";
+import { formatNumber, rawAmountToDecimal } from "../../utils/number";
 import { useColdKey } from "../../hooks/useColdKey";
 import { useValidatorStaked } from "../../hooks/useValidatorStaked";
 import { useValidatorBalance } from "../../hooks/useValidatorBalance";
@@ -44,6 +44,8 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 	const nomineesStaked = loading
 		? 0
 		: rawAmountToDecimal(balance.data).toNumber() - rawAmountToDecimal(validatorStaked).toNumber();
+	const validatorStakedFormatted = formatNumber(rawAmountToDecimal(validatorStaked), {decimalPlaces: 2});
+	const nomineesStakedFormatted = formatNumber(nomineesStaked, {decimalPlaces: 2});
 
 	const theme = useTheme();
 
@@ -56,18 +58,18 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 			<div css={supplyInfo}>
 				<StatItem
 					title='Delegated from validator'
-					value={`${nomineesStaked.toFixed(2)} 𝞃`}
+					value={`${validatorStakedFormatted} 𝞃`}
 				/>
 				<StatItem
 					title='Delegated from Nominees'
-					value={`${rawAmountToDecimal(validatorStaked).toFixed(2)} 𝞃`}
+					value={`${nomineesStakedFormatted} 𝞃`}
 				/>
 			</div>
 			<Chart
 				options={{
 					labels: [
-						`Delegated from validator: ${nomineesStaked.toFixed(2)} 𝞃`,
-						`Delegated from Nominees: ${rawAmountToDecimal(validatorStaked).toFixed(2)} 𝞃`
+						`Delegated from validator: ${validatorStakedFormatted} 𝞃`,
+						`Delegated from Nominees: ${nomineesStakedFormatted} 𝞃`
 					],
 					colors: [ theme.palette.success.main, theme.palette.neutral.main ],
 					dataLabels: {
@@ -118,8 +120,8 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 					},
 				}}
 				series={[
-					parseFloat(nomineesStaked.toFixed(2)),
-					parseFloat(rawAmountToDecimal(validatorStaked).toFixed(2)),
+					parseFloat(validatorStakedFormatted),
+					parseFloat(nomineesStakedFormatted),
 				]}
 				type='donut'
 				height={400}
