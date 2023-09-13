@@ -41,11 +41,28 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 	const coldKey = useColdKey(hotkey);
 	const validatorStaked = useValidatorStaked(hotkey, coldKey);
 	const loading = balance.loading || validatorStaked === undefined;
+	const validatorStakedFormatted = loading
+		? 0
+		: formatNumber(rawAmountToDecimal(validatorStaked), { decimalPlaces: 2 });
+	const validatorStakedPercent = loading
+		? 0
+		: (
+			(rawAmountToDecimal(validatorStaked).toNumber() * 100) /
+        rawAmountToDecimal(balance.data).toNumber()
+		).toFixed(2);
 	const nomineesStaked = loading
 		? 0
-		: rawAmountToDecimal(balance.data).toNumber() - rawAmountToDecimal(validatorStaked).toNumber();
-	const validatorStakedFormatted = formatNumber(rawAmountToDecimal(validatorStaked), {decimalPlaces: 2});
-	const nomineesStakedFormatted = formatNumber(nomineesStaked, {decimalPlaces: 2});
+		: rawAmountToDecimal(balance.data).toNumber() -
+      rawAmountToDecimal(validatorStaked).toNumber();
+	const nomineesStakedFormatted = loading
+		? 0
+		: formatNumber(nomineesStaked, { decimalPlaces: 2 });
+	const nomineesStakedPercent = loading
+		? 0
+		: (
+			(nomineesStaked * 100) /
+        rawAmountToDecimal(balance.data).toNumber()
+		).toFixed(2);
 
 	const theme = useTheme();
 
@@ -57,21 +74,21 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 		<div css={chartContainer}>
 			<div css={supplyInfo}>
 				<StatItem
-					title='Delegated from validator'
+					title="Delegated from validator"
 					value={`${validatorStakedFormatted} 𝞃`}
 				/>
 				<StatItem
-					title='Delegated from Nominees'
+					title="Delegated from Nominees"
 					value={`${nomineesStakedFormatted} 𝞃`}
 				/>
 			</div>
 			<Chart
 				options={{
 					labels: [
-						`Delegated from validator: ${validatorStakedFormatted} 𝞃`,
-						`Delegated from Nominees: ${nomineesStakedFormatted} 𝞃`
+						`Delegated from validator: ${validatorStakedFormatted} 𝞃 (${validatorStakedPercent}%)`,
+						`Delegated from Nominees: ${nomineesStakedFormatted} 𝞃 (${nomineesStakedPercent}%)`,
 					],
-					colors: [ theme.palette.success.main, theme.palette.neutral.main ],
+					colors: [theme.palette.success.main, theme.palette.neutral.main],
 					dataLabels: {
 						enabled: false,
 					},
@@ -120,10 +137,10 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 					},
 				}}
 				series={[
-					parseFloat(validatorStakedFormatted),
-					parseFloat(nomineesStakedFormatted),
+					parseFloat(rawAmountToDecimal(validatorStaked).toFixed(2)),
+					parseFloat(nomineesStaked.toFixed(2)),
 				]}
-				type='donut'
+				type="donut"
 				height={400}
 			/>
 		</div>
