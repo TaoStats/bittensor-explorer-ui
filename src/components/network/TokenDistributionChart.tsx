@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { HTMLAttributes } from "react";
 import { css } from "@emotion/react";
-import LoadingSpinner from "../../assets/loading.gif";
+import LoadingSpinner from "../../assets/loading.svg";
 import { StatItem } from "./StatItem";
 import { formatNumber, nFormatter } from "../../utils/number";
 import { useTotalIssuance } from "../../hooks/useTotalIssuance";

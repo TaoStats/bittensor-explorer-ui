@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import LoadingSpinner from "../../assets/loading.gif";
+import LoadingSpinner from "../../assets/loading.svg";
 import { formatNumber, rawAmountToDecimal } from "../../utils/number";
 import { useColdKey } from "../../hooks/useColdKey";
 import { useValidatorStaked } from "../../hooks/useValidatorStaked";
