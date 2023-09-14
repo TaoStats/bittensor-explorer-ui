@@ -3,12 +3,16 @@ import { css } from "@emotion/react";
 
 import LoadingSpinner from "../assets/loading.svg";
 
-const spinnerStyle = css`
+const smallSpinnerStyle = css`
 	width: 40px;
 `;
 
-const Spinner = () => {
-	return <img src={LoadingSpinner} css={spinnerStyle} />;
+interface SpinnerProps {
+	small?: boolean;
+}
+
+const Spinner = ({ small } : SpinnerProps) => {
+	return <img src={LoadingSpinner} css={ small && smallSpinnerStyle } />;
 };
 
 export default Spinner;

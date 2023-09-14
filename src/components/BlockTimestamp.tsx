@@ -30,7 +30,7 @@ export const BlockTimestamp = ({
 	const { data, isLoading, error } = useSWRImmutable (blockHeight.toString(), fetchBlocktimestamp);
 
 	return isLoading ? (
-		<Spinner />
+		<Spinner small />
 	) : error || !data ? (
 		<></>
 	) : (
