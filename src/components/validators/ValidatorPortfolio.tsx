@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css, useTheme } from "@emotion/react";
-import LoadingSpinner from "../../assets/loading.gif";
+import LoadingSpinner from "../../assets/loading.svg";
 import Chart from "react-apexcharts";
 import { formatNumber, rawAmountToDecimal } from "../../utils/number";
 import { useColdKey } from "../../hooks/useColdKey";

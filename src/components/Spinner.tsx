@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import LoadingSpinner from "../assets/loading.gif";
+import LoadingSpinner from "../assets/loading.svg";
 
 const spinnerStyle = css`
 	width: 40px;

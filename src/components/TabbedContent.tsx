@@ -11,7 +11,7 @@ import { Theme, css } from "@emotion/react";
 import { Tab, TabProps, Tabs } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Warning";
 
-import LoadingSpinner from "../assets/loading.gif";
+import LoadingSpinner from "../assets/loading.svg";
 
 const tabsWrapperStyle = css`
   margin-bottom: 16px;
