@@ -1,11 +1,8 @@
-import Decimal from "decimal.js";
-
 export type AccountResponse = {
 	address: string;
 	createdAt: bigint;
 	updatedAt: bigint;
 	balanceFree: bigint;
-	balanceReserved: bigint;
 	balanceStaked: bigint;
 	balanceTotal: bigint;
 };

@@ -34,7 +34,6 @@ export async function getBalances(
                     createdAt
                     updatedAt
                     balanceFree
-                    balanceReserved
                     balanceStaked
                     balanceTotal
 				}
@@ -63,7 +62,6 @@ const transformItem = (item: AccountResponse): Balance => {
 		id: item.address,
 		address: item.address,
 		free: item.balanceFree,
-		reserved: item.balanceReserved,
 		staked: item.balanceStaked,
 		total: item.balanceTotal,
 		createdAt: item.createdAt,
@@ -82,7 +80,6 @@ export async function getBalance(filter: BalancesFilter) {
                     createdAt
                     updatedAt
                     balanceFree
-                    balanceReserved
                     balanceStaked
                     balanceTotal
 				}
