@@ -73,17 +73,17 @@ export const AccountStatChart = () => {
 			height={400}
 			series={[
 				{
-					name: "Total accounts",
+					name: "All Accounts",
 					type: "area",
 					data: totalAccounts,
 				},
 				{
-					name: "Active accounts",
+					name: "Active Accounts",
 					type: "area",
 					data: activeAccounts,
 				},
 				{
-					name: "Holders",
+					name: "Active Accounts > 0𝞃",
 					type: "area",
 					data: holders,
 				},
@@ -94,47 +94,98 @@ export const AccountStatChart = () => {
 					theme.palette.success.main,
 					theme.palette.error.main,
 				],
-				stroke: {
-					show: true,
-					curve: "smooth",
-					lineCap: "butt",
-					colors: [
-						theme.palette.neutral.main,
-						theme.palette.success.main,
-						theme.palette.error.main,
-					],
-					width: 1,
-					dashArray: 0,
-				},
-				plotOptions: {
-					bar: {
-						columnWidth: 10,
-					},
+				dataLabels: {
+					enabled: false,
 				},
 				fill: {
 					type: "gradient",
 					gradient: {
+						shade: "dark",
+						shadeIntensity: 1,
 						inverseColors: false,
-						shade: "light",
 						type: "vertical",
-						opacityFrom: 0.85,
-						opacityTo: 0,
+						opacityFrom: 0.6,
+						opacityTo: 0.1,
+						stops: [0, 90, 100],
 					},
 				},
+				grid: {
+					show: false,
+				},
 				labels: timestamps,
+				legend: {
+					show: false,
+				},
 				markers: {
 					size: 0,
 				},
+				noData: {
+					text: "Loading price data...",
+					align: "center",
+					verticalAlign: "middle",
+					offsetX: 0,
+					offsetY: 0,
+					style: {
+						color: "#FFFFFF",
+					},
+				},
+				responsive: [
+					{
+						breakpoint: 767,
+						options: {
+							chart: {
+								height: 320,
+							},
+						},
+					},
+					{
+						breakpoint: 599,
+						options: {
+							chart: {
+								height: 270,
+							},
+						},
+					},
+				],
+				stroke: {
+					width: 1,
+				},
+				tooltip: {
+					theme: "dark",
+					shared: true,
+					intersect: false,
+					x: {
+						format: "dd MMM yy",
+					},
+				},
 				xaxis: {
+					axisTicks: {
+						show: false,
+					},
+					axisBorder: {
+						show: false,
+					},
+					labels: {
+						style: {
+							fontSize: "11px",
+							colors: "#7F7F7F",
+						},
+					},
 					type: "datetime",
 				},
 				yaxis: {
-					min: 0,
-				},
-				tooltip: {
-					shared: true,
-					intersect: false,
-					theme: "dark",
+					opposite: true,
+					labels: {
+						style: {
+							colors: "#a8a8a8",
+						},
+					},
+					axisTicks: {
+						show: false,
+					},
+					axisBorder: {
+						show: false,
+					},
 				},
 			}}
 		/>
