@@ -42,17 +42,17 @@ export const AccountStatChart = () => {
 		);
 		return resp;
 	}, [accountStats]);
-	const activeAccounts = useMemo(() => {
-		if (!accountStats.data) return [];
-		const resp = (accountStats.data as any).reduce(
-			(prev: bigint[], cur: AccountStats) => {
-				prev.push(cur.active);
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [accountStats]);
+	// const activeAccounts = useMemo(() => {
+	// 	if (!accountStats.data) return [];
+	// 	const resp = (accountStats.data as any).reduce(
+	// 		(prev: bigint[], cur: AccountStats) => {
+	// 			prev.push(cur.active);
+	// 			return prev;
+	// 		},
+	// 		[]
+	// 	);
+	// 	return resp;
+	// }, [accountStats]);
 	const holders = useMemo(() => {
 		if (!accountStats.data) return [];
 		const resp = (accountStats.data as any).reduce(
