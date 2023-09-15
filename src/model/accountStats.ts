@@ -6,3 +6,8 @@ export type AccountStats = {
 	height: bigint;
 	timestamp: string;
 }
+
+export type AccountStatsResponse = {
+	hasNextPage: boolean;
+	data: AccountStats[];
+};

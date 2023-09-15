@@ -4,7 +4,7 @@ import { Account } from "../model/account";
 import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { DataError } from "../utils/error";
 import { decodeAddress } from "../utils/formatAddress";
-import { AccountStats } from "../model/accountStats";
+import { AccountStats, AccountStatsResponse } from "../model/accountStats";
 import { ResponseItems } from "../model/itemsConnection";
 import { fetchIndexer } from "./fetchService";
 
@@ -33,12 +33,15 @@ export async function getAccount(address: string): Promise<Account | undefined> 
 	return account;
 }
 
-export async function getAccountStats(): Promise<AccountStats[]> {
+export async function getAccountStats(offset: number, limit = 100): Promise<AccountStatsResponse> {
 	const response = await fetchIndexer<{
 		accountStats: ResponseItems<AccountStats>;
 	}>(
-		`query {
-			accountStats(orderBy: HEIGHT_ASC) {
+		`query($first: Int!, $offset: Int!) {
+			accountStats(first: $first, offset: $offset, orderBy: HEIGHT_ASC) {
+				pageInfo {
+					hasNextPage
+				}
 				nodes {
 				  height
 				  active
@@ -49,8 +52,15 @@ export async function getAccountStats(): Promise<AccountStats[]> {
 				  timestamp
 				}
 			  }
-		}`
+		}`,
+		{
+			first: limit,
+			offset,
+		}
 	);
 
-	return response.accountStats?.nodes;
+	return {
+		hasNextPage: response.accountStats?.pageInfo.hasNextPage,
+		data: response.accountStats?.nodes,
+	};
 }
