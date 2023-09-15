@@ -24,7 +24,6 @@ import { DelegatesOrder } from "../services/delegateService";
 import { useDelegates } from "../hooks/useDelegates";
 import DelegatesTable from "../components/delegates/DelegatesTable";
 import { MIN_DELEGATION_AMOUNT } from "../config";
-import { useAppStats } from "../contexts";
 
 const accountInfoStyle = css`
   display: flex;
@@ -83,9 +82,6 @@ export type AccountPageParams = {
 
 export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
-	const {
-		state: { chainStats, chainLoading },
-	} = useAppStats();
 	const balance = useBalance({ address: { equalTo: address } });
 
 	const account = useAccount(address);
@@ -96,18 +92,10 @@ export const AccountPage = () => {
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
 	});
-	const blocksCount = (chainLoading || !chainStats) ? BigInt(0) : BigInt(chainStats.blocksFinalized);
 	const delegateBalances = useDelegateBalances(
 		{
 			account: { equalTo: address },
 			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
-			...(chainLoading || !chainStats
-				? {}
-				: {
-					updatedAt: {
-						greaterThanOrEqualTo: (blocksCount - (blocksCount % BigInt(1000))).toString()
-					},
-				}),
 		},
 		"AMOUNT_DESC"
 	);
@@ -142,7 +130,6 @@ export const AccountPage = () => {
 
 	useDOMEventTrigger(
 		"data-loaded",
-		!chainLoading &&
       !account.loading &&
       !extrinsics.loading &&
       !transfers.loading &&
