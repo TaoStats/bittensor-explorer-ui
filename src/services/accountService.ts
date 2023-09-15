@@ -4,6 +4,9 @@ import { Account } from "../model/account";
 import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { DataError } from "../utils/error";
 import { decodeAddress } from "../utils/formatAddress";
+import { AccountStats, AccountStatsPaginatedResponse } from "../model/accountStats";
+import { ResponseItems } from "../model/itemsConnection";
+import { fetchIndexer } from "./fetchService";
 
 export async function getAccount(address: string): Promise<Account | undefined> {
 	if (!isAddress(address)) {
@@ -28,4 +31,36 @@ export async function getAccount(address: string): Promise<Account | undefined> 
 	const account = await addRuntimeSpec(data, () => "latest");
 
 	return account;
+}
+
+export async function getAccountStats(offset: number, limit = 100): Promise<AccountStatsPaginatedResponse> {
+	const response = await fetchIndexer<{
+		accountStats: ResponseItems<AccountStats>;
+	}>(
+		`query($first: Int!, $offset: Int!) {
+			accountStats(first: $first, offset: $offset, orderBy: HEIGHT_ASC) {
+				pageInfo {
+					hasNextPage
+				}
+				nodes {
+				  height
+				  active
+				  holders
+				  total
+				  activeHolders
+				  id
+				  timestamp
+				}
+			  }
+		}`,
+		{
+			first: limit,
+			offset,
+		}
+	);
+
+	return {
+		hasNextPage: response.accountStats?.pageInfo.hasNextPage,
+		data: response.accountStats?.nodes,
+	};
 }

@@ -1,10 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Resource } from "../../model/resource";
-import { Stats } from "../../model/stats";
-
-import { ErrorMessage } from "../ErrorMessage";
 import Loading from "../Loading";
 import NotFound from "../NotFound";
 import { Theme } from "@mui/material";
@@ -12,13 +8,18 @@ import TaoIcon from "../../assets/tao_icon.png";
 import { formatNumber, nFormatter } from "../../utils/number";
 import Decimal from "decimal.js";
 import { StatItem } from "./StatItem";
-import { useEffect } from "react";
 import { useAppStats } from "../../contexts";
+import { AccountStatChart } from "../account/AccountStatChart";
+import { TabbedContent, TabPane } from "../TabbedContent";
+import { useAccountStats } from "../../hooks/useAccountStats";
+import { AccountStats } from "../../model/accountStats";
+import { useMemo } from "react";
 
 const stakingDataBlock = css`
   width: 100%;
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
 
   @media only screen and (max-width: 1399px) {
     flex-direction: column;
@@ -67,19 +68,6 @@ const stakingDataLabelContainer = css`
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-`;
-
-const stakingDataLabelTag = (theme: Theme) => css`
-  display: inline-block;
-  vertical-align: middle;
-  font-size: 12px;
-  font-weight: 300;
-  line-height: 1em;
-  text-transform: uppercase;
-  background-color: #292929;
-  padding: 5px;
-  border-radius: 4px;
-  color: ${theme.palette.secondary.light};
 `;
 
 const stakingDataPrice = css`
@@ -140,7 +128,19 @@ const priceContainer = css`
 `;
 
 export const NetworkStats = () => {
-	const { state: { tokenStats, tokenLoading, chainStats, chainLoading } } = useAppStats();
+	const {
+		state: { tokenStats, tokenLoading, chainStats, chainLoading },
+	} = useAppStats();
+
+	const accountStats = useAccountStats();
+	const totalAccount = useMemo(() => {
+		if (!accountStats.data) return 0;
+		const resp = (accountStats.data as any).reduce(
+			(prev: bigint, cur: AccountStats) => cur.total,
+			0
+		);
+		return resp;
+	}, [accountStats]);
 
 	if (tokenLoading || chainLoading) {
 		return <Loading />;
@@ -154,73 +154,90 @@ export const NetworkStats = () => {
 	const chain = chainStats;
 
 	return (
-		<div css={stakingDataBlock}>
-			<div css={bittensorBlock}>
-				<div css={priceContainer}>
-					<div css={taoIcon}>
-						<img src={TaoIcon} alt='Taostats Tao Icon' />
-					</div>
-					<div css={priceBox}>
-						<div css={stakingDataLabelContainer}>
-							<label css={statItemLabel}>Bittensor price</label>
+		<div>
+			<div css={stakingDataBlock}>
+				<div css={bittensorBlock}>
+					<div css={priceContainer}>
+						<div css={taoIcon}>
+							<img src={TaoIcon} alt="Taostats Tao Icon" />
 						</div>
-						<div css={stakingDataPrice}>
-							<div css={priceValue}>${token.price}</div>
-							<span
-								css={
-									token.priceChange24h > 0
-										? priceUp
+						<div css={priceBox}>
+							<div css={stakingDataLabelContainer}>
+								<label css={statItemLabel}>Bittensor price</label>
+							</div>
+							<div css={stakingDataPrice}>
+								<div css={priceValue}>${token.price}</div>
+								<span
+									css={
+										token.priceChange24h > 0
+											? priceUp
+											: token.priceChange24h < 0
+												? priceDown
+												: ""
+									}
+								>
+									{token.priceChange24h > 0
+										? "▴"
 										: token.priceChange24h < 0
-											? priceDown
-											: ""
-								}
-							>
-								{token.priceChange24h > 0
-									? "▴"
-									: token.priceChange24h < 0
-										? "▾"
-										: ""}
-								{` ${token.priceChange24h}%`}
-							</span>
+											? "▾"
+											: ""}
+									{` ${token.priceChange24h}%`}
+								</span>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-			<div css={statItems}>
-				<div css={statItemsRow}>
-					<StatItem
-						title='Market Cap'
-						value={`$${nFormatter(token.marketCap, 2)}`}
-					/>
-					<StatItem
-						title='24h Volume'
-						value={`$${nFormatter(token.volume24h, 2)}`}
-					/>
+				<div css={statItems}>
+					<div css={statItemsRow}>
+						<StatItem
+							title="Market Cap"
+							value={`$${nFormatter(token.marketCap, 2)}`}
+						/>
+						<StatItem
+							title="24h Volume"
+							value={`$${nFormatter(token.volume24h, 2)}`}
+						/>
 
-					{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
-					<StatItem title='Validating APY' value={`${token.validationAPY}%`} />
-					<StatItem title='Staking APY' value={`${token.stakingAPY}%`} />
-				</div>
+						{/* <StatItem title='Next Halvening' value={`${stats.data.totalSupply} 𝞃`} /> */}
+						<StatItem
+							title="Validating APY"
+							value={`${token.validationAPY}%`}
+						/>
+						<StatItem title="Staking APY" value={`${token.stakingAPY}%`} />
+					</div>
 
-				<div css={statItemsRow}>
-					<StatItem
-						title='Finalized blocks'
-						value={formatNumber(new Decimal(chain.blocksFinalized.toString()))}
-					/>
-					<StatItem
-						title='Signed extrinsics'
-						value={formatNumber(new Decimal(chain.extrinsicsSigned.toString()))}
-					/>
-					<StatItem
-						title='Active Accounts'
-						value={formatNumber(new Decimal(chain.activeAccounts.toString()))}
-					/>
-					<StatItem
-						title='Transfers'
-						value={formatNumber(new Decimal(chain.transfers.toString()))}
-					/>
+					<div css={statItemsRow}>
+						<StatItem
+							title="Finalized blocks"
+							value={formatNumber(
+								new Decimal(chain.blocksFinalized.toString())
+							)}
+						/>
+						<StatItem
+							title="Signed extrinsics"
+							value={formatNumber(
+								new Decimal(chain.extrinsicsSigned.toString())
+							)}
+						/>
+						<StatItem
+							title="Total Accounts"
+							value={formatNumber(totalAccount.toString())}
+						/>
+						<StatItem
+							title="Transfers"
+							value={formatNumber(new Decimal(chain.transfers.toString()))}
+						/>
+					</div>
 				</div>
 			</div>
+			<TabbedContent>
+				<TabPane
+					label='Accounts'
+					value='accounts'
+				>
+					<AccountStatChart accountStats={accountStats}/>
+				</TabPane>
+			</TabbedContent>
 		</div>
 	);
 };
