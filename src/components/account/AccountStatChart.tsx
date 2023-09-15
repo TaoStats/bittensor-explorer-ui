@@ -6,6 +6,7 @@ import LoadingSpinner from "../../assets/loading.svg";
 import { useAccountStats } from "../../hooks/useAccountStats";
 import { AccountStats } from "../../model/accountStats";
 import { useMemo } from "react";
+import { formatNumber } from "../../utils/number";
 
 const spinnerContainer = css`
   display: flex;
@@ -77,16 +78,16 @@ export const AccountStatChart = () => {
 					type: "area",
 					data: totalAccounts,
 				},
-				{
-					name: "Active Accounts",
-					type: "area",
-					data: activeAccounts,
-				},
 				// {
-				// 	name: "Active Accounts > 0𝞃",
+				// 	name: "Active Accounts",
 				// 	type: "area",
-				// 	data: holders,
+				// 	data: activeAccounts,
 				// },
+				{
+					name: "Active Accounts > 0𝞃",
+					type: "area",
+					data: holders,
+				},
 			]}
 			options={{
 				colors: [
@@ -157,6 +158,9 @@ export const AccountStatChart = () => {
 					x: {
 						format: "dd MMM yy",
 					},
+					y: {
+						formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
+					},
 				},
 				xaxis: {
 					axisTicks: {
@@ -179,6 +183,7 @@ export const AccountStatChart = () => {
 						style: {
 							colors: "#a8a8a8",
 						},
+						formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
 					},
 					axisTicks: {
 						show: false,
