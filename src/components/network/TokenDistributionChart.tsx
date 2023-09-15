@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { HTMLAttributes } from "react";
 import { css } from "@emotion/react";
-import LoadingSpinner from "../../assets/loading.gif";
 import { StatItem } from "./StatItem";
 import { formatNumber, nFormatter } from "../../utils/number";
 import { useTotalIssuance } from "../../hooks/useTotalIssuance";
 import { useDelegatedSupply } from "../../hooks/useDelegatedSupply";
 import { useAppStats } from "../../contexts";
 import { DonutChart } from "../DonutChart";
+import Loading from "../Loading";
 
 const chartContainer = css`
   display: flex;
@@ -59,7 +59,7 @@ export const TokenDistributionChart = () => {
 
 	return loading ? (
 		<div css={spinnerContainer}>
-			<img src={LoadingSpinner} />
+			<Loading />
 		</div>
 	) : (
 		<div css={chartContainer}>

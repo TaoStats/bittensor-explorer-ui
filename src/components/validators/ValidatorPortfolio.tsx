@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
-import LoadingSpinner from "../../assets/loading.gif";
 import { formatNumber, rawAmountToDecimal } from "../../utils/number";
 import { useColdKey } from "../../hooks/useColdKey";
 import { useValidatorStaked } from "../../hooks/useValidatorStaked";
 import { useValidatorBalance } from "../../hooks/useValidatorBalance";
 import { StatItem } from "../network/StatItem";
 import { DonutChart } from "../DonutChart";
+import Loading from "../Loading";
 
 const chartContainer = css`
   display: flex;
@@ -66,7 +66,7 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 
 	return loading ? (
 		<div css={spinnerContainer}>
-			<img src={LoadingSpinner} />
+			<Loading />
 		</div>
 	) : (
 		<div css={chartContainer}>

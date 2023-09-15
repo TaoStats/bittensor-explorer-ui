@@ -11,7 +11,7 @@ import { Theme, css } from "@emotion/react";
 import { Tab, TabProps, Tabs } from "@mui/material";
 import ErrorIcon from "@mui/icons-material/Warning";
 
-import LoadingSpinner from "../assets/loading.gif";
+import Spinner from "./Spinner";
 
 const tabsWrapperStyle = css`
   margin-bottom: 16px;
@@ -31,7 +31,7 @@ const tabsStyle = (theme: Theme) => css`
 
     & > span:first-of-type::after {
       position: absolute;
-      content: '';
+      content: "";
       width: 0px;
       height: 4px;
       background-color: ${theme.palette.success.main};
@@ -85,11 +85,6 @@ const tabErrorStyle = css`
   color: #ef5350;
 `;
 
-const tabLoadingStyle = css`
-  margin-left: 8px;
-  width: 22px;
-`;
-
 export type TabPaneProps = Omit<TabProps, "children"> &
 PropsWithChildren<{
 	label: ReactNode;
@@ -129,18 +124,18 @@ export const TabbedContent = (props: TabbedContentProps) => {
 
 		return (
 			<Tab
-				title=''
+				title=""
 				key={value}
 				css={tabStyle}
 				label={
 					<>
 						<span>{label}</span>
 						{Number.isInteger(count) && (
-							<span data-test='count' css={tabCountStyle}>
-                ({count})
+							<span data-test="count" css={tabCountStyle}>
+								({count})
 							</span>
 						)}
-						{loading && <img src={LoadingSpinner} css={tabLoadingStyle} />}
+						{loading && <Spinner small />}
 						{!!error && <ErrorIcon css={tabErrorStyle} />}
 					</>
 				}
@@ -163,7 +158,7 @@ export const TabbedContent = (props: TabbedContentProps) => {
 					css={tabsStyle}
 					onChange={(_, tab) => setTab(tab)}
 					value={tab || tabHandles[0]!.props.value}
-					variant='scrollable'
+					variant="scrollable"
 					scrollButtons={false}
 				>
 					{tabHandles}
