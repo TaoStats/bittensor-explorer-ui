@@ -130,12 +130,12 @@ export const AccountPage = () => {
 
 	useDOMEventTrigger(
 		"data-loaded",
-      !account.loading &&
-      !extrinsics.loading &&
-      !transfers.loading &&
-      !taoPrice.loading &&
-      !delegates.loading &&
-      !delegateBalances.loading
+		!account.loading &&
+		!extrinsics.loading &&
+		!transfers.loading &&
+		!taoPrice.loading &&
+		!delegates.loading &&
+		!delegateBalances.loading
 	);
 
 	useEffect(() => {
