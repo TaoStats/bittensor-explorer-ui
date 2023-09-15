@@ -11,6 +11,7 @@ import { SortOrder } from "../../model/sortOrder";
 import { DelegateBalancesOrder } from "../../services/delegateService";
 import { DelegateBalance } from "../../model/delegate";
 import useIsMobile from "../../hooks/useIsMobile";
+import { BlockTimestamp } from "../BlockTimestamp";
 
 export type NominatorsTableProps = {
 	nominators: PaginatedResource<DelegateBalance>;
@@ -25,6 +26,10 @@ const orderMappings = {
 	amount: {
 		[SortDirection.ASC]: "AMOUNT_ASC",
 		[SortDirection.DESC]: "AMOUNT_DESC",
+	},
+	delegateFrom: {
+		[SortDirection.ASC]: "DELEGATE_FROM_ASC",
+		[SortDirection.DESC]: "DELEGATE_FROM_DESC",
 	},
 };
 
@@ -108,6 +113,19 @@ function NominatorsTable(props: NominatorsTableProps) {
 				)}
 				sortable
 				sortProperty='amount'
+			/>
+			<NominatorsTableAttribute
+				label='Delegated From'
+				sortable
+				sortProperty='delegateFrom'
+				render={(balance) => (
+					<BlockTimestamp
+						blockHeight={balance.delegateFrom}
+						fromNow
+						utc
+						tooltip
+					/>
+				)}
 			/>
 		</ItemsTable>
 	);
