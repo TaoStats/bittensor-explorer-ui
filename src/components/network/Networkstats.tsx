@@ -10,6 +10,7 @@ import Decimal from "decimal.js";
 import { StatItem } from "./StatItem";
 import { useAppStats } from "../../contexts";
 import { AccountStatChart } from "../account/AccountStatChart";
+import { TabbedContent, TabPane } from "../TabbedContent";
 
 const stakingDataBlock = css`
   width: 100%;
@@ -216,7 +217,14 @@ export const NetworkStats = () => {
 					</div>
 				</div>
 			</div>
-			<AccountStatChart />
+			<TabbedContent>
+				<TabPane
+					label='Accounts'
+					value='accounts'
+				>
+					<AccountStatChart />
+				</TabPane>
+			</TabbedContent>
 		</div>
 	);
 };
