@@ -120,7 +120,7 @@ export const AccountStatChart = () => {
 					size: 0,
 				},
 				noData: {
-					text: "Loading price data...",
+					text: "Loading ...",
 					align: "center",
 					verticalAlign: "middle",
 					offsetX: 0,
