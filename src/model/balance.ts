@@ -1,5 +1,3 @@
-import Decimal from "decimal.js";
-
 export type AccountResponse = {
 	address: string;
 	createdAt: bigint;
