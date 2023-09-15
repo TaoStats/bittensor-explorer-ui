@@ -82,11 +82,11 @@ export const AccountStatChart = () => {
 					type: "area",
 					data: activeAccounts,
 				},
-				{
-					name: "Active Accounts > 0𝞃",
-					type: "area",
-					data: holders,
-				},
+				// {
+				// 	name: "Active Accounts > 0𝞃",
+				// 	type: "area",
+				// 	data: holders,
+				// },
 			]}
 			options={{
 				colors: [
