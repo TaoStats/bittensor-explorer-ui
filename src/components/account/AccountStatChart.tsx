@@ -3,8 +3,7 @@ import { css, useTheme } from "@emotion/react";
 import Chart from "react-apexcharts";
 
 import LoadingSpinner from "../../assets/loading.svg";
-import { useAccountStats } from "../../hooks/useAccountStats";
-import { AccountStats } from "../../model/accountStats";
+import { AccountStats, AccountStatsResponse } from "../../model/accountStats";
 import { useMemo } from "react";
 import { formatNumber } from "../../utils/number";
 
@@ -15,9 +14,14 @@ const spinnerContainer = css`
   justify-content: center;
 `;
 
-export const AccountStatChart = () => {
+export type AccountStatChartProps = {
+	accountStats: AccountStatsResponse;
+}
+
+export const AccountStatChart = (props: AccountStatChartProps) => {
 	const theme = useTheme();
-	const accountStats = useAccountStats();
+
+	const { accountStats } = props;
 
 	const loading = accountStats.loading;
 	const timestamps = useMemo(() => {
@@ -74,7 +78,7 @@ export const AccountStatChart = () => {
 			height={400}
 			series={[
 				{
-					name: "All Accounts",
+					name: "Total Accounts",
 					type: "area",
 					data: totalAccounts,
 				},
@@ -84,7 +88,7 @@ export const AccountStatChart = () => {
 				// 	data: activeAccounts,
 				// },
 				{
-					name: "Active Accounts > 0𝞃",
+					name: "Non-zero Accounts",
 					type: "area",
 					data: holders,
 				},
@@ -159,7 +163,7 @@ export const AccountStatChart = () => {
 						format: "dd MMM yy",
 					},
 					y: {
-						formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
+						formatter: (val: number) => formatNumber(val),
 					},
 				},
 				xaxis: {
@@ -183,7 +187,7 @@ export const AccountStatChart = () => {
 						style: {
 							colors: "#a8a8a8",
 						},
-						formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
+						formatter: (val: number) => formatNumber(val),
 					},
 					axisTicks: {
 						show: false,

@@ -1,3 +1,5 @@
+import { DataError } from "../utils/error";
+
 export type AccountStats = {
 	id: string;
 	total: bigint;
@@ -7,7 +9,13 @@ export type AccountStats = {
 	timestamp: string;
 }
 
-export type AccountStatsResponse = {
+export type AccountStatsPaginatedResponse = {
 	hasNextPage: boolean;
+	data: AccountStats[];
+};
+
+export type AccountStatsResponse = {
+	loading: boolean;
+	error?: DataError;
 	data: AccountStats[];
 };

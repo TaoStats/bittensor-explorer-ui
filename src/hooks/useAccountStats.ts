@@ -3,9 +3,9 @@ import { getAccountStats } from "../services/accountService";
 
 import { useRollbar } from "@rollbar/react";
 import { DataError } from "../utils/error";
-import { AccountStats } from "../model/accountStats";
+import { AccountStats, AccountStatsResponse } from "../model/accountStats";
 
-export function useAccountStats() {
+export function useAccountStats(): AccountStatsResponse {
 	const rollbar = useRollbar();
 
 	const [data, setData] = useState<AccountStats[]>([]);

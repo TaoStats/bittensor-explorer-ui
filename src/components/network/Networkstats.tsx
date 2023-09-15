@@ -11,6 +11,9 @@ import { StatItem } from "./StatItem";
 import { useAppStats } from "../../contexts";
 import { AccountStatChart } from "../account/AccountStatChart";
 import { TabbedContent, TabPane } from "../TabbedContent";
+import { useAccountStats } from "../../hooks/useAccountStats";
+import { AccountStats } from "../../model/accountStats";
+import { useMemo } from "react";
 
 const stakingDataBlock = css`
   width: 100%;
@@ -129,6 +132,16 @@ export const NetworkStats = () => {
 		state: { tokenStats, tokenLoading, chainStats, chainLoading },
 	} = useAppStats();
 
+	const accountStats = useAccountStats();
+	const totalAccount = useMemo(() => {
+		if (!accountStats.data) return 0;
+		const resp = (accountStats.data as any).reduce(
+			(prev: bigint, cur: AccountStats) => cur.total,
+			0
+		);
+		return resp;
+	}, [accountStats]);
+
 	if (tokenLoading || chainLoading) {
 		return <Loading />;
 	}
@@ -207,8 +220,8 @@ export const NetworkStats = () => {
 							)}
 						/>
 						<StatItem
-							title="Active Accounts"
-							value={formatNumber(new Decimal(chain.activeAccounts.toString()))}
+							title="Total Accounts"
+							value={formatNumber(totalAccount.toString())}
 						/>
 						<StatItem
 							title="Transfers"
@@ -222,7 +235,7 @@ export const NetworkStats = () => {
 					label='Accounts'
 					value='accounts'
 				>
-					<AccountStatChart />
+					<AccountStatChart accountStats={accountStats}/>
 				</TabPane>
 			</TabbedContent>
 		</div>
