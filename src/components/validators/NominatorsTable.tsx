@@ -115,7 +115,7 @@ function NominatorsTable(props: NominatorsTableProps) {
 				sortProperty='amount'
 			/>
 			<NominatorsTableAttribute
-				label='Delegate From'
+				label='Delegated From'
 				sortable
 				sortProperty='delegateFrom'
 				render={(balance) => (
