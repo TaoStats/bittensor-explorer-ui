@@ -46,17 +46,6 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 		);
 		return resp;
 	}, [accountStats]);
-	// const activeAccounts = useMemo(() => {
-	// 	if (!accountStats.data) return [];
-	// 	const resp = (accountStats.data as any).reduce(
-	// 		(prev: bigint[], cur: AccountStats) => {
-	// 			prev.push(cur.active);
-	// 			return prev;
-	// 		},
-	// 		[]
-	// 	);
-	// 	return resp;
-	// }, [accountStats]);
 	const holders = useMemo(() => {
 		if (!accountStats.data) return [];
 		const resp = (accountStats.data as any).reduce(
@@ -82,11 +71,6 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 					type: "area",
 					data: totalAccounts,
 				},
-				// {
-				// 	name: "Active Accounts",
-				// 	type: "area",
-				// 	data: activeAccounts,
-				// },
 				{
 					name: "Non-zero Accounts",
 					type: "area",
@@ -96,8 +80,8 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 			options={{
 				chart: {
 					toolbar: {
-						show: false
-					}
+						show: false,
+					},
 				},
 				colors: [
 					theme.palette.neutral.main,
