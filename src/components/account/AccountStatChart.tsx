@@ -167,7 +167,7 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 					},
 				},
 				toolbar: {
-        				show: false
+					show: false
 				},		
 				xaxis: {
 					axisTicks: {
