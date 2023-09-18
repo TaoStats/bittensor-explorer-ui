@@ -166,6 +166,9 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 						formatter: (val: number) => formatNumber(val),
 					},
 				},
+				toolbar: {
+        				show: false
+				},		
 				xaxis: {
 					axisTicks: {
 						show: false,
