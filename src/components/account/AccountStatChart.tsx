@@ -94,6 +94,11 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 				},
 			]}
 			options={{
+				chart: {
+					toolbar: {
+						show: false
+					}
+				},
 				colors: [
 					theme.palette.neutral.main,
 					theme.palette.success.main,
@@ -166,9 +171,6 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 						formatter: (val: number) => formatNumber(val),
 					},
 				},
-				toolbar: {
-					show: false
-				},		
 				xaxis: {
 					axisTicks: {
 						show: false,
