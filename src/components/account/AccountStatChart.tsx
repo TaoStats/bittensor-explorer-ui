@@ -90,6 +90,9 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 					toolbar: {
 						show: false,
 					},
+					zoom: {
+						enabled: false,
+					},
 				},
 				colors: [
 					theme.palette.neutral.main,
