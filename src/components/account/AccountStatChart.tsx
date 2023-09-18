@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 import LoadingSpinner from "../../assets/loading.svg";
 import { AccountStats, AccountStatsResponse } from "../../model/accountStats";
 import { useMemo } from "react";
-import { formatNumber } from "../../utils/number";
+import { formatNumber, nFormatter } from "../../utils/number";
 
 const spinnerContainer = css`
   display: flex;
@@ -24,6 +24,14 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 	const { accountStats } = props;
 
 	const loading = accountStats.loading;
+	const totalAccount = useMemo(() => {
+		if (!accountStats.data) return 0;
+		const resp = (accountStats.data as any).reduce(
+			(prev: number, cur: AccountStats) => parseInt(cur.total.toString()),
+			0
+		);
+		return resp;
+	}, [accountStats]);
 	const timestamps = useMemo(() => {
 		if (!accountStats.data) return [];
 		const resp = (accountStats.data as any).reduce(
@@ -176,7 +184,7 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 						style: {
 							colors: "#a8a8a8",
 						},
-						formatter: (val: number) => formatNumber(val),
+						formatter: (val: number) => nFormatter(val, 0).toString(),
 					},
 					axisTicks: {
 						show: false,
@@ -184,6 +192,8 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 					axisBorder: {
 						show: false,
 					},
+					min: 0,
+					max: totalAccount,
 				},
 			}}
 		/>
