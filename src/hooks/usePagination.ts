@@ -11,6 +11,7 @@ export type Pagination = PaginationState & {
 	set: (pagination: Partial<PaginationState>) => void;
 	setPreviousPage: () => void;
 	setNextPage: () => void;
+	setPage: (page: number) => void;
 	pageSizes: number[];
 };
 
@@ -43,6 +44,13 @@ export function usePagination(limit = 10) {
 		});
 	}, [state]);
 
+	const setPage = useCallback((page: number) => {
+		setState({
+			...state,
+			offset: state.limit * (page - 1),
+		});
+	}, [state]);
+
 	const set = useCallback((newState: Partial<Pagination>) => {
 		setState({
 			...state,
@@ -57,7 +65,8 @@ export function usePagination(limit = 10) {
 			set,
 			setPreviousPage,
 			setNextPage,
+			setPage,
 		} as Pagination),
-		[state, setPreviousPage, setNextPage, setState]
+		[state, setPreviousPage, setNextPage, setPage, setState]
 	);
 }

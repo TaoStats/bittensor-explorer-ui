@@ -67,7 +67,7 @@ export async function getBlocks(
 					hasPreviousPage
 					startCursor
 				}
-				${filter !== undefined ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{

@@ -24,6 +24,7 @@ import Loading from "./Loading";
 import NotFound from "./NotFound";
 import { TablePagination } from "./TablePagination";
 import { SortDirection } from "../model/sortDirection";
+import { TablePaginationHeader } from "./TablePaginationHeader";
 
 const tableStyle = css`
   table-layout: auto;
@@ -238,6 +239,7 @@ export const ItemsTable = <
 
 	return (
 		<div {...restProps} data-class='table'>
+			{pagination && <TablePaginationHeader {...pagination} />}
 			<TableContainer>
 				<Table css={tableStyle}>
 					<colgroup>

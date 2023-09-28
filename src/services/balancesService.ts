@@ -43,7 +43,7 @@ export async function getBalances(
 					hasPreviousPage
 					startCursor
 				}
-				${filter !== undefined ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{

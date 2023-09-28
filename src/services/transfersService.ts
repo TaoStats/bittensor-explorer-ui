@@ -49,7 +49,7 @@ async function fetchTransfers(
 					hasPreviousPage
 					startCursor
 				}
-				${(filter != undefined) ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{

@@ -1,86 +1,144 @@
 /** @jsxImportSource @emotion/react */
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { css, IconButton, MenuItem, Select, SelectChangeEvent } from "@mui/material";
+import { Theme, css } from "@mui/material";
 
-import { Theme } from "@emotion/react";
-import { Pagination, usePagination } from "../hooks/usePagination";
-import { useState } from "react";
+import { Pagination } from "../hooks/usePagination";
+import { theme } from "../theme";
 
 const paginationStyle = css`
-	display: flex;
-	justify-content: right;
-	margin-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
 `;
 
-const buttonStyle = (theme: Theme) => css`
-	padding: 4px;
-
-	border-radius: 4px;
-	color: ${theme.palette.primary.main};
-	background-color: ${theme.palette.success.main};
-
-	margin-left: 8px;
-
-	&:hover {
-		background-color: ${theme.palette.success.light};
-	}
-
-	&.Mui-disabled {
-		color: ${theme.palette.primary.dark};
-		background-color: ${theme.palette.text.secondary};
-	}
+const pagesStyle = css`
+  display: flex;
+  gap: 3px;
 `;
 
-const pageOptions = (theme: Theme) => css`
-	background-color: ${theme.palette.secondary.dark};
+const disabledPageStyle = css`
+  color: ${theme.palette.secondary.main};
+  padding: 0 10px;
 `;
 
-export type TablePaginationProps = Pagination;
+const activePageStyle = (theme: Theme) => css`
+  color: ${theme.palette.secondary.light};
+  cursor: pointer;
+  padding: 0 3px;
+`;
+
+const pageStyle = (theme: Theme) => css`
+  color: ${theme.palette.secondary.main};
+  cursor: pointer;
+  padding: 0 3px;
+
+  &:hover {
+    color: ${theme.palette.secondary.light};
+  }
+`;
+
+type TablePaginationProps = Pagination;
+
+type PageProps = {
+	page: number;
+};
+
+type PageNavProps = {
+	disabled: boolean;
+};
 
 export function TablePagination(props: TablePaginationProps) {
-	const {
-		offset,
-		limit,
-		hasNextPage = true,
-		setPreviousPage,
-		setNextPage,
-		set: setPaginationOptions,
-	} = props;
-	const { pageSizes } = usePagination();
+	const { offset, limit, totalCount, setPreviousPage, setNextPage, setPage } =
+    props;
 
-	const onPageSizeChange = (e: SelectChangeEvent<number>) => { 
-		const size = e.target.value as number;
-		setPaginationOptions({...props, limit: size});
+	const currentPage = Math.floor(offset / limit) + 1;
+	const totalPages = Math.max(Math.ceil((totalCount ?? 0) / limit), 1);
+
+	// Calculate the range of pages to display
+	let startPage = Math.max(1, currentPage - 1);
+	let endPage = Math.min(totalPages, currentPage + 1);
+
+	// Ensure start and end pages
+	if (totalPages > 7) {
+		if (startPage < 4) {
+			startPage = 1;
+			endPage = Math.min(5, totalPages);
+		}
+		if (endPage > totalPages - 3) {
+			startPage = Math.max(1, totalPages - 4);
+			endPage = totalPages;
+		}
+	} else {
+		startPage = 1;
+		endPage = totalPages;
+	}
+
+	const pageNumbers = Array.from(
+		{ length: endPage - startPage + 1 },
+		(_, index) => startPage + index
+	);
+
+	const Page = ({ page }: PageProps) => {
+		return (
+			<div
+				key={page}
+				css={currentPage === page ? activePageStyle : pageStyle}
+				onClick={() => setPage(page)}
+			>
+				{page}
+			</div>
+		);
+	};
+
+	const DisabledPage = () => {
+		return <div css={disabledPageStyle}>...</div>;
+	};
+
+	const PrevPage = ({ disabled }: PageNavProps) => {
+		return (
+			<div
+				css={disabled ? disabledPageStyle : pageStyle}
+				onClick={() => !disabled && setPreviousPage()}
+			>
+				Previous
+			</div>
+		);
+	};
+
+	const NextPage = ({ disabled }: PageNavProps) => {
+		return (
+			<div
+				css={disabled ? disabledPageStyle : pageStyle}
+				onClick={() => !disabled && setNextPage()}
+			>
+				Next
+			</div>
+		);
 	};
 
 	return (
 		<div css={paginationStyle}>
-			<Select
-				labelId="demo-simple-select-label"
-				id="demo-simple-select"
-				sx={{ height: "32px", ml: "8px" }}
-				css={pageOptions}
-				value={limit}
-				onChange={onPageSizeChange}
-			>
-				{pageSizes.map((size, index) => (
-					<MenuItem value={size} key={index}>{size}</MenuItem>
+			<div css={disabledPageStyle}>
+				Showing {Math.min(offset + 1, totalCount ?? 0)} to {Math.min(offset + limit, totalCount ?? 0)} of {totalCount ?? 0} entries
+			</div>
+			<div css={pagesStyle}>
+				<PrevPage disabled={currentPage == 1} />
+				{startPage > 1 && (
+					<>
+						<Page page={1} />
+						<DisabledPage />
+					</>
+				)}
+				{pageNumbers.map((page) => (
+					<Page page={page} />
 				))}
-			</Select>
-			<IconButton
-				css={buttonStyle}
-				disabled={offset === 0}
-				onClick={() => setPreviousPage()}
-			>
-				<ChevronLeft />
-			</IconButton>
-			<IconButton
-				css={buttonStyle}
-				disabled={!hasNextPage}
-				onClick={() => setNextPage()}
-			>
-				<ChevronRight />
-			</IconButton>
+				{endPage < totalPages && (
+					<>
+						<DisabledPage />
+						<Page page={totalPages} />
+					</>
+				)}
+				<NextPage disabled={currentPage >= totalPages} />
+			</div>
 		</div>
 	);
 }

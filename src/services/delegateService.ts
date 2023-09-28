@@ -77,7 +77,7 @@ async function fetchDelegates(
 					hasPreviousPage
 					startCursor
 				}
-				${(filter != undefined) ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{
