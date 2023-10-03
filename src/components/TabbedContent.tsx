@@ -17,7 +17,7 @@ import Spinner from "./Spinner";
 import { useNavigate } from "react-router-dom";
 
 const tabsWrapperStyle = css`
-  margin-bottom: 16px;
+  margin-bottom: 32px;
 `;
 
 const tabsStyle = (theme: Theme) => css`
@@ -143,11 +143,11 @@ export const TabbedContent = (props: TabbedContentProps) => {
 				label={
 					<>
 						<span>{label}</span>
-						{Number.isInteger(count) && (
+						{/* {Number.isInteger(count) && (
 							<span data-test="count" css={tabCountStyle}>
 								({count})
 							</span>
-						)}
+						)} */}
 						{loading && <Spinner small />}
 						{!!error && <ErrorIcon css={tabErrorStyle} />}
 					</>
