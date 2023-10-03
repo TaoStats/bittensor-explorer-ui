@@ -11,8 +11,8 @@ const paginationStyle = css`
   padding: 0 0 0 20px;
   font-size: 14px;
   @media (max-width: 767px) {
-	flex-direction: column;
-	gap: 5px;
+    flex-direction: column;
+    gap: 5px;
   }
 `;
 
@@ -36,12 +36,16 @@ const showItemSelectedStyle = (theme: Theme) => css`
   cursor: pointer;
 `;
 
+const searchPanelStyle = () => css`
+  display: none;
+`;
+
 const searchSpanStyle = () => css`
   margin-left: 15px;
 `;
 
 const searchStyle = (theme: Theme) => css`
-  background-color: ${theme.palette.text.secondary};
+  background-color: rgb(18, 18, 18);
   background-image: url(search.svg);
   background-position: 18px center;
   background-repeat: no-repeat;
@@ -69,19 +73,18 @@ export function TablePaginationHeader(props: TablePaginationProps) {
 					<div
 						css={size === limit ? showItemSelectedStyle : showItemStyle}
 						key={index}
-						onClick={() => setPaginationOptions({ ...props, offset: 0, limit: size })}
+						onClick={() =>
+							setPaginationOptions({ ...props, offset: 0, limit: size })
+						}
 					>
 						{size}
 					</div>
 				))}
 			</div>
-			<label>
-				Search:
+			<label css={searchPanelStyle}>
+        Search:
 				<span css={searchSpanStyle}>
-					<input
-						type="search"
-						css={searchStyle}
-					/>
+					<input type="search" css={searchStyle} />
 				</span>
 			</label>
 		</div>
