@@ -3,11 +3,14 @@ import { Theme, css } from "@mui/material";
 
 import { Pagination } from "../hooks/usePagination";
 import { theme } from "../theme";
+import { formatNumber } from "../utils/number";
 
 const paginationStyle = css`
   display: flex;
   justify-content: space-between;
   margin-top: 16px;
+  padding: 0 0 0 10px;
+  font-size: 14px;
 `;
 
 const pagesStyle = css`
@@ -115,10 +118,13 @@ export function TablePagination(props: TablePaginationProps) {
 		);
 	};
 
+	const startOffset = Math.min(offset + 1, totalCount ?? 0);
+	const endOffset = Math.min(offset + limit, totalCount ?? 0);
+
 	return (
 		<div css={paginationStyle}>
 			<div css={disabledPageStyle}>
-				Showing {Math.min(offset + 1, totalCount ?? 0)} to {Math.min(offset + limit, totalCount ?? 0)} of {totalCount ?? 0} entries
+				Showing {formatNumber(startOffset)} to {formatNumber(endOffset)} of {formatNumber(totalCount ?? 0)} entries
 			</div>
 			<div css={pagesStyle}>
 				<PrevPage disabled={currentPage == 1} />
