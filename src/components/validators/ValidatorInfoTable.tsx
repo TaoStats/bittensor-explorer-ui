@@ -23,10 +23,12 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 	const { account, balance } = props;
 
 	const { currency } = NETWORK_CONFIG;
-	
-	const { state: { tokenLoading, tokenStats } } = useAppStats();
+
+	const {
+		state: { tokenLoading, tokenStats },
+	} = useAppStats();
 	const dominance =
-	tokenLoading || tokenStats === undefined
+	tokenLoading || tokenStats === undefined || tokenStats.delegatedSupply === 0
 		? 0
 		: (
 			(rawAmountToDecimal(balance.data).toNumber() /
