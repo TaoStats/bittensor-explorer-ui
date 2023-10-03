@@ -44,7 +44,7 @@ const searchSpanStyle = () => css`
   margin-left: 15px;
 `;
 
-const searchStyle = (theme: Theme) => css`
+const searchStyle = () => css`
   background-color: rgb(18, 18, 18);
   background-image: url(search.svg);
   background-position: 18px center;
