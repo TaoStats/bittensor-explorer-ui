@@ -10,6 +10,10 @@ const paginationStyle = css`
   margin-bottom: 16px;
   padding: 0 0 0 20px;
   font-size: 14px;
+  @media (max-width: 767px) {
+	flex-direction: column;
+	gap: 5px;
+  }
 `;
 
 const showStyle = () => css`
@@ -48,7 +52,7 @@ const searchStyle = (theme: Theme) => css`
   height: 40px;
   line-height: 40px;
   padding: 0 5px 0 41px;
-  width: 230px;
+  width: 200px;
 `;
 
 type TablePaginationProps = Pagination;

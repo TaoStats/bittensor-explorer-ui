@@ -11,6 +11,10 @@ const paginationStyle = css`
   margin-top: 16px;
   padding: 0 0 0 10px;
   font-size: 14px;
+  @media (max-width: 999px) {
+	flex-direction: column;
+	gap: 5px;
+  }
 `;
 
 const pagesStyle = css`
@@ -134,8 +138,8 @@ export function TablePagination(props: TablePaginationProps) {
 						<DisabledPage />
 					</>
 				)}
-				{pageNumbers.map((page) => (
-					<Page page={page} />
+				{pageNumbers.map((page, index) => (
+					<Page page={page} key={`page-${index}`} />
 				))}
 				{endPage < totalPages && (
 					<>
