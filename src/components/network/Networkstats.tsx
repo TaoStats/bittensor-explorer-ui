@@ -233,7 +233,7 @@ export const NetworkStats = () => {
 			<TabbedContent>
 				<TabPane
 					label='Accounts'
-					value='accounts'
+					value='accountStats'
 				>
 					<AccountStatChart accountStats={accountStats}/>
 				</TabPane>

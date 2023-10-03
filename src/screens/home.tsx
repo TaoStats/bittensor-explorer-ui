@@ -11,7 +11,7 @@ import BlocksTable from "../components/blocks/BlocksTable";
 import { NetworkStats, TokenDistributionChart } from "../components/network";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BlocksOrder } from "../services/blocksService";
 import { BalancesOrder } from "../services/balancesService";
 import { TransfersOrder } from "../services/transfersService";
@@ -93,6 +93,14 @@ export const HomePage = () => {
 		}
 	}, [transfers]);
 
+	const tabRef = useRef(null);
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		}
+	}, [tab]);
+
 	return (
 		<div css={contentStyle}>
 			<div css={contentInner}>
@@ -105,70 +113,72 @@ export const HomePage = () => {
 					</Card>
 				</CardRow>
 				<Card>
-					<TabbedContent defaultTab={tab.slice(1).toString()}>
-						<TabPane
-							label='Blocks'
-							count={blocks.pagination.totalCount}
-							loading={blocks.loading}
-							error={blocks.error}
-							value='blocks'
-						>
-							<BlocksTable
-								blocks={blocks}
-								showTime
-								onSortChange={(sortKey: BlocksOrder) =>
-									setBlockSort(sortKey)
-								}
-								initialSort={blocksInitialOrder} />
-						</TabPane>
-						<TabPane
-							label='Transfers'
-							count={transfers.pagination.totalCount}
-							loading={transfers.loading}
-							error={transfers.error}
-							value='transfers'
-						>
-							<TransfersTable
-								transfers={transfers}
-								showTime
-								onSortChange={(sortKey: TransfersOrder) =>
-									setTransferSort(sortKey)
-								}
-								initialSort={transfersInitialOrder}
-							/>
-						</TabPane>
-						<TabPane
-							label='Delegation'
-							count={delegates.pagination.totalCount}
-							loading={delegates.loading}
-							error={delegates.error}
-							value='delegation'
-						>
-							<DelegatesTable
-								delegates={delegates}
-								showTime
-								onSortChange={(sortKey: DelegatesOrder) =>
-									setDelegateSort(sortKey)
-								}
-								initialSort={delegatesInitialOrder}
-							/>
-						</TabPane>
-						<TabPane
-							label='Accounts'
-							count={balances.pagination.totalCount}
-							loading={balances.loading}
-							error={balances.error}
-							value='accounts'
-						>
-							<BalancesTable
-								balances={balances}
-								onSortChange={(sortKey: BalancesOrder) =>
-									setBalanceSort(sortKey)
-								}
-								initialSort={balancesInitialOrder}
-							/>
-						</TabPane>
-					</TabbedContent>
+					<div ref={tabRef}>
+						<TabbedContent defaultTab={tab.slice(1).toString()}>
+							<TabPane
+								label='Blocks'
+								count={blocks.pagination.totalCount}
+								loading={blocks.loading}
+								error={blocks.error}
+								value='blocks'
+							>
+								<BlocksTable
+									blocks={blocks}
+									showTime
+									onSortChange={(sortKey: BlocksOrder) =>
+										setBlockSort(sortKey)
+									}
+									initialSort={blocksInitialOrder} />
+							</TabPane>
+							<TabPane
+								label='Transfers'
+								count={transfers.pagination.totalCount}
+								loading={transfers.loading}
+								error={transfers.error}
+								value='transfers'
+							>
+								<TransfersTable
+									transfers={transfers}
+									showTime
+									onSortChange={(sortKey: TransfersOrder) =>
+										setTransferSort(sortKey)
+									}
+									initialSort={transfersInitialOrder}
+								/>
+							</TabPane>
+							<TabPane
+								label='Delegation'
+								count={delegates.pagination.totalCount}
+								loading={delegates.loading}
+								error={delegates.error}
+								value='delegation'
+							>
+								<DelegatesTable
+									delegates={delegates}
+									showTime
+									onSortChange={(sortKey: DelegatesOrder) =>
+										setDelegateSort(sortKey)
+									}
+									initialSort={delegatesInitialOrder}
+								/>
+							</TabPane>
+							<TabPane
+								label='Accounts'
+								count={balances.pagination.totalCount}
+								loading={balances.loading}
+								error={balances.error}
+								value='accounts'
+							>
+								<BalancesTable
+									balances={balances}
+									onSortChange={(sortKey: BalancesOrder) =>
+										setBalanceSort(sortKey)
+									}
+									initialSort={balancesInitialOrder}
+								/>
+							</TabPane>
+						</TabbedContent>
+					</div>
 				</Card>
 			</div>
 		</div>

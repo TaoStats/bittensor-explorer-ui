@@ -5,8 +5,6 @@ import {
 	PropsWithChildren,
 	ReactElement,
 	ReactNode,
-	useEffect,
-	useRef,
 	useState,
 } from "react";
 import { Theme, css } from "@emotion/react";
@@ -77,10 +75,6 @@ const tabStyle = (theme: Theme) => css`
   }
 `;
 
-const tabCountStyle = css`
-  margin-left: 4px;
-`;
-
 const tabErrorStyle = css`
   margin-left: 8px;
   position: relative;
@@ -110,13 +104,6 @@ export const TabbedContent = (props: TabbedContentProps) => {
 	const { defaultTab, children } = props;
 
 	const [tab, setTab] = useState<string | undefined>(defaultTab);
-	const tabRef = useRef(null);
-
-	useEffect(() => {
-		if(tab && tabRef && tabRef.current) {
-			(tabRef.current as any).scrollIntoView({ behavior: "smooth", block: "start" });
-		}
-	}, [tab, tabRef, tabRef.current]);
 
 	const navigate = useNavigate();
 
@@ -139,15 +126,11 @@ export const TabbedContent = (props: TabbedContentProps) => {
 			<Tab
 				title=""
 				key={value}
+				id={`#${value}`}
 				css={tabStyle}
 				label={
 					<>
 						<span>{label}</span>
-						{/* {Number.isInteger(count) && (
-							<span data-test="count" css={tabCountStyle}>
-								({count})
-							</span>
-						)} */}
 						{loading && <Spinner small />}
 						{!!error && <ErrorIcon css={tabErrorStyle} />}
 					</>
@@ -166,8 +149,7 @@ export const TabbedContent = (props: TabbedContentProps) => {
 
 	return (
 		<>
-			<div css={tabsWrapperStyle}
-				ref={tabRef}>
+			<div css={tabsWrapperStyle}>
 				<Tabs
 					css={tabsStyle}
 					onChange={(_, tab) => {

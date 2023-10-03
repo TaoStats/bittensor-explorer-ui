@@ -15,7 +15,7 @@ import {
 	DelegateBalancesOrder,
 	DelegatesOrder,
 } from "../services/delegateService";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
@@ -144,6 +144,14 @@ export const ValidatorPage = () => {
 		window.open(url, "_blank");
 	};
 
+	const tabRef = useRef(null);
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		}
+	}, [tab]);
+
 	return (
 		<>
 			<CardRow css={infoSection}>
@@ -180,7 +188,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-							DELEGATE STAKE
+              DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
@@ -189,39 +197,41 @@ export const ValidatorPage = () => {
 				</Card>
 			</CardRow>
 			<Card>
-				<TabbedContent defaultTab={tab.slice(1).toString()}>
-					<TabPane
-						label="Nominator"
-						count={nominators.pagination.totalCount}
-						loading={nominators.loading}
-						error={nominators.error}
-						value="nominator"
-					>
-						<NominatorsTable
-							nominators={nominators}
-							onSortChange={(sortKey: DelegateBalancesOrder) =>
-								setNominatorSort(sortKey)
-							}
-							initialSort={nominatorSort}
-						/>
-					</TabPane>
-					<TabPane
-						label="Delegation"
-						count={delegates.pagination.totalCount}
-						loading={delegates.loading}
-						error={delegates.error}
-						value="delegation"
-					>
-						<DelegatesTable
-							delegates={delegates}
-							showTime
-							onSortChange={(sortKey: DelegatesOrder) =>
-								setDelegateSort(sortKey)
-							}
-							initialSort={delegatesInitialOrder}
-						/>
-					</TabPane>
-				</TabbedContent>
+				<div ref={tabRef}>
+					<TabbedContent defaultTab={tab.slice(1).toString()}>
+						<TabPane
+							label="Nominator"
+							count={nominators.pagination.totalCount}
+							loading={nominators.loading}
+							error={nominators.error}
+							value="nominator"
+						>
+							<NominatorsTable
+								nominators={nominators}
+								onSortChange={(sortKey: DelegateBalancesOrder) =>
+									setNominatorSort(sortKey)
+								}
+								initialSort={nominatorSort}
+							/>
+						</TabPane>
+						<TabPane
+							label="Delegation"
+							count={delegates.pagination.totalCount}
+							loading={delegates.loading}
+							error={delegates.error}
+							value="delegation"
+						>
+							<DelegatesTable
+								delegates={delegates}
+								showTime
+								onSortChange={(sortKey: DelegatesOrder) =>
+									setDelegateSort(sortKey)
+								}
+								initialSort={delegatesInitialOrder}
+							/>
+						</TabPane>
+					</TabbedContent>
+				</div>
 			</Card>
 		</>
 	);
