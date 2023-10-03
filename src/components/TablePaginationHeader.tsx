@@ -8,6 +8,8 @@ const paginationStyle = css`
   display: flex;
   justify-content: space-between;
   margin-bottom: 16px;
+  padding: 0 0 0 20px;
+  font-size: 14px;
 `;
 
 const showStyle = () => css`
@@ -35,7 +37,7 @@ const searchSpanStyle = () => css`
 `;
 
 const searchStyle = (theme: Theme) => css`
-  background-color: ${theme.palette.secondary.main};
+  background-color: ${theme.palette.text.secondary};
   background-image: url(search.svg);
   background-position: 18px center;
   background-repeat: no-repeat;
