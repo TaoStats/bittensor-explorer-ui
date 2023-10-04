@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { Card, CardHeader } from "../components/Card";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
@@ -9,6 +9,7 @@ import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsic } from "../hooks/useExtrinsic";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
+import { useRef, useEffect } from "react";
 
 type ExtrinsicPageParams = {
 	id: string;
@@ -30,6 +31,17 @@ export const ExtrinsicPage = () => {
 	);
 
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
+	
+	const { hash: tab } = useLocation();
+	const tabRef = useRef(null);
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
+		}
+	}, [tab]);
 
 	return (
 		<>
@@ -42,17 +54,19 @@ export const ExtrinsicPage = () => {
 			</Card>
 			{extrinsic.data && (
 				<Card>
-					<TabbedContent>
-						<TabPane
-							label='Events'
-							count={events.pagination.totalCount}
-							loading={events.loading}
-							error={events.error}
-							value='events'
-						>
-							<EventsTable events={events} />
-						</TabPane>
-					</TabbedContent>
+					<div ref={tabRef}>
+						<TabbedContent>
+							<TabPane
+								label='Events'
+								count={events.pagination.totalCount}
+								loading={events.loading}
+								error={events.error}
+								value='events'
+							>
+								<EventsTable events={events} />
+							</TabPane>
+						</TabbedContent>
+					</div>
 				</Card>
 			)}
 		</>

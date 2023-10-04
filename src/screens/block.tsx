@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { BlockInfoTable } from "../components/blocks/BlockInfoTable";
 import { Card, CardHeader } from "../components/Card";
@@ -10,6 +10,7 @@ import { useBlock } from "../hooks/useBlock";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
+import { useRef, useEffect } from "react";
 
 export type BlockPageParams = {
 	id: string;
@@ -26,41 +27,57 @@ export const BlockPage = () => {
 		"EXTRINSIC_ID_ASC"
 	);
 
-	useDOMEventTrigger("data-loaded", !block.loading && !extrinsics.loading && !events.loading);
+	useDOMEventTrigger(
+		"data-loaded",
+		!block.loading && !extrinsics.loading && !events.loading
+	);
+
+	const { hash: tab } = useLocation();
+	const tabRef = useRef(null);
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
+		}
+	}, [tab]);
 
 	return (
 		<>
 			<Card>
 				<CardHeader>
-					Block #{id}
+          Block #{id}
 					<CopyToClipboardButton value={id} />
 				</CardHeader>
 				<BlockInfoTable block={block} />
 			</Card>
-			{block.data &&
+			{block.data && (
 				<Card>
-					<TabbedContent>
-						<TabPane
-							label="Extrinsics"
-							count={extrinsics.pagination.totalCount}
-							loading={extrinsics.loading}
-							error={extrinsics.error}
-							value="extrinsics"
-						>
-							<ExtrinsicsTable extrinsics={extrinsics} showAccount />
-						</TabPane>
-						<TabPane
-							label="Events"
-							count={events.pagination.totalCount}
-							loading={events.loading}
-							error={events.error}
-							value="events"
-						>
-							<EventsTable events={events} showExtrinsic />
-						</TabPane>
-					</TabbedContent>
+					<div ref={tabRef}>
+						<TabbedContent>
+							<TabPane
+								label="Extrinsics"
+								count={extrinsics.pagination.totalCount}
+								loading={extrinsics.loading}
+								error={extrinsics.error}
+								value="extrinsics"
+							>
+								<ExtrinsicsTable extrinsics={extrinsics} showAccount />
+							</TabPane>
+							<TabPane
+								label="Events"
+								count={events.pagination.totalCount}
+								loading={events.loading}
+								error={events.error}
+								value="events"
+							>
+								<EventsTable events={events} showExtrinsic />
+							</TabPane>
+						</TabbedContent>
+					</div>
 				</Card>
-			}
+			)}
 		</>
 	);
 };

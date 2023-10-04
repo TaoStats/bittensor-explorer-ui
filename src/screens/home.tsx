@@ -55,22 +55,25 @@ const infoSection = css`
 `;
 
 export const HomePage = () => {
-	const { hash: tab } = useLocation();
-	
 	const blocksInitialOrder: BlocksOrder = "HEIGHT_DESC";
 	const [blockSort, setBlockSort] = useState<BlocksOrder>(blocksInitialOrder);
 	const blocks = useBlocks(undefined, blockSort);
 
 	const balancesInitialOrder: BalancesOrder = "BALANCE_TOTAL_DESC";
-	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(balancesInitialOrder);
+	const [balanceSort, setBalanceSort] =
+    useState<BalancesOrder>(balancesInitialOrder);
 	const balances = useBalances(undefined, balanceSort);
 
 	const transfersInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
-	const [transferSort, setTransferSort] = useState<TransfersOrder>(transfersInitialOrder);
+	const [transferSort, setTransferSort] = useState<TransfersOrder>(
+		transfersInitialOrder
+	);
 	const transfers = useTransfers(undefined, transferSort);
 
 	const delegatesInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
-	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(delegatesInitialOrder);
+	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
+		delegatesInitialOrder
+	);
 	const delegates = useDelegates(undefined, delegateSort);
 
 	useEffect(() => {
@@ -93,11 +96,14 @@ export const HomePage = () => {
 		}
 	}, [transfers]);
 
+	const { hash: tab } = useLocation();
 	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
 			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
 		}
 	}, [tab]);
 
@@ -116,26 +122,25 @@ export const HomePage = () => {
 					<div ref={tabRef}>
 						<TabbedContent defaultTab={tab.slice(1).toString()}>
 							<TabPane
-								label='Blocks'
+								label="Blocks"
 								count={blocks.pagination.totalCount}
 								loading={blocks.loading}
 								error={blocks.error}
-								value='blocks'
+								value="blocks"
 							>
 								<BlocksTable
 									blocks={blocks}
 									showTime
-									onSortChange={(sortKey: BlocksOrder) =>
-										setBlockSort(sortKey)
-									}
-									initialSort={blocksInitialOrder} />
+									onSortChange={(sortKey: BlocksOrder) => setBlockSort(sortKey)}
+									initialSort={blocksInitialOrder}
+								/>
 							</TabPane>
 							<TabPane
-								label='Transfers'
+								label="Transfers"
 								count={transfers.pagination.totalCount}
 								loading={transfers.loading}
 								error={transfers.error}
-								value='transfers'
+								value="transfers"
 							>
 								<TransfersTable
 									transfers={transfers}
@@ -147,11 +152,11 @@ export const HomePage = () => {
 								/>
 							</TabPane>
 							<TabPane
-								label='Delegation'
+								label="Delegation"
 								count={delegates.pagination.totalCount}
 								loading={delegates.loading}
 								error={delegates.error}
-								value='delegation'
+								value="delegation"
 							>
 								<DelegatesTable
 									delegates={delegates}
@@ -163,11 +168,11 @@ export const HomePage = () => {
 								/>
 							</TabPane>
 							<TabPane
-								label='Accounts'
+								label="Accounts"
 								count={balances.pagination.totalCount}
 								loading={balances.loading}
 								error={balances.error}
-								value='accounts'
+								value="accounts"
 							>
 								<BalancesTable
 									balances={balances}

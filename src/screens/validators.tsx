@@ -97,7 +97,6 @@ export type ValidatorPageParams = {
 
 export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
-	const { hash: tab } = useLocation();
 
 	const info = (verifiedDelegates as Record<string, DelegateInfo>)[address];
 
@@ -144,11 +143,14 @@ export const ValidatorPage = () => {
 		window.open(url, "_blank");
 	};
 
+	const { hash: tab } = useLocation();
 	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
 			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
 		}
 	}, [tab]);
 

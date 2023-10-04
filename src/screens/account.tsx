@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
 import { Card, CardHeader, CardRow } from "../components/Card";
@@ -131,11 +131,11 @@ export const AccountPage = () => {
 	useDOMEventTrigger(
 		"data-loaded",
 		!account.loading &&
-		!extrinsics.loading &&
-		!transfers.loading &&
-		!taoPrice.loading &&
-		!delegates.loading &&
-		!delegateBalances.loading
+      !extrinsics.loading &&
+      !transfers.loading &&
+      !taoPrice.loading &&
+      !delegates.loading &&
+      !delegateBalances.loading
 	);
 
 	useEffect(() => {
@@ -145,10 +145,21 @@ export const AccountPage = () => {
 		}
 	}, [extrinsics]);
 
+	const { hash: tab } = useLocation();
+	const tabRef = useRef(null);
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
+		}
+	}, [tab]);
+
 	return (
 		<>
 			<CardRow css={infoSection}>
-				<Card css={accountInfoStyle} data-test='account-info'>
+				<Card css={accountInfoStyle} data-test="account-info">
 					<CardHeader css={accountHeader}>
 						<div css={accountTitle}>Account</div>
 						{/* {(account.loading || account.data) && (
@@ -165,58 +176,60 @@ export const AccountPage = () => {
 						}}
 					/>
 				</Card>
-				<Card css={portfolioStyle} data-test='account-portfolio'>
+				<Card css={portfolioStyle} data-test="account-portfolio">
 					<div css={summary}>
-						<StatItem title='Delegated' value={delegated} />
-						<StatItem title='Free' value={free} />
+						<StatItem title="Delegated" value={delegated} />
+						<StatItem title="Free" value={free} />
 					</div>
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
 				</Card>
 			</CardRow>
 			{account.data && (
-				<Card data-test='account-related-items'>
-					<TabbedContent>
-						<TabPane
-							label='Extrinsics'
-							count={extrinsics.pagination.totalCount}
-							loading={extrinsics.loading}
-							error={extrinsics.error}
-							value='extrinsics'
-						>
-							<ExtrinsicsTable extrinsics={extrinsics} showTime />
-						</TabPane>
+				<Card data-test="account-related-items">
+					<div ref={tabRef}>
+						<TabbedContent>
+							<TabPane
+								label="Extrinsics"
+								count={extrinsics.pagination.totalCount}
+								loading={extrinsics.loading}
+								error={extrinsics.error}
+								value="extrinsics"
+							>
+								<ExtrinsicsTable extrinsics={extrinsics} showTime />
+							</TabPane>
 
-						<TabPane
-							label='Transfers'
-							count={transfers.pagination.totalCount}
-							loading={transfers.loading}
-							error={transfers.error}
-							value='transfers'
-						>
-							<TransfersTable
-								transfers={transfers}
-								showTime
-								direction={{ show: true, source: address }}
-							/>
-						</TabPane>
+							<TabPane
+								label="Transfers"
+								count={transfers.pagination.totalCount}
+								loading={transfers.loading}
+								error={transfers.error}
+								value="transfers"
+							>
+								<TransfersTable
+									transfers={transfers}
+									showTime
+									direction={{ show: true, source: address }}
+								/>
+							</TabPane>
 
-						<TabPane
-							label='Delegation'
-							count={delegates.pagination.totalCount}
-							loading={delegates.loading}
-							error={delegates.error}
-							value='delegation'
-						>
-							<DelegatesTable
-								delegates={delegates}
-								showTime
-								onSortChange={(sortKey: DelegatesOrder) =>
-									setDelegateSort(sortKey)
-								}
-								initialSort={delegatesInitialOrder}
-							/>
-						</TabPane>
-					</TabbedContent>
+							<TabPane
+								label="Delegation"
+								count={delegates.pagination.totalCount}
+								loading={delegates.loading}
+								error={delegates.error}
+								value="delegation"
+							>
+								<DelegatesTable
+									delegates={delegates}
+									showTime
+									onSortChange={(sortKey: DelegatesOrder) =>
+										setDelegateSort(sortKey)
+									}
+									initialSort={delegatesInitialOrder}
+								/>
+							</TabPane>
+						</TabbedContent>
+					</div>
 				</Card>
 			)}
 		</>
