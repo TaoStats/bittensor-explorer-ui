@@ -205,6 +205,11 @@ export const Header = () => {
 													</a>
 												</li>
 												<li>
+													<a href="https://taostats.io/subnets/netuid-5/">
+														Subnet 5 - Image
+													</a>
+												</li>
+												<li>
 													<a href="https://taostats.io/subnets/netuid-11/">
 														Subnet 11 - Text Prompting
 													</a>
