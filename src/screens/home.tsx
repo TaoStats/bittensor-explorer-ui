@@ -18,6 +18,7 @@ import { TransfersFilter, TransfersOrder } from "../services/transfersService";
 import { useDelegates } from "../hooks/useDelegates";
 import { DelegateFilter, DelegatesOrder } from "../services/delegateService";
 import { useLocation } from "react-router-dom";
+import { MIN_DELEGATION_AMOUNT } from "../config";
 
 const contentStyle = css`
   position: relative;
@@ -78,7 +79,7 @@ export const HomePage = () => {
 	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
 		delegatesInitialOrder
 	);
-	const delegatesInitialFilter: DelegateFilter = { amount: { greaterThan: 0 } };
+	const delegatesInitialFilter: DelegateFilter = { amount: { greaterThan: MIN_DELEGATION_AMOUNT } };
 	const [delegatesFilter, setDelegatesFilter] = useState<DelegateFilter>(delegatesInitialFilter);
 	const delegates = useDelegates(delegatesFilter, delegateSort);
 

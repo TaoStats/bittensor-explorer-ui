@@ -5,7 +5,7 @@ import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
-import { NETWORK_CONFIG } from "../../config";
+import { MIN_DELEGATION_AMOUNT, NETWORK_CONFIG } from "../../config";
 import { BlockTimestamp } from "../BlockTimestamp";
 import { css, Theme } from "@mui/material";
 import { SortDirection } from "../../model/sortDirection";
@@ -84,7 +84,7 @@ const filterMappings: DelegateFilter = {
 			rawAmountToDecimaledString(1000),
 			rawAmountToDecimaledString(500),
 			rawAmountToDecimaledString(100),
-			0,
+			MIN_DELEGATION_AMOUNT,
 		],
 		operator: "greaterThan",
 	},

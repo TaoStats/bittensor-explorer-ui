@@ -24,6 +24,7 @@ const filterItemStyle = (theme: Theme) => css`
 const filterItemSelectedStyle = (theme: Theme) => css`
   color: ${theme.palette.secondary.light};
   cursor: pointer;
+  font-weight: bold;
 `;
 
 type TableFilterProps = {

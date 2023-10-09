@@ -13,6 +13,7 @@ import { TabPane, TabbedContent } from "../components/TabbedContent";
 import DelegatesTable from "../components/delegates/DelegatesTable";
 import {
 	DelegateBalancesOrder,
+	DelegateFilter,
 	DelegatesOrder,
 } from "../services/delegateService";
 import { useEffect, useRef, useState } from "react";
@@ -118,10 +119,12 @@ export const ValidatorPage = () => {
 	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
 		delegatesInitialOrder
 	);
+	const delegatesInitialFilter: DelegateFilter = { amount: { greaterThan: MIN_DELEGATION_AMOUNT } };
+	const [delegatesFilter, setDelegatesFilter] = useState<DelegateFilter>(delegatesInitialFilter);
 	const delegates = useDelegates(
 		{
 			delegate: { equalTo: address },
-			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
+			...delegatesFilter,
 		},
 		delegateSort
 	);
@@ -230,6 +233,10 @@ export const ValidatorPage = () => {
 									setDelegateSort(sortKey)
 								}
 								initialSort={delegatesInitialOrder}
+								onFilterChange={(newFilter?: DelegateFilter) =>
+									setDelegatesFilter({...delegatesFilter, ...newFilter})
+								}
+								initialFilter={delegatesInitialFilter}
 							/>
 						</TabPane>
 					</TabbedContent>
