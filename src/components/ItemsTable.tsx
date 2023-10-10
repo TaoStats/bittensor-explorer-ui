@@ -226,24 +226,6 @@ export const ItemsTable = <
 		...restProps
 	} = props;
 
-	if (loading) {
-		return <Loading />;
-	}
-
-	if (notFound) {
-		return <NotFound>{notFoundMessage}</NotFound>;
-	}
-
-	if (error) {
-		return (
-			<ErrorMessage
-				message={errorMessage}
-				details={error.message}
-				showReported
-			/>
-		);
-	}
-
 	return (
 		<div {...restProps} data-class="table">
 			{pagination && <TablePaginationHeader {...pagination} />}
@@ -305,10 +287,12 @@ export const ItemsTable = <
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data?.map((item, index) => (
+						{!loading && !notFound && !error && data?.map((item, index) => (
 							<TableRow key={item.id}>
 								{showRank ? (
-									<TableCell>{(pagination?.offset || 0) + index + 1}</TableCell>
+									<TableCell>
+										{(pagination?.offset || 0) + index + 1}
+									</TableCell>
 								) : (
 									<></>
 								)}
@@ -325,6 +309,17 @@ export const ItemsTable = <
 						))}
 					</TableBody>
 				</Table>
+				{loading ? (
+					<Loading />
+				) : notFound ? (
+					<NotFound>{notFoundMessage}</NotFound>
+				) : error ? (
+					<ErrorMessage
+						message={errorMessage}
+						details={error.message}
+						showReported
+					/>
+				) : null}
 			</TableContainer>
 			{pagination && <TablePagination {...pagination} />}
 		</div>
