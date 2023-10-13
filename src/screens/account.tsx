@@ -24,6 +24,7 @@ import { DelegatesOrder } from "../services/delegateService";
 import { useDelegates } from "../hooks/useDelegates";
 import DelegatesTable from "../components/delegates/DelegatesTable";
 import { MIN_DELEGATION_AMOUNT } from "../config";
+import { useAppStats } from "../contexts";
 
 const accountInfoStyle = css`
   display: flex;
@@ -83,6 +84,9 @@ export type AccountPageParams = {
 export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
 	const balance = useBalance({ address: { equalTo: address } });
+	const {state } = useAppStats();
+	
+	const blockHeight = Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) * 1000;
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics(
@@ -96,6 +100,7 @@ export const AccountPage = () => {
 		{
 			account: { equalTo: address },
 			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
+			updatedAt: { greaterThan: (blockHeight > 1000 ? blockHeight - 1000: 0) }
 		},
 		"AMOUNT_DESC"
 	);
@@ -140,10 +145,31 @@ export const AccountPage = () => {
 
 	useEffect(() => {
 		if (extrinsics.pagination.offset === 0) {
-			const interval = setInterval(extrinsics.refetch, 60 * 1000);
+			const interval = setInterval(extrinsics.refetch, 12 * 1000);
 			return () => clearInterval(interval);
 		}
 	}, [extrinsics]);
+
+	useEffect(() => {
+		if (transfers.pagination.offset === 0) {
+			const interval = setInterval(transfers.refetch, 12 * 1000);
+			return () => clearInterval(interval);
+		}
+	}, [transfers]);
+
+	useEffect(() => {
+		if (delegates.pagination.offset === 0) {
+			const interval = setInterval(delegates.refetch, 12 * 1000);
+			return () => clearInterval(interval);
+		}
+	}, [delegates]);
+
+	useEffect(() => {
+		if (balance.refetch) {
+			const interval = setInterval(balance.refetch, 12 * 1000);
+			return () => clearInterval(interval);
+		}
+	}, [balance]);
 
 	const { hash: tab } = useLocation();
 	const tabRef = useRef(null);
