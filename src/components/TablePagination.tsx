@@ -27,11 +27,6 @@ const disabledPageStyle = css`
   padding: 0 10px;
 `;
 
-const activePageStyle = (theme: Theme) => css`
-  color: ${theme.palette.secondary.light};
-  padding: 0 3px;
-`;
-
 const pageStyle = (theme: Theme) => css`
   color: ${theme.palette.secondary.main};
   cursor: pointer;
@@ -44,10 +39,6 @@ const pageStyle = (theme: Theme) => css`
 
 type TablePaginationProps = Pagination;
 
-type PageProps = {
-	page: number;
-};
-
 type PageNavProps = {
 	disabled: boolean;
 };
@@ -58,19 +49,10 @@ export function TablePagination(props: TablePaginationProps) {
 		hasPreviousPage,
 		limit,
 		offset,
-		page,
 		setNextPage,
 		setPreviousPage,
 		totalCount,
 	} = props;
-
-	const Page = ({ page }: PageProps) => {
-		return (
-			<div key={page} css={activePageStyle}>
-				{page}
-			</div>
-		);
-	};
 
 	const PrevPage = ({ disabled }: PageNavProps) => {
 		return (
@@ -78,7 +60,7 @@ export function TablePagination(props: TablePaginationProps) {
 				css={disabled ? disabledPageStyle : pageStyle}
 				onClick={() => !disabled && setPreviousPage()}
 			>
-        Previous
+        &#9664; Previous
 			</div>
 		);
 	};
@@ -89,7 +71,7 @@ export function TablePagination(props: TablePaginationProps) {
 				css={disabled ? disabledPageStyle : pageStyle}
 				onClick={() => !disabled && setNextPage()}
 			>
-        Next
+        Next &#9654;
 			</div>
 		);
 	};
@@ -105,7 +87,6 @@ export function TablePagination(props: TablePaginationProps) {
 			</div>
 			<div css={pagesStyle}>
 				<PrevPage disabled={!hasPreviousPage} />
-				<Page page={page} />
 				<NextPage disabled={!hasNextPage} />
 			</div>
 		</div>
