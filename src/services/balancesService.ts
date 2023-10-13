@@ -24,13 +24,11 @@ export async function getBalances(
 	order: BalancesOrder = "ID_ASC",
 	pagination: PaginationOptions
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchIndexer<{
 		accounts: ResponseItems<AccountResponse>;
 	}>(
-		`query ($first: Int!, $offset: Int!, $filter: AccountFilter, $order: [AccountsOrderBy!]!) {
-			accounts(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: AccountFilter, $order: [AccountsOrderBy!]!) {
+			accounts(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
                     address
                     createdAt
@@ -43,14 +41,13 @@ export async function getBalances(
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
 				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}

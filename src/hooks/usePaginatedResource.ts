@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRollbar } from "@rollbar/react";
 
 import { FetchOptions } from "../model/fetchOptions";
@@ -10,7 +10,9 @@ import { DataError } from "../utils/error";
 import { usePagination } from "./usePagination";
 
 export function usePaginatedResource<T = any, F extends any[] = any[]>(
-	fetchItems: (...args: [...F, PaginationOptions]) => ItemsResponse<T> | Promise<ItemsResponse<T>>,
+	fetchItems: (
+		...args: [...F, PaginationOptions]
+	) => ItemsResponse<T> | Promise<ItemsResponse<T>>,
 	args: F,
 	options?: FetchOptions
 ) {
@@ -22,37 +24,61 @@ export function usePaginatedResource<T = any, F extends any[] = any[]>(
 
 	const pagination = usePagination();
 
+	const argsRef = useRef(args);
+	const paginationRef = useRef(pagination);
+
 	const fetchData = useCallback(async () => {
-		if (options?.waitUntil) {
-			// wait until all required condition are met
-			return;
-		}
+		argsRef.current = args;
+		paginationRef.current = pagination;
 
-		if (!options?.skip) {
-			try {
-				const items = await fetchItems(...args, {
-					limit: pagination.limit,
-					offset: pagination.offset,
-				});
+		const timer = setTimeout(async () => {
+			if (args !== argsRef.current || pagination !== paginationRef.current)
+				return;
 
-				setData(items.data);
-				pagination.set(items.pagination);
-			} catch (e) {
-				if (e instanceof DataError) {
-					rollbar.error(e);
-					setError(e);
-				} else {
-					throw e;
+			if (options?.waitUntil) {
+				// wait until all required condition are met
+				return;
+			}
+
+			if (!options?.skip) {
+				try {
+					let paginationObj = {};
+					if (pagination.page > 1) {
+						if (pagination.page > pagination.prevPage) {
+							paginationObj = {
+								after: pagination.endCursor,
+							};
+						} else {
+							paginationObj = {
+								after: pagination.prevEndCursor[pagination.page - 2],
+							};
+						}
+					}
+					const items = await fetchItems(...args, {
+						limit: pagination.limit,
+						...paginationObj,
+					});
+
+					setData(items.data);
+					pagination.set(items.pagination);
+				} catch (e) {
+					if (e instanceof DataError) {
+						rollbar.error(e);
+						setError(e);
+					} else {
+						throw e;
+					}
 				}
 			}
-		}
 
-		setLoading(false);
+			setLoading(false);
+		}, 100);
+		return () => clearTimeout(timer);
 	}, [
 		fetchItems,
 		JSON.stringify(args),
 		pagination.limit,
-		pagination.offset,
+		pagination.page,
 		options?.skip,
 	]);
 
@@ -64,14 +90,15 @@ export function usePaginatedResource<T = any, F extends any[] = any[]>(
 	}, [fetchData]);
 
 	return useMemo(
-		() => ({
-			data,
-			loading,
-			notFound: !loading && !error && (!data || data.length === 0),
-			pagination,
-			error,
-			refetch: fetchData
-		}) as PaginatedResource<T>,
+		() =>
+			({
+				data,
+				loading,
+				notFound: !loading && !error && (!data || data.length === 0),
+				pagination,
+				error,
+				refetch: fetchData,
+			} as PaginatedResource<T>),
 		[data, loading, pagination, error, fetchData]
 	);
 }

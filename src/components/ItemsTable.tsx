@@ -237,6 +237,7 @@ export const ItemsTable = <
 					value={filter[property][(value as any).operator]}
 					key={`filter-${property}-${index}`}
 					onFilterChange={onFilterChange}
+					pagination={pagination}
 				/>
 			))}
 			<TableContainer>
@@ -291,7 +292,7 @@ export const ItemsTable = <
 							<TableRow key={item.id}>
 								{showRank ? (
 									<TableCell>
-										{(pagination?.offset || 0) + index + 1}
+										{pagination ? pagination.limit * (pagination.page - 1) + index + 1 : 0}
 									</TableCell>
 								) : (
 									<></>
@@ -321,7 +322,7 @@ export const ItemsTable = <
 					/>
 				) : null}
 			</TableContainer>
-			{pagination && <TablePagination {...pagination} />}
+			{!loading && !notFound && !error && pagination && <TablePagination {...pagination} />}
 		</div>
 	);
 };

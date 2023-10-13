@@ -52,11 +52,9 @@ export async function getExtrinsics(
 	fetchTotalCount: boolean,
 	pagination: PaginationOptions,
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchDictionary<{ extrinsics: ResponseItems<ExtrinsicResponse> }>(
-		`query ($first: Int!, $offset: Int!, $filter: ExtrinsicFilter, $order: [ExtrinsicsOrderBy!]!) {
-			extrinsics(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: ExtrinsicFilter, $order: [ExtrinsicsOrderBy!]!) {
+			extrinsics(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
 					txHash
@@ -73,14 +71,13 @@ export async function getExtrinsics(
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
-				${fetchTotalCount ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}

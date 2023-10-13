@@ -12,15 +12,20 @@ export function extractItems<R = any, T = any, A extends any[] = any[]>(
 		data: [],
 		pagination: {
 			...pagination,
-			hasNextPage: false
+			hasNextPage: false,
+			endCursor: "",
+			hasPreviousPage: false,
+			totalCount: 0,
 		}
 	};
 	return {
 		data: resp.nodes.map((node) => transformNode(node, ...additionalArgs)),
 		pagination: {
 			...pagination,
+			endCursor: resp.pageInfo.endCursor,
 			hasNextPage: resp.pageInfo.hasNextPage,
-			totalCount: resp.totalCount
+			hasPreviousPage: resp.pageInfo.hasPreviousPage,
+			totalCount: resp.totalCount,
 		}
 	};
 }

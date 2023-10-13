@@ -1,4 +1,4 @@
 export type PaginationOptions = {
-	offset: number;
+	after?: string;
 	limit: number;
 }

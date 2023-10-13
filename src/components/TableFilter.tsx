@@ -2,6 +2,7 @@
 import { css } from "@mui/material";
 
 import { Theme } from "@emotion/react";
+import { Pagination } from "../hooks/usePagination";
 
 const filterStyle = () => css`
   display: flex;
@@ -32,10 +33,11 @@ type TableFilterProps = {
 	filter: any;
 	value: any;
 	onFilterChange?: (key: string, value: any) => void;
+	pagination?: Pagination;
 };
 
 export function TableFilter(props: TableFilterProps) {
-	const { property, filter, value, onFilterChange } = props;
+	const { property, filter, value, onFilterChange, pagination } = props;
 
 	return (
 		<div css={filterStyle}>
@@ -44,7 +46,16 @@ export function TableFilter(props: TableFilterProps) {
 				<div
 					css={breakpoint === value ? filterItemSelectedStyle : filterItemStyle}
 					key={index}
-					onClick={() => onFilterChange && onFilterChange(property, breakpoint)}
+					onClick={() => {
+						if (onFilterChange) onFilterChange(property, breakpoint);
+
+						pagination?.set({
+							...pagination,
+							offset: 1,
+							page: 1,
+							prevEndCursor: [],
+						});
+					}}
 				>
 					{filter.labels[index]}
 				</div>

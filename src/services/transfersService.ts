@@ -32,11 +32,9 @@ async function fetchTransfers(
 	order: TransfersOrder = "BLOCK_NUMBER_DESC",
 	pagination: PaginationOptions,
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchIndexer<{ transfers: ResponseItems<Transfer> }>(
-		`query ($first: Int!, $offset: Int!, $filter: TransferFilter, $order: [TransfersOrderBy!]!) {
-			transfers(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: TransferFilter, $order: [TransfersOrderBy!]!) {
+			transfers(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
 					from
@@ -49,14 +47,13 @@ async function fetchTransfers(
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
 				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}

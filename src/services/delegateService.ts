@@ -59,11 +59,9 @@ async function fetchDelegates(
 	order: DelegatesOrder = "BLOCK_NUMBER_DESC",
 	pagination: PaginationOptions,
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchIndexer<{ delegates: ResponseItems<Delegate> }>(
-		`query ($first: Int!, $offset: Int!, $filter: DelegateFilter, $order: [DelegatesOrderBy!]!) {
-			delegates(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: DelegateFilter, $order: [DelegatesOrderBy!]!) {
+			delegates(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
                     account
@@ -77,14 +75,13 @@ async function fetchDelegates(
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
 				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}
@@ -99,11 +96,9 @@ async function fetchDelegateBalances(
 	order: DelegateBalancesOrder = "UPDATED_AT_DESC",
 	pagination: PaginationOptions,
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchIndexer<{ delegateBalances: ResponseItems<DelegateBalance> }>(
-		`query ($first: Int!, $offset: Int!, $filter: DelegateBalanceFilter, $order: [DelegateBalancesOrderBy!]!) {
-			delegateBalances(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: DelegateBalanceFilter, $order: [DelegateBalancesOrderBy!]!) {
+			delegateBalances(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
                     account
@@ -116,14 +111,13 @@ async function fetchDelegateBalances(
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
-				${(filter != undefined) ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}

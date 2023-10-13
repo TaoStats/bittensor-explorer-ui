@@ -48,11 +48,9 @@ export async function getEvents(
 	fetchTotalCount = true,
 	pagination: PaginationOptions,
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchDictionary<{ events: ResponseItems<EventResponse> }>(
-		`query ($first: Int!, $offset: Int!, $filter: EventFilter, $order: [EventsOrderBy!]!) {
-			events(orderBy: $order, filter: $filter, first: $first, offset: $offset) {
+		`query ($first: Int!, $after: Cursor, $filter: EventFilter, $order: [EventsOrderBy!]!) {
+			events(orderBy: $order, filter: $filter, first: $first, after: $after) {
 				nodes {
 					id
 					module
@@ -61,18 +59,17 @@ export async function getEvents(
 					extrinsicId
 					data
 				}
-				${fetchTotalCount ? "totalCount" : ""}
 				pageInfo {
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
+				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}

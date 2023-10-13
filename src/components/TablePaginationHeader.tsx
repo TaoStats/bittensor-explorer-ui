@@ -74,7 +74,13 @@ export function TablePaginationHeader(props: TablePaginationProps) {
 						css={size === limit ? showItemSelectedStyle : showItemStyle}
 						key={index}
 						onClick={() =>
-							setPaginationOptions({ ...props, offset: 0, limit: size })
+							setPaginationOptions({
+								...props,
+								offset: 1,
+								page: 1,
+								prevEndCursor: [],
+								limit: size,
+							})
 						}
 					>
 						{size}

@@ -46,11 +46,9 @@ export async function getBlocks(
 	order: BlocksOrder = "ID_DESC",
 	pagination: PaginationOptions,
 ) {
-	const offset = pagination.offset;
-
 	const response = await fetchDictionary<{ blocks: ResponseItems<Block> }>(
-		`query ($first: Int!, $offset: Int!, $filter: BlockFilter, $order: [BlocksOrderBy!]!) {
-			blocks(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: BlockFilter, $order: [BlocksOrderBy!]!) {
+			blocks(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
 					hash
@@ -65,14 +63,13 @@ export async function getBlocks(
 					endCursor
 					hasNextPage
 					hasPreviousPage
-					startCursor
 				}
 				totalCount
 			}
 		}`,
 		{
+			after: pagination.after,
 			first: pagination.limit,
-			offset,
 			filter,
 			order,
 		}
