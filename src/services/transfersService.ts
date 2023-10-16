@@ -48,7 +48,7 @@ async function fetchTransfers(
 					hasNextPage
 					hasPreviousPage
 				}
-				totalCount
+				${pagination.after === undefined ? "totalCount" : ""}
 			}
 		}`,
 		{

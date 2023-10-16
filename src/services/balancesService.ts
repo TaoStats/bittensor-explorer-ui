@@ -42,7 +42,7 @@ export async function getBalances(
 					hasNextPage
 					hasPreviousPage
 				}
-				totalCount
+				${pagination.after === undefined ? "totalCount" : ""}
 			}
 		}`,
 		{

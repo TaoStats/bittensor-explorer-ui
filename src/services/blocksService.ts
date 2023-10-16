@@ -64,7 +64,7 @@ export async function getBlocks(
 					hasNextPage
 					hasPreviousPage
 				}
-				totalCount
+				${pagination.after === undefined ? "totalCount" : ""}
 			}
 		}`,
 		{

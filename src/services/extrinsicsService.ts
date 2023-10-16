@@ -72,7 +72,7 @@ export async function getExtrinsics(
 					hasNextPage
 					hasPreviousPage
 				}
-				totalCount
+				${pagination.after === undefined ? "totalCount" : ""}
 			}
 		}`,
 		{

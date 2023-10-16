@@ -65,6 +65,7 @@ export function usePagination(limit = 10) {
 
 	const set = useCallback(
 		(newState: Partial<Pagination>) => {
+			if (newState.totalCount === undefined) delete newState.totalCount;
 			setState({
 				...state,
 				...newState,

@@ -76,7 +76,7 @@ async function fetchDelegates(
 					hasNextPage
 					hasPreviousPage
 				}
-				totalCount
+				${pagination.after === undefined ? "totalCount" : ""}
 			}
 		}`,
 		{
@@ -112,7 +112,7 @@ async function fetchDelegateBalances(
 					hasNextPage
 					hasPreviousPage
 				}
-				totalCount
+				${pagination.after === undefined ? "totalCount" : ""}
 			}
 		}`,
 		{
