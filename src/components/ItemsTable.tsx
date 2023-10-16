@@ -262,7 +262,16 @@ export const ItemsTable = <
 								return (
 									<TableCell
 										css={[cellStyle, sortableHeaderBase]}
-										onClick={() => onSortChange && onSortChange(sortProperty)}
+										onClick={() => {
+											if (onSortChange) onSortChange(sortProperty);
+
+											pagination?.set({
+												...pagination,
+												offset: 1,
+												page: 1,
+												prevEndCursor: [],
+											});
+										}}
 									>
 										<div css={sortableHeaderItem}>
 											{label}
