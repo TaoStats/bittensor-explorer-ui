@@ -4,11 +4,16 @@ import { Account } from "../model/account";
 import { addRuntimeSpec } from "../utils/addRuntimeSpec";
 import { DataError } from "../utils/error";
 import { decodeAddress } from "../utils/formatAddress";
-import { AccountStats, AccountStatsPaginatedResponse } from "../model/accountStats";
+import {
+	AccountStats,
+	AccountStatsPaginatedResponse,
+} from "../model/accountStats";
 import { ResponseItems } from "../model/itemsConnection";
-import { fetchIndexer } from "./fetchService";
+import { fetchHistorical } from "./fetchService";
 
-export async function getAccount(address: string): Promise<Account | undefined> {
+export async function getAccount(
+	address: string
+): Promise<Account | undefined> {
 	if (!isAddress(address)) {
 		throw new DataError("Invalid account address");
 	}
@@ -23,7 +28,7 @@ export async function getAccount(address: string): Promise<Account | undefined> 
 	const data: Omit<Account, "runtimeSpec"> = {
 		id: address,
 		address,
-		identity: null
+		identity: null,
 	};
 
 	// data.identity = await getAccountIdentity(network, address);
@@ -33,8 +38,11 @@ export async function getAccount(address: string): Promise<Account | undefined> 
 	return account;
 }
 
-export async function getAccountStats(offset: number, limit = 100): Promise<AccountStatsPaginatedResponse> {
-	const response = await fetchIndexer<{
+export async function getAccountStats(
+	offset: number,
+	limit = 100
+): Promise<AccountStatsPaginatedResponse> {
+	const response = await fetchHistorical<{
 		accountStats: ResponseItems<AccountStats>;
 	}>(
 		`query($first: Int!, $offset: Int!) {

@@ -70,7 +70,9 @@ export const HomePage = () => {
 		balancesInitialFilter
 	);
 	const balancesInitialSearch = "";
-	const [balanceSearch, setBalanceSearch] = useState<string | undefined>(balancesInitialSearch);
+	const [balanceSearch, setBalanceSearch] = useState<string | undefined>(
+		balancesInitialSearch
+	);
 	const balances = useBalances(
 		{
 			address: {
@@ -221,7 +223,9 @@ export const HomePage = () => {
 										setBalanceFilter({ ...balanceFilter, ...newFilter })
 									}
 									initialFilter={balancesInitialFilter}
-									onSearchChange={(newSearch?: string) => setBalanceSearch(newSearch)}
+									onSearchChange={(newSearch?: string) =>
+										setBalanceSearch(newSearch)
+									}
 									initialSearch={balancesInitialSearch}
 								/>
 							</TabPane>

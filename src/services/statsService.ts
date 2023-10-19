@@ -9,7 +9,6 @@ type DictionaryStats = {
 };
 
 type IndexerStats = {
-	activeAccounts: bigint;
 	transfers: bigint;
 };
 
@@ -37,14 +36,13 @@ async function getIndexerStats(): Promise<IndexerStats> {
 		`{
 			stats {
 				nodes {
-					activeAccounts
 					transfers
 				}
 			}
 		}`
 	);
 	const data = response.stats.nodes[0];
-	return data ?? { activeAccounts: BigInt(0), transfers: BigInt(0) };
+	return data ?? { transfers: BigInt(0) };
 }
 
 export const getTokenomics = async (): Promise<Tokenomics> => {

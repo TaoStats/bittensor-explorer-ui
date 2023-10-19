@@ -12,7 +12,6 @@ import { useAppStats } from "../../contexts";
 import { AccountStatChart } from "../account/AccountStatChart";
 import { TabbedContent, TabPane } from "../TabbedContent";
 import { useAccountStats } from "../../hooks/useAccountStats";
-import { AccountStats } from "../../model/accountStats";
 import { useMemo } from "react";
 
 const stakingDataBlock = css`
@@ -134,12 +133,9 @@ export const NetworkStats = () => {
 
 	const accountStats = useAccountStats();
 	const totalAccount = useMemo(() => {
-		if (!accountStats.data) return 0;
-		const resp = (accountStats.data as any).reduce(
-			(prev: bigint, cur: AccountStats) => cur.total,
-			0
-		);
-		return resp;
+		const { data } = accountStats;
+		if (!data || !data.length) return 0;
+		return Number(data.at(-1)?.total || 0);
 	}, [accountStats]);
 
 	if (tokenLoading || chainLoading) {
@@ -221,7 +217,7 @@ export const NetworkStats = () => {
 						/>
 						<StatItem
 							title="Total Accounts"
-							value={formatNumber(totalAccount.toString())}
+							value={formatNumber(totalAccount)}
 						/>
 						<StatItem
 							title="Transfers"
@@ -231,11 +227,8 @@ export const NetworkStats = () => {
 				</div>
 			</div>
 			<TabbedContent>
-				<TabPane
-					label='Accounts'
-					value='accountStats'
-				>
-					<AccountStatChart accountStats={accountStats}/>
+				<TabPane label="Accounts" value="accountStats">
+					<AccountStatChart accountStats={accountStats} />
 				</TabPane>
 			</TabbedContent>
 		</div>
