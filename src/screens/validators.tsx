@@ -1,7 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { useLocation, useParams } from "react-router-dom";
-import verifiedDelegates from "../delegates.json";
-import { DelegateInfo } from "../model/delegate";
 
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
 import { useDelegates } from "../hooks/useDelegates";
@@ -25,6 +23,7 @@ import { ButtonLink } from "../components/ButtonLink";
 import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio";
 import { ValidatorStakeHistoryChart } from "../components/validators/ValidatorStakeHistoryChart";
 import { useValidatorStakeHistory } from "../hooks/useValidatorHistory";
+import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -101,7 +100,9 @@ export type ValidatorPageParams = {
 export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
 
-	const info = (verifiedDelegates as Record<string, DelegateInfo>)[address];
+	const verifiedDelegates = useVerifiedDelegates();
+
+	const info = verifiedDelegates[address];
 
 	const balance = useValidatorBalance({ delegate: { equalTo: address } });
 	const validatorStakeHistory = useValidatorStakeHistory(address);

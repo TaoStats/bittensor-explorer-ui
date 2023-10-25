@@ -3,15 +3,14 @@ import { css, useTheme } from "@emotion/react";
 import Chart from "react-apexcharts";
 
 import LoadingSpinner from "../../assets/loading.svg";
-import verifiedDelegates from "../../delegates.json";
 import { useMemo } from "react";
 import { nFormatter, rawAmountToDecimal } from "../../utils/number";
 import {
 	AccountDelegateHistory,
 	AccountDelegateHistoryResponse,
 } from "../../model/accountHistory";
-import { DelegateInfo } from "../../model/delegate";
 import { NETWORK_CONFIG } from "../../config";
+import { useVerifiedDelegates } from "../../hooks/useVerifiedDelegates";
 
 const spinnerContainer = css`
   display: flex;
@@ -30,6 +29,8 @@ export const AccounDelegateHistoryChart = (
 	const theme = useTheme();
 
 	const { delegateHistory } = props;
+
+	const verifiedDelegates = useVerifiedDelegates();
 
 	const loading = delegateHistory.loading;
 	const timestamps = useMemo(() => {
@@ -61,7 +62,7 @@ export const AccounDelegateHistoryChart = (
 		if (!delegateHistory.data) return [];
 		const resp = (delegateHistory.data as any).reduce(
 			(prev: ApexAxisChartSeries, cur: AccountDelegateHistory) => {
-				const info = (verifiedDelegates as Record<string, DelegateInfo>)[cur.delegate];
+				const info = verifiedDelegates[cur.delegate];
 				const delegate = info?.name || cur.delegate;
 				let serie = prev.find((x) => x.name === delegate);
 				if (serie === undefined)
