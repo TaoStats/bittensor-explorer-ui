@@ -173,7 +173,7 @@ export const ValidatorStakeHistoryChart = (
 					size: 0,
 				},
 				noData: {
-					text: "Loading ...",
+					text: "No stake yet",
 					align: "center",
 					verticalAlign: "middle",
 					offsetX: 0,

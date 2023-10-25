@@ -146,7 +146,7 @@ export const AccounBalanceHistoryChart = (
 					size: 0,
 				},
 				noData: {
-					text: "Loading ...",
+					text: "No balance yet",
 					align: "center",
 					verticalAlign: "middle",
 					offsetX: 0,
@@ -203,6 +203,7 @@ export const AccounBalanceHistoryChart = (
 					type: "datetime",
 				},
 				yaxis: {
+					show: timestamps.length > 0,
 					opposite: true,
 					labels: {
 						style: {
