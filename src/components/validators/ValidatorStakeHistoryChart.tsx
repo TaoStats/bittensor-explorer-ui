@@ -41,19 +41,41 @@ export const ValidatorStakeHistoryChart = (
 			(new Date()).toUTCString(),
 		];
 	}, [stakeHistory, balance]);
+	const minAmount = useMemo(() => {
+		if (!balance.data) return 0;
+		if (!stakeHistory.data) return 0;
+		const current = rawAmountToDecimal(balance.data.toString()).toNumber();
+		return stakeHistory.data.reduce(
+			(prev: number, cur: ValidatorStakeHistory) => {
+				const now = rawAmountToDecimal(cur.amount.toString()).toNumber();
+				return now < prev ? now : prev;
+			},
+			current
+		);
+	}, [stakeHistory, balance]);
 	const maxAmount = useMemo(() => {
 		if (!balance.data) return 0;
 		if (!stakeHistory.data) return 0;
-		const resp = stakeHistory.data.reduce(
+		const current = rawAmountToDecimal(balance.data.toString()).toNumber();
+		return stakeHistory.data.reduce(
 			(prev: number, cur: ValidatorStakeHistory) => {
 				const now = rawAmountToDecimal(cur.amount.toString()).toNumber();
 				return now > prev ? now : prev;
 			},
-			0
+			current
 		);
-		const current = rawAmountToDecimal(balance.data.toString()).toNumber();
-		return resp > current ? resp : current;
 	}, [stakeHistory, balance]);
+	const minNominators = useMemo(() => {
+		if (!stakeHistory.data) return 0;
+		const resp = stakeHistory.data.reduce(
+			(prev: number, cur: ValidatorStakeHistory) => {
+				const now = parseInt(cur.nominators.toString());
+				return now < prev ? now : prev;
+			},
+			100000000
+		);
+		return resp;
+	}, [stakeHistory]);
 	const maxNominators = useMemo(() => {
 		if (!stakeHistory.data) return 0;
 		const resp = stakeHistory.data.reduce(
@@ -256,7 +278,7 @@ export const ValidatorStakeHistoryChart = (
 					axisBorder: {
 						show: false,
 					},
-					min: 0,
+					min: minNominators,
 					max: maxNominators,
 				}, {
 					opposite: true,
@@ -278,7 +300,7 @@ export const ValidatorStakeHistoryChart = (
 					axisBorder: {
 						show: false,
 					},
-					min: 0,
+					min: minAmount,
 					max: maxAmount,
 				}],
 			}}
