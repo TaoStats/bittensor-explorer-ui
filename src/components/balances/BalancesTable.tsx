@@ -160,7 +160,7 @@ function BalancesTable(props: BalancesTableProps) {
 			onFilterChange={handleFilterChange}
 			search={search}
 			onSearchChange={handleSearchChange}
-			searchPlaceholder="Account"
+			searchPlaceholder="ACCOUNT"
 		>
 			<BalancesItemsTableAttribute
 				label="Account"

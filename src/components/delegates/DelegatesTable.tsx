@@ -189,7 +189,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 			onFilterChange={handleFilterChange}
 			search={search}
 			onSearchChange={handleSearchChange}
-			searchPlaceholder="Delegate"
+			searchPlaceholder="DELEGATE"
 		>
 			<DelegatesTableAttribute
 				label='Extrinsic'

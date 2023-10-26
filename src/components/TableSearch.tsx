@@ -20,7 +20,7 @@ const searchLabelStyle = (theme: Theme) => css`
 
 const searchInputStyle = css`
   background-color: rgb(18, 18, 18);
-  background-image: url(search.svg);
+  background-image: url(/search.svg);
   background-position: 18px center;
   background-repeat: no-repeat;
   background-size: 16px;

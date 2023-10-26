@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
@@ -31,6 +31,7 @@ import {
 } from "../hooks/useAccountHistory";
 import { AccounBalanceHistoryChart } from "../components/account/AccounBalanceHistoryChart";
 import { AccounDelegateHistoryChart } from "../components/account/AccounDelegateHistoryChart";
+import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 
 const accountInfoStyle = css`
   display: flex;
@@ -91,6 +92,7 @@ export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
 	const balance = useBalance({ address: { equalTo: address } });
 	const { state } = useAppStats();
+	const verifiedDelegates = useVerifiedDelegates();
 
 	const blockHeight =
     Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) * 1000;
@@ -116,8 +118,39 @@ export const AccountPage = () => {
 	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
 		delegatesInitialOrder
 	);
+	const delegatesInitialSearch = "";
+	const [delegatesSearch, setDelegatesSearch] = useState<string | undefined>(
+		delegatesInitialSearch
+	);
+	const delegateSearchFilter = useMemo(() => {
+		const lowerSearch = delegatesSearch?.trim().toLowerCase() || "";
+		if(verifiedDelegates !== undefined) {
+			const filtered = Object.keys(verifiedDelegates).filter((hotkey: string) => {
+				const delegateInfo = verifiedDelegates[hotkey];
+				const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
+				if(lowerSearch !== "" && delegateName.includes(lowerSearch))
+					return true;
+				return false;
+			});
+			if(filtered.length > 0) {
+				return {
+					delegate: {
+						in: filtered,
+					}
+				};
+			}
+		}
+		if(lowerSearch === "")
+			return {};
+		return {
+			delegate: {
+				includesInsensitive: delegatesSearch,
+			}
+		};
+	}, [delegatesSearch]);
 	const delegates = useDelegates(
 		{
+			...delegateSearchFilter,
 			and: [
 				{ account: { equalTo: address } },
 				{ amount: { greaterThan: MIN_DELEGATION_AMOUNT } },
@@ -240,7 +273,7 @@ export const AccountPage = () => {
 								label="Delegation"
 								loading={accountDelegateHistory.loading}
 								error={!!accountDelegateHistory.error}
-								value="delegation"
+								value="delegation-chart"
 							>
 								<AccounDelegateHistoryChart
 									delegateHistory={accountDelegateHistory}
@@ -283,7 +316,7 @@ export const AccountPage = () => {
 								count={delegates.pagination.totalCount}
 								loading={delegates.loading}
 								error={delegates.error}
-								value="delegation"
+								value="delegation-table"
 							>
 								<DelegatesTable
 									delegates={delegates}
@@ -292,6 +325,10 @@ export const AccountPage = () => {
 										setDelegateSort(sortKey)
 									}
 									initialSort={delegatesInitialOrder}
+									onSearchChange={(newSearch?: string) =>
+										setDelegatesSearch(newSearch)
+									}
+									initialSearch={delegatesInitialSearch}
 								/>
 							</TabPane>
 						</TabbedContent>
