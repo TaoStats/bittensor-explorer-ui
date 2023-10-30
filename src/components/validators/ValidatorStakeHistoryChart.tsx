@@ -19,6 +19,7 @@ const spinnerContainer = css`
 `;
 
 export type ValidatorStakeHistoryChartProps = {
+	account: string;
 	stakeHistory: ValidatorStakeHistoryResponse;
 	balance: any;
 };
@@ -28,7 +29,7 @@ export const ValidatorStakeHistoryChart = (
 ) => {
 	const theme = useTheme();
 
-	const { stakeHistory, balance } = props;
+	const { account, stakeHistory, balance } = props;
 
 	const loading = stakeHistory.loading || balance.loading;
 	const timestamps = useMemo(() => {
@@ -147,6 +148,7 @@ export const ValidatorStakeHistoryChart = (
 			]}
 			options={{
 				chart: {
+					background: "#1a1a1a",
 					toolbar: {
 						show: true,
 						offsetX: 0,
@@ -158,6 +160,18 @@ export const ValidatorStakeHistoryChart = (
 							zoomin: true,
 							zoomout: true,
 							pan: true,
+						},
+						export: {
+							csv: {
+								filename: `staking-${account}`,
+								headerCategory: "Date",
+							},
+							png: {
+								filename: `staking-${account}`,
+							},
+							svg: {
+								filename: `staking-${account}`,
+							},
 						},
 					},
 					zoom: {

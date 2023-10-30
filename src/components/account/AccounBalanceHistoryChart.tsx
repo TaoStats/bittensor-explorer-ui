@@ -19,6 +19,7 @@ const spinnerContainer = css`
 `;
 
 export type AccounBalanceHistoryChartProps = {
+	account: string;
 	balanceHistory: AccountBalanceHistoryResponse;
 };
 
@@ -27,7 +28,7 @@ export const AccounBalanceHistoryChart = (
 ) => {
 	const theme = useTheme();
 
-	const { balanceHistory } = props;
+	const { account, balanceHistory } = props;
 
 	const loading = balanceHistory.loading;
 	const timestamps = useMemo(() => {
@@ -93,6 +94,7 @@ export const AccounBalanceHistoryChart = (
 			]}
 			options={{
 				chart: {
+					background: "#1a1a1a",
 					toolbar: {
 						show: true,
 						offsetX: 0,
@@ -104,6 +106,18 @@ export const AccounBalanceHistoryChart = (
 							zoomin: true,
 							zoomout: true,
 							pan: true,
+						},
+						export: {
+							csv: {
+								filename: `balance-${account}`,
+								headerCategory: "Date",
+							},
+							png: {
+								filename: `balance-${account}`,
+							},
+							svg: {
+								filename: `balance-${account}`,
+							},
 						},
 					},
 					zoom: {

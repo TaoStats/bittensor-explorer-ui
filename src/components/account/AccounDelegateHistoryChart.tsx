@@ -20,6 +20,7 @@ const spinnerContainer = css`
 `;
 
 export type AccounDelegateHistoryChartProps = {
+	account: string;
 	delegateHistory: AccountDelegateHistoryResponse;
 };
 
@@ -28,7 +29,7 @@ export const AccounDelegateHistoryChart = (
 ) => {
 	const theme = useTheme();
 
-	const { delegateHistory } = props;
+	const { account, delegateHistory } = props;
 
 	const verifiedDelegates = useVerifiedDelegates();
 
@@ -93,6 +94,7 @@ export const AccounDelegateHistoryChart = (
 			series={delegates}
 			options={{
 				chart: {
+					background: "#1a1a1a",
 					toolbar: {
 						show: true,
 						offsetX: 0,
@@ -104,6 +106,18 @@ export const AccounDelegateHistoryChart = (
 							zoomin: true,
 							zoomout: true,
 							pan: true,
+						},
+						export: {
+							csv: {
+								filename: `delegation-${account}`,
+								headerCategory: "Date",
+							},
+							png: {
+								filename: `delegation-${account}`,
+							},
+							svg: {
+								filename: `delegation-${account}`,
+							},
 						},
 					},
 					zoom: {

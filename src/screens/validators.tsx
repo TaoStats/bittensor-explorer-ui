@@ -219,6 +219,7 @@ export const ValidatorPage = () => {
 							value="staked"
 						>
 							<ValidatorStakeHistoryChart
+								account={address}
 								stakeHistory={validatorStakeHistory}
 								balance={balance}
 							/>

@@ -266,6 +266,7 @@ export const AccountPage = () => {
 								value="balance"
 							>
 								<AccounBalanceHistoryChart
+									account={address}
 									balanceHistory={accountBalanceHistory}
 								/>
 							</TabPane>
@@ -276,6 +277,7 @@ export const AccountPage = () => {
 								value="delegation-chart"
 							>
 								<AccounDelegateHistoryChart
+									account={address}
 									delegateHistory={accountDelegateHistory}
 								/>
 							</TabPane>
