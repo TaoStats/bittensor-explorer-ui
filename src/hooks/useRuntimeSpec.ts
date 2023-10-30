@@ -19,11 +19,12 @@ export const useRuntimeSpec = (specVersion: number | undefined) => {
 								id
 								blockHeight
 								hex
+								version
 							}
 						}
 		       		}`,
 					{
-						filter: { id: { equalTo: specVersion.toString() } },
+						filter: { version: { equalTo: specVersion } },
 					}
 				);
 
@@ -33,7 +34,8 @@ export const useRuntimeSpec = (specVersion: number | undefined) => {
 					setRuntimeSpec({
 						id: spec.id,
 						blockHeight: spec.blockHeight,
-						metadata: decodeMetadata(spec.hex)
+						metadata: decodeMetadata(spec.hex),
+						version: spec.version
 					});
 				}
 				else {
