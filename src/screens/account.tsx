@@ -189,21 +189,21 @@ export const AccountPage = () => {
 	);
 
 	useEffect(() => {
-		if (extrinsics.pagination.offset === 0) {
+		if (extrinsics.pagination.page === 1) {
 			const interval = setInterval(extrinsics.refetch, 12 * 1000);
 			return () => clearInterval(interval);
 		}
 	}, [extrinsics]);
 
 	useEffect(() => {
-		if (transfers.pagination.offset === 0) {
+		if (transfers.pagination.page === 1) {
 			const interval = setInterval(transfers.refetch, 12 * 1000);
 			return () => clearInterval(interval);
 		}
 	}, [transfers]);
 
 	useEffect(() => {
-		if (delegates.pagination.offset === 0) {
+		if (delegates.pagination.page === 1) {
 			const interval = setInterval(delegates.refetch, 12 * 1000);
 			return () => clearInterval(interval);
 		}
