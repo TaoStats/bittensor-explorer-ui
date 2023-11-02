@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useApi } from "../contexts";
 import { rawAmountToDecimal } from "../utils/number";
 
@@ -8,22 +8,14 @@ export function useDelegatedSupply() {
 		state: { api, apiState },
 	} = useApi();
 	const [delegated, setDelegated] = useState<Decimal>();
-	const [unsub, setUnsub] = useState<any>(undefined);
 
-	const subscribeDelegatedSupply = async () => {
+	const fetchDelegatedSupply = async () => {
 		if (!api || apiState !== "READY") return;
-		const _unsub = await api.query.subtensorModule?.totalStake((value: any) => {
-			value && setDelegated(rawAmountToDecimal(value.toString()));
-		});
-		setUnsub(_unsub);
+		const value = await api.query.subtensorModule?.totalStake();
+		setDelegated(rawAmountToDecimal(value.toString()));
 	};
 
-	useEffect(() => {
-		subscribeDelegatedSupply();
-		return () => {
-			if (unsub) unsub.then();
-		};
-	}, [apiState]);
+	setTimeout(fetchDelegatedSupply, 12 * 1000);
 
 	return delegated;
 }
