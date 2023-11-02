@@ -35,17 +35,15 @@ const spinnerContainer = css`
 export type TokenDistributionChartProps = HTMLAttributes<HTMLDivElement>;
 
 export const TokenDistributionChart = () => {
-	const { state: { tokenLoading, tokenStats } } = useAppStats();
+	const {
+		state: { tokenLoading, tokenStats },
+	} = useAppStats();
 	const token = tokenStats;
-	const issued: Decimal = useTotalIssuance() ?? new Decimal(0);
-	const delegated: Decimal = useDelegatedSupply() ?? new Decimal(0);
-	const totalIssuance = issued.add(delegated);
+	const issued = useTotalIssuance();
+	const delegated = useDelegatedSupply();
+	const loading = tokenLoading || token === undefined || issued === undefined || delegated === undefined;
 
-	const loading =
-    tokenLoading ||
-    token === undefined ||
-    totalIssuance === undefined ||
-    delegated === undefined;
+	const totalIssuance = loading ? new Decimal(0) : issued.add(delegated);
 
 	const delegatedPercent = loading
 		? 0
@@ -67,11 +65,11 @@ export const TokenDistributionChart = () => {
 		<div css={chartContainer}>
 			<div css={supplyInfo}>
 				<StatItem
-					title='Total Supply'
+					title="Total Supply"
 					value={`${formatNumber(token.totalSupply)} 𝞃`}
 				/>
 				<StatItem
-					title='Circulating Supply'
+					title="Circulating Supply"
 					value={`${formatNumber(totalIssuance, { decimalPlaces: 2 })} 𝞃`}
 				/>
 			</div>
@@ -82,7 +80,7 @@ export const TokenDistributionChart = () => {
 						`Circulating Free (${circulatingPercent}% of ${totalIssuanceFormatted})`,
 						`Unissued (${(
 							100 -
-							(totalIssuance.toNumber() / token.totalSupply) * 100
+              (totalIssuance.toNumber() / token.totalSupply) * 100
 						).toFixed(2)}% of ${nFormatter(token.totalSupply, 2)})`,
 					],
 				}}
