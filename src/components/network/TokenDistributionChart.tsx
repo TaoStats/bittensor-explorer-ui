@@ -70,7 +70,7 @@ export const TokenDistributionChart = () => {
 				/>
 				<StatItem
 					title="Circulating Supply"
-					value={`${formatNumber(totalIssuance, { decimalPlaces: 2 })} 𝞃`}
+					value={`${formatNumber(totalIssuance.floor())} 𝞃`}
 				/>
 			</div>
 			<DonutChart
@@ -81,7 +81,7 @@ export const TokenDistributionChart = () => {
 						`Unissued (${(
 							100 -
               (totalIssuance.toNumber() / token.totalSupply) * 100
-						).toFixed(2)}% of ${nFormatter(token.totalSupply, 2)})`,
+						).toFixed(2)}% of ${nFormatter(token.totalSupply, 0)})`,
 					],
 				}}
 				series={[
