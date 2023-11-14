@@ -2,15 +2,15 @@ import { DataError } from "../utils/error";
 
 export type Validator = {
 	id: string;
-	timestamp: string;
 	height: bigint;
+	timestamp: string;
+	address: string;
 	amount: bigint;
 	nominators: bigint;
 	rank: bigint;
-	address: string;
+	amountChange: bigint;
+	nominatorChange: bigint;
 	name?: string;
-	amount_day_change?: bigint;
-	nominators_day_change?: bigint;
 };
 
 export type ValidatorStakeHistory = {

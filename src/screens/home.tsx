@@ -20,10 +20,7 @@ import { DelegateFilter, DelegatesOrder } from "../services/delegateService";
 import { useLocation } from "react-router-dom";
 import { MIN_DELEGATION_AMOUNT } from "../config";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
-import {
-	useMaxHeightForValidators,
-	useValidators,
-} from "../hooks/useValidators";
+import { useValidators } from "../hooks/useValidators";
 import ValidatorsTable from "../components/validators/ValidatorsTable";
 
 const contentStyle = css`
@@ -152,11 +149,7 @@ export const HomePage = () => {
 		delegateSort
 	);
 
-	const { height: maxHeightsForValidators } = useMaxHeightForValidators();
-	const validators = useValidators(
-		maxHeightsForValidators?.last,
-		maxHeightsForValidators?.prev
-	);
+	const validators = useValidators();
 
 	useEffect(() => {
 		if (blocks.pagination.page === 1) {

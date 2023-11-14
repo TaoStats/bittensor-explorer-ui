@@ -8,7 +8,7 @@ import { PaginationOptions } from "../model/paginationOptions";
 
 import { extractItems } from "../utils/extractItems";
 
-import { fetchHistorical } from "./fetchService";
+import { fetchHistorical, fetchIndexer } from "./fetchService";
 import { isAddress } from "@polkadot/util-crypto";
 import { DataError } from "../utils/error";
 import { fetchVerifiedDelegates } from "./delegateService";
@@ -16,48 +16,35 @@ import { DelegateInfo } from "../model/delegate";
 
 export type ValidatorsFilter = object;
 
-export type ValidatorsOrder =
-  | "ID_ASC"
-  | "ID_DESC"
-  | "HEIGHT_ASC"
-  | "HEIGHT_DESC"
-  | "AMOUNT_ASC"
-  | "AMOUNT_DESC"
-  | "NOMINATORS_ASC"
-  | "NOMINATORS_DESC";
-
 export async function getValidators(
-	filter: ValidatorsFilter | undefined,
-	order: ValidatorsOrder = "AMOUNT_DESC",
 	pagination: PaginationOptions
 ) {
-	const response = await fetchHistorical<{
+	const response = await fetchIndexer<{
 		validators: ResponseItems<Validator>;
 	}>(
-		`query($after: Cursor, $first: Int!, $filter: ValidatorFilter, $order: [ValidatorsOrderBy!]!) {
-			validators(first: $first, after: $after, filter: $filter, orderBy: $order) {
+		`query($first: Int!) {
+			validators(first: $first, orderBy: RANK_ASC) {
 				nodes {
 					id
-					timestamp
 					height
+					timestamp
+					address
 					amount
 					nominators
 					rank
-					address
+					amountChange
+					nominatorChange
 				}
 				pageInfo {
 					endCursor
 					hasNextPage
 					hasPreviousPage
 				}
-				${pagination.after === undefined ? "totalCount" : ""}
+				totalCount
 			  }
 		}`,
 		{
-			after: pagination.after,
 			first: pagination.limit,
-			filter,
-			order,
 		}
 	);
 
