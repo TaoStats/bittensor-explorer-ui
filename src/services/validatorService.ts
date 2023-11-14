@@ -16,14 +16,21 @@ import { DelegateInfo } from "../model/delegate";
 
 export type ValidatorsFilter = object;
 
+export type ValidatorsOrder = 
+	| "AMOUNT_ASC"
+	| "AMOUNT_DESC"
+	| "NOMINATORS_ASC"
+	| "NOMINATORS_DESC";
+
 export async function getValidators(
+	order: ValidatorsOrder = "AMOUNT_DESC",
 	pagination: PaginationOptions
 ) {
 	const response = await fetchIndexer<{
 		validators: ResponseItems<Validator>;
 	}>(
-		`query($first: Int!) {
-			validators(first: $first, orderBy: RANK_ASC) {
+		`query($first: Int!, $order: [ValidatorsOrderBy!]!) {
+			validators(first: $first, orderBy: $order) {
 				nodes {
 					id
 					height
@@ -44,7 +51,8 @@ export async function getValidators(
 			  }
 		}`,
 		{
-			first: pagination.limit,
+			first: 64,
+			order,
 		}
 	);
 

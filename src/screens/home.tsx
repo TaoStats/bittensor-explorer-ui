@@ -22,6 +22,7 @@ import { MIN_DELEGATION_AMOUNT } from "../config";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidators } from "../hooks/useValidators";
 import ValidatorsTable from "../components/validators/ValidatorsTable";
+import { ValidatorsOrder } from "../services/validatorService";
 
 const contentStyle = css`
   position: relative;
@@ -149,7 +150,11 @@ export const HomePage = () => {
 		delegateSort
 	);
 
-	const validators = useValidators();
+	const validatorsInitialOrder: ValidatorsOrder = "AMOUNT_DESC";
+	const [validatorsSort, setValidatorsSort] = useState<ValidatorsOrder>(
+		validatorsInitialOrder
+	);
+	const validators = useValidators(validatorsSort);
 
 	useEffect(() => {
 		if (blocks.pagination.page === 1) {
@@ -260,7 +265,13 @@ export const HomePage = () => {
 								error={!!validators.error}
 								value="validators"
 							>
-								<ValidatorsTable validators={validators} />
+								<ValidatorsTable
+									validators={validators}
+									onSortChange={(sortKey: ValidatorsOrder) =>
+										setValidatorsSort(sortKey)
+									}
+									initialSort={validatorsInitialOrder}
+								/>
 							</TabPane>
 							<TabPane
 								label="Accounts"

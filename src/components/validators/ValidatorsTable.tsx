@@ -5,15 +5,17 @@ import { Validator } from "../../model/validator";
 import { NETWORK_CONFIG } from "../../config";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
-import { DataError } from "../../utils/error";
 import { css } from "@emotion/react";
+import { ValidatorsOrder } from "../../services/validatorService";
+import { SortDirection } from "../../model/sortDirection";
+import { useState, useEffect } from "react";
+import { SortOrder } from "../../model/sortOrder";
+import { PaginatedResource } from "../../model/paginatedResource";
 
 export type ValidatorsTableProps = {
-	validators: {
-		loading: boolean;
-		error?: DataError;
-		data: Validator[];
-	};
+	validators: PaginatedResource<Validator>;
+	initialSort?: string;
+	onSortChange?: (orderBy: ValidatorsOrder) => void;
 };
 
 const day_change_css = css`
@@ -24,10 +26,60 @@ const day_change_css = css`
 
 const ValidatorsTableAttribute = ItemsTableAttribute<Validator>;
 
+const orderMappings = {
+	amount: {
+		[SortDirection.ASC]: "AMOUNT_ASC",
+		[SortDirection.DESC]: "AMOUNT_DESC",
+	},
+	nominators: {
+		[SortDirection.ASC]: "NOMINATORS_ASC",
+		[SortDirection.DESC]: "NOMINATORS_DESC",
+	},
+};
+
 function ValidatorsTable(props: ValidatorsTableProps) {
-	const { validators } = props;
+	const { validators, initialSort, onSortChange } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
+
+	const [sort, setSort] = useState<SortOrder<string>>();
+
+	useEffect(() => {
+		Object.entries(orderMappings).forEach(([property, value]) => {
+			Object.entries(value).forEach(([dir, orderKey]) => {
+				if (orderKey === initialSort) {
+					setSort({
+						property,
+						direction: dir === "1" ? SortDirection.ASC : SortDirection.DESC,
+					});
+				}
+			});
+		});
+	}, [initialSort]);
+
+	const handleSortChange = (property?: string) => {
+		if (!property) return;
+		if (property === sort?.property) {
+			setSort({
+				...sort,
+				direction:
+					sort.direction === SortDirection.ASC
+						? SortDirection.DESC
+						: SortDirection.ASC,
+			});
+		} else {
+			setSort({
+				property,
+				direction: SortDirection.DESC,
+			});
+		}
+	};
+
+	useEffect(() => {
+		if (!onSortChange || !sort?.property || sort.direction === undefined)
+			return;
+		onSortChange((orderMappings as any)[sort.property][sort.direction]);
+	}, [JSON.stringify(sort)]);
 
 	return (
 		<ItemsTable
@@ -36,11 +88,10 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			notFoundMessage="No validators found"
 			error={validators.error}
 			data-test="validators-table"
+			sort={sort}
+			onSortChange={handleSortChange}
+			showRank
 		>
-			<ValidatorsTableAttribute
-				label="Rank"
-				render={(validator) => <>{validator.rank}</>}
-			/>
 			<ValidatorsTableAttribute
 				label="Validator"
 				render={(validator) =>
@@ -72,12 +123,14 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						/>
 					);
 				}}
+				sortable
+				sortProperty="amount"
 			/>
 			<ValidatorsTableAttribute
 				label=""
 				colCss={css`
-					padding-left: 0px;
-				`}
+          padding-left: 0px;
+        `}
 				render={(validator) => {
 					const change24h = validator.amountChange;
 					return (
@@ -106,12 +159,14 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				render={(validator) => {
 					return <>{validator.nominators}</>;
 				}}
+				sortable
+				sortProperty="nominators"
 			/>
 			<ValidatorsTableAttribute
 				label=""
 				colCss={css`
-					padding-left: 0px;
-				`}
+          padding-left: 0px;
+        `}
 				render={(validator) => {
 					const change24h = validator.nominatorChange;
 					return (

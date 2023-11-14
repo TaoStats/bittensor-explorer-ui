@@ -345,7 +345,7 @@ export const ItemsTable = <
 									<TableCell>
 										{pagination
 											? pagination.limit * (pagination.page - 1) + index + 1
-											: 0}
+											: index + 1}
 									</TableCell>
 								) : (
 									<></>
