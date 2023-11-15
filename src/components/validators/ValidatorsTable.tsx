@@ -113,6 +113,10 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			<ValidatorsTableAttribute
 				label="Stake"
 				align="right"
+				colCss={css`
+					display: flex;
+					justify-content: end;
+				`}
 				render={(validator) => {
 					return (
 						<Currency
@@ -129,8 +133,8 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			<ValidatorsTableAttribute
 				label=""
 				colCss={css`
-          padding-left: 0px;
-        `}
+					padding-left: 0px;
+				`}
 				render={(validator) => {
 					const change24h = validator.amountChange;
 					return (
@@ -156,6 +160,10 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			<ValidatorsTableAttribute
 				label="Nominators"
 				align="right"
+				colCss={css`
+					display: flex;
+					justify-content: end;
+				`}
 				render={(validator) => {
 					return <>{validator.nominators}</>;
 				}}
@@ -165,8 +173,8 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			<ValidatorsTableAttribute
 				label=""
 				colCss={css`
-          padding-left: 0px;
-        `}
+					padding-left: 0px;
+				`}
 				render={(validator) => {
 					const change24h = validator.nominatorChange;
 					return (

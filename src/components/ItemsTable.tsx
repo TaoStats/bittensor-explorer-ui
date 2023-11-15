@@ -300,7 +300,7 @@ export const ItemsTable = <
 
 								return (
 									<TableCell
-										css={[cellStyle, sortableHeaderBase]}
+										css={[cellStyle, sortableHeaderBase, child.props.colCss]}
 										onClick={() => {
 											if (onSortChange) onSortChange(sortProperty);
 
@@ -354,10 +354,9 @@ export const ItemsTable = <
 									children,
 									(child) =>
 										child &&
-								cloneElement(child, {
-									_data: item,
-									_additionalData: additionalData,
-								})
+											cloneElement(child, {
+												_data: item,
+											})
 								)}
 							</TableRow>
 						))}
