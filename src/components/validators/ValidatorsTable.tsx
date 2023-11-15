@@ -5,12 +5,13 @@ import { Validator } from "../../model/validator";
 import { NETWORK_CONFIG } from "../../config";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
-import { css } from "@emotion/react";
+// import { css } from "@emotion/react";
 import { ValidatorsOrder } from "../../services/validatorService";
 import { SortDirection } from "../../model/sortDirection";
 import { useState, useEffect } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { PaginatedResource } from "../../model/paginatedResource";
+import { DataError } from "../../utils/error";
 
 export type ValidatorsTableProps = {
 	validators: PaginatedResource<Validator>;
@@ -18,11 +19,11 @@ export type ValidatorsTableProps = {
 	onSortChange?: (orderBy: ValidatorsOrder) => void;
 };
 
-const day_change_css = css`
-  font-size: small;
-  font-weight: bold;
-  margin-left: 10px;
-`;
+// const day_change_css = css`
+//   font-size: small;
+//   font-weight: bold;
+//   margin-left: 10px;
+// `;
 
 const ValidatorsTableAttribute = ItemsTableAttribute<Validator>;
 
@@ -130,6 +131,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="amount"
 			/>
+			{/*
 			<ValidatorsTableAttribute
 				label=""
 				colCss={css`
@@ -157,6 +159,8 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 					);
 				}}
 			/>
+			*/}
+
 			<ValidatorsTableAttribute
 				label="Nominators"
 				align="right"
@@ -170,11 +174,9 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="nominators"
 			/>
-			<ValidatorsTableAttribute
+			{/*<ValidatorsTableAttribute
 				label=""
-				colCss={css`
-					padding-left: 0px;
-				`}
+				colCss={css`padding-left: 0px;`}
 				render={(validator) => {
 					const change24h = validator.nominatorChange;
 					return (
@@ -192,6 +194,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 					);
 				}}
 			/>
+				 */}
 		</ItemsTable>
 	);
 }
