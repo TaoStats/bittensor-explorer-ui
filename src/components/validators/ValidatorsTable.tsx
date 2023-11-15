@@ -5,7 +5,7 @@ import { Validator } from "../../model/validator";
 import { NETWORK_CONFIG } from "../../config";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
-// import { css } from "@emotion/react";
+import { css } from "@emotion/react";
 import { ValidatorsOrder } from "../../services/validatorService";
 import { SortDirection } from "../../model/sortDirection";
 import { useState, useEffect } from "react";
