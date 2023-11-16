@@ -113,7 +113,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			/>
 			<ValidatorsTableAttribute
 				label="Stake"
-				// align="right"
+				align="right"
 				render={(validator) => {
 					return (
 						<Currency
@@ -159,7 +159,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 
 			<ValidatorsTableAttribute
 				label="Nominators"
-				// align="right"
+				align="right"
 				render={(validator) => {
 					return <>{validator.nominators}</>;
 				}}
