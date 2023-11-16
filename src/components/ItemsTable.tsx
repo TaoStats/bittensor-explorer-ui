@@ -171,14 +171,26 @@ export const ItemsTableAttribute = <
 >(
 	props: ItemsTableAttributeProps<T, A, S>
 ) => {
-	const { align, colCss, colSpan, render, hide, _data, _additionalData = [] as any } = props;
+	const {
+		align,
+		colCss,
+		colSpan,
+		render,
+		hide,
+		_data,
+		_additionalData = [] as any,
+	} = props;
 
 	if (!_data || hide?.(_data, ..._additionalData)) {
 		return null;
 	}
 
 	return (
-		<TableCell align={align} css={[cellStyle, colCss]} colSpan={colSpan?.(_data, ..._additionalData)}>
+		<TableCell
+			align={align}
+			css={[cellStyle, colCss]}
+			colSpan={colSpan?.(_data, ..._additionalData)}
+		>
 			{render(_data, ..._additionalData)}
 		</TableCell>
 	);
@@ -294,12 +306,17 @@ export const ItemsTable = <
 								if (!child) return null;
 								const { label, align, sortable, sortProperty } = child.props;
 								if (sortable !== true)
-									return <TableCell align={align} css={cellStyle}>{label}</TableCell>;
+									return (
+										<TableCell align={align} css={cellStyle}>
+											{label}
+										</TableCell>
+									);
 
 								const isActive = sort?.property === sortProperty;
 
 								return (
 									<TableCell
+										align={align}
 										css={[cellStyle, sortableHeaderBase, child.props.colCss]}
 										onClick={() => {
 											if (onSortChange) onSortChange(sortProperty);
@@ -312,7 +329,14 @@ export const ItemsTable = <
 											});
 										}}
 									>
-										<div css={sortableHeaderItem}>
+										<div
+											css={[
+												sortableHeaderItem,
+												css`
+													float: ${align};
+												`,
+											]}
+										>
 											{label}
 											<div
 												css={[
