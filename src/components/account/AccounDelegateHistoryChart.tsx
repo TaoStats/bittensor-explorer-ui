@@ -11,6 +11,8 @@ import {
 } from "../../model/accountHistory";
 import { NETWORK_CONFIG } from "../../config";
 import { useVerifiedDelegates } from "../../hooks/useVerifiedDelegates";
+import { DelegateBalance } from "../../model/delegate";
+import { Resource } from "../../model/resource";
 
 const spinnerContainer = css`
   display: flex;
@@ -22,6 +24,7 @@ const spinnerContainer = css`
 export type AccounDelegateHistoryChartProps = {
 	account: string;
 	delegateHistory: AccountDelegateHistoryResponse;
+	delegate: Resource<DelegateBalance[]>;
 };
 
 export const AccounDelegateHistoryChart = (
@@ -29,13 +32,16 @@ export const AccounDelegateHistoryChart = (
 ) => {
 	const theme = useTheme();
 
-	const { account, delegateHistory } = props;
+	const { account, delegateHistory, delegate } = props;
 
 	const verifiedDelegates = useVerifiedDelegates();
 
 	const loading = delegateHistory.loading;
 	const timestamps = useMemo(() => {
-		if (!delegateHistory.data) return [];
+		let suffix: string[] = [];
+		if(delegate.data && delegate.data.length > 0)
+			suffix = [(new Date()).toUTCString()];
+		if (!delegateHistory.data) return [...suffix];
 		const resp = (delegateHistory.data as any).reduce(
 			(prev: string[], cur: AccountDelegateHistory) => {
 				if(prev.find(x => x === cur.timestamp) === undefined)
@@ -44,7 +50,10 @@ export const AccounDelegateHistoryChart = (
 			},
 			[]
 		);
-		return resp;
+		return [
+			...resp,
+			...suffix
+		];
 	}, [delegateHistory]);
 
 	const maxDelegate = useMemo(() => {
@@ -56,10 +65,17 @@ export const AccounDelegateHistoryChart = (
 			},
 			0
 		);
-		return resp;
+		return delegate.data?.reduce(
+			(prev: number, cur: DelegateBalance) => {
+				const now = rawAmountToDecimal(cur.amount.toString()).toNumber();
+				return now > prev ? now : prev;
+			},
+			resp
+		);
 	}, [delegateHistory]);
 
 	const delegates = useMemo(() => {
+		if (!delegate.data) return [];
 		if (!delegateHistory.data) return [];
 		const resp = (delegateHistory.data as any).reduce(
 			(prev: ApexAxisChartSeries, cur: AccountDelegateHistory) => {
@@ -81,7 +97,27 @@ export const AccounDelegateHistoryChart = (
 			},
 			[]
 		);
-		return resp;
+		
+		return delegate.data?.reduce(
+			(prev: ApexAxisChartSeries, cur: DelegateBalance) => {
+				const info = verifiedDelegates[cur.delegate];
+				const delegate = info?.name || cur.delegate;
+				let serie = prev.find((x) => x.name === delegate);
+				if (serie === undefined)
+					prev.push({
+						name: delegate,
+						type: "area",
+						data: [],
+					});
+				serie = prev.find((x) => x.name === delegate);
+				serie?.data.push({
+					x: (new Date()).toUTCString(),
+					y: rawAmountToDecimal(cur.amount.toString()).toNumber(),
+				} as any);
+				return prev;
+			},
+			resp
+		);
 	}, [delegateHistory]);
 
 	return loading ? (
