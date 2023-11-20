@@ -45,25 +45,25 @@ export const AccounBalanceHistoryChart = (
 		];
 	}, [balanceHistory]);
 	const staked = useMemo(() => {
+		if (!balance.data) return [];
 		if (!balanceHistory.data) return [];
 		const resp = balanceHistory.data.map((x: AccountBalanceHistory) =>
 			rawAmountToDecimal(x.balanceStaked.toString()).toNumber()
 		);
-		const current = resp.length === 0 ? 0 : resp[resp.length - 1];
 		return [
 			...resp,
-			current as number,
+			rawAmountToDecimal(balance.data.staked.toString()).toNumber(),
 		];
 	}, [balanceHistory]);
 	const free = useMemo(() => {
+		if (!balance.data) return [];
 		if (!balanceHistory.data) return [];
 		const resp = balanceHistory.data.map((x: AccountBalanceHistory) =>
 			rawAmountToDecimal(x.balanceFree.toString()).toNumber()
 		);
-		const current = resp.length === 0 ? 0 : resp[resp.length - 1];
 		return [
 			...resp,
-			current as number,
+			rawAmountToDecimal(balance.data.free.toString()).toNumber(),
 		];
 	}, [balanceHistory]);
 	const total = useMemo(() => {
