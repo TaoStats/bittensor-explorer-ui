@@ -67,10 +67,14 @@ export const TokenDistributionChart = () => {
 				<StatItem
 					title="Total Supply"
 					value={`${formatNumber(token.totalSupply)} 𝞃`}
+					animating={token.totalSupply.toString()}
+					suffix="𝞃"
 				/>
 				<StatItem
 					title="Circulating Supply"
 					value={`${formatNumber(totalIssuance.floor())} 𝞃`}
+					animating={totalIssuance.toString()}
+					suffix="𝞃"
 				/>
 			</div>
 			<DonutChart

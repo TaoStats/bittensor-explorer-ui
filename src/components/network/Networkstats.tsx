@@ -208,12 +208,14 @@ export const NetworkStats = () => {
 							value={formatNumber(
 								new Decimal(chain.blocksFinalized.toString())
 							)}
+							animating={chain.blocksFinalized.toString()}
 						/>
 						<StatItem
 							title="Signed extrinsics"
 							value={formatNumber(
 								new Decimal(chain.extrinsicsSigned.toString())
 							)}
+							animating={chain.extrinsicsSigned.toString()}
 						/>
 						<StatItem
 							title="Total Accounts"
@@ -222,6 +224,7 @@ export const NetworkStats = () => {
 						<StatItem
 							title="Transfers"
 							value={formatNumber(new Decimal(chain.transfers.toString()))}
+							animating={chain.transfers.toString()}
 						/>
 					</div>
 				</div>

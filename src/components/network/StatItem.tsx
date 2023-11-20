@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { Theme } from "@mui/material";
+import { AnimatingNumber } from "../AnimatingNumber";
 
 const stakingDataBox = css`
   display: flex;
@@ -43,15 +44,27 @@ const statItemValue = (theme: Theme) => css`
 type StatItemProps = {
 	title: string;
 	value: string | number;
+	animating?: string;
+	suffix?: string;
 };
 
 export const StatItem = (props: StatItemProps) => {
-	const { title, value } = props;
+	const { title, value, animating, suffix } = props;
 
 	return (
 		<div css={stakingDataBox}>
 			<label css={statItemLabel}>{title}</label>
-			<div css={statItemValue}>{value}</div>
+			{animating ? (
+				<AnimatingNumber
+					css={statItemValue}
+					value={parseInt(animating)}
+					suffix={suffix}
+				/>
+			) : (
+				<div css={statItemValue} className="number-transition">
+					{value}
+				</div>
+			)}
 		</div>
 	);
 };
