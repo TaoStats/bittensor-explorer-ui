@@ -12,10 +12,10 @@ type AnimatingNumberProps = {
 
 export const AnimatingNumber = (props: AnimatingNumberProps) => {
 	const { css, value, suffix } = props;
-	const [currentNumber, setCurrentNumber] = useState(0);
+	const [currentNumber, setCurrentNumber] = useState(1);
 
 	useEffect(() => {
-		let counter = 0;
+		let counter = currentNumber;
 		const incrementAmount = (value - currentNumber) / 60; // Transition over 60 frames
 
 		const interval = setInterval(() => {
