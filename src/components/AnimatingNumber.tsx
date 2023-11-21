@@ -23,8 +23,8 @@ export const AnimatingNumber = (props: AnimatingNumberProps) => {
 
 			if (
 				incrementAmount === 0 ||
-        (incrementAmount > 0 && counter >= value) ||
-        (incrementAmount < 0 && counter <= value)
+				(incrementAmount > 0 && counter >= value) ||
+				(incrementAmount < 0 && counter <= value)
 			) {
 				clearInterval(interval);
 				counter = value; // Ensure the final value is accurate
