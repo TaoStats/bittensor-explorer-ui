@@ -37,10 +37,9 @@ export const ValidatorStakeHistoryChart = (
 		const resp = stakeHistory.data.map(
 			(x: ValidatorStakeHistory) => x.timestamp
 		);
-		return [
-			...resp,
-			(new Date()).toUTCString(),
-		];
+		const now = new Date();
+		now.setDate(now.getDate() + 1);
+		return [...resp, now.toUTCString()];
 	}, [stakeHistory, balance]);
 	const minAmount = useMemo(() => {
 		if (!balance.data) return 0;
@@ -94,10 +93,7 @@ export const ValidatorStakeHistoryChart = (
 			parseInt(x.rank.toString())
 		);
 		const current = resp.length === 0 ? 0 : resp[resp.length - 1];
-		return [
-			...resp,
-			current as number,
-		];
+		return [...resp, current as number];
 	}, [stakeHistory]);
 	const nominators = useMemo(() => {
 		if (!stakeHistory.data) return [];
@@ -105,10 +101,7 @@ export const ValidatorStakeHistoryChart = (
 			parseInt(x.nominators.toString())
 		);
 		const current = resp.length === 0 ? 0 : resp[resp.length - 1];
-		return [
-			...resp,
-			current as number,
-		];
+		return [...resp, current as number];
 	}, [stakeHistory]);
 	const staked = useMemo(() => {
 		if (!balance.data) return [];
@@ -116,10 +109,7 @@ export const ValidatorStakeHistoryChart = (
 		const resp = stakeHistory.data.map((x: ValidatorStakeHistory) =>
 			rawAmountToDecimal(x.amount.toString()).toNumber()
 		);
-		return [
-			...resp,
-			rawAmountToDecimal(balance.data).toNumber()
-		];
+		return [...resp, rawAmountToDecimal(balance.data).toNumber()];
 	}, [stakeHistory, balance]);
 
 	return loading ? (
@@ -244,12 +234,31 @@ export const ValidatorStakeHistoryChart = (
 					shared: true,
 					intersect: false,
 					x: {
-						format: "dd MMM yy",
+						formatter: (val: number) => {
+							const day = new Date(val);
+							const lastDay = new Date();
+							lastDay.setDate(lastDay.getDate() + 1);
+							if (
+								day.getFullYear() === lastDay.getFullYear() &&
+								day.getMonth() === lastDay.getMonth() &&
+								day.getDate() === lastDay.getDate()
+							)
+								return "Now";
+							const options: Intl.DateTimeFormatOptions = {
+								day: "2-digit",
+								month: "short",
+								year: "2-digit",
+							};
+							const formattedDate = day.toLocaleDateString("en-US", options);
+							return formattedDate;
+						},
 					},
 					y: {
 						formatter: (val: number, { seriesIndex }) => {
-							if(seriesIndex === 2)
-								return NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString();
+							if (seriesIndex === 2)
+								return (
+									NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString()
+								);
 							return val.toString();
 						},
 					},
@@ -269,54 +278,58 @@ export const ValidatorStakeHistoryChart = (
 					},
 					type: "datetime",
 				},
-				yaxis: [{
-					show: false,
-					min: 0,
-					max: 0,
-				}, {
-					labels: {
-						style: {
-							colors: theme.palette.neutral.main,
+				yaxis: [
+					{
+						show: false,
+						min: 0,
+						max: 0,
+					},
+					{
+						labels: {
+							style: {
+								colors: theme.palette.neutral.main,
+							},
+							formatter: (val: number) => parseInt(val.toString()).toString(),
 						},
-						formatter: (val: number) => parseInt(val.toString()).toString(),
-					},
-					title: {
-						text: "Nominators",
-						style: {
-							color: theme.palette.neutral.main,
-						}
-					},
-					axisTicks: {
-						show: false,
-					},
-					axisBorder: {
-						show: false,
-					},
-					min: minNominators,
-					max: maxNominators,
-				}, {
-					opposite: true,
-					labels: {
-						style: { 
-							colors: theme.palette.success.main,
+						title: {
+							text: "Nominators",
+							style: {
+								color: theme.palette.neutral.main,
+							},
 						},
-						formatter: (val: number) => nFormatter(val, 2).toString(),
+						axisTicks: {
+							show: false,
+						},
+						axisBorder: {
+							show: false,
+						},
+						min: minNominators,
+						max: maxNominators,
 					},
-					title: {
-						text: `Stake (${NETWORK_CONFIG.currency})`,
-						style: {
-							color: theme.palette.success.main,
-						}
+					{
+						opposite: true,
+						labels: {
+							style: {
+								colors: theme.palette.success.main,
+							},
+							formatter: (val: number) => nFormatter(val, 2).toString(),
+						},
+						title: {
+							text: `Stake (${NETWORK_CONFIG.currency})`,
+							style: {
+								color: theme.palette.success.main,
+							},
+						},
+						axisTicks: {
+							show: false,
+						},
+						axisBorder: {
+							show: false,
+						},
+						min: minAmount,
+						max: maxAmount,
 					},
-					axisTicks: {
-						show: false,
-					},
-					axisBorder: {
-						show: false,
-					},
-					min: minAmount,
-					max: maxAmount,
-				}],
+				],
 			}}
 		/>
 	);

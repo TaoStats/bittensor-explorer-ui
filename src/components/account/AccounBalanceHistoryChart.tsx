@@ -39,10 +39,9 @@ export const AccounBalanceHistoryChart = (
 		const resp = balanceHistory.data.map(
 			(x: AccountBalanceHistory) => x.timestamp
 		);
-		return [
-			...resp,
-			(new Date()).toUTCString(),
-		];
+		const now = new Date();
+		now.setDate(now.getDate() + 1);
+		return [...resp, now.toUTCString()];
 	}, [balanceHistory]);
 	const staked = useMemo(() => {
 		if (!balance.data) return [];
@@ -78,12 +77,9 @@ export const AccounBalanceHistoryChart = (
 		];
 	}, [balanceHistory]);
 	const maxBalance = useMemo(() => {
-		const resp = total.reduce(
-			(prev: number, cur: number) => {
-				return cur > prev ? cur : prev;
-			},
-			0
-		);
+		const resp = total.reduce((prev: number, cur: number) => {
+			return cur > prev ? cur : prev;
+		}, 0);
 		return resp;
 	}, [total]);
 
@@ -214,10 +210,28 @@ export const AccounBalanceHistoryChart = (
 					shared: true,
 					intersect: false,
 					x: {
-						format: "dd MMM yy",
+						formatter: (val: number) => {
+							const day = new Date(val);
+							const lastDay = new Date();
+							lastDay.setDate(lastDay.getDate() + 1);
+							if (
+								day.getFullYear() === lastDay.getFullYear() &&
+								day.getMonth() === lastDay.getMonth() &&
+								day.getDate() === lastDay.getDate()
+							)
+								return "Now";
+							const options: Intl.DateTimeFormatOptions = {
+								day: "2-digit",
+								month: "short",
+								year: "2-digit",
+							};
+							const formattedDate = day.toLocaleDateString("en-US", options);
+							return formattedDate;
+						},
 					},
 					y: {
-						formatter: (val: number) => NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString(),
+						formatter: (val: number) =>
+							NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString(),
 					},
 				},
 				xaxis: {

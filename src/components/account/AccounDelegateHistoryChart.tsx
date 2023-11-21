@@ -39,21 +39,21 @@ export const AccounDelegateHistoryChart = (
 	const loading = delegateHistory.loading;
 	const timestamps = useMemo(() => {
 		let suffix: string[] = [];
-		if(delegate.data && delegate.data.length > 0)
-			suffix = [(new Date()).toUTCString()];
+		if (delegate.data && delegate.data.length > 0) {
+			const now = new Date();
+			now.setDate(now.getDate() + 1);
+			suffix = [now.toUTCString()];
+		}
 		if (!delegateHistory.data) return [...suffix];
 		const resp = (delegateHistory.data as any).reduce(
 			(prev: string[], cur: AccountDelegateHistory) => {
-				if(prev.find(x => x === cur.timestamp) === undefined)
+				if (prev.find((x) => x === cur.timestamp) === undefined)
 					prev.push(cur.timestamp);
 				return prev;
 			},
 			[]
 		);
-		return [
-			...resp,
-			...suffix
-		];
+		return [...resp, ...suffix];
 	}, [delegateHistory]);
 
 	const maxDelegate = useMemo(() => {
@@ -65,13 +65,10 @@ export const AccounDelegateHistoryChart = (
 			},
 			0
 		);
-		return delegate.data?.reduce(
-			(prev: number, cur: DelegateBalance) => {
-				const now = rawAmountToDecimal(cur.amount.toString()).toNumber();
-				return now > prev ? now : prev;
-			},
-			resp
-		);
+		return delegate.data?.reduce((prev: number, cur: DelegateBalance) => {
+			const now = rawAmountToDecimal(cur.amount.toString()).toNumber();
+			return now > prev ? now : prev;
+		}, resp);
 	}, [delegateHistory]);
 
 	const delegates = useMemo(() => {
@@ -97,7 +94,7 @@ export const AccounDelegateHistoryChart = (
 			},
 			[]
 		);
-		
+
 		return delegate.data?.reduce(
 			(prev: ApexAxisChartSeries, cur: DelegateBalance) => {
 				const info = verifiedDelegates[cur.delegate];
@@ -110,8 +107,10 @@ export const AccounDelegateHistoryChart = (
 						data: [],
 					});
 				serie = prev.find((x) => x.name === delegate);
+				const now = new Date();
+				now.setDate(now.getDate() + 1);
 				serie?.data.push({
-					x: (new Date()).toUTCString(),
+					x: now.toUTCString(),
 					y: rawAmountToDecimal(cur.amount.toString()).toNumber(),
 				} as any);
 				return prev;
@@ -239,10 +238,28 @@ export const AccounDelegateHistoryChart = (
 					shared: true,
 					intersect: false,
 					x: {
-						format: "dd MMM yy",
+						formatter: (val: number) => {
+							const day = new Date(val);
+							const lastDay = new Date();
+							lastDay.setDate(lastDay.getDate() + 1);
+							if (
+								day.getFullYear() === lastDay.getFullYear() &&
+								day.getMonth() === lastDay.getMonth() &&
+								day.getDate() === lastDay.getDate()
+							)
+								return "Now";
+							const options: Intl.DateTimeFormatOptions = {
+								day: "2-digit",
+								month: "short",
+								year: "2-digit",
+							};
+							const formattedDate = day.toLocaleDateString("en-US", options);
+							return formattedDate;
+						},
 					},
 					y: {
-						formatter: (val: number) => NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString(),
+						formatter: (val: number) =>
+							NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString(),
 					},
 				},
 				xaxis: {
