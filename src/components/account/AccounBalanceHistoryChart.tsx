@@ -10,6 +10,8 @@ import {
 	AccountBalanceHistoryResponse,
 } from "../../model/accountHistory";
 import { NETWORK_CONFIG } from "../../config";
+import { Balance } from "../../model/balance";
+import { Resource } from "../../model/resource";
 
 const spinnerContainer = css`
   display: flex;
@@ -21,6 +23,7 @@ const spinnerContainer = css`
 export type AccounBalanceHistoryChartProps = {
 	account: string;
 	balanceHistory: AccountBalanceHistoryResponse;
+	balance: Resource<Balance>;
 };
 
 export const AccounBalanceHistoryChart = (
@@ -28,7 +31,7 @@ export const AccounBalanceHistoryChart = (
 ) => {
 	const theme = useTheme();
 
-	const { account, balanceHistory } = props;
+	const { account, balanceHistory, balance } = props;
 
 	const loading = balanceHistory.loading;
 	const timestamps = useMemo(() => {
@@ -36,37 +39,53 @@ export const AccounBalanceHistoryChart = (
 		const resp = balanceHistory.data.map(
 			(x: AccountBalanceHistory) => x.timestamp
 		);
-		return resp;
+		return [
+			...resp,
+			(new Date()).toUTCString(),
+		];
+	}, [balanceHistory]);
+	const staked = useMemo(() => {
+		if (!balance.data) return [];
+		if (!balanceHistory.data) return [];
+		const resp = balanceHistory.data.map((x: AccountBalanceHistory) =>
+			rawAmountToDecimal(x.balanceStaked.toString()).toNumber()
+		);
+		return [
+			...resp,
+			rawAmountToDecimal(balance.data.staked.toString()).toNumber(),
+		];
+	}, [balanceHistory]);
+	const free = useMemo(() => {
+		if (!balance.data) return [];
+		if (!balanceHistory.data) return [];
+		const resp = balanceHistory.data.map((x: AccountBalanceHistory) =>
+			rawAmountToDecimal(x.balanceFree.toString()).toNumber()
+		);
+		return [
+			...resp,
+			rawAmountToDecimal(balance.data.free.toString()).toNumber(),
+		];
+	}, [balanceHistory]);
+	const total = useMemo(() => {
+		if (!balance.data) return [];
+		if (!balanceHistory.data) return [];
+		const resp = balanceHistory.data.map((x: AccountBalanceHistory) =>
+			rawAmountToDecimal(x.balanceTotal.toString()).toNumber()
+		);
+		return [
+			...resp,
+			rawAmountToDecimal(balance.data.total.toString()).toNumber(),
+		];
 	}, [balanceHistory]);
 	const maxBalance = useMemo(() => {
-		if (!balanceHistory.data) return 0;
-		const resp = balanceHistory.data.reduce(
-			(prev: number, cur: AccountBalanceHistory) => {
-				const now = rawAmountToDecimal(cur.balanceTotal.toString()).toNumber();
-				return now > prev ? now : prev;
+		const resp = total.reduce(
+			(prev: number, cur: number) => {
+				return cur > prev ? cur : prev;
 			},
 			0
 		);
 		return resp;
-	}, [balanceHistory]);
-	const staked = useMemo(() => {
-		if (!balanceHistory.data) return [];
-		return balanceHistory.data.map((x: AccountBalanceHistory) =>
-			rawAmountToDecimal(x.balanceStaked.toString()).toNumber()
-		);
-	}, [balanceHistory]);
-	const free = useMemo(() => {
-		if (!balanceHistory.data) return [];
-		return balanceHistory.data.map((x: AccountBalanceHistory) =>
-			rawAmountToDecimal(x.balanceFree.toString()).toNumber()
-		);
-	}, [balanceHistory]);
-	const total = useMemo(() => {
-		if (!balanceHistory.data) return [];
-		return balanceHistory.data.map((x: AccountBalanceHistory) =>
-			rawAmountToDecimal(x.balanceTotal.toString()).toNumber()
-		);
-	}, [balanceHistory]);
+	}, [total]);
 
 	return loading ? (
 		<div css={spinnerContainer}>
