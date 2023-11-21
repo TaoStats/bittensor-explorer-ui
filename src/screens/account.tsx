@@ -179,13 +179,13 @@ export const AccountPage = () => {
 	useDOMEventTrigger(
 		"data-loaded",
 		!account.loading &&
-      !extrinsics.loading &&
-      !transfers.loading &&
-      !taoPrice.loading &&
-      !delegates.loading &&
-      !delegateBalances.loading &&
-      !accountBalanceHistory.loading &&
-      !accountDelegateHistory.loading
+		!extrinsics.loading &&
+		!transfers.loading &&
+		!taoPrice.loading &&
+		!delegates.loading &&
+		!delegateBalances.loading &&
+		!accountBalanceHistory.loading &&
+		!accountDelegateHistory.loading
 	);
 
 	useEffect(() => {
