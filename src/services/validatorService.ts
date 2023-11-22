@@ -38,7 +38,6 @@ export async function getValidators(
 					address
 					amount
 					nominators
-					rank
 					amountChange
 					nominatorChange
 				}
