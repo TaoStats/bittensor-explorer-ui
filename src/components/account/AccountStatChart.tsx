@@ -125,7 +125,7 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 					size: 0,
 				},
 				noData: {
-					text: "No accounts yet",
+					text: "Loading ...",
 					align: "center",
 					verticalAlign: "middle",
 					offsetX: 0,
@@ -182,7 +182,6 @@ export const AccountStatChart = (props: AccountStatChartProps) => {
 					type: "datetime",
 				},
 				yaxis: {
-					show: timestamps.length > 0,
 					opposite: true,
 					labels: {
 						style: {

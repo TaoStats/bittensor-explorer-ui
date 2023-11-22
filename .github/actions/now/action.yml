@@ -1,8 +1,0 @@
-name: Get current timestamp
-
-runs:
-  using: "composite"
-  steps:
-    - name: Now
-      shell: bash
-      run: echo "NOW=$(date +%s)000" >> $GITHUB_ENV

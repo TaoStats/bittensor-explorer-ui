@@ -7,12 +7,12 @@ export type Tokenomics = {
 	validationAPY: number;
 	totalSupply: number;
 	currentSupply: number;
-	delegatedSupply: number;
 };
 
 export type ChainStats = {
 	blocksFinalized: bigint;
 	extrinsicsSigned: bigint;
+	activeAccounts: bigint;
 	transfers: bigint;
 };
 

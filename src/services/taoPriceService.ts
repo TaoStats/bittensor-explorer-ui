@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { TAOSTATS_DATA_ENDPOINT } from "../config";
+import { TAOSTATS_PRICE_ENDPOINT } from "../config";
 export const USD_RATES_REFRESH_RATE = 5 * 60 * 1000; // 5 minutes
 
 export async function getTaoPrice() {
@@ -48,7 +48,7 @@ function savePriceUpdatedAt(time: number) {
 }
 
 async function fetchTaoPrice(): Promise<Decimal> {
-	const res = await fetch(TAOSTATS_DATA_ENDPOINT);
+	const res = await fetch(TAOSTATS_PRICE_ENDPOINT);
 	try {
 		const [data] = await res.json();
 		return new Decimal(data.price || "0");

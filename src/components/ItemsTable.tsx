@@ -25,8 +25,6 @@ import NotFound from "./NotFound";
 import { TablePagination } from "./TablePagination";
 import { SortDirection } from "../model/sortDirection";
 import { TablePaginationHeader } from "./TablePaginationHeader";
-import { TableFilter } from "./TableFilter";
-import { TableSearch } from "./TableSearch";
 
 const tableStyle = css`
   table-layout: auto;
@@ -95,17 +93,17 @@ const sortArrows = css`
     display: block;
     line-height: 8px;
     font-weight: 500;
-    opacity: 1;
+	opacity: 1;
   }
 
   ::before {
-    content: "\\25B2";
+    content: '\\25B2';
     font-size: 10px !important;
   }
 
   ::after {
-    margin-left: -4px;
-    content: "\\25BC";
+	margin-left: -4px;
+	content: '\\25BC';
     font-size: 10px !important;
   }
 `;
@@ -130,17 +128,6 @@ const sortDesc = (theme: Theme) => css`
   }
 `;
 
-const tableOptions = css`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const tableFiltering = css`
-  display: flex;
-  flex-direction: column;
-`;
-
 type ItemsTableItem = {
 	id: string;
 };
@@ -152,7 +139,6 @@ type ItemsTableDataFn<T, A extends any[], R> = (
 
 export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
-	align?: "left" | "center" | "right" | "justify" | "inherit" | undefined;
 	colCss?: Interpolation<Theme>;
 	sortable?: boolean;
 	sortProperty?: string;
@@ -171,26 +157,14 @@ export const ItemsTableAttribute = <
 >(
 	props: ItemsTableAttributeProps<T, A, S>
 ) => {
-	const {
-		align,
-		colCss,
-		colSpan,
-		render,
-		hide,
-		_data,
-		_additionalData = [] as any,
-	} = props;
+	const { colSpan, render, hide, _data, _additionalData = [] as any } = props;
 
 	if (!_data || hide?.(_data, ..._additionalData)) {
 		return null;
 	}
 
 	return (
-		<TableCell
-			align={align}
-			css={[cellStyle, colCss]}
-			colSpan={colSpan?.(_data, ..._additionalData)}
-		>
+		<TableCell css={cellStyle} colSpan={colSpan?.(_data, ..._additionalData)}>
 			{render(_data, ..._additionalData)}
 		</TableCell>
 	);
@@ -220,12 +194,6 @@ export type ItemsTableProps<
 	)[];
 	showRank?: boolean;
 	onSortChange?: (property: string | undefined) => void;
-	filterMappings?: any;
-	filter?: any;
-	onFilterChange?: (key: string, value: any) => void;
-	search?: string;
-	onSearchChange?: (value?: string) => void;
-	searchPlaceholder?: string;
 };
 
 export const ItemsTable = <
@@ -248,49 +216,30 @@ export const ItemsTable = <
 		children,
 		showRank,
 		onSortChange,
-		filterMappings,
-		filter,
-		onFilterChange,
-		search,
-		onSearchChange,
-		searchPlaceholder,
 		...restProps
 	} = props;
 
-	return (
-		<div {...restProps} data-class="table">
-			<div css={tableOptions}>
-				<div css={tableFiltering}>
-					{pagination && <TablePaginationHeader {...pagination} />}
-					{filterMappings &&
-					filter &&
-					Object.entries(filterMappings).map(([property, value], index) => (
-						<TableFilter
-							property={property}
-							filter={value}
-							value={filter[property][(value as any).operator]}
-							key={`filter-${property}-${index}`}
-							onFilterChange={onFilterChange}
-							pagination={pagination}
-						/>
-					))}
-				</div>
-				{search !== undefined && (
-					<TableSearch
-						onChange={(newValue?: string) => {
-							if (onSearchChange) onSearchChange(newValue);
+	if (loading) {
+		return <Loading />;
+	}
 
-							pagination?.set({
-								...pagination,
-								offset: 1,
-								page: 1,
-								prevEndCursor: [],
-							});
-						}}
-						placeholder={searchPlaceholder}
-					/>
-				)}
-			</div>
+	if (notFound) {
+		return <NotFound>{notFoundMessage}</NotFound>;
+	}
+
+	if (error) {
+		return (
+			<ErrorMessage
+				message={errorMessage}
+				details={error.message}
+				showReported
+			/>
+		);
+	}
+
+	return (
+		<div {...restProps} data-class='table'>
+			{pagination && <TablePaginationHeader {...pagination} />}
 			<TableContainer>
 				<Table css={tableStyle}>
 					<colgroup>
@@ -304,39 +253,18 @@ export const ItemsTable = <
 							{showRank ? <TableCell>Rank</TableCell> : <></>}
 							{Children.map(children, (child) => {
 								if (!child) return null;
-								const { label, align, sortable, sortProperty } = child.props;
+								const { label, sortable, sortProperty } = child.props;
 								if (sortable !== true)
-									return (
-										<TableCell align={align} css={cellStyle}>
-											{label}
-										</TableCell>
-									);
+									return <TableCell css={cellStyle}>{label}</TableCell>;
 
 								const isActive = sort?.property === sortProperty;
 
 								return (
 									<TableCell
-										align={align}
-										css={[cellStyle, sortableHeaderBase, child.props.colCss]}
-										onClick={() => {
-											if (onSortChange) onSortChange(sortProperty);
-
-											pagination?.set({
-												...pagination,
-												offset: 1,
-												page: 1,
-												prevEndCursor: [],
-											});
-										}}
+										css={[cellStyle, sortableHeaderBase]}
+										onClick={() => onSortChange && onSortChange(sortProperty)}
 									>
-										<div
-											css={[
-												sortableHeaderItem,
-												css`
-													float: ${align};
-												`,
-											]}
-										>
+										<div css={sortableHeaderItem}>
 											{label}
 											<div
 												css={[
@@ -360,47 +288,27 @@ export const ItemsTable = <
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{!loading &&
-						!notFound &&
-						!error &&
-						data?.map((item, index) => (
+						{data?.map((item, index) => (
 							<TableRow key={item.id}>
 								{showRank ? (
 									<TableCell>
 										{pagination
 											? pagination.limit * (pagination.page - 1) + index + 1
-											: index + 1}
+											: 0}
 									</TableCell>
 								) : (
 									<></>
 								)}
 								{Children.map(
 									children,
-									(child) =>
-										child &&
-											cloneElement(child, {
-												_data: item,
-											})
+									(child) =>child && cloneElement(child, { _data: item, _additionalData: additionalData})
 								)}
 							</TableRow>
 						))}
 					</TableBody>
 				</Table>
-				{loading ? (
-					<Loading />
-				) : notFound ? (
-					<NotFound>{notFoundMessage}</NotFound>
-				) : error ? (
-					<ErrorMessage
-						message={errorMessage}
-						details={error.message}
-						showReported
-					/>
-				) : null}
 			</TableContainer>
-			{!loading && !notFound && !error && pagination && (
-				<TablePagination {...pagination} />
-			)}
+			{pagination && <TablePagination {...pagination} />}
 		</div>
 	);
 };

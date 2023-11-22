@@ -3,16 +3,10 @@ import { NETWORK_CONFIG } from "../config";
 
 const supportedFiatCurrencies = ["USD"];
 
-export function rawAmountToDecimal(amount: string | number | undefined) {
+export function rawAmountToDecimal(amount: string | undefined) {
 	const { decimals } = NETWORK_CONFIG;
 	const scale = new Decimal(10).pow(decimals * -1);
 	return new Decimal(amount || 0).mul(scale);
-}
-
-export function rawAmountToDecimaledString(amount: string | number | undefined) {
-	const { decimals } = NETWORK_CONFIG;
-	const scale = new Decimal(10).pow(decimals);
-	return new Decimal(amount || 0).mul(scale).toString();
 }
 
 export type FormatNumberOptions = {
@@ -26,7 +20,7 @@ export function formatNumber(value: number | Decimal, options: FormatNumberOptio
 	}
 
 	return Intl.NumberFormat("en-US", {
-		maximumFractionDigits: options.compact ? 3 : (options.decimalPlaces === undefined ? 20 : options.decimalPlaces),
+		maximumFractionDigits: options.compact ? 3 : (options.decimalPlaces || 20),
 		notation: options.compact ? "compact" : undefined
 	}).format(value.toString() as any);
 }
@@ -37,7 +31,7 @@ export const nFormatter = (num: number, digits: number) => {
 		{ value: 1, symbol: "" },
 		{ value: 1e3, symbol: "k" },
 		{ value: 1e6, symbol: "m" },
-		{ value: 1e9, symbol: "b" },
+		{ value: 1e9, symbol: "G" },
 		{ value: 1e12, symbol: "T" },
 		{ value: 1e15, symbol: "P" },
 		{ value: 1e18, symbol: "E" },
@@ -66,7 +60,7 @@ export function formatCurrency(value: number | Decimal, currency: string, option
 		value = new Decimal(value);
 	}
 
-	let decimalPlaces = options.decimalPlaces === undefined ? 20 : options.decimalPlaces;
+	let decimalPlaces = options.decimalPlaces || 20;
 
 	if (decimalPlaces === "optimal") {
 		decimalPlaces =

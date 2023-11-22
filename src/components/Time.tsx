@@ -33,7 +33,7 @@ export const Time = (props: TimeProps) => {
 		}
 
 		if (utc) {
-			return formatTime(new Date(time), format, { timeZone: "UTC" });
+			return formatTimeInTimeZone(new Date(time), "UTC", format, { locale: enGB });
 		} else {
 			return formatTime(new Date(time), format, { locale: enGB });
 		}

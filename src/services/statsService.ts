@@ -1,5 +1,5 @@
 import { ChainStats, Stats, Tokenomics } from "./../model/stats";
-import { TAOSTATS_DATA_ENDPOINT } from "../config";
+import { TAOSTATS_PRICE_ENDPOINT } from "../config";
 import { fetchDictionary, fetchIndexer } from "./fetchService";
 import { ResponseItems } from "../model/itemsConnection";
 
@@ -9,6 +9,7 @@ type DictionaryStats = {
 };
 
 type IndexerStats = {
+	activeAccounts: bigint;
 	transfers: bigint;
 };
 
@@ -36,17 +37,18 @@ async function getIndexerStats(): Promise<IndexerStats> {
 		`{
 			stats {
 				nodes {
+					activeAccounts
 					transfers
 				}
 			}
 		}`
 	);
 	const data = response.stats.nodes[0];
-	return data ?? { transfers: BigInt(0) };
+	return data ?? { activeAccounts: BigInt(0), transfers: BigInt(0) };
 }
 
 export const getTokenomics = async (): Promise<Tokenomics> => {
-	const res = await fetch(TAOSTATS_DATA_ENDPOINT);
+	const res = await fetch(TAOSTATS_PRICE_ENDPOINT);
 	const [data] = await res.json();
 
 	return {
@@ -57,7 +59,6 @@ export const getTokenomics = async (): Promise<Tokenomics> => {
 		validationAPY: data["validating_apy"],
 		totalSupply: parseInt(data["total_supply"]),
 		currentSupply: parseInt(data["current_supply"]),
-		delegatedSupply: parseInt(data["delegated_supply"]),
 		volume24h: data["24h_volume"]
 	} as Tokenomics;
 };

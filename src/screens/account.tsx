@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
@@ -13,25 +13,8 @@ import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import { useTransfers } from "../hooks/useTransfers";
 import { AccountInfoTable } from "../components/account/AccountInfoTable";
-import { AccountPortfolio } from "../components/account/AccountPortfolio";
 import { useTaoPrice } from "../hooks/useTaoPrice";
 import { useBalance } from "../hooks/useBalance";
-import { StatItem } from "../components/network/StatItem";
-import { formatCurrency, rawAmountToDecimal } from "../utils/number";
-import { useDelegateBalances } from "../hooks/useDelegateBalances";
-import { TransfersOrder } from "../services/transfersService";
-import { DelegatesOrder } from "../services/delegateService";
-import { useDelegates } from "../hooks/useDelegates";
-import DelegatesTable from "../components/delegates/DelegatesTable";
-import { MIN_DELEGATION_AMOUNT } from "../config";
-import { useAppStats } from "../contexts";
-import {
-	useAccountBalanceHistory,
-	useAccountDelegateHistory,
-} from "../hooks/useAccountHistory";
-import { AccounBalanceHistoryChart } from "../components/account/AccounBalanceHistoryChart";
-import { AccounDelegateHistoryChart } from "../components/account/AccounDelegateHistoryChart";
-import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 
 const accountInfoStyle = css`
   display: flex;
@@ -42,15 +25,6 @@ const accountLabelAddress = css`
   opacity: 0.5;
   overflow: hidden;
   text-overflow: ellipsis;
-`;
-
-const portfolioStyle = (theme: Theme) => css`
-  flex: 0 0 auto;
-  width: 400px;
-
-  ${theme.breakpoints.down("lg")} {
-    width: auto;
-  }
 `;
 
 const accountHeader = (theme: Theme) => css`
@@ -68,15 +42,6 @@ const infoSection = css`
   }
 `;
 
-const summary = css`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 100%;
-  @media only screen and (max-width: 767px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
-`;
-
 const accountTitle = css`
   display: block;
   opacity: 0.8;
@@ -91,11 +56,6 @@ export type AccountPageParams = {
 export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
 	const balance = useBalance({ address: { equalTo: address } });
-	const { state } = useAppStats();
-	const verifiedDelegates = useVerifiedDelegates();
-
-	const blockHeight =
-    Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) * 1000;
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics(
@@ -105,116 +65,22 @@ export const AccountPage = () => {
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
 	});
-	const delegateBalances = useDelegateBalances(
-		{
-			account: { equalTo: address },
-			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
-			updatedAt: { greaterThan: blockHeight > 1000 ? blockHeight - 1000 : 0 },
-		},
-		"AMOUNT_DESC"
-	);
-
-	const delegatesInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
-	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
-		delegatesInitialOrder
-	);
-	const delegatesInitialSearch = "";
-	const [delegatesSearch, setDelegatesSearch] = useState<string | undefined>(
-		delegatesInitialSearch
-	);
-	const delegateSearchFilter = useMemo(() => {
-		const lowerSearch = delegatesSearch?.trim().toLowerCase() || "";
-		if(verifiedDelegates !== undefined) {
-			const filtered = Object.keys(verifiedDelegates).filter((hotkey: string) => {
-				const delegateInfo = verifiedDelegates[hotkey];
-				const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
-				if(lowerSearch !== "" && delegateName.includes(lowerSearch))
-					return true;
-				return false;
-			});
-			if(filtered.length > 0) {
-				return {
-					delegate: {
-						in: filtered,
-					}
-				};
-			}
-		}
-		if(lowerSearch === "")
-			return {};
-		return {
-			delegate: {
-				includesInsensitive: delegatesSearch,
-			}
-		};
-	}, [delegatesSearch]);
-	const delegates = useDelegates(
-		{
-			...delegateSearchFilter,
-			and: [
-				{ account: { equalTo: address } },
-				{ amount: { greaterThan: MIN_DELEGATION_AMOUNT } },
-			],
-		},
-		delegateSort
-	);
-
-	const delegated = `${formatCurrency(
-		rawAmountToDecimal((balance?.data?.staked || 0).toString()),
-		"USD",
-		{ decimalPlaces: 2 }
-	)} 𝞃`;
-
-	const free = `${formatCurrency(
-		rawAmountToDecimal((balance?.data?.free || 0).toString()),
-		"USD",
-		{ decimalPlaces: 2 }
-	)} 𝞃`;
-
 	const taoPrice = useTaoPrice();
-
-	const accountBalanceHistory = useAccountBalanceHistory(address);
-	const accountDelegateHistory = useAccountDelegateHistory(address);
 
 	useDOMEventTrigger(
 		"data-loaded",
 		!account.loading &&
-		!extrinsics.loading &&
-		!transfers.loading &&
-		!taoPrice.loading &&
-		!delegates.loading &&
-		!delegateBalances.loading &&
-		!accountBalanceHistory.loading &&
-		!accountDelegateHistory.loading
+      !extrinsics.loading &&
+      !transfers.loading &&
+      !taoPrice.loading
 	);
 
 	useEffect(() => {
-		if (extrinsics.pagination.page === 1) {
-			const interval = setInterval(extrinsics.refetch, 12 * 1000);
+		if (extrinsics.pagination.offset === 0) {
+			const interval = setInterval(extrinsics.refetch, 60 * 1000);
 			return () => clearInterval(interval);
 		}
 	}, [extrinsics]);
-
-	useEffect(() => {
-		if (transfers.pagination.page === 1) {
-			const interval = setInterval(transfers.refetch, 12 * 1000);
-			return () => clearInterval(interval);
-		}
-	}, [transfers]);
-
-	useEffect(() => {
-		if (delegates.pagination.page === 1) {
-			const interval = setInterval(delegates.refetch, 12 * 1000);
-			return () => clearInterval(interval);
-		}
-	}, [delegates]);
-
-	useEffect(() => {
-		if (balance.refetch) {
-			const interval = setInterval(balance.refetch, 12 * 1000);
-			return () => clearInterval(interval);
-		}
-	}, [balance]);
 
 	const { hash: tab } = useLocation();
 	const tabRef = useRef(null);
@@ -242,51 +108,18 @@ export const AccountPage = () => {
 						info={{
 							account,
 							balance,
-							delegates: delegateBalances,
 							price: taoPrice.data?.toNumber(),
 						}}
 					/>
 				</Card>
-				<Card css={portfolioStyle} data-test="account-portfolio">
+				{/* <Card css={portfolioStyle} data-test="account-portfolio">
 					<div css={summary}>
 						<StatItem title="Delegated" value={delegated} />
 						<StatItem title="Free" value={free} />
 					</div>
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
-				</Card>
+				</Card> */}
 			</CardRow>
-			{account.data && (
-				<Card data-test="account-historical-items">
-					<div ref={tabRef}>
-						<TabbedContent>
-							<TabPane
-								label="Balance"
-								loading={accountBalanceHistory.loading}
-								error={!!accountBalanceHistory.error}
-								value="balance"
-							>
-								<AccounBalanceHistoryChart
-									account={address}
-									balance={balance}
-									balanceHistory={accountBalanceHistory}
-								/>
-							</TabPane>
-							<TabPane
-								label="Delegation"
-								loading={accountDelegateHistory.loading}
-								error={!!accountDelegateHistory.error}
-								value="delegation-chart"
-							>
-								<AccounDelegateHistoryChart
-									account={address}
-									delegate={delegateBalances}
-									delegateHistory={accountDelegateHistory}
-								/>
-							</TabPane>
-						</TabbedContent>
-					</div>
-				</Card>
-			)}
 			{account.data && (
 				<Card data-test="account-related-items">
 					<div ref={tabRef}>
@@ -312,27 +145,6 @@ export const AccountPage = () => {
 									transfers={transfers}
 									showTime
 									direction={{ show: true, source: address }}
-								/>
-							</TabPane>
-
-							<TabPane
-								label="Delegation"
-								count={delegates.pagination.totalCount}
-								loading={delegates.loading}
-								error={delegates.error}
-								value="delegation-table"
-							>
-								<DelegatesTable
-									delegates={delegates}
-									showTime
-									onSortChange={(sortKey: DelegatesOrder) =>
-										setDelegateSort(sortKey)
-									}
-									initialSort={delegatesInitialOrder}
-									onSearchChange={(newSearch?: string) =>
-										setDelegatesSearch(newSearch)
-									}
-									initialSearch={delegatesInitialSearch}
 								/>
 							</TabPane>
 						</TabbedContent>

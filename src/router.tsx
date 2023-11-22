@@ -11,7 +11,6 @@ import { HomePage } from "./screens/home";
 import { NotFoundPage } from "./screens/notFound";
 import { SearchPage } from "./screens/search";
 import { NETWORK_CONFIG } from "./config";
-import { ValidatorPage } from "./screens/validators";
 
 export const router = createBrowserRouter(
 	[
@@ -58,10 +57,6 @@ export const router = createBrowserRouter(
 				{
 					path: "event/:id",
 					element: <EventPage />,
-				},
-				{
-					path: "validators/:address",
-					element: <ValidatorPage />,
 				},
 				{
 					path: "*",

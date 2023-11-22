@@ -1,6 +1,6 @@
 import React, { useReducer, useContext, useEffect } from "react";
-import { getChainStats, getTokenomics } from "../../services/statsService";
-import { ChainStats, Tokenomics } from "../../model/stats";
+import { getTokenomics } from "../../services/statsService";
+import { Tokenomics } from "../../model/stats";
 
 ///
 // Initial state for `useReducer`
@@ -8,13 +8,10 @@ import { ChainStats, Tokenomics } from "../../model/stats";
 type State = {
 	tokenLoading: boolean;
 	tokenStats?: Tokenomics;
-	chainLoading: boolean;
-	chainStats?: ChainStats;
 };
 
 const initialState: State = {
 	tokenLoading: true,
-	chainLoading: true,
 };
 
 ///
@@ -28,12 +25,6 @@ const reducer = (state: any, action: any) => {
 				tokenLoading: false,
 				tokenStats: action.payload,
 			};
-		case "CHAIN_FETCHED":
-			return {
-				...state,
-				chainLoading: false,
-				chainStats: action.payload,
-			};
 		default:
 			throw new Error(`Unknown type: ${action.type}`);
 	}
@@ -42,11 +33,6 @@ const reducer = (state: any, action: any) => {
 const updateTokenStats = async (state: any, dispatch: any) => {
 	const token = await getTokenomics();
 	dispatch({ type: "TOKEN_FETCHED", payload: token });
-};
-
-const updateChainStats = async (state: any, dispatch: any) => {
-	const chain = await getChainStats();
-	dispatch({ type: "CHAIN_FETCHED", payload: chain });
 };
 
 const defaultValue = {
@@ -66,13 +52,6 @@ const StatsContextProvider = (props: any) => {
 		return () => clearInterval(id);
 	}, []);
 
-	useEffect(() => {
-		updateChainStats(state, dispatch);
-		const id = setInterval(() => {
-			updateChainStats(state, dispatch);
-		}, 12 * 1000);
-		return () => clearInterval(id);
-	}, []);
 	return (
 		<StatsContext.Provider value={{ state }}>
 			{props.children}

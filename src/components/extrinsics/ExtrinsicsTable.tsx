@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-import { Theme, css } from "@emotion/react";
 import { NETWORK_CONFIG } from "../../config";
 import { Extrinsic } from "../../model/extrinsic";
 import { PaginatedResource } from "../../model/paginatedResource";
@@ -9,16 +7,6 @@ import { BlockTimestamp } from "../BlockTimestamp";
 import { ButtonLink } from "../ButtonLink";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
-
-const successStyle = (theme: Theme) => css`
-  font-size: 16px;
-  color: ${theme.palette.success.main};
-`;
-
-const failedStyle = (theme: Theme) => css`
-  font-size: 16px;
-  color: ${theme.palette.error.main};
-`;
 
 export type ExtrinsicsTableProps = {
 	extrinsics: PaginatedResource<Extrinsic>;
@@ -76,28 +64,12 @@ function ExtrinsicsTable(props: ExtrinsicsTableProps) {
 			)}
 			{showTime && (
 				<ExtrinsicsTableAttribute
-					label="Time"
+					label="Time (UTC)"
 					render={(extrinsic) => (
-						<BlockTimestamp
-							blockHeight={extrinsic.blockHeight}
-							fromNow
-							tooltip
-							utc
-						/>
+						<BlockTimestamp blockHeight={extrinsic.blockHeight} tooltip utc timezone={false} />
 					)}
 				/>
 			)}
-			<ExtrinsicsTableAttribute
-				label="Result"
-				align="center"
-				render={(extrinsic) =>
-					extrinsic.success ? (
-						<span css={successStyle}>&#x1F5F9;</span>
-					) : (
-						<span css={failedStyle}>&#x1F5F5;</span>
-					)
-				}
-			/>
 		</ItemsTable>
 	);
 }

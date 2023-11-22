@@ -123,9 +123,9 @@ function ExtrinsicsTable(props: BlocksTableProps) {
 			/>
 			{showTime &&
 				<BlocksTableAttribute
-					label="Time"
+					label="Time (UTC)"
 					render={(block) =>
-						<Time time={block.timestamp} fromNow tooltip utc />
+						<Time time={block.timestamp} tooltip utc timezone={false} />
 					}
 				/>
 			}
