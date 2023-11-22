@@ -76,11 +76,11 @@ export const Header = () => {
 									className="btn"
 									rel="noreferrer"
 								>
-									STAKE TAO
+                  STAKE TAO
 								</a>
 								<div className="menu-dropdown">
 									<a href="#" className="btn">
-										BUY TAO
+                    BUY TAO
 										<span>
 											<img src={PolygonGray} alt="Taostats down caret" />
 										</span>
@@ -92,7 +92,7 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												MEXC
+                        MEXC
 											</a>
 										</li>
 										<li>
@@ -101,7 +101,7 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												GATE.IO
+                        GATE.IO
 											</a>
 										</li>
 										<li>
@@ -110,7 +110,7 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												BITGET
+                        BITGET
 											</a>
 										</li>
 										<li>
@@ -119,7 +119,7 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												TENSOR EXCHANGE
+                        TENSOR EXCHANGE
 											</a>
 										</li>
 										<li>
@@ -128,7 +128,7 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												UNISWAP(WTAO)
+                        UNISWAP(WTAO)
 											</a>
 										</li>
 									</ul>
@@ -187,7 +187,7 @@ export const Header = () => {
 										</li>
 										<li className="menu-item-has-children">
 											<a href="https://taostats.io/subnets/">
-												Subnets
+                        Subnets
 												<span
 													className="has-btn"
 													onClick={(e) => openSubMenu(e)}
@@ -198,42 +198,42 @@ export const Header = () => {
 													<ul>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-0/">
-																00 - Root
+                                00 - Root
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-1/">
-																01 - Text Prompting
+                                01 - Text Prompting
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-2/">
-																02 : Machine Translation
+                                02 : Machine Translation
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-3/">
-																03 : Scraping
+                                03 : Scraping
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-4/">
-																04 : Multi Modality
+                                04 : Multi Modality
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-5/">
-																05 - Image
+                                05 - Image
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-6/">
-																06 : Unknown
+                                06 : Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-7/">
-																07 : Storage
+                                07 : Storage
 															</a>
 														</li>
 													</ul>
@@ -242,42 +242,42 @@ export const Header = () => {
 													<ul>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-8/">
-																08 : Price Prediction
+                                08 : Price Prediction
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-9/">
-																09 : Pretraining
+                                09 : Pretraining
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-10/">
-																10 : MapReduce
+                                10 : MapReduce
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-11/">
-																11 - Text Prompting
+                                11 - Text Prompting
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-12/">
-																12 - Unknown
+                                12 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-13/">
-																13 - Unknown
+                                13 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-14/">
-																14 - Unknown
+                                14 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-15/">
-																15 - Blockchain Insights
+                                15 - Blockchain Insights
 															</a>
 														</li>
 													</ul>
@@ -286,42 +286,42 @@ export const Header = () => {
 													<ul>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-16/">
-																16 - Audio
+                                16 - Audio
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-17/">
-																17 - Unknown
+                                17 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-18/">
-																18 - Cortex.t
+                                18 - Cortex.t
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-19/">
-																19 - Unknown
+                                19 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-20/">
-																20 - Unknown
+                                20 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-21/">
-																21 - Unknown
+                                21 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-22/">
-																22 - Unknown
+                                22 - Unknown
 															</a>
 														</li>
 														<li>
 															<a href="https://taostats.io/subnets/netuid-23/">
-																23 - Unknown
+                                23 - Unknown
 															</a>
 														</li>
 													</ul>
@@ -330,8 +330,8 @@ export const Header = () => {
 											<span className="menuItem-glow"></span>
 										</li>
 										<li className="current-menu-item menu-item-has-children">
-											<a href="/">
-												Blockchain
+											<a href="https://x.taostats.io/">
+                        Blockchain
 												<span
 													className="has-btn"
 													onClick={(e) => openSubMenu(e)}
@@ -339,37 +339,33 @@ export const Header = () => {
 											</a>
 											<ul className="subMenu">
 												<li>
-													<a href="/#accounts">Accounts</a>
+													<a href="https://x.taostats.io/#accounts">Accounts</a>
 												</li>
 												<li>
-													<a href="/#transfers">
-														Transfers
+													<a href="https://x.taostats.io/#transfers">
+                            Transfers
 													</a>
 												</li>
 												<li>
-													<a href="/#blocks">Blocks</a>
+													<a href="https://x.taostats.io/#blocks">Blocks</a>
 												</li>
 												<li>
 													<a href="https://taostats.io/tokenomics/">
-														Tokenomics
+                            Tokenomics
 													</a>
 												</li>
 												<li>
-													<a href="https://nx.taostats.io/">
-														Nakamoto
-													</a>
+													<a href="https://nx.taostats.io/">Nakamoto</a>
 												</li>
 												<li>
-													<a href="https://kx.taostats.io/">
-														Kusanagi
-													</a>
+													<a href="https://kx.taostats.io/">Kusanagi</a>
 												</li>
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
 										<li className="menu-item-has-children">
 											<a href="https://taostats.io/verified-validators/">
-												Validators
+                        Validators
 												<span
 													className="has-btn"
 													onClick={(e) => openSubMenu(e)}
@@ -378,12 +374,12 @@ export const Header = () => {
 											<ul className="subMenu">
 												<li>
 													<a href="https://taostats.io/verified-validators/">
-														Verified Validators
+                            Verified Validators
 													</a>
 												</li>
 												<li>
 													<a href="https://taostats.io/staking/">
-														Delegation/Staking
+                            Delegation/Staking
 													</a>
 												</li>
 											</ul>
@@ -391,7 +387,7 @@ export const Header = () => {
 										</li>
 										<li className="menu-item-has-children">
 											<a href="https://taostats.io/developers/">
-												Developers
+                        Developers
 												<span
 													className="has-btn"
 													onClick={(e) => openSubMenu(e)}
@@ -409,7 +405,7 @@ export const Header = () => {
 										</li>
 										<li className="menu-item-has-children">
 											<a href="#">
-												Resources
+                        Resources
 												<span
 													className="has-btn"
 													onClick={(e) => openSubMenu(e)}
@@ -429,11 +425,11 @@ export const Header = () => {
 								</nav>
 								<div className="ht-btns">
 									<a href="https://delegate.taostats.io" className="btn">
-										Stake Tao
+                    Stake Tao
 									</a>
 									<div className="menu-dropdown">
 										<a href="#" className="btn">
-											BUY TAO
+                      BUY TAO
 											<span>
 												<img src={PolygonGray} alt="Taostats down caret" />
 											</span>
@@ -445,7 +441,7 @@ export const Header = () => {
 													target="_blank"
 													rel="noreferrer"
 												>
-													MEXC
+                          MEXC
 												</a>
 											</li>
 											<li>
@@ -454,7 +450,7 @@ export const Header = () => {
 													target="_blank"
 													rel="noreferrer"
 												>
-													GATE.IO
+                          GATE.IO
 												</a>
 											</li>
 											<li>
@@ -463,7 +459,7 @@ export const Header = () => {
 													target="_blank"
 													rel="noreferrer"
 												>
-													BITGET
+                          BITGET
 												</a>
 											</li>
 											<li>
@@ -472,7 +468,7 @@ export const Header = () => {
 													target="_blank"
 													rel="noreferrer"
 												>
-													TENSOR EXCHANGE
+                          TENSOR EXCHANGE
 												</a>
 											</li>
 											<li>
@@ -481,7 +477,7 @@ export const Header = () => {
 													target="_blank"
 													rel="noreferrer"
 												>
-													UNISWAP(WTAO)
+                          UNISWAP(WTAO)
 												</a>
 											</li>
 										</ul>

@@ -1,28 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 
-import { Card, CardRow } from "../components/Card";
+import { Card } from "../components/Card";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useTransfers } from "../hooks/useTransfers";
 import TransfersTable from "../components/transfers/TransfersTable";
-import DelegatesTable from "../components/delegates/DelegatesTable";
 import { useBlocks } from "../hooks/useBlocks";
 import BlocksTable from "../components/blocks/BlocksTable";
-import { NetworkStats, TokenDistributionChart } from "../components/network";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BlocksOrder } from "../services/blocksService";
-import { BalancesFilter, BalancesOrder } from "../services/balancesService";
-import { TransfersFilter, TransfersOrder } from "../services/transfersService";
-import { useDelegates } from "../hooks/useDelegates";
-import { DelegateFilter, DelegatesOrder } from "../services/delegateService";
+import { BalancesOrder } from "../services/balancesService";
+import { TransfersOrder } from "../services/transfersService";
 import { useLocation } from "react-router-dom";
-import { MIN_DELEGATION_AMOUNT } from "../config";
-import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
-import { useValidators } from "../hooks/useValidators";
-import ValidatorsTable from "../components/validators/ValidatorsTable";
-import { ValidatorsOrder } from "../services/validatorService";
 
 const contentStyle = css`
   position: relative;
@@ -38,126 +29,24 @@ const contentInner = css`
   margin-bottom: 48px;
 `;
 
-const statsContainer = css`
-  flex-grow: 1;
-  min-height: 400px;
-`;
-
-const chartContainer = css`
-  width: 400px;
-  flex-grow: 0;
-  @media only screen and (max-width: 767px) {
-    flex-grow: 1;
-    width: auto;
-  }
-`;
-
-const infoSection = css`
-  display: flex;
-  @media only screen and (max-width: 767px) {
-    flex-direction: column;
-  }
-`;
-
 export const HomePage = () => {
-	const verifiedDelegates = useVerifiedDelegates();
-
 	const blocksInitialOrder: BlocksOrder = "HEIGHT_DESC";
 	const [blockSort, setBlockSort] = useState<BlocksOrder>(blocksInitialOrder);
 	const blocks = useBlocks(undefined, blockSort);
 
-	const balancesInitialOrder: BalancesOrder = "BALANCE_TOTAL_DESC";
+	const balancesInitialOrder: BalancesOrder = "BALANCE_FREE_DESC";
 	const [balanceSort, setBalanceSort] =
     useState<BalancesOrder>(balancesInitialOrder);
-	const balancesInitialFilter: BalancesFilter = {
-		balanceTotal: { greaterThan: 0 },
-	};
-	const [balanceFilter, setBalanceFilter] = useState<BalancesFilter>(
-		balancesInitialFilter
-	);
-	const balancesInitialSearch = "";
-	const [balanceSearch, setBalanceSearch] = useState<string | undefined>(
-		balancesInitialSearch
-	);
-	const balances = useBalances(
-		{
-			address: {
-				includesInsensitive: balanceSearch,
-			},
-			...balanceFilter,
-		},
-		balanceSort
-	);
+	const balances = useBalances(undefined, balanceSort);
 
 	const transfersInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
 	const [transferSort, setTransferSort] = useState<TransfersOrder>(
 		transfersInitialOrder
 	);
-	const transfersInitialFilter: TransfersFilter = {
-		amount: { greaterThan: 0 },
-	};
-	const [transfersFilter, setTransfersFilter] = useState<TransfersFilter>(
-		transfersInitialFilter
-	);
-	const transfers = useTransfers(transfersFilter, transferSort);
-
-	const delegatesInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
-	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
-		delegatesInitialOrder
-	);
-	const delegatesInitialFilter: DelegateFilter = {
-		amount: { greaterThan: MIN_DELEGATION_AMOUNT },
-	};
-	const [delegatesFilter, setDelegatesFilter] = useState<DelegateFilter>(
-		delegatesInitialFilter
-	);
-	const delegatesInitialSearch = "";
-	const [delegatesSearch, setDelegatesSearch] = useState<string | undefined>(
-		delegatesInitialSearch
-	);
-	const delegateSearchFilter = useMemo(() => {
-		const lowerSearch = delegatesSearch?.trim().toLowerCase() || "";
-		if (verifiedDelegates !== undefined) {
-			const filtered = Object.keys(verifiedDelegates).filter(
-				(hotkey: string) => {
-					const delegateInfo = verifiedDelegates[hotkey];
-					const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
-					if (lowerSearch !== "" && delegateName.includes(lowerSearch))
-						return true;
-					return false;
-				}
-			);
-			if (filtered.length > 0) {
-				return {
-					delegate: {
-						in: filtered,
-					},
-				};
-			}
-		}
-		if (lowerSearch === "") return {};
-		return {
-			delegate: {
-				includesInsensitive: delegatesSearch,
-			},
-		};
-	}, [delegatesSearch]);
-	const delegates = useDelegates(
-		{
-			...delegateSearchFilter,
-			...delegatesFilter,
-		},
-		delegateSort
-	);
-
-	const validatorsInitialOrder: ValidatorsOrder = "AMOUNT_DESC";
-	const [validatorsSort, setValidatorsSort] = useState<ValidatorsOrder>(
-		validatorsInitialOrder
-	);
-	const validators = useValidators(validatorsSort);
+	const transfers = useTransfers(undefined, transferSort);
 
 	useEffect(() => {
-		if (blocks.pagination.page === 1) {
+		if (blocks.pagination.offset === 0) {
 			const id = setInterval(
 				() => blocks.refetch && blocks.refetch(),
 				12 * 1000
@@ -167,7 +56,7 @@ export const HomePage = () => {
 	}, [blocks]);
 
 	useEffect(() => {
-		if (transfers.pagination.page === 1) {
+		if (transfers.pagination.offset === 0) {
 			const id = setInterval(
 				() => transfers.refetch && transfers.refetch(),
 				12 * 1000
@@ -190,14 +79,6 @@ export const HomePage = () => {
 	return (
 		<div css={contentStyle}>
 			<div css={contentInner}>
-				<CardRow css={infoSection}>
-					<Card css={statsContainer}>
-						<NetworkStats />
-					</Card>
-					<Card css={chartContainer}>
-						<TokenDistributionChart />
-					</Card>
-				</CardRow>
 				<Card>
 					<div ref={tabRef}>
 						<TabbedContent defaultTab={tab.slice(1).toString()}>
@@ -229,48 +110,6 @@ export const HomePage = () => {
 										setTransferSort(sortKey)
 									}
 									initialSort={transfersInitialOrder}
-									onFilterChange={(newFilter?: TransfersFilter) =>
-										setTransfersFilter({ ...transfersFilter, ...newFilter })
-									}
-									initialFilter={transfersInitialFilter}
-								/>
-							</TabPane>
-							<TabPane
-								label="Delegation"
-								count={delegates.pagination.totalCount}
-								loading={delegates.loading}
-								error={delegates.error}
-								value="delegation"
-							>
-								<DelegatesTable
-									delegates={delegates}
-									showTime
-									onSortChange={(sortKey: DelegatesOrder) =>
-										setDelegateSort(sortKey)
-									}
-									initialSort={delegatesInitialOrder}
-									onFilterChange={(newFilter?: DelegateFilter) =>
-										setDelegatesFilter({ ...delegatesFilter, ...newFilter })
-									}
-									initialFilter={delegatesInitialFilter}
-									onSearchChange={(newSearch?: string) =>
-										setDelegatesSearch(newSearch)
-									}
-									initialSearch={delegatesInitialSearch}
-								/>
-							</TabPane>
-							<TabPane
-								label="Validators"
-								loading={validators.loading}
-								error={!!validators.error}
-								value="validators"
-							>
-								<ValidatorsTable
-									validators={validators}
-									onSortChange={(sortKey: ValidatorsOrder) =>
-										setValidatorsSort(sortKey)
-									}
-									initialSort={validatorsInitialOrder}
 								/>
 							</TabPane>
 							<TabPane
@@ -286,14 +125,6 @@ export const HomePage = () => {
 										setBalanceSort(sortKey)
 									}
 									initialSort={balancesInitialOrder}
-									onFilterChange={(newFilter?: BalancesFilter) =>
-										setBalanceFilter({ ...balanceFilter, ...newFilter })
-									}
-									initialFilter={balancesInitialFilter}
-									onSearchChange={(newSearch?: string) =>
-										setBalanceSearch(newSearch)
-									}
-									initialSearch={balancesInitialSearch}
 								/>
 							</TabPane>
 						</TabbedContent>

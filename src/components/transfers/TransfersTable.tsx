@@ -10,10 +10,9 @@ import { NETWORK_CONFIG } from "../../config";
 import { BlockTimestamp } from "../BlockTimestamp";
 import { css, Theme } from "@mui/material";
 import { SortDirection } from "../../model/sortDirection";
-import { TransfersFilter, TransfersOrder } from "../../services/transfersService";
+import { TransfersOrder } from "../../services/transfersService";
 import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
-import { rawAmountToDecimaledString } from "../../utils/number";
 
 const dirContainer = css`
   display: flex;
@@ -59,8 +58,6 @@ export type TransfersTableProps = {
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: TransfersOrder) => void;
 	initialSort?: string;
-	onFilterChange?: (newFilter?: TransfersFilter) => void;
-	initialFilter?: TransfersFilter;
 };
 
 const TransfersTableAttribute = ItemsTableAttribute<Transfer>;
@@ -76,32 +73,13 @@ const orderMappings = {
 	}
 };
 
-const filterMappings: TransfersFilter = {
-	amount: {
-		key: "Amount >",
-		labels: ["100k", "50k", "10k", "5k", "1k", "500", "100", "..."],
-		values: [
-			rawAmountToDecimaledString(100000),
-			rawAmountToDecimaledString(50000),
-			rawAmountToDecimaledString(10000),
-			rawAmountToDecimaledString(5000),
-			rawAmountToDecimaledString(1000),
-			rawAmountToDecimaledString(500),
-			rawAmountToDecimaledString(100),
-			0,
-		],
-		operator: "greaterThan",
-	},
-};
-
 function TransfersTable(props: TransfersTableProps) {
-	const { transfers, showTime, direction, initialFilter, onFilterChange } = props;
+	const { transfers, showTime, direction } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
 	const { initialSort, onSortChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
-	const [filter, setFilter] = useState<TransfersFilter | undefined>();
 
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
@@ -137,33 +115,6 @@ function TransfersTable(props: TransfersTableProps) {
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
 
-	useEffect(() => {
-		Object.entries(filterMappings).forEach(([property, mapping]) => {
-			mapping.values.forEach((value: number) => {
-				if (value === initialFilter?.[property]?.[mapping.operator]) {
-					setFilter({
-						...filter,
-						[property]: {
-							[mapping.operator]: value,
-						},
-					});
-				}
-			});
-		});
-	}, [JSON.stringify(initialFilter)]);
-	const handleFilterChange = (key: string, value: number) => {
-		setFilter({
-			...filter,
-			[key]: {
-				[filterMappings[key].operator]: value,
-			},
-		});
-	};
-	useEffect(() => {
-		if (!onFilterChange) return;
-		onFilterChange(filter);
-	}, [JSON.stringify(filter)]);
-
 	return (
 		<ItemsTable
 			data={transfers.data}
@@ -175,9 +126,6 @@ function TransfersTable(props: TransfersTableProps) {
 			data-test='transfers-table'
 			sort={sort}
 			onSortChange={handleSortChange}
-			filterMappings={filterMappings}
-			filter={filter}
-			onFilterChange={handleFilterChange}
 		>
 			<TransfersTableAttribute
 				label='Extrinsic'
@@ -249,14 +197,14 @@ function TransfersTable(props: TransfersTableProps) {
 			/>
 			{showTime && (
 				<TransfersTableAttribute
-					label='Time'
+					label='Time (UTC)'
 					colCss={{ width: 200 }}
 					render={(transfer) => (
 						<BlockTimestamp
 							blockHeight={transfer.blockNumber}
-							fromNow
 							utc
 							tooltip
+							timezone={false}
 						/>
 					)}
 					sortable

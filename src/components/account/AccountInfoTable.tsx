@@ -17,15 +17,11 @@ import { u8aToHex } from "@polkadot/util";
 import { css } from "@emotion/react";
 import Decimal from "decimal.js";
 import { countBalanceItems } from "../../services/balancesService";
-import { BlockTimestamp } from "../BlockTimestamp";
-import { Link } from "../Link";
-import { DelegateBalance } from "../../model/delegate";
 
 export type AccountInfoTableProps = HTMLAttributes<HTMLDivElement> & {
 	info: {
 		account: Resource<Account>;
 		balance: Resource<Balance>;
-		delegates: Resource<DelegateBalance[]>;
 		price: number | undefined;
 	};
 };
@@ -49,42 +45,22 @@ const addressItem = css`
   word-break: keep-all;
 `;
 
-const createdAt = css`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-`;
-
-const blockLink = css`
-  ::before {
-    content: '(';
-  }
-  ::after {
-    content: ')';
-  }
-`;
-
-const delegateContainer = css`
-  display: flex;
-  flex-direction: column;
-`;
-
 export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	const {
-		info: { account, balance, price, delegates },
+		info: { account, balance, price },
 		...tableProps
 	} = props;
 
-	const total = rawAmountToDecimal(balance.data?.total.toString());
+	const free = rawAmountToDecimal(balance.data?.free.toString());
 	const [rank, setRank] = useState<number>();
 
 	useEffect(() => {
 		const fetchRank = async () => {
-			if (balance.data?.total === undefined) return;
-			const total = balance.data.total;
-			if (total === BigInt(0)) return;
+			if (balance.data?.free === undefined) return;
+			const free = balance.data.free;
+			if (free === BigInt(0)) return;
 			const _rank = await countBalanceItems({
-				balanceTotal: { greaterThan: total },
+				balanceFree: { greaterThan: free },
 			});
 			setRank(_rank + 1);
 		};
@@ -94,10 +70,10 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	return (
 		<InfoTable
 			data={{ ...account.data, ...balance.data }}
-			loading={account.loading || balance.loading || delegates.loading}
+			loading={account.loading || balance.loading}
 			notFound={account.notFound}
 			notFoundMessage="Account doesn't exist"
-			error={account.error || balance.error || delegates.error}
+			error={account.error || balance.error}
 			{...tableProps}
 		>
 			<AccountInfoTableAttribute
@@ -118,78 +94,31 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 				)}
 				copyToClipboard={(data) => u8aToHex(decodeAddress(data.address))}
 			/>
-			{balance.data?.createdAt ? (
-				<AccountInfoTableAttribute
-					label='Created at'
-					render={(data) =>
-						data.createdAt > BigInt(0) ? (
-							<div css={createdAt}>
-								<BlockTimestamp blockHeight={data.createdAt} />
-								<Link href={`/block/${data.createdAt}`} css={blockLink}>
-									{`Block ${data.createdAt}`}
-								</Link>
-							</div>
-						) : (
-							<div css={createdAt}>
-								Pre dates finney chain. View data on
-								<Link href={`https://nx.taostats.io/account/${data.address}`}>
-									Nakamoto chain
-								</Link>
-							</div>
-						)
-					}
-				/>
-			) : (
-				<></>
-			)}
 			<AccountInfoTableAttribute
-				label='Total balance'
+				label='Balance'
 				render={() => (
 					<div css={balanceContainer}>
 						<span css={taoBalance}>
 							{`${formatCurrency(
-								new Decimal(total.toFixed(2).toString()),
+								new Decimal(free.toFixed(2).toString()),
 								"USD",
 								{ decimalPlaces: 2 }
 							)} 𝞃`}
 						</span>
 						<span>
-							{`(${formatCurrency(total.mul(price ?? 0), "USD", {
+							{`(${formatCurrency(free.mul(price ?? 0), "USD", {
 								decimalPlaces: 2,
 							})} USD)`}
 						</span>
 					</div>
 				)}
-				copyToClipboard={() => total.toFixed(2).toString()}
+				copyToClipboard={() => free.toFixed(2).toString()}
 			/>
 			{rank !== undefined && (
 				<AccountInfoTableAttribute
 					label='Rank'
 					render={() => formatNumber(rank)}
 				/>
-			)}
-			{balance.data !== undefined && balance.data.staked > 0 && delegates.data !== undefined && delegates.data.length ? (
-				<AccountInfoTableAttribute
-					label='Delegated balance'
-					render={() => (
-						<div>
-							{delegates.data?.map(({ delegate, amount, delegateName }, index) => (
-								<div css={delegateContainer} key={index}>
-									<Link to={`/validators/${delegate}`}>{`${delegateName ?? delegate}`}</Link>
-									<span>
-										{`${formatCurrency(
-											rawAmountToDecimal(amount.toString()),
-											"𝞃",
-											{ decimalPlaces: 2 }
-										)}`}
-									</span>
-								</div>
-							))}
-						</div>
-					)}
-				/>
-			) : (
-				<></>
 			)}
 		</InfoTable>
 	);

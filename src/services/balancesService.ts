@@ -4,20 +4,12 @@ import { PaginationOptions } from "../model/paginationOptions";
 import { extractItems } from "../utils/extractItems";
 import { fetchIndexer } from "./fetchService";
 
-export type BalancesFilter = {
-	[key: string]: any;
-};
+export type BalancesFilter = object;
 export type BalancesOrder =
 	| "ID_ASC"
 	| "ID_DESC"
 	| "BALANCE_FREE_ASC"
 	| "BALANCE_FREE_DESC"
-	| "BALANCE_STAKED_ASC"
-	| "BALANCE_STAKED_DESC"
-	| "BALANCE_TOTAL_ASC"
-	| "BALANCE_TOTAL_DESC"
-	| "UPDATED_AT_ASC"
-	| "UPDATED_AT_DESC";
 
 export async function getBalances(
 	filter: BalancesFilter | undefined,
@@ -28,23 +20,19 @@ export async function getBalances(
 		accounts: ResponseItems<AccountResponse>;
 	}>(
 		`query ($first: Int!, $after: Cursor, $filter: AccountFilter, $order: [AccountsOrderBy!]!) {
-			accounts(first: $first, after: $after, filter: $filter, orderBy: $order) {
-				nodes {
-                    address
-                    createdAt
-                    updatedAt
-                    balanceFree
-                    balanceStaked
-                    balanceTotal
+				accounts(first: $first, after: $after, filter: $filter, orderBy: $order) {
+					nodes {
+						address
+						balanceFree
+					}
+					pageInfo {
+						endCursor
+						hasNextPage
+						hasPreviousPage
+					}
+					${pagination.after === undefined ? "totalCount" : ""}
 				}
-				pageInfo {
-					endCursor
-					hasNextPage
-					hasPreviousPage
-				}
-				${pagination.after === undefined ? "totalCount" : ""}
-			}
-		}`,
+			}`,
 		{
 			after: pagination.after,
 			first: pagination.limit,
@@ -52,7 +40,7 @@ export async function getBalances(
 			order,
 		}
 	);
-
+	
 	return extractItems(response.accounts, pagination, transformItem);
 }
 
@@ -76,11 +64,7 @@ export async function getBalance(filter: BalancesFilter) {
 			accounts(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
 				nodes {
                     address
-                    createdAt
-                    updatedAt
                     balanceFree
-                    balanceStaked
-                    balanceTotal
 				}
 			}
 		}`,

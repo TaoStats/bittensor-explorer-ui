@@ -1,2 +1,2 @@
-# Taostats Bittensor Explorer
-Bittensor block explorer built by [Taostats](https://taostats.io)
+# Nakamoto Explorer
+Block explorer Nakamoto. Built by [Taostats](https://taostats.io)

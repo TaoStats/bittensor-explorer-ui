@@ -39,13 +39,12 @@ export async function getEventsByName(
 	const [module, event] = name.split(".");
 	const filter: EventsFilter = { and: [{ module: { equalTo: module } }, { event: { equalTo: event } }] };
 
-	return getEvents(filter, order, false, pagination);
+	return getEvents(filter, order, pagination);
 }
 
 export async function getEvents(
 	filter: EventsFilter,
 	order: EventsOrder = "BLOCK_HEIGHT_DESC",
-	fetchTotalCount = true,
 	pagination: PaginationOptions,
 ) {
 	const response = await fetchDictionary<{ events: ResponseItems<EventResponse> }>(

@@ -43,36 +43,68 @@ export const Footer = () => {
 							<div className="f-col">
 								<h5>Apps</h5>
 								<ul>
-									<li><a href="https://chat.bitapai.io/">Chat UI</a></li>
-									<li><a href="https://studio.bitapai.io/">Image Studio</a></li>
+									<li>
+										<a href="https://chat.bitapai.io/">Chat UI</a>
+									</li>
+									<li>
+										<a href="https://studio.bitapai.io/">Image Studio</a>
+									</li>
 								</ul>
 								<h5>Developers</h5>
 								<ul>
-									<li><a href="https://bitapi.io/">BitAPAI</a></li>
-									<li><a href="https://taostats.io/api/">Taostats API</a></li>
+									<li>
+										<a href="https://bitapi.io/">BitAPAI</a>
+									</li>
+									<li>
+										<a href="https://taostats.io/api/">Taostats API</a>
+									</li>
 								</ul>
 							</div>
 							<div className="f-col">
-								<h5>Blockchain</h5>                             
+								<h5>Blockchain</h5>
 								<ul>
-									<li><a href="/#accounts">Accounts</a></li>
-									<li><a href="/#transfers">Transfers</a></li>
-									<li><a href="/#blocks">Blocks</a></li>
-									<li><a href="https://taostats.io/tokenomics/">Tokenomics</a></li>
-									<li><a href="https://nx.taostats.io/">Nakamoto</a></li>
-									<li><a href="https://kx.taostats.io/">Kusanagi</a></li>
+									<li>
+										<a href="https://x.taostats.io/#accounts">Accounts</a>
+									</li>
+									<li>
+										<a href="https://x.taostats.io/#transfers">Transfers</a>
+									</li>
+									<li>
+										<a href="https://x.taostats.io/#blocks">Blocks</a>
+									</li>
+									<li>
+										<a href="https://taostats.io/tokenomics/">Tokenomics</a>
+									</li>
+									<li>
+										<a href="https://nx.taostats.io/">Nakamoto</a>
+									</li>
+									<li>
+										<a href="https://kx.taostats.io/">Kusanagi</a>
+									</li>
 								</ul>
 							</div>
 							<div className="f-col">
-								<h5>Validators</h5> 
+								<h5>Validators</h5>
 								<ul>
-									<li><a href="https://taostats.io/verified-validators/">Verified Validators</a></li>
-									<li><a href="https://taostats.io/staking/">Delegation/Staking</a></li>
+									<li>
+										<a href="https://taostats.io/verified-validators/">
+                      Verified Validators
+										</a>
+									</li>
+									<li>
+										<a href="https://taostats.io/staking/">
+                      Delegation/Staking
+										</a>
+									</li>
 								</ul>
-								<h5>Resources</h5> 
+								<h5>Resources</h5>
 								<ul>
-									<li className=""><a href="https://taostats.io/links/">Links</a></li>
-									<li className=""><a href="https://taostats.io/media/">Media</a></li>
+									<li className="">
+										<a href="https://taostats.io/links/">Links</a>
+									</li>
+									<li className="">
+										<a href="https://taostats.io/media/">Media</a>
+									</li>
 								</ul>
 							</div>
 						</div>

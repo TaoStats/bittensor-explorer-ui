@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useApi } from "../contexts";
 import { rawAmountToDecimal } from "../utils/number";
 
@@ -8,14 +8,24 @@ export function useTotalIssuance() {
 		state: { api, apiState },
 	} = useApi();
 	const [totalIssuance, setTotalIssuance] = useState<Decimal>();
+	const [unsub, setUnsub] = useState<any>(undefined);
 
-	const fetchTotalIssuance = async () => {
+	const subscribeTotalIssuance = async () => {
 		if (!api || apiState !== "READY") return;
-		const value = await api.query.balances.totalIssuance();
-		setTotalIssuance(rawAmountToDecimal(value.toString()));
+		const _unsub = await api.query.subtensorModule?.totalIssuance(
+			(value: any) => {
+				value && setTotalIssuance(rawAmountToDecimal(value.toString()));
+			}
+		);
+		setUnsub(_unsub);
 	};
 
-	setTimeout(fetchTotalIssuance, 12 * 1000);
+	useEffect(() => {
+		subscribeTotalIssuance();
+		return () => { 
+			if (unsub) unsub.then();
+		};
+	}, [apiState]);
 
 	return totalIssuance;
 }
