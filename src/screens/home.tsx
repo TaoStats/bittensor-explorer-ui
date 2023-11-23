@@ -34,9 +34,8 @@ export const HomePage = () => {
 	const [blockSort, setBlockSort] = useState<BlocksOrder>(blocksInitialOrder);
 	const blocks = useBlocks(undefined, blockSort);
 
-	const balancesInitialOrder: BalancesOrder = "BALANCE_FREE_DESC";
-	const [balanceSort, setBalanceSort] =
-    useState<BalancesOrder>(balancesInitialOrder);
+	const balancesInitialOrder: BalancesOrder = "BALANCE_TOTAL_DESC";
+	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(balancesInitialOrder);
 	const balances = useBalances(undefined, balanceSort);
 
 	const transfersInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
