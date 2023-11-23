@@ -9,7 +9,6 @@ export type AccountResponse = {
 
 export type AccountBalance = {
 	free: bigint;
-	reserved: bigint;
 	staked: bigint;
 	total: bigint;
 }
@@ -17,6 +16,4 @@ export type AccountBalance = {
 export type Balance = AccountBalance & {
 	id: string;
 	address: string;
-	createdAt: bigint;
-	updatedAt: bigint;
 }

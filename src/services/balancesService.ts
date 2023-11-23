@@ -4,12 +4,18 @@ import { PaginationOptions } from "../model/paginationOptions";
 import { extractItems } from "../utils/extractItems";
 import { fetchIndexer } from "./fetchService";
 
-export type BalancesFilter = object;
+export type BalancesFilter = {
+	[key: string]: any;
+};
 export type BalancesOrder =
 	| "ID_ASC"
 	| "ID_DESC"
 	| "BALANCE_FREE_ASC"
 	| "BALANCE_FREE_DESC"
+	| "BALANCE_STAKED_ASC"
+	| "BALANCE_STAKED_DESC"
+	| "BALANCE_TOTAL_ASC"
+	| "BALANCE_TOTAL_DESC";
 
 export async function getBalances(
 	filter: BalancesFilter | undefined,
@@ -24,6 +30,8 @@ export async function getBalances(
 				nodes {
                     address
                     balanceFree
+                    balanceStaked
+                    balanceTotal
 				}
 				pageInfo {
 					endCursor
@@ -51,8 +59,6 @@ const transformItem = (item: AccountResponse): Balance => {
 		free: item.balanceFree,
 		staked: item.balanceStaked,
 		total: item.balanceTotal,
-		createdAt: item.createdAt,
-		updatedAt: item.updatedAt,
 	} as Balance;
 };
 
@@ -65,6 +71,8 @@ export async function getBalance(filter: BalancesFilter) {
 				nodes {
                     address
                     balanceFree
+                    balanceStaked
+                    balanceTotal
 				}
 			}
 		}`,
@@ -73,8 +81,7 @@ export async function getBalance(filter: BalancesFilter) {
 		}
 	);
 
-	const data =
-		response.accounts?.nodes[0] && transformItem(response.accounts.nodes[0]);
+	const data = response.accounts?.nodes[0] && transformItem(response.accounts.nodes[0]);
 	return data;
 }
 
