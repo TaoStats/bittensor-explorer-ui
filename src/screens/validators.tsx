@@ -104,7 +104,7 @@ export const ValidatorPage = () => {
 
 	const info = verifiedDelegates[address];
 
-	const balance = useValidatorBalance({ delegate: { equalTo: address } });
+	const balance = useValidatorBalance({ address: { equalTo: address } });
 	const validatorStakeHistory = useValidatorStakeHistory(address);
 
 	const nominatorsInitialOrder: DelegateBalancesOrder = "AMOUNT_DESC";

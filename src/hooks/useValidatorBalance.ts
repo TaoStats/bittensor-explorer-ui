@@ -1,9 +1,9 @@
 import { FetchOptions } from "../model/fetchOptions";
-import { DelegateBalanceFilter, getValidatorBalances } from "../services/delegateService";
+import { ValidatorFilter, getValidatorBalances } from "../services/delegateService";
 import { useResource } from "./useResource";
 
 export function useValidatorBalance(
-	filter: DelegateBalanceFilter | undefined,
+	filter: ValidatorFilter | undefined,
 	options?: FetchOptions
 ) {
 	return useResource(getValidatorBalances, [filter], options);

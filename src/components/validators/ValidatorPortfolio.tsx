@@ -37,7 +37,7 @@ export type ValidatorPortfolioProps = {
 export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 	const { hotkey } = props;
 
-	const balance = useValidatorBalance({ delegate: { equalTo: hotkey } });
+	const balance = useValidatorBalance({ address: { equalTo: hotkey } });
 	const coldKey = useColdKey(hotkey);
 	const validatorStaked = useValidatorStaked(hotkey, coldKey);
 	const loading = balance.loading || validatorStaked === undefined;
