@@ -160,6 +160,23 @@ async function fetchDelegateBalances(
 	return items;
 }
 
+export async function countNominators(filter: DelegateBalanceFilter) {
+	const response = await fetchIndexer<{
+		delegateBalances: ResponseItems<DelegateBalance>;
+	}>(
+		`query ($filter: DelegateBalanceFilter) {
+			delegateBalances(filter: $filter) {
+				totalCount
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	return response.delegateBalances.totalCount;
+}
+
 async function fetchValidatorBalances(
 	filter: ValidatorFilter | undefined
 ) {

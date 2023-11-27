@@ -7,6 +7,8 @@ import { useValidatorBalance } from "../../hooks/useValidatorBalance";
 import { StatItem } from "../network/StatItem";
 import { DonutChart } from "../DonutChart";
 import Loading from "../Loading";
+import { useState, useEffect } from "react";
+import { countNominators } from "../../services/delegateService";
 
 const chartContainer = css`
   display: flex;
@@ -50,14 +52,27 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 			(rawAmountToDecimal(validatorStaked).toNumber() * 100) /
         rawAmountToDecimal(balance.data).toNumber()
 		).toFixed(2);
-	const nomineesStaked = loading
+		
+	const [nominators, setNominators] = useState<number>();
+	useEffect(() => {
+		const fetchNominators = async () => {
+			if (hotkey === "") return;
+			const _count = await countNominators({
+				delegate: { equalTo: hotkey },
+			});
+			setNominators(_count);
+		};
+		fetchNominators();
+	}, [hotkey]);
+
+	const nomineesStaked = loading || nominators === 1
 		? 0
 		: rawAmountToDecimal(balance.data).toNumber() -
       rawAmountToDecimal(validatorStaked).toNumber();
-	const nomineesStakedFormatted = loading
+	const nomineesStakedFormatted = loading || nominators === 1
 		? 0
 		: formatNumber(nomineesStaked, { decimalPlaces: 2 });
-	const nomineesStakedPercent = loading
+	const nomineesStakedPercent = loading || nominators === 1
 		? 0
 		: (
 			(nomineesStaked * 100) /
