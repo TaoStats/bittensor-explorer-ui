@@ -139,6 +139,7 @@ type ItemsTableDataFn<T, A extends any[], R> = (
 
 export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
+	align?: "left" | "center" | "right" | "justify" | "inherit" | undefined;
 	colCss?: Interpolation<Theme>;
 	sortable?: boolean;
 	sortProperty?: string;
@@ -157,14 +158,14 @@ export const ItemsTableAttribute = <
 >(
 	props: ItemsTableAttributeProps<T, A, S>
 ) => {
-	const { colSpan, render, hide, _data, _additionalData = [] as any } = props;
+	const { align, colSpan, render, hide, _data, _additionalData = [] as any } = props;
 
 	if (!_data || hide?.(_data, ..._additionalData)) {
 		return null;
 	}
 
 	return (
-		<TableCell css={cellStyle} colSpan={colSpan?.(_data, ..._additionalData)}>
+		<TableCell align={align} css={cellStyle} colSpan={colSpan?.(_data, ..._additionalData)}>
 			{render(_data, ..._additionalData)}
 		</TableCell>
 	);
@@ -253,9 +254,9 @@ export const ItemsTable = <
 							{showRank ? <TableCell>Rank</TableCell> : <></>}
 							{Children.map(children, (child) => {
 								if (!child) return null;
-								const { label, sortable, sortProperty } = child.props;
+								const { label, align, sortable, sortProperty } = child.props;
 								if (sortable !== true)
-									return <TableCell css={cellStyle}>{label}</TableCell>;
+									return <TableCell align={align} css={cellStyle}>{label}</TableCell>;
 
 								const isActive = sort?.property === sortProperty;
 
