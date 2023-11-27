@@ -101,8 +101,8 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 				render={() => (
 					<div>
 						<div css={balanceContainer}>
-							<span css={taoBalance}>
-								Free:
+							<span>
+								Free:&nbsp;&nbsp;&nbsp;&nbsp;
 								{`${formatCurrency(
 									new Decimal(free.toFixed(2).toString()),
 									"USD",
@@ -111,8 +111,8 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 							</span>
 						</div>
 						<div css={balanceContainer}>
-							<span css={taoBalance}>
-								Staked:
+							<span>
+								Staked:&nbsp;
 								{`${formatCurrency(
 									new Decimal(staked.toFixed(2).toString()),
 									"USD",
@@ -121,7 +121,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 							</span>
 						</div>
 						<div css={balanceContainer}>
-							Total:
+							Total:&nbsp;&nbsp;&nbsp;
 							<span css={taoBalance}>
 								{`${formatCurrency(
 									new Decimal(total.toFixed(2).toString()),
@@ -137,7 +137,7 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 						</div>
 					</div>
 				)}
-				copyToClipboard={() => free.toFixed(2).toString()}
+				copyToClipboard={() => total.toFixed(2).toString()}
 			/>
 			{rank !== undefined && (
 				<AccountInfoTableAttribute
