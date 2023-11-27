@@ -51,16 +51,18 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 		...tableProps
 	} = props;
 
+	const total = rawAmountToDecimal(balance.data?.total.toString());
 	const free = rawAmountToDecimal(balance.data?.free.toString());
+	const staked = rawAmountToDecimal(balance.data?.staked.toString());
 	const [rank, setRank] = useState<number>();
 
 	useEffect(() => {
 		const fetchRank = async () => {
-			if (balance.data?.free === undefined) return;
-			const free = balance.data.free;
-			if (free === BigInt(0)) return;
+			if (balance.data?.total === undefined) return;
+			const total = balance.data.total;
+			if (total === BigInt(0)) return;
 			const _rank = await countBalanceItems({
-				balanceFree: { greaterThan: free },
+				balanceTotal: { greaterThan: total },
 			});
 			setRank(_rank + 1);
 		};
@@ -97,22 +99,45 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			<AccountInfoTableAttribute
 				label='Balance'
 				render={() => (
-					<div css={balanceContainer}>
-						<span css={taoBalance}>
-							{`${formatCurrency(
-								new Decimal(free.toFixed(2).toString()),
-								"USD",
-								{ decimalPlaces: 2 }
-							)} 𝞃`}
-						</span>
-						<span>
-							{`(${formatCurrency(free.mul(price ?? 0), "USD", {
-								decimalPlaces: 2,
-							})} USD)`}
-						</span>
+					<div>
+						<div css={balanceContainer}>
+							<span>
+								Free:&nbsp;&nbsp;&nbsp;&nbsp;
+								{`${formatCurrency(
+									new Decimal(free.toFixed(2).toString()),
+									"USD",
+									{ decimalPlaces: 2 }
+								)} 𝞃`}
+							</span>
+						</div>
+						<div css={balanceContainer}>
+							<span>
+								Staked:&nbsp;
+								{`${formatCurrency(
+									new Decimal(staked.toFixed(2).toString()),
+									"USD",
+									{ decimalPlaces: 2 }
+								)} 𝞃`}
+							</span>
+						</div>
+						<div css={balanceContainer}>
+							Total:&nbsp;&nbsp;&nbsp;
+							<span css={taoBalance}>
+								{`${formatCurrency(
+									new Decimal(total.toFixed(2).toString()),
+									"USD",
+									{ decimalPlaces: 2 }
+								)} 𝞃`}
+							</span>
+							{/* <span>
+								{`(${formatCurrency(free.mul(price ?? 0), "USD", {
+									decimalPlaces: 2,
+								})} USD)`}
+							</span> */}
+						</div>
 					</div>
 				)}
-				copyToClipboard={() => free.toFixed(2).toString()}
+				copyToClipboard={() => total.toFixed(2).toString()}
 			/>
 			{rank !== undefined && (
 				<AccountInfoTableAttribute
