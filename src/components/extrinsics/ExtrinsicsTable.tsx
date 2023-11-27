@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { Theme, css } from "@emotion/react";
 import { NETWORK_CONFIG } from "../../config";
 import { Extrinsic } from "../../model/extrinsic";
 import { PaginatedResource } from "../../model/paginatedResource";
@@ -15,6 +17,16 @@ export type ExtrinsicsTableProps = {
 };
 
 const ExtrinsicsTableAttribute = ItemsTableAttribute<Extrinsic>;
+
+const successStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.success.main};
+`;
+
+const failedStyle = (theme: Theme) => css`
+	font-size: 16px;
+	color: ${theme.palette.error.main};
+`;
 
 function ExtrinsicsTable(props: ExtrinsicsTableProps) {
 	const { extrinsics, showAccount, showTime } = props;
@@ -70,6 +82,17 @@ function ExtrinsicsTable(props: ExtrinsicsTableProps) {
 					)}
 				/>
 			)}
+			<ExtrinsicsTableAttribute
+				label="Result"
+				align="center"
+				render={(extrinsic) =>
+					extrinsic.success ? (
+						<span css={successStyle}>&#x1F5F9;</span>
+					) : (
+						<span css={failedStyle}>&#x1F5F5;</span>
+					)
+				}
+			/>
 		</ItemsTable>
 	);
 }
