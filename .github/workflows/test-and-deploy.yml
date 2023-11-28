@@ -1,6 +1,9 @@
 name: Test & Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - ci-fix
 
 jobs:
   build:
@@ -18,6 +21,7 @@ jobs:
           REACT_APP_COMMIT_SHA: ${{ github.sha }}
           REACT_APP_BUILD_TIMESTAMP: ${{ env.NOW }}
           REACT_APP_ROLLBAR_TOKEN: ${{ secrets.ROLLBAR_CLIENT_ACCESS_TOKEN }}
+          CI: false
         run: npm run build
       - name: Upload build artifact
         uses: actions/upload-artifact@master
