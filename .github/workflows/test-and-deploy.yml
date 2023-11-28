@@ -1,9 +1,6 @@
 name: Test & Deploy
 
-on:
-  push:
-    branches:
-      - ci-fix
+on: [push]
 
 jobs:
   build:
