@@ -26,7 +26,7 @@ export const RPC_ENDPOINT = process.env.REACT_APP_RPC_ENDPOINT || "wss://entrypo
 
 export const NETWORK_CONFIG = {
 	currency: "𝞃",
-	decimals: 12,
+	decimals: 9,
 	prefix: 42,
 };
 
