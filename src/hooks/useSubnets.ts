@@ -8,5 +8,5 @@ export function useSubnets(
 	order?: SubnetsOrder,
 	options?: FetchOptions
 ) {
-	return usePaginatedResource(getSubnets, [filter, order], options);
+	return usePaginatedResource(getSubnets, [order], options);
 }

@@ -10,10 +10,9 @@ import { AccountAddress } from "../AccountAddress";
 import { Subnet } from "../../model/subnet";
 import { SubnetsOrder } from "../../services/subnetsService";
 import { SortOrder } from "../../model/sortOrder";
-import subnetNames from "../../subnets_names.json";
 
 export type SubnetsTableProps = {
-	subnets: PaginatedResource<Subnet>,
+	subnets: PaginatedResource<Subnet>;
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: SubnetsOrder) => void;
 	initialSort?: string;
@@ -33,9 +32,7 @@ const orderMappings = {
 };
 
 function SubnetsTable(props: SubnetsTableProps) {
-	const {
-		subnets
-	} = props;
+	const { subnets } = props;
 
 	const { initialSort, onSortChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
@@ -58,7 +55,10 @@ function SubnetsTable(props: SubnetsTableProps) {
 		if (property === sort?.property) {
 			setSort({
 				...sort,
-				direction: sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC,
+				direction:
+					sort.direction === SortDirection.ASC
+						? SortDirection.DESC
+						: SortDirection.ASC,
 			});
 		} else {
 			setSort({
@@ -81,53 +81,51 @@ function SubnetsTable(props: SubnetsTableProps) {
 			notFound={subnets.notFound}
 			notFoundMessage="No subnets found"
 			error={subnets.error}
-			pagination={subnets.pagination}
 			data-test="subnets-table"
 			sort={sort}
 			onSortChange={handleSortChange}
 		>
 			<SubnetsTableAttribute
-				label="Subnet ID"
+				label="ID"
 				sortable
-				render={(subnet) =>
-					<>{subnet.netUid}</>
-				}
-				sortProperty='netUid'
+				render={(subnet) => <>{subnet.netUid}</>}
+				sortProperty="netUid"
 			/>
 			<SubnetsTableAttribute
-				label="Subnet Name"
-				render={(subnet) =>
-					<>{(subnetNames as any)[subnet.netUid] || "Unknown"}</>
-
-				}
+				label="Name"
+				render={(subnet) => <>{subnet.name}</>}
 			/>
 			<SubnetsTableAttribute
-				label="Created At"
+				label="Created At (UTC)"
 				sortable
-				render={(subnet) =>
-					<BlockTimestamp blockHeight={subnet.createdAt} fromNow tooltip utc />
-				}
-				sortProperty='createdAt'
+				render={(subnet) => (
+					<BlockTimestamp
+						blockHeight={subnet.createdAt}
+						tooltip
+						utc
+						timezone={false}
+					/>
+				)}
+				sortProperty="createdAt"
 			/>
 			<SubnetsTableAttribute
 				label="Owner"
-				render={(subnet) =>
+				render={(subnet) => (
 					<AccountAddress
 						address={decodeAddress(subnet.owner)}
 						prefix={NETWORK_CONFIG.prefix}
 						copyToClipboard="normal"
 						shorten
 					/>
-				}
-				sortProperty='eventCount'
+				)}
 			/>
 			<SubnetsTableAttribute
-				label='Extrinsic'
-				render={(subnet) =>
+				label="Extrinsic"
+				render={(subnet) => (
 					<Link
 						to={`/extrinsic/${subnet.createdAt}-${subnet.extrinsicId}`}
 					>{`${subnet.createdAt}-${subnet.extrinsicId}`}</Link>
-				}
+				)}
 			/>
 		</ItemsTable>
 	);
