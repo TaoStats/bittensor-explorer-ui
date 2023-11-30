@@ -3,6 +3,7 @@ import Logo from "../assets/logo.png";
 import PolygonGray from "../assets/polygon-gray.svg";
 import { useAppStats } from "../contexts";
 import { nFormatter } from "../utils/number";
+import subnetNames from "../subnets_names.json";
 
 export const Header = () => {
 	const {
@@ -26,6 +27,10 @@ export const Header = () => {
 		(event.target as any).parentElement.classList.toggle("open-menu");
 		event.preventDefault();
 	};
+	
+	const subnetIDs = Object.keys(subnetNames);
+	const totalSubnets = subnetIDs.length;
+	const subnetMenuColumn = 3;
 
 	return (
 		<header className="new-site-header">
@@ -194,138 +199,31 @@ export const Header = () => {
 												></span>
 											</a>
 											<ul className="megaMenu subMenu">
-												<li>
-													<ul>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-0/">
-																00 - Root
-															</a>
+												{
+													Array.from(Array(3)).map((_, menuIndex) => (
+														<li key={`subnet-menu-column-${menuIndex}`}>
+															<ul>
+																{
+																	Array.from(Array(Math.floor((totalSubnets + 2 - menuIndex) / subnetMenuColumn))).map((_, itemIndex) => {
+																		let passed = 0;
+																		for(let i = 0; i < menuIndex; i ++) {
+																			passed += Math.floor((totalSubnets + 2 - i) / subnetMenuColumn);
+																		}
+																		const netUid = parseInt(subnetIDs[passed + itemIndex] ?? "0");
+																		const name = (subnetNames as any)[netUid];
+																		return (
+																			<li key={`subnet-menu-item-${itemIndex}`}>
+																				<a href={"https://taostats.io/subnets/netuid-" + netUid}>
+																					{netUid < 10 ? "0" : ""}{netUid} - {name}
+																				</a>
+																			</li>
+																		);
+																	})
+																}
+															</ul>
 														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-1/">
-																01 - Text Prompting
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-2/">
-																02 : Machine Translation
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-3/">
-																03 : Scraping
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-4/">
-																04 : Multi Modality
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-5/">
-																05 - Image
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-6/">
-																06 : Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-7/">
-																07 : Storage
-															</a>
-														</li>
-													</ul>
-												</li>
-												<li>
-													<ul>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-8/">
-																08 : Price Prediction
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-9/">
-																09 : Pretraining
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-10/">
-																10 : MapReduce
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-11/">
-																11 - Text Prompting
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-12/">
-																12 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-13/">
-																13 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-14/">
-																14 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-15/">
-																15 - Blockchain Insights
-															</a>
-														</li>
-													</ul>
-												</li>
-												<li>
-													<ul>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-16/">
-																16 - Audio
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-17/">
-																17 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-18/">
-																18 - Cortex.t
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-19/">
-																19 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-20/">
-																20 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-21/">
-																21 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-22/">
-																22 - Unknown
-															</a>
-														</li>
-														<li>
-															<a href="https://taostats.io/subnets/netuid-23/">
-																23 - Unknown
-															</a>
-														</li>
-													</ul>
-												</li>
+													))
+												}
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
