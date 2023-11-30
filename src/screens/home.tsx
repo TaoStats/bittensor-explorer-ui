@@ -23,6 +23,9 @@ import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidators } from "../hooks/useValidators";
 import ValidatorsTable from "../components/validators/ValidatorsTable";
 import { ValidatorsOrder } from "../services/validatorService";
+import SubnetsTable from "../components/subnets/SubnetsTable";
+import { useSubnets } from "../hooks/useSubnets";
+import { SubnetsOrder } from "../services/subnetsService";
 
 const contentStyle = css`
   position: relative;
@@ -155,6 +158,10 @@ export const HomePage = () => {
 		validatorsInitialOrder
 	);
 	const validators = useValidators(validatorsSort);
+
+	const subnetsInitialOrder: SubnetsOrder = "NET_UID_ASC";
+	const [subnetSort, setSubnetSort] = useState<SubnetsOrder>(subnetsInitialOrder);
+	const subnets = useSubnets(undefined, subnetSort);
 
 	useEffect(() => {
 		if (blocks.pagination.page === 1) {
@@ -294,6 +301,19 @@ export const HomePage = () => {
 										setBalanceSearch(newSearch)
 									}
 									initialSearch={balancesInitialSearch}
+								/>
+							</TabPane>
+							<TabPane
+								label="Subnets"
+								count={subnets.pagination.totalCount}
+								loading={subnets.loading}
+								error={subnets.error}
+								value="subnets"
+							>
+								<SubnetsTable
+									subnets={subnets}
+									onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
+									initialSort={subnetsInitialOrder}
 								/>
 							</TabPane>
 						</TabbedContent>
