@@ -93,7 +93,11 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Name"
-				render={(subnet) => <>{subnet.name}</>}
+				render={(subnet) => 
+					<Link to={`https://taostats.io/subnets/netuid-${subnet.netUid}`}>
+						{subnet.name}
+					</Link>
+				}
 			/>
 			<SubnetsTableAttribute
 				label="Created At (UTC)"
