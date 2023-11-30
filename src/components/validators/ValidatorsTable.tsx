@@ -11,7 +11,6 @@ import { SortDirection } from "../../model/sortDirection";
 import { useState, useEffect } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { PaginatedResource } from "../../model/paginatedResource";
-import { DataError } from "../../utils/error";
 
 export type ValidatorsTableProps = {
 	validators: PaginatedResource<Validator>;
@@ -19,11 +18,11 @@ export type ValidatorsTableProps = {
 	onSortChange?: (orderBy: ValidatorsOrder) => void;
 };
 
-// const day_change_css = css`
-//   font-size: small;
-//   font-weight: bold;
-//   margin-left: 10px;
-// `;
+const day_change_css = css`
+  font-size: small;
+  font-weight: bold;
+  margin-left: 10px;
+`;
 
 const ValidatorsTableAttribute = ItemsTableAttribute<Validator>;
 
@@ -127,7 +126,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="amount"
 			/>
-			{/*
+
 			<ValidatorsTableAttribute
 				label=""
 				colCss={css`
@@ -154,8 +153,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						</>
 					);
 				}}
-			/>
-			*/}
+			/>			
 
 			<ValidatorsTableAttribute
 				label="Nominators"
@@ -166,7 +164,8 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="nominators"
 			/>
-			{/*<ValidatorsTableAttribute
+
+			<ValidatorsTableAttribute
 				label=""
 				colCss={css`padding-left: 0px;`}
 				render={(validator) => {
@@ -185,8 +184,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						</>
 					);
 				}}
-			/>
-				 */}
+			/>				
 		</ItemsTable>
 	);
 }

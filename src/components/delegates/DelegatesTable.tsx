@@ -93,7 +93,14 @@ const filterMappings: DelegateFilter = {
 };
 
 function DelegatesTable(props: DelegatesTableProps) {
-	const { delegates, showTime, initialFilter, onFilterChange, initialSearch, onSearchChange } = props;
+	const {
+		delegates,
+		showTime,
+		initialFilter,
+		onFilterChange,
+		initialSearch,
+		onSearchChange,
+	} = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
@@ -169,7 +176,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 	};
 
 	useEffect(() => {
-		if(!onSearchChange) return;
+		if (!onSearchChange) return;
 		onSearchChange(search);
 	}, [search]);
 
@@ -178,10 +185,10 @@ function DelegatesTable(props: DelegatesTableProps) {
 			data={delegates.data}
 			loading={delegates.loading}
 			notFound={delegates.notFound}
-			notFoundMessage='No delegate/undelegate events found'
+			notFoundMessage="No delegate/undelegate events found"
 			error={delegates.error}
 			pagination={delegates.pagination}
-			data-test='delegates-table'
+			data-test="delegates-table"
 			sort={sort}
 			onSortChange={handleSortChange}
 			filterMappings={filterMappings}
@@ -192,7 +199,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 			searchPlaceholder="DELEGATE"
 		>
 			<DelegatesTableAttribute
-				label='Extrinsic'
+				label="Extrinsic"
 				render={(delegate) =>
 					delegate.extrinsicId && (
 						<Link
@@ -202,60 +209,60 @@ function DelegatesTable(props: DelegatesTableProps) {
 				}
 			/>
 			<DelegatesTableAttribute
-				label='Account'
+				label="Account"
 				render={(delegate) => (
 					<AccountAddress
 						address={delegate.account}
 						prefix={prefix}
 						shorten
 						link
-						copyToClipboard='small'
+						copyToClipboard="small"
 					/>
 				)}
 			/>
 			<DelegatesTableAttribute
-				label=''
-				render={({action}) => 
+				label=""
+				render={({ action }) => (
 					<div css={dirContainer}>
 						<div css={action === "UNDELEGATE" ? dirIn : dirOut}>{action}</div>
 					</div>
-				}
-			/>
-			<DelegatesTableAttribute
-				label='Delegate'
-				render={({ delegate, delegateName }) => (
-					delegateName === undefined ?
-						<AccountAddress
-							address={delegate}
-							prefix={prefix}
-							shorten
-							delegate
-							copyToClipboard='small'
-						/> :
-						<Link to={ `/validators/${delegate}`}>
-							{delegateName}
-						</Link>
 				)}
 			/>
 			<DelegatesTableAttribute
-				label='Amount'
+				label="Delegate"
+				render={({ delegate, delegateName }) =>
+					delegateName !== undefined ? (
+						<Link to={`/validators/${delegate}`}>{delegateName}</Link>
+					) : (
+						<AccountAddress
+							address={delegate}
+							prefix={prefix}
+							link={false}
+							shorten
+							copyToClipboard="small"
+						/>
+					)
+				}
+			/>
+			<DelegatesTableAttribute
+				label="Amount"
 				render={(delegate) => (
 					<Currency
 						amount={delegate.amount}
 						currency={currency}
-						decimalPlaces='optimal'
+						decimalPlaces="optimal"
 						showFullInTooltip
 					/>
 				)}
 				sortable
-				sortProperty='amount'
+				sortProperty="amount"
 			/>
 			{showTime && (
 				<DelegatesTableAttribute
-					label='Time'
+					label="Time"
 					colCss={{ width: 200 }}
 					sortable
-					sortProperty='time'
+					sortProperty="time"
 					render={(delegate) => (
 						<BlockTimestamp
 							blockHeight={delegate.blockNumber}

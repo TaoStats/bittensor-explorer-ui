@@ -22,7 +22,7 @@ export type DelegateBalance = {
 };
 
 export type ValidatorBalance = {
-	aggregates: any;
+	nodes: any;
 };
 
 export type DelegateInfo = {

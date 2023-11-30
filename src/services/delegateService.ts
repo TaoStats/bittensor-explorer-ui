@@ -21,6 +21,7 @@ export type DelegatesOrder =
   | "BLOCK_NUMBER_ASC"
   | "BLOCK_NUMBER_DESC";
 
+export type ValidatorFilter = object;
 export type DelegateBalanceFilter = object;
 export type DelegateBalancesOrder =
   | "ID_ASC"
@@ -159,16 +160,31 @@ async function fetchDelegateBalances(
 	return items;
 }
 
-async function fetchValidatorBalances(
-	filter: DelegateBalanceFilter | undefined
-) {
-	const response = await fetchIndexer<{ delegateBalances: ValidatorBalance }>(
+export async function countNominators(filter: DelegateBalanceFilter) {
+	const response = await fetchIndexer<{
+		delegateBalances: ResponseItems<DelegateBalance>;
+	}>(
 		`query ($filter: DelegateBalanceFilter) {
 			delegateBalances(filter: $filter) {
-				aggregates {
-					sum {
-						amount
-					}
+				totalCount
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	return response.delegateBalances.totalCount;
+}
+
+async function fetchValidatorBalances(
+	filter: ValidatorFilter | undefined
+) {
+	const response = await fetchIndexer<{ validators: ValidatorBalance }>(
+		`query ($filter: ValidatorFilter) {
+			validators(filter: $filter) {
+				nodes {
+					amount
 				}
 			}
 		}`,
@@ -177,7 +193,7 @@ async function fetchValidatorBalances(
 		}
 	);
 
-	const data = response.delegateBalances?.aggregates?.sum?.amount ?? 0;
+	const data = response.validators?.nodes[0]?.amount ?? 0;
 	return data;
 }
 
