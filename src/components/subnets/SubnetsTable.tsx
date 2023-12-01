@@ -10,6 +10,9 @@ import { AccountAddress } from "../AccountAddress";
 import { Subnet } from "../../model/subnet";
 import { SubnetsOrder } from "../../services/subnetsService";
 import { SortOrder } from "../../model/sortOrder";
+import { useSubnetEmissions } from "../../hooks/useSubnetEmissions";
+import { formatNumber, rawAmountToDecimal } from "../../utils/number";
+import Spinner from "../Spinner";
 
 export type SubnetsTableProps = {
 	subnets: PaginatedResource<Subnet>;
@@ -33,6 +36,8 @@ const orderMappings = {
 
 function SubnetsTable(props: SubnetsTableProps) {
 	const { subnets } = props;
+
+	const emissions = useSubnetEmissions();
 
 	const { initialSort, onSortChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
@@ -93,11 +98,11 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Name"
-				render={(subnet) => 
+				render={(subnet) => (
 					<Link to={`https://taostats.io/subnets/netuid-${subnet.netUid}`}>
 						{subnet.name}
 					</Link>
-				}
+				)}
 			/>
 			<SubnetsTableAttribute
 				label="Created At (UTC)"
@@ -122,6 +127,24 @@ function SubnetsTable(props: SubnetsTableProps) {
 						shorten
 					/>
 				)}
+			/>
+			<SubnetsTableAttribute
+				label="Emission"
+				render={(subnet) =>
+					emissions === undefined ? (
+						<Spinner small />
+					) : (
+						<>
+							{formatNumber(
+								rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+								{
+									decimalPlaces: 2,
+								}
+							)}
+              %
+						</>
+					)
+				}
 			/>
 		</ItemsTable>
 	);
