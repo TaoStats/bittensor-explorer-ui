@@ -10,6 +10,8 @@ export type Validator = {
 	rank: bigint;
 	amountChange: bigint;
 	nominatorChange: bigint;
+	owner: string;
+	validatorStake: bigint;
 	name?: string;
 };
 

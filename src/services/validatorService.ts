@@ -22,6 +22,26 @@ export type ValidatorsOrder =
 	| "NOMINATORS_ASC"
 	| "NOMINATORS_DESC";
 
+export async function getValidator(filter: ValidatorsFilter) {
+	const response = await fetchIndexer<{ validators: ResponseItems<Validator> }>(
+		`query ($filter: ValidatorFilter) {
+			validators(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
+				nodes {
+					id
+					owner
+					validatorStake
+				}
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	const data = response.validators?.nodes[0] && transformValidator(response.validators.nodes[0]);
+	return data;
+}
+
 export async function getValidators(
 	order: ValidatorsOrder = "AMOUNT_DESC",
 	pagination: PaginationOptions
@@ -113,3 +133,7 @@ export async function getValidatorStakeHistory(
 		data: response.validators?.nodes,
 	};
 }
+
+const transformValidator = (validator: Validator): Validator => {
+	return validator;
+};

@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react";
 import { formatNumber, rawAmountToDecimal } from "../../utils/number";
-import { useColdKey } from "../../hooks/useColdKey";
-import { useValidatorStaked } from "../../hooks/useValidatorStaked";
 import { useValidatorBalance } from "../../hooks/useValidatorBalance";
 import { StatItem } from "../network/StatItem";
 import { DonutChart } from "../DonutChart";
 import Loading from "../Loading";
 import { useState, useEffect } from "react";
 import { countNominators } from "../../services/delegateService";
+import { Resource } from "../../model/resource";
+import { Validator } from "../../model/validator";
 
 const chartContainer = css`
   display: flex;
@@ -34,15 +34,15 @@ const spinnerContainer = css`
 
 export type ValidatorPortfolioProps = {
 	hotkey: string;
+	info: Resource<Validator>;
 };
 
 export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
-	const { hotkey } = props;
+	const { hotkey, info } = props;
 
 	const balance = useValidatorBalance({ address: { equalTo: hotkey } });
-	const coldKey = useColdKey(hotkey);
-	const validatorStaked = useValidatorStaked(hotkey, coldKey);
-	const loading = balance.loading || validatorStaked === undefined;
+	const loading = balance.loading || info.loading;
+	const validatorStaked = info.data?.validatorStake.toString();
 	const validatorStakedFormatted = loading
 		? 0
 		: formatNumber(rawAmountToDecimal(validatorStaked), { decimalPlaces: 2 });
