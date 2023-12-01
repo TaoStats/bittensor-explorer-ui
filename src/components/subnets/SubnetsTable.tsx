@@ -135,13 +135,15 @@ function SubnetsTable(props: SubnetsTableProps) {
 						<Spinner small />
 					) : (
 						<>
-							{formatNumber(
-								rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-								{
-									decimalPlaces: 2,
-								}
-							)}
-              %
+							{
+								emissions[subnet.netUid] > 10000000
+									? formatNumber(
+										rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+										{ decimalPlaces: 2 }
+									)
+									: rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100
+							}
+							%
 						</>
 					)
 				}
