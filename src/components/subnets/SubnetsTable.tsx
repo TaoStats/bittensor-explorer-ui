@@ -123,14 +123,6 @@ function SubnetsTable(props: SubnetsTableProps) {
 					/>
 				)}
 			/>
-			<SubnetsTableAttribute
-				label="Extrinsic"
-				render={(subnet) => (
-					<Link
-						to={`/extrinsic/${subnet.createdAt}-${subnet.extrinsicId}`}
-					>{`${subnet.createdAt}-${subnet.extrinsicId}`}</Link>
-				)}
-			/>
 		</ItemsTable>
 	);
 }
