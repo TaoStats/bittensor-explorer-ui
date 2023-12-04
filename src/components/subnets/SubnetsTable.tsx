@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { SortDirection } from "../../model/sortDirection";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
@@ -11,7 +11,7 @@ import { Subnet } from "../../model/subnet";
 import { SubnetsOrder } from "../../services/subnetsService";
 import { SortOrder } from "../../model/sortOrder";
 import { useSubnetEmissions } from "../../hooks/useSubnetEmissions";
-import { formatNumber, rawAmountToDecimal } from "../../utils/number";
+import { formatNumber, formatNumberWithPrecision, rawAmountToDecimal } from "../../utils/number";
 import Spinner from "../Spinner";
 
 export type SubnetsTableProps = {
@@ -32,6 +32,10 @@ const orderMappings = {
 		[SortDirection.ASC]: "CREATED_AT_ASC",
 		[SortDirection.DESC]: "CREATED_AT_DESC",
 	},
+	emission: {
+		[SortDirection.ASC]: "ID_ASC",
+		[SortDirection.DESC]: "ID_DESC",
+	},
 };
 
 function SubnetsTable(props: SubnetsTableProps) {
@@ -41,6 +45,18 @@ function SubnetsTable(props: SubnetsTableProps) {
 
 	const { initialSort, onSortChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
+
+	const sortedSubnets = useMemo(() => {
+		if(subnets.loading || subnets.error || subnets.data === undefined || emissions === undefined)
+			return subnets.data;
+		if(sort?.property !== "emission")
+			return subnets.data;
+		return subnets.data.sort((left: Subnet, right: Subnet) => {
+			if(sort?.direction === SortDirection.ASC)
+				return emissions[left.netUid] - emissions[right.netUid];
+			return emissions[right.netUid] - emissions[left.netUid];
+		});
+	}, [subnets, emissions, sort]);
 
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
@@ -81,7 +97,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 
 	return (
 		<ItemsTable
-			data={subnets.data}
+			data={sortedSubnets}
 			loading={subnets.loading}
 			notFound={subnets.notFound}
 			notFoundMessage="No subnets found"
@@ -130,21 +146,30 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Emission"
+				sortable
 				render={(subnet) =>
 					emissions === undefined ? (
 						<Spinner small />
 					) : (
 						<>
 							{
-								formatNumber(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									{ decimalPlaces: emissions[subnet.netUid] > 10000000 ? 2 : 7 }
-								)
+								emissions[subnet.netUid] >= 100000 ?
+									formatNumber(
+										rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+										{ decimalPlaces: 2 }
+									)
+									:
+									formatNumberWithPrecision(
+										rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+										1,
+										true
+									)
 							}
 							%
 						</>
 					)
 				}
+				sortProperty="emission"
 			/>
 		</ItemsTable>
 	);

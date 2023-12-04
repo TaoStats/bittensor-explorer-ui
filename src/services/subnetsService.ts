@@ -9,6 +9,8 @@ import { fetchSubnets } from "./fetchService";
 export type SubnetsFilter = object;
 
 export type SubnetsOrder =
+	| "ID_ASC"
+	| "ID_DESC"
 	| "NET_UID_ASC"
 	| "NET_UID_DESC"
 	| "CREATED_AT_ASC"

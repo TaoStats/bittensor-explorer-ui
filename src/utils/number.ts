@@ -31,6 +31,21 @@ export function formatNumber(value: number | Decimal, options: FormatNumberOptio
 	}).format(value.toString() as any);
 }
 
+export function formatNumberWithPrecision(value: number | Decimal, precision: number, disableExponential?: boolean) {
+	let formattedNumber = value.toPrecision(precision);
+
+	// Check if the number is in exponential format
+	if (disableExponential && formattedNumber.indexOf("e") !== -1) {
+		// Convert exponential format to fixed-point notation
+		const decimalIndex = formattedNumber.indexOf(".");
+		const exponentIndex = formattedNumber.indexOf("e");
+		const precision = exponentIndex - decimalIndex - 1;
+		formattedNumber = Number(formattedNumber).toFixed(precision);
+	}
+  
+	return formattedNumber;
+}
+
 export const nFormatter = (num: number, digits: number) => {
 	if (Number(num) === 0) return 0;
 	const lookup = [
