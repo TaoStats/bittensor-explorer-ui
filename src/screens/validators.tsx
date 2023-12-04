@@ -158,7 +158,6 @@ export const ValidatorPage = () => {
 	};
 
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -213,63 +212,59 @@ export const ValidatorPage = () => {
 				</Card>
 			</CardRow>
 			<Card data-test="account-historical-items">
-				<div ref={tabRef}>
-					<TabbedContent>
-						<TabPane
-							label="Staked"
-							loading={validatorStakeHistory.loading}
-							error={!!validatorStakeHistory.error}
-							value="staked"
-						>
-							<ValidatorStakeHistoryChart
-								account={address}
-								stakeHistory={validatorStakeHistory}
-								balance={balance}
-							/>
-						</TabPane>
-					</TabbedContent>
-				</div>
+				<TabbedContent>
+					<TabPane
+						label="Staked"
+						loading={validatorStakeHistory.loading}
+						error={!!validatorStakeHistory.error}
+						value="staked"
+					>
+						<ValidatorStakeHistoryChart
+							account={address}
+							stakeHistory={validatorStakeHistory}
+							balance={balance}
+						/>
+					</TabPane>
+				</TabbedContent>
 			</Card>
 			<Card>
-				<div ref={tabRef}>
-					<TabbedContent defaultTab={tab.slice(1).toString()}>
-						<TabPane
-							label="Nominator"
-							count={nominators.pagination.totalCount}
-							loading={nominators.loading}
-							error={nominators.error}
-							value="nominator"
-						>
-							<NominatorsTable
-								nominators={nominators}
-								onSortChange={(sortKey: DelegateBalancesOrder) =>
-									setNominatorSort(sortKey)
-								}
-								initialSort={nominatorSort}
-							/>
-						</TabPane>
-						<TabPane
-							label="Delegation"
-							count={delegates.pagination.totalCount}
-							loading={delegates.loading}
-							error={delegates.error}
-							value="delegation"
-						>
-							<DelegatesTable
-								delegates={delegates}
-								showTime
-								onSortChange={(sortKey: DelegatesOrder) =>
-									setDelegateSort(sortKey)
-								}
-								initialSort={delegatesInitialOrder}
-								onFilterChange={(newFilter?: DelegateFilter) =>
-									setDelegatesFilter({ ...delegatesFilter, ...newFilter })
-								}
-								initialFilter={delegatesInitialFilter}
-							/>
-						</TabPane>
-					</TabbedContent>
-				</div>
+				<TabbedContent defaultTab={tab.slice(1).toString()}>
+					<TabPane
+						label="Nominator"
+						count={nominators.pagination.totalCount}
+						loading={nominators.loading}
+						error={nominators.error}
+						value="nominator"
+					>
+						<NominatorsTable
+							nominators={nominators}
+							onSortChange={(sortKey: DelegateBalancesOrder) =>
+								setNominatorSort(sortKey)
+							}
+							initialSort={nominatorSort}
+						/>
+					</TabPane>
+					<TabPane
+						label="Delegation"
+						count={delegates.pagination.totalCount}
+						loading={delegates.loading}
+						error={delegates.error}
+						value="delegation"
+					>
+						<DelegatesTable
+							delegates={delegates}
+							showTime
+							onSortChange={(sortKey: DelegatesOrder) =>
+								setDelegateSort(sortKey)
+							}
+							initialSort={delegatesInitialOrder}
+							onFilterChange={(newFilter?: DelegateFilter) =>
+								setDelegatesFilter({ ...delegatesFilter, ...newFilter })
+							}
+							initialFilter={delegatesInitialFilter}
+						/>
+					</TabPane>
+				</TabbedContent>
 			</Card>
 		</>
 	);

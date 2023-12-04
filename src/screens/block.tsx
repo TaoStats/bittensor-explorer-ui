@@ -33,7 +33,6 @@ export const BlockPage = () => {
 	);
 
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -54,28 +53,26 @@ export const BlockPage = () => {
 			</Card>
 			{block.data && (
 				<Card>
-					<div ref={tabRef}>
-						<TabbedContent>
-							<TabPane
-								label="Extrinsics"
-								count={extrinsics.pagination.totalCount}
-								loading={extrinsics.loading}
-								error={extrinsics.error}
-								value="extrinsics"
-							>
-								<ExtrinsicsTable extrinsics={extrinsics} showAccount />
-							</TabPane>
-							<TabPane
-								label="Events"
-								count={events.pagination.totalCount}
-								loading={events.loading}
-								error={events.error}
-								value="events"
-							>
-								<EventsTable events={events} showExtrinsic />
-							</TabPane>
-						</TabbedContent>
-					</div>
+					<TabbedContent defaultTab={tab.slice(1).toString()}>
+						<TabPane
+							label="Extrinsics"
+							count={extrinsics.pagination.totalCount}
+							loading={extrinsics.loading}
+							error={extrinsics.error}
+							value="extrinsics"
+						>
+							<ExtrinsicsTable extrinsics={extrinsics} showAccount />
+						</TabPane>
+						<TabPane
+							label="Events"
+							count={events.pagination.totalCount}
+							loading={events.loading}
+							error={events.error}
+							value="events"
+						>
+							<EventsTable events={events} showExtrinsic />
+						</TabPane>
+					</TabbedContent>
 				</Card>
 			)}
 		</>

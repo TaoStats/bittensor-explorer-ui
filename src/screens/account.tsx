@@ -217,7 +217,6 @@ export const AccountPage = () => {
 	}, [balance]);
 
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -255,10 +254,10 @@ export const AccountPage = () => {
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
 				</Card>
 			</CardRow>
-			{account.data && (
+			{(
 				<Card data-test="account-historical-items">
-					<div ref={tabRef}>
-						<TabbedContent>
+					<div>
+						<TabbedContent defaultTab={tab.slice(1).toString()}>
 							<TabPane
 								label="Balance"
 								loading={accountBalanceHistory.loading}
@@ -287,10 +286,10 @@ export const AccountPage = () => {
 					</div>
 				</Card>
 			)}
-			{account.data && (
+			{(
 				<Card data-test="account-related-items">
-					<div ref={tabRef}>
-						<TabbedContent>
+					<div>
+						<TabbedContent defaultTab={tab.slice(1).toString()}>
 							<TabPane
 								label="Extrinsics"
 								count={extrinsics.pagination.totalCount}

@@ -103,8 +103,6 @@ export type TabbedContentProps = {
 export const TabbedContent = (props: TabbedContentProps) => {
 	const { defaultTab, children } = props;
 
-	const [tab, setTab] = useState<string | undefined>(defaultTab);
-
 	const navigate = useNavigate();
 
 	const tabHandles = Children.map(children, (child) => {
@@ -146,6 +144,8 @@ export const TabbedContent = (props: TabbedContentProps) => {
 		children,
 		(child) => child && cloneElement(child, { key: child.props.value })
 	);
+
+	const [tab, setTab] = useState<string | undefined>(tabPanes.find((it) => it.props.value === defaultTab) ? defaultTab : tabPanes[0]?.props.value);
 
 	return (
 		<>
