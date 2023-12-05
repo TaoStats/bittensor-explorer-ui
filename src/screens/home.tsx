@@ -301,6 +301,19 @@ export const HomePage = () => {
 								initialSearch={balancesInitialSearch}
 							/>
 						</TabPane>
+						<TabPane
+							label="Subnets"
+							count={subnets.pagination.totalCount}
+							loading={subnets.loading}
+							error={subnets.error}
+							value="subnets"
+						>
+							<SubnetsTable
+								subnets={subnets}
+								onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
+								initialSort={subnetsInitialOrder}
+							/>
+						</TabPane>
 					</TabbedContent>
 				</Card>
 			</div>
