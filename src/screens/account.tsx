@@ -15,6 +15,9 @@ import { useTransfers } from "../hooks/useTransfers";
 import { AccountInfoTable } from "../components/account/AccountInfoTable";
 import { useTaoPrice } from "../hooks/useTaoPrice";
 import { useBalance } from "../hooks/useBalance";
+import { AccountPortfolio } from "../components/account/AccountPortfolio";
+import { formatCurrency, rawAmountToDecimal } from "../utils/number";
+import { StatItem } from "../components/network/StatItem";
 
 const accountInfoStyle = css`
   display: flex;
@@ -49,6 +52,24 @@ const accountTitle = css`
   font-size: 12px;
 `;
 
+const portfolioStyle = (theme: Theme) => css`
+  flex: 0 0 auto;
+  width: 400px;
+
+  ${theme.breakpoints.down("lg")} {
+    width: auto;
+  }
+`;
+
+const summary = css`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  @media only screen and (max-width: 767px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+
 export type AccountPageParams = {
 	address: string;
 };
@@ -67,12 +88,23 @@ export const AccountPage = () => {
 	});
 	const taoPrice = useTaoPrice();
 
+	const staked = `${formatCurrency(
+		rawAmountToDecimal((balance?.data?.staked || 0).toString()),
+		"USD",
+		{ decimalPlaces: 2 }
+	)} 𝞃`;
+	const free = `${formatCurrency(
+		rawAmountToDecimal((balance?.data?.free || 0).toString()),
+		"USD",
+		{ decimalPlaces: 2 }
+	)} 𝞃`;
+
 	useDOMEventTrigger(
 		"data-loaded",
 		!account.loading &&
-      !extrinsics.loading &&
-      !transfers.loading &&
-      !taoPrice.loading
+		!extrinsics.loading &&
+		!transfers.loading &&
+		!taoPrice.loading
 	);
 
 	useEffect(() => {
@@ -112,13 +144,13 @@ export const AccountPage = () => {
 						}}
 					/>
 				</Card>
-				{/* <Card css={portfolioStyle} data-test="account-portfolio">
+				<Card css={portfolioStyle} data-test="account-portfolio">
 					<div css={summary}>
-						<StatItem title="Delegated" value={delegated} />
+						<StatItem title="Staked" value={staked} />
 						<StatItem title="Free" value={free} />
 					</div>
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
-				</Card> */}
+				</Card>
 			</CardRow>
 			{account.data && (
 				<Card data-test="account-related-items">

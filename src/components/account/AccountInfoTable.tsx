@@ -52,8 +52,6 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 	} = props;
 
 	const total = rawAmountToDecimal(balance.data?.total.toString());
-	const free = rawAmountToDecimal(balance.data?.free.toString());
-	const staked = rawAmountToDecimal(balance.data?.staked.toString());
 	const [rank, setRank] = useState<number>();
 
 	useEffect(() => {
@@ -99,42 +97,19 @@ export const AccountInfoTable = (props: AccountInfoTableProps) => {
 			<AccountInfoTableAttribute
 				label='Balance'
 				render={() => (
-					<div>
-						<div css={balanceContainer}>
-							<span>
-								Free:&nbsp;&nbsp;&nbsp;&nbsp;
-								{`${formatCurrency(
-									new Decimal(free.toFixed(2).toString()),
-									"USD",
-									{ decimalPlaces: 2 }
-								)} 𝞃`}
-							</span>
-						</div>
-						<div css={balanceContainer}>
-							<span>
-								Staked:&nbsp;
-								{`${formatCurrency(
-									new Decimal(staked.toFixed(2).toString()),
-									"USD",
-									{ decimalPlaces: 2 }
-								)} 𝞃`}
-							</span>
-						</div>
-						<div css={balanceContainer}>
-							Total:&nbsp;&nbsp;&nbsp;
-							<span css={taoBalance}>
-								{`${formatCurrency(
-									new Decimal(total.toFixed(2).toString()),
-									"USD",
-									{ decimalPlaces: 2 }
-								)} 𝞃`}
-							</span>
-							{/* <span>
-								{`(${formatCurrency(free.mul(price ?? 0), "USD", {
-									decimalPlaces: 2,
-								})} USD)`}
-							</span> */}
-						</div>
+					<div css={balanceContainer}>
+						<span css={taoBalance}>
+							{`${formatCurrency(
+								new Decimal(total.toFixed(2).toString()),
+								"USD",
+								{ decimalPlaces: 2 }
+							)} 𝞃`}
+						</span>
+						<span>
+							{`(${formatCurrency(total.mul(price ?? 0), "USD", {
+								decimalPlaces: 2,
+							})} USD)`}
+						</span>
 					</div>
 				)}
 				copyToClipboard={() => total.toFixed(2).toString()}
