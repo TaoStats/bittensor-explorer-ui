@@ -47,5 +47,6 @@ module.exports = {
 		"no-constant-condition": ["warn"],
 		"@typescript-eslint/ban-ts-comment": ["warn"],
 		"react/jsx-key": ["off"],
+		"@typescript-eslint/no-explicit-any": "off",
 	}
 };

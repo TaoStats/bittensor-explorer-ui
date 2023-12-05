@@ -1,19 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-
 import { Event } from "../../model/event";
 import { PaginatedResource } from "../../model/paginatedResource";
 
-import { getEventMetadataByName } from "../../utils/queryMetadata";
-
 import { ButtonLink } from "../ButtonLink";
-import DataViewer from "../DataViewer";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
-
-const parametersColCss = (showExtrinsic?: boolean) => css`
-  width: ${showExtrinsic ? "40%" : "60%"};
-`;
 
 export type EventsTableProps = {
 	events: PaginatedResource<Event>;

@@ -14,7 +14,7 @@ import {
 	DelegateFilter,
 	DelegatesOrder,
 } from "../services/delegateService";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";

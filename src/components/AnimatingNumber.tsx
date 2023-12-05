@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Interpolation, css } from "@emotion/react";
+import { Interpolation } from "@emotion/react";
 import { Theme } from "@mui/material";
 import { formatNumber } from "../utils/number";
 import { useState, useEffect } from "react";

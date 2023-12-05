@@ -9,7 +9,7 @@ import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsic } from "../hooks/useExtrinsic";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 
 type ExtrinsicPageParams = {
 	id: string;

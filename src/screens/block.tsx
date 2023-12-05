@@ -10,7 +10,7 @@ import { useBlock } from "../hooks/useBlock";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 
 export type BlockPageParams = {
 	id: string;

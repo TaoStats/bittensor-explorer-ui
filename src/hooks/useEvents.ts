@@ -8,5 +8,5 @@ export function useEvents(
 	order?: EventsOrder,
 	options?: FetchOptions
 ) {
-	return usePaginatedResource(getEvents, [filter, order, true], options);
+	return usePaginatedResource(getEvents, [filter, order], options);
 }

@@ -11,7 +11,7 @@ import BlocksTable from "../components/blocks/BlocksTable";
 import { NetworkStats, TokenDistributionChart } from "../components/network";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BlocksOrder } from "../services/blocksService";
 import { BalancesFilter, BalancesOrder } from "../services/balancesService";
 import { TransfersFilter, TransfersOrder } from "../services/transfersService";
