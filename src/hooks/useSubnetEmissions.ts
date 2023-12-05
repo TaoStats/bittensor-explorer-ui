@@ -10,7 +10,6 @@ export function useSubnetEmissions() {
 	const fetchSubnetEmissions = async () => {
 		if (!api || apiState !== "READY") return;
 		const res = await api.query.subtensorModule.emissionValues.entries();
-		console.log(res);
 		const emi = res.reduce((emi: any, [key, value]: any) => {
 			const [id] = key.toHuman();
 			const uid = parseInt(id);
