@@ -37,9 +37,8 @@ export function formatNumberWithPrecision(value: number | Decimal, precision: nu
 	// Check if the number is in exponential format
 	if (disableExponential && formattedNumber.indexOf("e") !== -1) {
 		// Convert exponential format to fixed-point notation
-		const decimalIndex = formattedNumber.indexOf(".");
 		const exponentIndex = formattedNumber.indexOf("e");
-		const precision = exponentIndex - decimalIndex - 1;
+		const precision = parseInt(formattedNumber.substring(exponentIndex + 2));
 		formattedNumber = Number(formattedNumber).toFixed(precision);
 	}
   
