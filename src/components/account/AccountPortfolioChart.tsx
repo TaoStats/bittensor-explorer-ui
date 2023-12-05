@@ -2,7 +2,7 @@
 import { HTMLAttributes } from "react";
 import { css } from "@emotion/react";
 
-import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
+import { rawAmountToDecimal } from "../../utils/number";
 
 import { AccountBalance } from "../../model/balance";
 import Decimal from "decimal.js";
@@ -18,12 +18,9 @@ export type AccountPortfolioChartProps = HTMLAttributes<HTMLDivElement> & {
 export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 	const { balance } = props;
 
-	const free = rawAmountToDecimal(balance?.free.toString());
-	const delegated = rawAmountToDecimal(balance?.staked.toString());
 	const total = rawAmountToDecimal(balance?.total.toString());
-
-	const strFree = formatCurrency(free, "USD", { decimalPlaces: 2 });
-	const strDelegated = formatCurrency(delegated, "USD", { decimalPlaces: 2 });
+	const free = rawAmountToDecimal(balance?.free.toString());
+	const staked = rawAmountToDecimal(balance?.staked.toString());
 
 	return total.isZero() ? (
 		<></>
@@ -31,15 +28,13 @@ export const AccountPortfolioChart = (props: AccountPortfolioChartProps) => {
 		<div css={chartContainer}>
 			<DonutChart
 				options={{
-					labels: [
-						`Delegated: ${strDelegated} 𝞃 (${delegated
-							.div(total)
-							.mul(100)
-							.toFixed(2)}%)`,
-						`Free: ${strFree} 𝞃 (${free.div(total).mul(100).toFixed(2)}%)`,
-					],
+					labels: ["Staked", "Free"],
+					legend: {
+						horizontalAlign: "center",
+						position: "bottom",
+					},
 				}}
-				series={[parseFloat(delegated.toFixed(2)), parseFloat(free.toFixed(2))]}
+				series={[parseFloat(staked.toFixed(2)), parseFloat(free.toFixed(2))]}
 			/>
 		</div>
 	);
