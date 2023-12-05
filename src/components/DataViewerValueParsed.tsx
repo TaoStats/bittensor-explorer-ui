@@ -151,6 +151,22 @@ const AccountValue = (props: MaybeAccountLinkValueProps) => {
 	);
 };
 
+type CallIndexValueProps = {
+	value: any;
+	runtimeSpec?: RuntimeSpec;
+};
+
+const CallIndexValue = (props: CallIndexValueProps) => {
+	const { value, runtimeSpec } = props;
+	const hexValue = parseInt(value, 16);
+	const palletIndex = (hexValue >> 8) & 0xFF;
+	const callIndex = hexValue & 0xFF;
+	const result = runtimeSpec?.metadata.pallets[palletIndex]?.calls[callIndex]?.name;
+	return (
+		<div css={valueStyle}>{result}</div>
+	);
+};
+
 export type DataViewerValueParsedProps = {
 	value: any;
 	metadata?: DecodedArg[] | DecodedArg;
@@ -231,15 +247,24 @@ export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
 								<div css={objectKeyStyle}>{key}</div>
 							</TableCell>
 							<TableCell>
-								<DataViewerValueParsed
-									value={value[key]}
-									metadata={
-										Array.isArray(metadata)
-											? metadata?.find((it) => noCase(it.name) === noCase(key))
-											: undefined
-									}
-									runtimeSpec={runtimeSpec}
-								/>
+								{
+									key === "callIndex"
+										?
+										<CallIndexValue
+											value={value[key]}
+											runtimeSpec={runtimeSpec}
+										/>
+										:
+										<DataViewerValueParsed
+											value={value[key]}
+											metadata={
+												Array.isArray(metadata)
+													? metadata?.find((it) => noCase(it.name) === noCase(key))
+													: undefined
+											}
+											runtimeSpec={runtimeSpec}
+										/>
+								}
 							</TableCell>
 						</TableRow>
 					))}
