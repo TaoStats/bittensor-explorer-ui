@@ -7,6 +7,7 @@ import {
 	ReactNode,
 } from "react";
 import {
+	Button,
 	Table,
 	TableBody,
 	TableCell,
@@ -27,6 +28,7 @@ import { SortDirection } from "../model/sortDirection";
 import { TablePaginationHeader } from "./TablePaginationHeader";
 import { TableFilter } from "./TableFilter";
 import { TableSearch } from "./TableSearch";
+import { download, generateCsv, mkConfig } from "export-to-csv";
 
 const tableStyle = css`
   table-layout: auto;
@@ -141,6 +143,11 @@ const tableFiltering = css`
   flex-direction: column;
 `;
 
+const csvDownload = css`
+  text-align: right;
+  margin-bottom: 10px;
+`;
+
 type ItemsTableItem = {
 	id: string;
 };
@@ -149,6 +156,12 @@ type ItemsTableDataFn<T, A extends any[], R> = (
 	data: T,
 	...additionalData: A
 ) => R;
+
+type CSVData = {
+	columns: {key: string; displayLabel: string;}[];
+	data: any[];
+	filename: string;
+}
 
 export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
@@ -226,6 +239,7 @@ export type ItemsTableProps<
 	search?: string;
 	onSearchChange?: (value?: string) => void;
 	searchPlaceholder?: string;
+	getExportCSV?: () => Promise<CSVData>;
 };
 
 export const ItemsTable = <
@@ -254,11 +268,33 @@ export const ItemsTable = <
 		search,
 		onSearchChange,
 		searchPlaceholder,
+		getExportCSV,
 		...restProps
 	} = props;
 
 	return (
 		<div {...restProps} data-class="table">
+			{
+				getExportCSV &&
+					<div css={csvDownload}>
+						<Button
+							size="small"
+							variant="outlined"
+							color="secondary"
+							onClick={async () => {
+								const { columns, data, filename, } = await getExportCSV();
+								const csvConfig = mkConfig({
+									columnHeaders: columns,
+									filename: filename,
+								});
+								const csv = generateCsv(csvConfig)(data);
+								download(csvConfig)(csv);
+							}}
+						>
+							Download CSV
+						</Button>
+					</div>
+			}
 			<div css={tableOptions}>
 				<div css={tableFiltering}>
 					{pagination && <TablePaginationHeader {...pagination} />}
