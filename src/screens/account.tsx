@@ -319,6 +319,8 @@ export const AccountPage = () => {
 									}
 									initialSort={transfersInitialOrder}
 									direction={{ show: true, source: address }}
+									address={address}
+									download
 								/>
 							</TabPane>
 
