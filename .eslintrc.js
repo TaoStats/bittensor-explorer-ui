@@ -48,5 +48,6 @@ module.exports = {
 		"@typescript-eslint/ban-ts-comment": ["warn"],
 		"react/jsx-key": ["off"],
 		"@typescript-eslint/no-explicit-any": "off",
+		"@typescript-eslint/no-non-null-assertion": "off",
 	}
 };
