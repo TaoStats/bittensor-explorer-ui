@@ -14,6 +14,7 @@ import { SortOrder } from "../../model/sortOrder";
 import { DelegateFilter, DelegatesOrder } from "../../services/delegateService";
 import { Delegate } from "../../model/delegate";
 import { rawAmountToDecimaledString } from "../../utils/number";
+import { fetchBlocktimestamp } from "../../utils/block";
 
 const dirContainer = css`
   display: flex;
@@ -59,6 +60,8 @@ export type DelegatesTableProps = {
 	initialFilter?: DelegateFilter;
 	onSearchChange?: (newSearch?: string) => void;
 	initialSearch?: string;
+	address?: string;
+	download?: boolean;
 };
 
 const DelegatesTableAttribute = ItemsTableAttribute<Delegate>;
@@ -100,6 +103,8 @@ function DelegatesTable(props: DelegatesTableProps) {
 		onFilterChange,
 		initialSearch,
 		onSearchChange,
+		address,
+		download,
 	} = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
@@ -127,7 +132,10 @@ function DelegatesTable(props: DelegatesTableProps) {
 		if (property === sort?.property) {
 			setSort({
 				...sort,
-				direction: sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC,
+				direction:
+					sort.direction === SortDirection.ASC
+						? SortDirection.DESC
+						: SortDirection.ASC,
 			});
 		} else {
 			setSort({
@@ -180,6 +188,45 @@ function DelegatesTable(props: DelegatesTableProps) {
 		onSearchChange(search);
 	}, [search]);
 
+	const getExportCSV = async () => {
+		const columns = [
+			{
+				key: "height",
+				displayLabel: "Block height"
+			},
+			{
+				key: "createdAt",
+				displayLabel: "Time(UTC)"
+			},
+			{
+				key: "validator",
+				displayLabel: "Validator"
+			},
+			{
+				key: "amount",
+				displayLabel: "Amount",
+			},
+		];
+		const data = [];
+		if(!delegates.loading && !delegates.notFound && delegates.data !== undefined) {
+			for(let i = 0; i < delegates.data.length; i ++) {
+				const delegate = delegates.data[i]!;
+				const createdAt = await fetchBlocktimestamp(delegate.blockNumber);
+				data.push({
+					height: delegate.blockNumber,
+					createdAt,
+					validator: delegate.delegateName ?? delegate.delegate,
+					amount: delegate.amount,
+				});
+			}
+		}
+		return {
+			columns,
+			data,
+			filename: `delegation-${address}`,
+		};
+	};
+
 	return (
 		<ItemsTable
 			data={delegates.data}
@@ -197,6 +244,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 			search={search}
 			onSearchChange={handleSearchChange}
 			searchPlaceholder="DELEGATE"
+			getExportCSV={download ? getExportCSV : undefined}
 		>
 			<DelegatesTableAttribute
 				label="Extrinsic"

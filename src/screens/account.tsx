@@ -342,6 +342,8 @@ export const AccountPage = () => {
 										setDelegatesSearch(newSearch)
 									}
 									initialSearch={delegatesInitialSearch}
+									address={address}
+									download
 								/>
 							</TabPane>
 						</TabbedContent>
