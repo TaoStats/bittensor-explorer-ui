@@ -102,9 +102,13 @@ export const AccountPage = () => {
 		{ signer: { equalTo: address } },
 		"BLOCK_HEIGHT_DESC"
 	);
+	const transfersInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
+	const [transferSort, setTransferSort] = useState<TransfersOrder>(
+		transfersInitialOrder
+	);
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
-	});
+	}, transferSort);
 	const delegateBalances = useDelegateBalances(
 		{
 			account: { equalTo: address },
@@ -310,6 +314,10 @@ export const AccountPage = () => {
 								<TransfersTable
 									transfers={transfers}
 									showTime
+									onSortChange={(sortKey: TransfersOrder) =>
+										setTransferSort(sortKey)
+									}
+									initialSort={transfersInitialOrder}
 									direction={{ show: true, source: address }}
 								/>
 							</TabPane>
