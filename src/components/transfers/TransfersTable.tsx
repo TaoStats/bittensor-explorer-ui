@@ -201,7 +201,7 @@ function TransfersTable(props: TransfersTableProps) {
 			},
 			{
 				key: "direction",
-				displayLabel: "IN/OUT",
+				displayLabel: "Direction",
 			},
 			{
 				key: "amount",
@@ -213,19 +213,20 @@ function TransfersTable(props: TransfersTableProps) {
 			for(let i = 0; i < transfers.data.length; i ++) {
 				const transfer = transfers.data[i]!;
 				const createdAt = await fetchBlocktimestamp(transfer.blockNumber);
+				const amount = formatCurrency(
+					rawAmountToDecimal(transfer.amount.toString()),
+					currency,
+					{
+						decimalPlaces: "optimal",
+					}
+				);
 				data.push({
 					height: transfer.blockNumber,
-					createdAt: createdAt,
+					createdAt,
 					from: transfer.from,
 					to: transfer.to,
 					direction: transfer.from === address ? "Out" : "In",
-					amount: formatCurrency(
-						rawAmountToDecimal(transfer.amount.toString()),
-						currency,
-						{
-							decimalPlaces: "optimal",
-						}
-					),
+					amount,
 				});
 			}
 		}

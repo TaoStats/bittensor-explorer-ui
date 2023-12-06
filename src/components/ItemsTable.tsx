@@ -158,10 +158,10 @@ type ItemsTableDataFn<T, A extends any[], R> = (
 ) => R;
 
 type CSVData = {
-	columns: {key: string; displayLabel: string;}[];
+	columns: { key: string; displayLabel: string }[];
 	data: any[];
 	filename: string;
-}
+};
 
 export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
@@ -274,27 +274,26 @@ export const ItemsTable = <
 
 	return (
 		<div {...restProps} data-class="table">
-			{
-				getExportCSV &&
-					<div css={csvDownload}>
-						<Button
-							size="small"
-							variant="outlined"
-							color="secondary"
-							onClick={async () => {
-								const { columns, data, filename, } = await getExportCSV();
-								const csvConfig = mkConfig({
-									columnHeaders: columns,
-									filename: filename,
-								});
-								const csv = generateCsv(csvConfig)(data);
-								download(csvConfig)(csv);
-							}}
-						>
-							Download CSV
-						</Button>
-					</div>
-			}
+			{getExportCSV && (
+				<div css={csvDownload}>
+					<Button
+						size="small"
+						variant="outlined"
+						color="secondary"
+						onClick={async () => {
+							const { columns, data, filename } = await getExportCSV();
+							const csvConfig = mkConfig({
+								columnHeaders: columns,
+								filename,
+							});
+							const csv = generateCsv(csvConfig)(data);
+							download(csvConfig)(csv);
+						}}
+					>
+            Download CSV
+					</Button>
+				</div>
+			)}
 			<div css={tableOptions}>
 				<div css={tableFiltering}>
 					{pagination && <TablePaginationHeader {...pagination} />}
@@ -369,8 +368,8 @@ export const ItemsTable = <
 											css={[
 												sortableHeaderItem,
 												css`
-													float: ${align};
-												`,
+                          float: ${align};
+                        `,
 											]}
 										>
 											{label}
@@ -414,9 +413,9 @@ export const ItemsTable = <
 									children,
 									(child) =>
 										child &&
-											cloneElement(child, {
-												_data: item,
-											})
+								cloneElement(child, {
+									_data: item,
+								})
 								)}
 							</TableRow>
 						))}
