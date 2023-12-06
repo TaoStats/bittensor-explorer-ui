@@ -178,11 +178,15 @@ export const Header = () => {
 						<div className={`main-menu fade-in-out ${isFaded ? "active" : ""}`}>
 							<div className="container">
 								<div className="ht-search">
-									<input
-										type="text"
-										placeholder="Search by Address / Validator /Txn Hash"
-									/>
-									<input type="submit" value="" />
+									<form action="/search" method="get">
+										<input
+											type="text"
+											name="query"
+											id="mobile-query"
+											placeholder="Search by Address / Validator /Txn Hash"
+										/>
+										<input type="submit" value="" />
+									</form>
 								</div>
 								<nav>
 									<ul>
