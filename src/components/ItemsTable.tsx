@@ -138,6 +138,12 @@ const tableOptions = css`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: end;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+	align-items: start;
+  }
 `;
 
 const tableFiltering = css`
@@ -151,8 +157,10 @@ const csvDownload = css`
 `;
 
 const spinnerStyle = css`
-  width: 24px;
-  margin-right: 4px;
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 44px;
 `;
 
 type ItemsTableItem = {
@@ -289,6 +297,7 @@ export const ItemsTable = <
 						size="small"
 						variant="outlined"
 						color="secondary"
+						style={{height: "48px"}}
 						onClick={async () => {
 							if(isDownloading)
 								return;
@@ -304,7 +313,7 @@ export const ItemsTable = <
 						}}
 					>
 						{isDownloading && <img src={LoadingSpinner} css={spinnerStyle} />}
-						Download CSV
+						<span style={{marginLeft: isDownloading ? "24px": 0}}>Download CSV</span>
 					</Button>
 				</div>
 			)}
@@ -382,8 +391,8 @@ export const ItemsTable = <
 											css={[
 												sortableHeaderItem,
 												css`
-                          float: ${align};
-                        `,
+													float: ${align};
+												`,
 											]}
 										>
 											{label}
