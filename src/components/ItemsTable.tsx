@@ -152,6 +152,7 @@ const csvDownload = css`
 
 const spinnerStyle = css`
   width: 24px;
+  margin-right: 4px;
 `;
 
 type ItemsTableItem = {
