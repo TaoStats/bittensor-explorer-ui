@@ -199,6 +199,10 @@ function DelegatesTable(props: DelegatesTableProps) {
 				displayLabel: "Time(UTC)"
 			},
 			{
+				key: "action",
+				displayLabel: "Action"
+			},
+			{
 				key: "validator",
 				displayLabel: "Validator"
 			},
@@ -222,6 +226,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 				data.push({
 					height: delegate.blockNumber,
 					createdAt,
+					action: delegate.action,
 					validator: delegate.delegateName ?? delegate.delegate,
 					amount,
 				});
