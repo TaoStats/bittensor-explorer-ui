@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { DelegateFilter, DelegatesOrder } from "../../services/delegateService";
 import { Delegate } from "../../model/delegate";
-import { rawAmountToDecimaledString } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal, rawAmountToDecimaledString } from "../../utils/number";
 import { fetchBlocktimestamp } from "../../utils/block";
 
 const dirContainer = css`
@@ -212,11 +212,18 @@ function DelegatesTable(props: DelegatesTableProps) {
 			for(let i = 0; i < delegates.data.length; i ++) {
 				const delegate = delegates.data[i]!;
 				const createdAt = await fetchBlocktimestamp(delegate.blockNumber);
+				const amount = formatCurrency(
+					rawAmountToDecimal(delegate.amount.toString()),
+					currency,
+					{
+						decimalPlaces: "optimal",
+					}
+				);
 				data.push({
 					height: delegate.blockNumber,
 					createdAt,
 					validator: delegate.delegateName ?? delegate.delegate,
-					amount: delegate.amount,
+					amount,
 				});
 			}
 		}
