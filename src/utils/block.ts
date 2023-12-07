@@ -1,6 +1,6 @@
 import { fetchDictionary } from "../services/fetchService";
 
-export const fetchBlocktimestamp = async (blockHeight: bigint) => {
+export const fetchBlockTimestamp = async (blockHeight: bigint) => {
 	if(blockHeight.toString() === "0")
 		return ;
 	const res = await fetchDictionary<{
@@ -18,4 +18,30 @@ export const fetchBlocktimestamp = async (blockHeight: bigint) => {
 		},
 	);
 	return res.blocks.nodes[0]?.timestamp;
+};
+
+type BlockTimestampType = {
+	[key: string]: Date;
+}
+
+export const fetchBlockTimestamps = async (blockHeights: bigint[]) => {
+	const res = await fetchDictionary<{
+		blocks: { nodes: Array<{ height: bigint; timestamp: Date; }> }
+	}>(
+		`query ($filter: BlockFilter) {
+			blocks(filter: $filter) {
+				nodes {
+					height
+					timestamp
+				}
+			}
+		}`,
+		{
+			filter: { height: { in: blockHeights } },
+		},
+	);
+	return res.blocks.nodes.reduce((timestamps: BlockTimestampType, cur) => {
+		timestamps[cur.height.toString()] = cur.timestamp;
+		return timestamps;
+	}, {});
 };

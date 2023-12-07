@@ -14,7 +14,7 @@ import { SortOrder } from "../../model/sortOrder";
 import { DelegateFilter, DelegatesOrder } from "../../services/delegateService";
 import { Delegate } from "../../model/delegate";
 import { formatCurrency, rawAmountToDecimal, rawAmountToDecimaledString } from "../../utils/number";
-import { fetchBlocktimestamp } from "../../utils/block";
+import { fetchBlockTimestamps } from "../../utils/block";
 
 const dirContainer = css`
   display: flex;
@@ -211,11 +211,16 @@ function DelegatesTable(props: DelegatesTableProps) {
 				displayLabel: "Amount",
 			},
 		];
-		const data = [];
+		const data: any[] = [];
 		if(!delegates.loading && !delegates.notFound && delegates.data !== undefined) {
-			for(let i = 0; i < delegates.data.length; i ++) {
-				const delegate = delegates.data[i]!;
-				const createdAt = await fetchBlocktimestamp(delegate.blockNumber);
+			const blockNumbers = delegates.data.reduce((prev: bigint[], cur: Delegate) => {
+				prev.push(cur.blockNumber);
+				return prev;
+			}, []);
+			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
+
+			delegates.data.forEach((delegate: Delegate) => {
+				const createdAt = blockTimestamps[delegate.blockNumber.toString()];
 				const amount = formatCurrency(
 					rawAmountToDecimal(delegate.amount.toString()),
 					currency,
@@ -230,7 +235,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 					action: delegate.action,
 					amount,
 				});
-			}
+			});
 		}
 		return {
 			columns,

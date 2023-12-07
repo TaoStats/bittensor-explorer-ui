@@ -4,7 +4,7 @@ import Spinner from "../components/Spinner";
 import useSWRImmutable  from "swr/immutable";
 import ErrorIcon from "@mui/icons-material/Warning";
 import { css } from "@emotion/react";
-import { fetchBlocktimestamp } from "../utils/block";
+import { fetchBlockTimestamp } from "../utils/block";
 
 const errorIconStyle = css`
   margin-left: 8px;
@@ -20,7 +20,7 @@ export const BlockTimestamp = ({
 	blockHeight,
 	...props
 }: BlockTimestampProps) => {
-	const { data, isLoading, error } = useSWRImmutable (blockHeight.toString(), fetchBlocktimestamp);
+	const { data, isLoading, error } = useSWRImmutable (blockHeight.toString(), fetchBlockTimestamp);
 
 	return isLoading ? (
 		<Spinner small />

@@ -17,7 +17,7 @@ import {
 import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { formatCurrency, rawAmountToDecimal, rawAmountToDecimaledString } from "../../utils/number";
-import { fetchBlocktimestamp } from "../../utils/block";
+import { fetchBlockTimestamps } from "../../utils/block";
 
 const dirContainer = css`
   display: flex;
@@ -208,11 +208,16 @@ function TransfersTable(props: TransfersTableProps) {
 				displayLabel: "Amount",
 			},
 		];
-		const data = [];
+		const data: any[] = [];
 		if(!transfers.loading && !transfers.notFound && transfers.data !== undefined) {
-			for(let i = 0; i < transfers.data.length; i ++) {
-				const transfer = transfers.data[i]!;
-				const createdAt = await fetchBlocktimestamp(transfer.blockNumber);
+			const blockNumbers = transfers.data.reduce((prev: bigint[], cur: Transfer) => {
+				prev.push(cur.blockNumber);
+				return prev;
+			}, []);
+			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
+
+			transfers.data.forEach((transfer: Transfer) => {
+				const createdAt = blockTimestamps[transfer.blockNumber.toString()];
 				const amount = formatCurrency(
 					rawAmountToDecimal(transfer.amount.toString()),
 					currency,
@@ -228,7 +233,7 @@ function TransfersTable(props: TransfersTableProps) {
 					direction: transfer.from === address ? "Out" : "In",
 					amount,
 				});
-			}
+			});
 		}
 		return {
 			columns,
