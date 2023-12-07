@@ -56,14 +56,12 @@ export const StatItem = (props: StatItemProps) => {
 			<label css={statItemLabel}>{title}</label>
 			{animating ? (
 				<AnimatingNumber
-					css={statItemValue}
+					divCss={statItemValue}
 					value={parseInt(animating)}
 					suffix={suffix}
 				/>
 			) : (
-				<div css={statItemValue} className="number-transition">
-					{value}
-				</div>
+				<div css={statItemValue}>{value}</div>
 			)}
 		</div>
 	);

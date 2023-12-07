@@ -5,13 +5,13 @@ import { formatNumber } from "../utils/number";
 import { useState, useEffect } from "react";
 
 type AnimatingNumberProps = {
-	css: Interpolation<Theme>;
+	divCss: Interpolation<Theme>;
 	value: number;
 	suffix?: string;
 };
 
 export const AnimatingNumber = (props: AnimatingNumberProps) => {
-	const { css, value, suffix } = props;
+	const { divCss, value, suffix } = props;
 	const [currentNumber, setCurrentNumber] = useState(1);
 
 	useEffect(() => {
@@ -39,7 +39,7 @@ export const AnimatingNumber = (props: AnimatingNumberProps) => {
 	}, [value]);
 
 	return (
-		<div css={css}>
+		<div css={divCss}>
 			{formatNumber(currentNumber)} {suffix ?? ""}
 		</div>
 	);
