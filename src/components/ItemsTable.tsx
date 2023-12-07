@@ -151,7 +151,7 @@ const csvDownload = css`
 `;
 
 const spinnerStyle = css`
-  width: 45px;
+  width: 24px;
 `;
 
 type ItemsTableItem = {
@@ -284,13 +284,13 @@ export const ItemsTable = <
 		<div {...restProps} data-class="table">
 			{getExportCSV && (
 				<div css={csvDownload}>
-					{isDownloading && <img src={LoadingSpinner} css={spinnerStyle} />}
 					<Button
 						size="small"
 						variant="outlined"
 						color="secondary"
-						disabled={isDownloading}
 						onClick={async () => {
+							if(isDownloading)
+								return;
 							setDownloading(true);
 							const { columns, data, filename } = await getExportCSV();
 							const csvConfig = mkConfig({
@@ -302,7 +302,8 @@ export const ItemsTable = <
 							setDownloading(false);
 						}}
 					>
-            Download CSV
+						{isDownloading && <img src={LoadingSpinner} css={spinnerStyle} />}
+						Download CSV
 					</Button>
 				</div>
 			)}
