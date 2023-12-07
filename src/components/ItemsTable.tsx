@@ -136,6 +136,12 @@ const tableOptions = css`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: end;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+	align-items: start;
+  }
 `;
 
 const tableFiltering = css`
@@ -368,8 +374,8 @@ export const ItemsTable = <
 											css={[
 												sortableHeaderItem,
 												css`
-                          float: ${align};
-                        `,
+													float: ${align};
+												`,
 											]}
 										>
 											{label}
