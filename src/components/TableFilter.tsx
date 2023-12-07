@@ -10,6 +10,9 @@ const filterStyle = () => css`
   margin-bottom: 16px;
   padding: 0 0 0 20px;
   font-size: 14px;
+  @media (max-width: 767px) {
+    font-size: 12px;
+  }
 `;
 
 const filterLabelStyle = (theme: Theme) => css`
