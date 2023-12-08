@@ -52,14 +52,17 @@ export async function getValidators(
 		`query($first: Int!, $order: [ValidatorsOrderBy!]!) {
 			validators(first: $first, orderBy: $order) {
 				nodes {
-					id
-					height
-					timestamp
 					address
 					amount
-					nominators
 					amountChange
+					id
 					nominatorChange
+					nominatorReturnPerK
+					nominators
+					owner
+					totalDailyReturn
+					validatorStake
+					validatorReturn
 				}
 				pageInfo {
 					endCursor

@@ -1,17 +1,17 @@
 import { DataError } from "../utils/error";
 
 export type Validator = {
-	id: string;
-	height: bigint;
-	timestamp: string;
 	address: string;
 	amount: bigint;
-	nominators: bigint;
-	rank: bigint;
 	amountChange: bigint;
+	id: string;
 	nominatorChange: bigint;
+	nominatorReturnPerK: bigint;
+	nominators: bigint;
 	owner: string;
+	totalDailyReturn: bigint;
 	validatorStake: bigint;
+	validatorReturn: bigint;
 	name?: string;
 };
 

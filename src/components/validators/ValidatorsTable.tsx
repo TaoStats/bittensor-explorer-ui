@@ -31,9 +31,33 @@ const orderMappings = {
 		[SortDirection.ASC]: "AMOUNT_ASC",
 		[SortDirection.DESC]: "AMOUNT_DESC",
 	},
+	amountChange: {
+		[SortDirection.ASC]: "AMOUNT_CHANGE_ASC",
+		[SortDirection.DESC]: "AMOUNT_CHANGE_DESC",
+	},
+	validatorStake: {
+		[SortDirection.ASC]: "VALIDATOR_STAKE_ASC",
+		[SortDirection.DESC]: "VALIDATOR_STAKE_DESC",
+	},
 	nominators: {
 		[SortDirection.ASC]: "NOMINATORS_ASC",
 		[SortDirection.DESC]: "NOMINATORS_DESC",
+	},
+	nominatorChange: {
+		[SortDirection.ASC]: "NOMINATOR_CHANGE_ASC",
+		[SortDirection.DESC]: "NOMINATOR_CHANGE_DESC",
+	},
+	totalDailyReturn: {
+		[SortDirection.ASC]: "TOTAL_DAILY_RETURN_ASC",
+		[SortDirection.DESC]: "TOTAL_DAILY_RETURN_DESC",
+	},
+	nominatorReturnPerK: {
+		[SortDirection.ASC]: "NOMINATOR_RETURN_PER_K_ASC",
+		[SortDirection.DESC]: "NOMINATOR_RETURN_PER_K_DESC",
+	},
+	validatorReturn: {
+		[SortDirection.ASC]: "VALIDATOR_RETURN_ASC",
+		[SortDirection.DESC]: "VALIDATOR_RETURN_DESC",
 	},
 };
 
@@ -110,8 +134,9 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 					)
 				}
 			/>
+
 			<ValidatorsTableAttribute
-				label="Stake"
+				label="Total Stake"
 				align="right"
 				render={(validator) => {
 					return (
@@ -126,12 +151,12 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="amount"
 			/>
-
 			<ValidatorsTableAttribute
-				label=""
-				colCss={css`
-					padding-left: 0px;
-				`}
+				label="24h Change"
+				align="right"
+				// colCss={css`
+				// 	padding-left: 0px;
+				// `}
 				render={(validator) => {
 					const change24h = validator.amountChange;
 					return (
@@ -153,7 +178,26 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						</>
 					);
 				}}
-			/>			
+				sortable
+				sortProperty="amountChange"
+			/>
+			
+			<ValidatorsTableAttribute
+				label="Validator Stake"
+				align="right"
+				render={(validator) => {
+					return (
+						<Currency
+							amount={validator.validatorStake}
+							currency={currency}
+							decimalPlaces={2}
+							showFullInTooltip
+						/>
+					);
+				}}
+				sortable
+				sortProperty="validatorStake"
+			/>
 
 			<ValidatorsTableAttribute
 				label="Nominators"
@@ -164,10 +208,10 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="nominators"
 			/>
-
 			<ValidatorsTableAttribute
-				label=""
-				colCss={css`padding-left: 0px;`}
+				label="24h Change"
+				align="right"
+				// colCss={css`padding-left: 0px;`}
 				render={(validator) => {
 					const change24h = validator.nominatorChange;
 					return (
@@ -184,7 +228,60 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						</>
 					);
 				}}
-			/>				
+				sortable
+				sortProperty="nominatorChange"
+			/>		
+			
+			<ValidatorsTableAttribute
+				label="Daily Return"
+				align="right"
+				render={(validator) => {
+					return (
+						<Currency
+							amount={validator.totalDailyReturn}
+							currency={currency}
+							decimalPlaces={2}
+							showFullInTooltip
+						/>
+					);
+				}}
+				sortable
+				sortProperty="totalDailyReturn"
+			/>
+			
+			<ValidatorsTableAttribute
+				label="Nominator / 24h / k𝞃"
+				align="right"
+				render={(validator) => {
+					return (
+						<Currency
+							amount={validator.nominatorReturnPerK}
+							currency={currency}
+							decimalPlaces={2}
+							showFullInTooltip
+						/>
+					);
+				}}
+				sortable
+				sortProperty="nominatorReturnPerK"
+			/>
+			
+			<ValidatorsTableAttribute
+				label="Validator / 24h"
+				align="right"
+				render={(validator) => {
+					return (
+						<Currency
+							amount={validator.validatorReturn}
+							currency={currency}
+							decimalPlaces={2}
+							showFullInTooltip
+						/>
+					);
+				}}
+				sortable
+				sortProperty="validatorReturn"
+			/>
 		</ItemsTable>
 	);
 }
