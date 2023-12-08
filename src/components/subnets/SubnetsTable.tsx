@@ -3,7 +3,7 @@ import { PaginatedResource } from "../../model/paginatedResource";
 import { SortDirection } from "../../model/sortDirection";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
-import { BlockTimestamp } from "../BlockTimestamp";
+import { Time } from "../Time";
 import { NETWORK_CONFIG } from "../../config";
 import { decodeAddress } from "../../utils/formatAddress";
 import { AccountAddress } from "../AccountAddress";
@@ -11,7 +11,11 @@ import { Subnet } from "../../model/subnet";
 import { SubnetsOrder } from "../../services/subnetsService";
 import { SortOrder } from "../../model/sortOrder";
 import { useSubnetEmissions } from "../../hooks/useSubnetEmissions";
-import { formatNumber, formatNumberWithPrecision, rawAmountToDecimal } from "../../utils/number";
+import {
+	formatNumber,
+	formatNumberWithPrecision,
+	rawAmountToDecimal,
+} from "../../utils/number";
 import Spinner from "../Spinner";
 
 export type SubnetsTableProps = {
@@ -47,12 +51,16 @@ function SubnetsTable(props: SubnetsTableProps) {
 	const [sort, setSort] = useState<SortOrder<string>>();
 
 	const sortedSubnets = useMemo(() => {
-		if(subnets.loading || subnets.error || subnets.data === undefined || emissions === undefined)
+		if (
+			subnets.loading ||
+			subnets.error ||
+			subnets.data === undefined ||
+			emissions === undefined
+		)
 			return subnets.data;
-		if(sort?.property !== "emission")
-			return subnets.data;
+		if (sort?.property !== "emission") return subnets.data;
 		return subnets.data.sort((left: Subnet, right: Subnet) => {
-			if(sort?.direction === SortDirection.ASC)
+			if (sort?.direction === SortDirection.ASC)
 				return emissions[left.netUid] - emissions[right.netUid];
 			return emissions[right.netUid] - emissions[left.netUid];
 		});
@@ -124,12 +132,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 				label="Created At (UTC)"
 				sortable
 				render={(subnet) => (
-					<BlockTimestamp
-						blockHeight={subnet.createdAt}
-						tooltip
-						utc
-						timezone={false}
-					/>
+					<Time time={subnet.timestamp} utc timezone={false} />
 				)}
 				sortProperty="createdAt"
 			/>
@@ -152,18 +155,16 @@ function SubnetsTable(props: SubnetsTableProps) {
 						<Spinner small />
 					) : (
 						<>
-							{
-								emissions[subnet.netUid] >= 100000 ?
-									formatNumber(
-										rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-										{ decimalPlaces: 2 }
-									)
-									:
-									formatNumberWithPrecision(
-										rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-										1,
-										true
-									)
+							{emissions[subnet.netUid] >= 100000
+								? formatNumber(
+									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+									{ decimalPlaces: 2 }
+								)
+								: formatNumberWithPrecision(
+									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+									1,
+									true
+								)
 							}
 							%
 						</>

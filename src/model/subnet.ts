@@ -5,4 +5,5 @@ export type Subnet = {
 	createdAt: bigint;
 	owner: string;
 	extrinsicId: number;
+	timestamp: string;
 }
