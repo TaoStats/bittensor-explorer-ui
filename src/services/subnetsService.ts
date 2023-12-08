@@ -3,8 +3,7 @@ import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 import subnetNames from "../subnets_names.json";
 import { extractItems } from "../utils/extractItems";
-
-import { fetchSubnets } from "./fetchService";
+import { fetchIndexer } from "./fetchService";
 
 export type SubnetsFilter = object;
 
@@ -20,14 +19,16 @@ export async function getSubnets(
 	order: SubnetsOrder = "NET_UID_ASC",
 	pagination: PaginationOptions,
 ) {
-	const response = await fetchSubnets<{ subnets: ResponseItems<Subnet> }>(
+	const response = await fetchIndexer<{ subnets: ResponseItems<Subnet> }>(
 		`query ($order: [SubnetsOrderBy!]!) {
 			subnets(orderBy: $order) {
 				nodes {
+					id
 					netUid
 					createdAt
 					owner
 					extrinsicId
+					timestamp
 				}
 				pageInfo {
 					endCursor

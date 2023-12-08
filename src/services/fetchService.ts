@@ -2,7 +2,6 @@ import {
 	DICTIONARY_ENDPOINT,
 	HISTORICAL_ENDPOINT,
 	INDEXER_ENDPOINT,
-	SUBNETS_ENDPOINT,
 } from "../config";
 import { fetchGraphql } from "../utils/fetchGraphql";
 
@@ -25,11 +24,4 @@ export async function fetchHistorical<T = any>(
 	variables: object = {}
 ) {
 	return fetchGraphql<T>(HISTORICAL_ENDPOINT, query, variables);
-}
-
-export async function fetchSubnets<T = any>(
-	query: string,
-	variables: object = {}
-) {
-	return fetchGraphql<T>(SUBNETS_ENDPOINT, query, variables);
 }
