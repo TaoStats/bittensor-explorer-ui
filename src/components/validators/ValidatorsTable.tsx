@@ -152,7 +152,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortProperty="amount"
 			/>
 			<ValidatorsTableAttribute
-				label="24h Change"
+				label="Change"
 				align="right"
 				// colCss={css`
 				// 	padding-left: 0px;
@@ -209,7 +209,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortProperty="nominators"
 			/>
 			<ValidatorsTableAttribute
-				label="24h Change"
+				label="Change"
 				align="right"
 				// colCss={css`padding-left: 0px;`}
 				render={(validator) => {
@@ -250,7 +250,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			/>
 			
 			<ValidatorsTableAttribute
-				label="Nominator / 24h / k𝞃"
+				label="NOM. / 24h / k𝞃"
 				align="right"
 				render={(validator) => {
 					return (
@@ -267,7 +267,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			/>
 			
 			<ValidatorsTableAttribute
-				label="Validator / 24h"
+				label="VAL. / 24h"
 				align="right"
 				render={(validator) => {
 					return (
