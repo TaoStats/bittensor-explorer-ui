@@ -10,4 +10,5 @@
 	},
 	"files.eol": "\n",
 	"editor.detectIndentation": true,
+	"editor.inlineSuggest.showToolbar": "onHover",
 }

@@ -11,7 +11,7 @@ import BlocksTable from "../components/blocks/BlocksTable";
 import { NetworkStats, TokenDistributionChart } from "../components/network";
 import { useBalances } from "../hooks/useBalances";
 import BalancesTable from "../components/balances/BalancesTable";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { BlocksOrder } from "../services/blocksService";
 import { BalancesFilter, BalancesOrder } from "../services/balancesService";
 import { TransfersFilter, TransfersOrder } from "../services/transfersService";
@@ -23,6 +23,9 @@ import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidators } from "../hooks/useValidators";
 import ValidatorsTable from "../components/validators/ValidatorsTable";
 import { ValidatorsOrder } from "../services/validatorService";
+import SubnetsTable from "../components/subnets/SubnetsTable";
+import { useSubnets } from "../hooks/useSubnets";
+import { SubnetsOrder } from "../services/subnetsService";
 
 const contentStyle = css`
   position: relative;
@@ -156,6 +159,10 @@ export const HomePage = () => {
 	);
 	const validators = useValidators(validatorsSort);
 
+	const subnetsInitialOrder: SubnetsOrder = "NET_UID_ASC";
+	const [subnetSort, setSubnetSort] = useState<SubnetsOrder>(subnetsInitialOrder);
+	const subnets = useSubnets(undefined, subnetSort);
+
 	useEffect(() => {
 		if (blocks.pagination.page === 1) {
 			const id = setInterval(
@@ -177,7 +184,6 @@ export const HomePage = () => {
 	}, [transfers]);
 
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -199,105 +205,116 @@ export const HomePage = () => {
 					</Card>
 				</CardRow>
 				<Card>
-					<div ref={tabRef}>
-						<TabbedContent defaultTab={tab.slice(1).toString()}>
-							<TabPane
-								label="Blocks"
-								count={blocks.pagination.totalCount}
-								loading={blocks.loading}
-								error={blocks.error}
-								value="blocks"
-							>
-								<BlocksTable
-									blocks={blocks}
-									showTime
-									onSortChange={(sortKey: BlocksOrder) => setBlockSort(sortKey)}
-									initialSort={blocksInitialOrder}
-								/>
-							</TabPane>
-							<TabPane
-								label="Transfers"
-								count={transfers.pagination.totalCount}
-								loading={transfers.loading}
-								error={transfers.error}
-								value="transfers"
-							>
-								<TransfersTable
-									transfers={transfers}
-									showTime
-									onSortChange={(sortKey: TransfersOrder) =>
-										setTransferSort(sortKey)
-									}
-									initialSort={transfersInitialOrder}
-									onFilterChange={(newFilter?: TransfersFilter) =>
-										setTransfersFilter({ ...transfersFilter, ...newFilter })
-									}
-									initialFilter={transfersInitialFilter}
-								/>
-							</TabPane>
-							<TabPane
-								label="Delegation"
-								count={delegates.pagination.totalCount}
-								loading={delegates.loading}
-								error={delegates.error}
-								value="delegation"
-							>
-								<DelegatesTable
-									delegates={delegates}
-									showTime
-									onSortChange={(sortKey: DelegatesOrder) =>
-										setDelegateSort(sortKey)
-									}
-									initialSort={delegatesInitialOrder}
-									onFilterChange={(newFilter?: DelegateFilter) =>
-										setDelegatesFilter({ ...delegatesFilter, ...newFilter })
-									}
-									initialFilter={delegatesInitialFilter}
-									onSearchChange={(newSearch?: string) =>
-										setDelegatesSearch(newSearch)
-									}
-									initialSearch={delegatesInitialSearch}
-								/>
-							</TabPane>
-							<TabPane
-								label="Validators"
-								loading={validators.loading}
-								error={!!validators.error}
-								value="validators"
-							>
-								<ValidatorsTable
-									validators={validators}
-									onSortChange={(sortKey: ValidatorsOrder) =>
-										setValidatorsSort(sortKey)
-									}
-									initialSort={validatorsInitialOrder}
-								/>
-							</TabPane>
-							<TabPane
-								label="Accounts"
-								count={balances.pagination.totalCount}
-								loading={balances.loading}
-								error={balances.error}
-								value="accounts"
-							>
-								<BalancesTable
-									balances={balances}
-									onSortChange={(sortKey: BalancesOrder) =>
-										setBalanceSort(sortKey)
-									}
-									initialSort={balancesInitialOrder}
-									onFilterChange={(newFilter?: BalancesFilter) =>
-										setBalanceFilter({ ...balanceFilter, ...newFilter })
-									}
-									initialFilter={balancesInitialFilter}
-									onSearchChange={(newSearch?: string) =>
-										setBalanceSearch(newSearch)
-									}
-									initialSearch={balancesInitialSearch}
-								/>
-							</TabPane>
-						</TabbedContent>
-					</div>
+					<TabbedContent defaultTab={tab.slice(1).toString()}>
+						<TabPane
+							label="Blocks"
+							count={blocks.pagination.totalCount}
+							loading={blocks.loading}
+							error={blocks.error}
+							value="blocks"
+						>
+							<BlocksTable
+								blocks={blocks}
+								showTime
+								onSortChange={(sortKey: BlocksOrder) => setBlockSort(sortKey)}
+								initialSort={blocksInitialOrder}
+							/>
+						</TabPane>
+						<TabPane
+							label="Transfers"
+							count={transfers.pagination.totalCount}
+							loading={transfers.loading}
+							error={transfers.error}
+							value="transfers"
+						>
+							<TransfersTable
+								transfers={transfers}
+								showTime
+								onSortChange={(sortKey: TransfersOrder) =>
+									setTransferSort(sortKey)
+								}
+								initialSort={transfersInitialOrder}
+								onFilterChange={(newFilter?: TransfersFilter) =>
+									setTransfersFilter({ ...transfersFilter, ...newFilter })
+								}
+								initialFilter={transfersInitialFilter}
+							/>
+						</TabPane>
+						<TabPane
+							label="Delegation"
+							count={delegates.pagination.totalCount}
+							loading={delegates.loading}
+							error={delegates.error}
+							value="delegation"
+						>
+							<DelegatesTable
+								delegates={delegates}
+								showTime
+								onSortChange={(sortKey: DelegatesOrder) =>
+									setDelegateSort(sortKey)
+								}
+								initialSort={delegatesInitialOrder}
+								onFilterChange={(newFilter?: DelegateFilter) =>
+									setDelegatesFilter({ ...delegatesFilter, ...newFilter })
+								}
+								initialFilter={delegatesInitialFilter}
+								onSearchChange={(newSearch?: string) =>
+									setDelegatesSearch(newSearch)
+								}
+								initialSearch={delegatesInitialSearch}
+							/>
+						</TabPane>
+						<TabPane
+							label="Validators"
+							loading={validators.loading}
+							error={!!validators.error}
+							value="validators"
+						>
+							<ValidatorsTable
+								validators={validators}
+								onSortChange={(sortKey: ValidatorsOrder) =>
+									setValidatorsSort(sortKey)
+								}
+								initialSort={validatorsInitialOrder}
+							/>
+						</TabPane>
+						<TabPane
+							label="Accounts"
+							count={balances.pagination.totalCount}
+							loading={balances.loading}
+							error={balances.error}
+							value="accounts"
+						>
+							<BalancesTable
+								balances={balances}
+								onSortChange={(sortKey: BalancesOrder) =>
+									setBalanceSort(sortKey)
+								}
+								initialSort={balancesInitialOrder}
+								onFilterChange={(newFilter?: BalancesFilter) =>
+									setBalanceFilter({ ...balanceFilter, ...newFilter })
+								}
+								initialFilter={balancesInitialFilter}
+								onSearchChange={(newSearch?: string) =>
+									setBalanceSearch(newSearch)
+								}
+								initialSearch={balancesInitialSearch}
+							/>
+						</TabPane>
+						<TabPane
+							label="Subnets"
+							count={subnets.pagination.totalCount}
+							loading={subnets.loading}
+							error={subnets.error}
+							value="subnets"
+						>
+							<SubnetsTable
+								subnets={subnets}
+								onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
+								initialSort={subnetsInitialOrder}
+							/>
+						</TabPane>
+					</TabbedContent>
 				</Card>
 			</div>
 		</div>

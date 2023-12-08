@@ -5,8 +5,10 @@ import {
 	HTMLAttributes,
 	ReactElement,
 	ReactNode,
+	useState,
 } from "react";
 import {
+	Button,
 	Table,
 	TableBody,
 	TableCell,
@@ -27,6 +29,8 @@ import { SortDirection } from "../model/sortDirection";
 import { TablePaginationHeader } from "./TablePaginationHeader";
 import { TableFilter } from "./TableFilter";
 import { TableSearch } from "./TableSearch";
+import { download, generateCsv, mkConfig } from "export-to-csv";
+import LoadingSpinner from "../assets/loading.svg";
 
 const tableStyle = css`
   table-layout: auto;
@@ -134,11 +138,29 @@ const tableOptions = css`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: end;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+	align-items: start;
+  }
 `;
 
 const tableFiltering = css`
   display: flex;
   flex-direction: column;
+`;
+
+const csvDownload = css`
+  text-align: right;
+  margin-bottom: 10px;
+`;
+
+const spinnerStyle = css`
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 44px;
 `;
 
 type ItemsTableItem = {
@@ -149,6 +171,12 @@ type ItemsTableDataFn<T, A extends any[], R> = (
 	data: T,
 	...additionalData: A
 ) => R;
+
+type CSVData = {
+	columns: { key: string; displayLabel: string }[];
+	data: any[];
+	filename: string;
+};
 
 export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
@@ -226,6 +254,7 @@ export type ItemsTableProps<
 	search?: string;
 	onSearchChange?: (value?: string) => void;
 	searchPlaceholder?: string;
+	getExportCSV?: () => Promise<CSVData>;
 };
 
 export const ItemsTable = <
@@ -254,11 +283,40 @@ export const ItemsTable = <
 		search,
 		onSearchChange,
 		searchPlaceholder,
+		getExportCSV,
 		...restProps
 	} = props;
 
+	const [isDownloading, setDownloading] = useState(false);
+
 	return (
 		<div {...restProps} data-class="table">
+			{getExportCSV && (
+				<div css={csvDownload}>
+					<Button
+						size="small"
+						variant="outlined"
+						color="secondary"
+						style={{height: "48px"}}
+						onClick={async () => {
+							if(isDownloading)
+								return;
+							setDownloading(true);
+							const { columns, data, filename } = await getExportCSV();
+							const csvConfig = mkConfig({
+								columnHeaders: columns,
+								filename,
+							});
+							const csv = generateCsv(csvConfig)(data);
+							download(csvConfig)(csv);
+							setDownloading(false);
+						}}
+					>
+						{isDownloading && <img src={LoadingSpinner} css={spinnerStyle} />}
+						<span style={{marginLeft: isDownloading ? "24px": 0}}>Download CSV</span>
+					</Button>
+				</div>
+			)}
 			<div css={tableOptions}>
 				<div css={tableFiltering}>
 					{pagination && <TablePaginationHeader {...pagination} />}
@@ -378,9 +436,9 @@ export const ItemsTable = <
 									children,
 									(child) =>
 										child &&
-											cloneElement(child, {
-												_data: item,
-											})
+								cloneElement(child, {
+									_data: item,
+								})
 								)}
 							</TableRow>
 						))}

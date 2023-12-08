@@ -14,7 +14,7 @@ import {
 	DelegateFilter,
 	DelegatesOrder,
 } from "../services/delegateService";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
@@ -24,6 +24,7 @@ import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio"
 import { ValidatorStakeHistoryChart } from "../components/validators/ValidatorStakeHistoryChart";
 import { useValidatorStakeHistory } from "../hooks/useValidatorHistory";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
+import { useValidator } from "../hooks/useValidator";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -100,6 +101,8 @@ export type ValidatorPageParams = {
 export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
 
+	const validator = useValidator({ address: { equalTo: address } });
+
 	const verifiedDelegates = useVerifiedDelegates();
 
 	const info = verifiedDelegates[address];
@@ -155,7 +158,6 @@ export const ValidatorPage = () => {
 	};
 
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -192,7 +194,7 @@ export const ValidatorPage = () => {
 					{info?.description && (
 						<div css={validatorDescription}>{info?.description}</div>
 					)}
-					<ValidatorInfoTable account={address} balance={balance} />
+					<ValidatorInfoTable account={address} balance={balance} info={validator} />
 					<div css={stakeButton}>
 						<ButtonLink
 							to={`https://delegate.taostats.io/staking?hkey=${address}`}
@@ -206,67 +208,63 @@ export const ValidatorPage = () => {
 					</div>
 				</Card>
 				<Card css={portfolioStyle} data-test="account-portfolio">
-					<ValidatorPortfolio hotkey={address} />
+					<ValidatorPortfolio hotkey={address} info={validator} />
 				</Card>
 			</CardRow>
 			<Card data-test="account-historical-items">
-				<div ref={tabRef}>
-					<TabbedContent>
-						<TabPane
-							label="Staked"
-							loading={validatorStakeHistory.loading}
-							error={!!validatorStakeHistory.error}
-							value="staked"
-						>
-							<ValidatorStakeHistoryChart
-								account={address}
-								stakeHistory={validatorStakeHistory}
-								balance={balance}
-							/>
-						</TabPane>
-					</TabbedContent>
-				</div>
+				<TabbedContent>
+					<TabPane
+						label="Staked"
+						loading={validatorStakeHistory.loading}
+						error={!!validatorStakeHistory.error}
+						value="staked"
+					>
+						<ValidatorStakeHistoryChart
+							account={address}
+							stakeHistory={validatorStakeHistory}
+							balance={balance}
+						/>
+					</TabPane>
+				</TabbedContent>
 			</Card>
 			<Card>
-				<div ref={tabRef}>
-					<TabbedContent defaultTab={tab.slice(1).toString()}>
-						<TabPane
-							label="Nominator"
-							count={nominators.pagination.totalCount}
-							loading={nominators.loading}
-							error={nominators.error}
-							value="nominator"
-						>
-							<NominatorsTable
-								nominators={nominators}
-								onSortChange={(sortKey: DelegateBalancesOrder) =>
-									setNominatorSort(sortKey)
-								}
-								initialSort={nominatorSort}
-							/>
-						</TabPane>
-						<TabPane
-							label="Delegation"
-							count={delegates.pagination.totalCount}
-							loading={delegates.loading}
-							error={delegates.error}
-							value="delegation"
-						>
-							<DelegatesTable
-								delegates={delegates}
-								showTime
-								onSortChange={(sortKey: DelegatesOrder) =>
-									setDelegateSort(sortKey)
-								}
-								initialSort={delegatesInitialOrder}
-								onFilterChange={(newFilter?: DelegateFilter) =>
-									setDelegatesFilter({ ...delegatesFilter, ...newFilter })
-								}
-								initialFilter={delegatesInitialFilter}
-							/>
-						</TabPane>
-					</TabbedContent>
-				</div>
+				<TabbedContent defaultTab={tab.slice(1).toString()}>
+					<TabPane
+						label="Nominator"
+						count={nominators.pagination.totalCount}
+						loading={nominators.loading}
+						error={nominators.error}
+						value="nominator"
+					>
+						<NominatorsTable
+							nominators={nominators}
+							onSortChange={(sortKey: DelegateBalancesOrder) =>
+								setNominatorSort(sortKey)
+							}
+							initialSort={nominatorSort}
+						/>
+					</TabPane>
+					<TabPane
+						label="Delegation"
+						count={delegates.pagination.totalCount}
+						loading={delegates.loading}
+						error={delegates.error}
+						value="delegation"
+					>
+						<DelegatesTable
+							delegates={delegates}
+							showTime
+							onSortChange={(sortKey: DelegatesOrder) =>
+								setDelegateSort(sortKey)
+							}
+							initialSort={delegatesInitialOrder}
+							onFilterChange={(newFilter?: DelegateFilter) =>
+								setDelegatesFilter({ ...delegatesFilter, ...newFilter })
+							}
+							initialFilter={delegatesInitialFilter}
+						/>
+					</TabPane>
+				</TabbedContent>
 			</Card>
 		</>
 	);

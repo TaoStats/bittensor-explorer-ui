@@ -9,7 +9,7 @@ import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsic } from "../hooks/useExtrinsic";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useRef, useEffect } from "react";
+import { useEffect } from "react";
 
 type ExtrinsicPageParams = {
 	id: string;
@@ -33,7 +33,6 @@ export const ExtrinsicPage = () => {
 	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
 	
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -54,19 +53,17 @@ export const ExtrinsicPage = () => {
 			</Card>
 			{extrinsic.data && (
 				<Card>
-					<div ref={tabRef}>
-						<TabbedContent>
-							<TabPane
-								label='Events'
-								count={events.pagination.totalCount}
-								loading={events.loading}
-								error={events.error}
-								value='events'
-							>
-								<EventsTable events={events} />
-							</TabPane>
-						</TabbedContent>
-					</div>
+					<TabbedContent>
+						<TabPane
+							label='Events'
+							count={events.pagination.totalCount}
+							loading={events.loading}
+							error={events.error}
+							value='events'
+						>
+							<EventsTable events={events} />
+						</TabPane>
+					</TabbedContent>
 				</Card>
 			)}
 		</>

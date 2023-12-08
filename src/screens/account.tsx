@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
@@ -102,9 +102,13 @@ export const AccountPage = () => {
 		{ signer: { equalTo: address } },
 		"BLOCK_HEIGHT_DESC"
 	);
+	const transfersInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
+	const [transferSort, setTransferSort] = useState<TransfersOrder>(
+		transfersInitialOrder
+	);
 	const transfers = useTransfers({
 		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
-	});
+	}, transferSort);
 	const delegateBalances = useDelegateBalances(
 		{
 			account: { equalTo: address },
@@ -217,7 +221,6 @@ export const AccountPage = () => {
 	}, [balance]);
 
 	const { hash: tab } = useLocation();
-	const tabRef = useRef(null);
 	useEffect(() => {
 		if (tab) {
 			document.getElementById(tab)?.scrollIntoView();
@@ -255,10 +258,10 @@ export const AccountPage = () => {
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
 				</Card>
 			</CardRow>
-			{account.data && (
+			{(
 				<Card data-test="account-historical-items">
-					<div ref={tabRef}>
-						<TabbedContent>
+					<div>
+						<TabbedContent defaultTab={tab.slice(1).toString()}>
 							<TabPane
 								label="Balance"
 								loading={accountBalanceHistory.loading}
@@ -287,10 +290,10 @@ export const AccountPage = () => {
 					</div>
 				</Card>
 			)}
-			{account.data && (
+			{(
 				<Card data-test="account-related-items">
-					<div ref={tabRef}>
-						<TabbedContent>
+					<div>
+						<TabbedContent defaultTab={tab.slice(1).toString()}>
 							<TabPane
 								label="Extrinsics"
 								count={extrinsics.pagination.totalCount}
@@ -311,7 +314,13 @@ export const AccountPage = () => {
 								<TransfersTable
 									transfers={transfers}
 									showTime
+									onSortChange={(sortKey: TransfersOrder) =>
+										setTransferSort(sortKey)
+									}
+									initialSort={transfersInitialOrder}
 									direction={{ show: true, source: address }}
+									address={address}
+									download
 								/>
 							</TabPane>
 
@@ -333,6 +342,8 @@ export const AccountPage = () => {
 										setDelegatesSearch(newSearch)
 									}
 									initialSearch={delegatesInitialSearch}
+									address={address}
+									download
 								/>
 							</TabPane>
 						</TabbedContent>

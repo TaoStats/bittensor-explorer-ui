@@ -9,7 +9,7 @@ const searchStyle = () => css`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 0 0 0 20px;
+  padding: 0 0 16px 20px;
   font-size: 14px;
 `;
 
@@ -30,7 +30,8 @@ const searchInputStyle = css`
   height: 40px;
   line-height: 40px;
   padding: 0 5px 0 41px;
-  width: 200px;
+  max-width: 200px;
+  width: 100%;
 `;
 
 type TableSearchProps = {

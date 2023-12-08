@@ -12,12 +12,12 @@ jobs:
     steps:
       - name: Get token
         id: get-token
-        uses: topmonks/app-auth-action@v1
+        uses: TaoStats/app-auth-action@v1
         with:
           appId: ${{ secrets.PROJECTS_AND_ISSUES_APP_ID }}
           appPrivateKey: ${{ secrets.PROJECTS_AND_ISSUES_APP_PRIVATE_KEY }}
       - name: Add issue to project
         uses: actions/add-to-project@v0.4.0
         with:
-          project-url: https://github.com/orgs/topmonks/projects/11
+          project-url: https://github.com/orgs/TaoStats/projects/1
           github-token: ${{ steps.get-token.outputs.token }}

@@ -13,7 +13,8 @@ import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { DelegateFilter, DelegatesOrder } from "../../services/delegateService";
 import { Delegate } from "../../model/delegate";
-import { rawAmountToDecimaledString } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal, rawAmountToDecimaledString } from "../../utils/number";
+import { fetchBlockTimestamps } from "../../utils/block";
 
 const dirContainer = css`
   display: flex;
@@ -59,6 +60,8 @@ export type DelegatesTableProps = {
 	initialFilter?: DelegateFilter;
 	onSearchChange?: (newSearch?: string) => void;
 	initialSearch?: string;
+	address?: string;
+	download?: boolean;
 };
 
 const DelegatesTableAttribute = ItemsTableAttribute<Delegate>;
@@ -100,6 +103,8 @@ function DelegatesTable(props: DelegatesTableProps) {
 		onFilterChange,
 		initialSearch,
 		onSearchChange,
+		address,
+		download,
 	} = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
@@ -127,7 +132,10 @@ function DelegatesTable(props: DelegatesTableProps) {
 		if (property === sort?.property) {
 			setSort({
 				...sort,
-				direction: sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC,
+				direction:
+					sort.direction === SortDirection.ASC
+						? SortDirection.DESC
+						: SortDirection.ASC,
 			});
 		} else {
 			setSort({
@@ -180,6 +188,62 @@ function DelegatesTable(props: DelegatesTableProps) {
 		onSearchChange(search);
 	}, [search]);
 
+	const getExportCSV = async () => {
+		const columns = [
+			{
+				key: "height",
+				displayLabel: "Block height"
+			},
+			{
+				key: "createdAt",
+				displayLabel: "Time(UTC)"
+			},
+			{
+				key: "validator",
+				displayLabel: "Validator"
+			},
+			{
+				key: "action",
+				displayLabel: "Action"
+			},
+			{
+				key: "amount",
+				displayLabel: "Amount",
+			},
+		];
+		const data: any[] = [];
+		if(!delegates.loading && !delegates.notFound && delegates.data !== undefined) {
+			const blockNumbers = delegates.data.reduce((prev: bigint[], cur: Delegate) => {
+				prev.push(cur.blockNumber);
+				return prev;
+			}, []);
+			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
+
+			delegates.data.forEach((delegate: Delegate) => {
+				const createdAt = blockTimestamps[delegate.blockNumber.toString()];
+				const amount = formatCurrency(
+					rawAmountToDecimal(delegate.amount.toString()),
+					currency,
+					{
+						decimalPlaces: "optimal",
+					}
+				);
+				data.push({
+					height: delegate.blockNumber,
+					createdAt,
+					validator: delegate.delegateName ?? delegate.delegate,
+					action: delegate.action,
+					amount,
+				});
+			});
+		}
+		return {
+			columns,
+			data,
+			filename: `delegation-${address}`,
+		};
+	};
+
 	return (
 		<ItemsTable
 			data={delegates.data}
@@ -197,6 +261,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 			search={search}
 			onSearchChange={handleSearchChange}
 			searchPlaceholder="DELEGATE"
+			getExportCSV={download ? getExportCSV : undefined}
 		>
 			<DelegatesTableAttribute
 				label="Extrinsic"

@@ -28,11 +28,11 @@ const valueTableStyle = css`
     padding: 0;
   }
 
-	td:first-of-type {
-		font-weight: 400;
-		font-size: 14px;
-		line-height: 22px;
-	}
+  td:first-of-type {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+  }
 `;
 
 const arrayIndexCellStyle = css`
@@ -55,14 +55,14 @@ const objectKeyCellStyle = css`
 `;
 
 const objectKeyStyle = css`
-	font-weight: 500;
-	word-break: break-all;
-	box-sizing: border-box;
-	width: 180px;
-	padding: 6px 0;
-	padding-right: 32px;
-	position: sticky;
-	top: 0;
+  font-weight: 500;
+  word-break: break-all;
+  box-sizing: border-box;
+  width: 180px;
+  padding: 6px 0;
+  padding-right: 32px;
+  position: sticky;
+  top: 0;
 `;
 
 const kindStyle = css`
@@ -95,7 +95,7 @@ const ValueOfKind = (props: ValueOfKindProps) => {
 	} = props;
 
 	return (
-		<Table size='small' css={valueTableStyle}>
+		<Table size="small" css={valueTableStyle}>
 			<TableBody>
 				<TableRow>
 					<TableCell css={objectKeyCellStyle}>
@@ -145,10 +145,27 @@ const AccountValue = (props: MaybeAccountLinkValueProps) => {
 			<AccountAddress
 				address={value}
 				prefix={runtimeSpec.metadata.ss58Prefix}
-				copyToClipboard='small'
+				copyToClipboard="small"
 			/>
 		</div>
 	);
+};
+
+type CallIndexValueProps = {
+	value: any;
+	runtimeSpec?: RuntimeSpec;
+};
+
+const CallIndexValue = (props: CallIndexValueProps) => {
+	const { value, runtimeSpec } = props;
+	const hexValue = parseInt(value, 16);
+	const palletIndex = (hexValue >> 8) & 0xff;
+	const callIndex = hexValue & 0xff;
+	const moduleName = runtimeSpec?.metadata.pallets[palletIndex]?.name || "";
+	const formattedModuleName = moduleName.slice(0, 1).toLowerCase() + moduleName.slice(1);
+	const callName = runtimeSpec?.metadata.pallets[palletIndex]?.calls[callIndex]?.name || "";
+	const formattedCallName = callName.slice(0, 1).toLowerCase() + callName.slice(1);
+	return <div css={valueStyle}>{`${formattedModuleName}.${formattedCallName}`}</div>;
 };
 
 export type DataViewerValueParsedProps = {
@@ -193,7 +210,7 @@ export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
 		});
 
 		return (
-			<Table size='small' css={valueTableStyle}>
+			<Table size="small" css={valueTableStyle}>
 				<TableBody>
 					{value.map((item, index) => (
 						<TableRow key={index}>
@@ -223,23 +240,34 @@ export const DataViewerValueParsed = (props: DataViewerValueParsedProps) => {
 		keys.sort();
 
 		return (
-			<Table size='small' css={valueTableStyle}>
+			<Table size="small" css={valueTableStyle}>
 				<TableBody>
 					{keys.map((key) => (
 						<TableRow key={key}>
 							<TableCell css={objectKeyCellStyle}>
-								<div css={objectKeyStyle}>{key}</div>
+								<div css={objectKeyStyle}>
+									{key === "callIndex" ? "call" : key}
+								</div>
 							</TableCell>
 							<TableCell>
-								<DataViewerValueParsed
-									value={value[key]}
-									metadata={
-										Array.isArray(metadata)
-											? metadata?.find((it) => noCase(it.name) === noCase(key))
-											: undefined
-									}
-									runtimeSpec={runtimeSpec}
-								/>
+								{key === "callIndex" ? (
+									<CallIndexValue
+										value={value[key]}
+										runtimeSpec={runtimeSpec}
+									/>
+								) : (
+									<DataViewerValueParsed
+										value={value[key]}
+										metadata={
+											Array.isArray(metadata)
+												? metadata?.find(
+													(it) => noCase(it.name) === noCase(key)
+												)
+												: undefined
+										}
+										runtimeSpec={runtimeSpec}
+									/>
+								)}
 							</TableCell>
 						</TableRow>
 					))}
