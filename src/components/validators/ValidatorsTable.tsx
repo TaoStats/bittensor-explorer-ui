@@ -219,7 +219,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						<Currency
 							amount={validator.nominatorReturnPerK}
 							currency={currency}
-							decimalPlaces={2}
+							decimalPlaces={3}
 							showFullInTooltip
 						/>
 					);
@@ -236,7 +236,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 						<Currency
 							amount={validator.validatorReturn}
 							currency={currency}
-							decimalPlaces={2}
+							decimalPlaces={3}
 							showFullInTooltip
 						/>
 					);
