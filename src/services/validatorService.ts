@@ -2,6 +2,7 @@ import {
 	Validator,
 	ValidatorStakeHistory,
 	ValidatorStakeHistoryPaginatedResponse,
+	ValidatorX,
 } from "../model/validator";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -23,7 +24,7 @@ export type ValidatorsOrder =
 	| "NOMINATORS_DESC";
 
 export async function getValidator(filter: ValidatorsFilter) {
-	const response = await fetchIndexer<{ validators: ResponseItems<Validator> }>(
+	const response = await fetchIndexer<{ validators: ResponseItems<ValidatorX> }>(
 		`query ($filter: ValidatorFilter) {
 			validators(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
 				nodes {
@@ -142,8 +143,11 @@ export async function getValidatorStakeHistory(
 	};
 }
 
-const transformValidator = (validator: Validator): Validator => {
-	validator.parsedRegistrations = JSON.parse(validator.registrations);
-	validator.parsedValidatorPermits = JSON.parse(validator.validatorPermits);
-	return validator;
+const transformValidator = (validator: Validator): ValidatorX => {
+	const validatorX = {
+		parsedRegistrations: JSON.parse(validator.registrations),
+		parsedValidatorPermits: JSON.parse(validator.validatorPermits),
+		...validator,
+	};
+	return validatorX;
 };

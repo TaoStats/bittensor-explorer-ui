@@ -13,11 +13,14 @@ export type Validator = {
 	validatorStake: bigint;
 	validatorReturn: bigint;
 	registrations: string;
-	parsedRegistrations?: bigint[];
 	validatorPermits: string;
-	parsedValidatorPermits?: bigint[];
 	name?: string;
 };
+
+export type ValidatorX = Validator & {
+	parsedRegistrations?: bigint[];
+	parsedValidatorPermits?: bigint[];
+}
 
 export type ValidatorStakeHistory = {
 	amount: bigint;
