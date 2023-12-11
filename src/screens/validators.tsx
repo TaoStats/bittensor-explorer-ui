@@ -211,7 +211,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-							DELEGATE STAKE
+              DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
@@ -281,8 +281,8 @@ export const ValidatorPage = () => {
 					>
 						<SubnetsTable
 							subnets={subnets}
-							registrations={validator.data?.parsedRegistrations}
-							validatorPermits={validator.data?.parsedValidatorPermits}
+							registrations={validator.data?.registrations}
+							validatorPermits={validator.data?.validatorPermits}
 						/>
 					</TabPane>
 				</TabbedContent>

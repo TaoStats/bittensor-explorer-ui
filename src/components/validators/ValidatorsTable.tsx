@@ -86,10 +86,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 		if (property === sort?.property) {
 			setSort({
 				...sort,
-				direction:
-					sort.direction === SortDirection.ASC
-						? SortDirection.DESC
-						: SortDirection.ASC,
+				direction: sort.direction === SortDirection.ASC ? SortDirection.DESC: SortDirection.ASC,
 			});
 		} else {
 			setSort({
@@ -209,8 +206,8 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				}}
 				sortable
 				sortProperty="nominatorChange"
-			/>		
-			
+			/>
+
 			<ValidatorsTableAttribute
 				label="NOM. / 24h / k𝞃"
 				align="right"
@@ -227,7 +224,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 				sortable
 				sortProperty="nominatorReturnPerK"
 			/>
-			
+
 			<ValidatorsTableAttribute
 				label="VAL. / 24h"
 				align="right"

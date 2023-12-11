@@ -6,7 +6,7 @@ import { StatItem } from "../network/StatItem";
 import { DonutChart } from "../DonutChart";
 import Loading from "../Loading";
 import { Resource } from "../../model/resource";
-import { Validator } from "../../model/validator";
+import { ValidatorResponse } from "../../model/validator";
 
 const chartContainer = css`
   display: flex;
@@ -32,7 +32,7 @@ const spinnerContainer = css`
 
 export type ValidatorPortfolioProps = {
 	hotkey: string;
-	info: Resource<Validator>;
+	info: Resource<ValidatorResponse>;
 };
 
 export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
@@ -43,10 +43,9 @@ export const ValidatorPortfolio = (props: ValidatorPortfolioProps) => {
 	const validatorStaked = info.data?.validatorStake.toString();
 	const validatorStakedFormatted = loading ? 0 : formatNumber(rawAmountToDecimal(validatorStaked), { decimalPlaces: 2 });
 	const validatorStakedPercent = loading ? 0 : ((rawAmountToDecimal(validatorStaked).toNumber() * 100) / rawAmountToDecimal(balance.data).toNumber()).toFixed(2);
-
 	const nomineesStaked = loading ? 0 : rawAmountToDecimal(balance.data).toNumber() - rawAmountToDecimal(validatorStaked).toNumber();
 	const nomineesStakedFormatted = loading ? 0 : formatNumber(nomineesStaked, { decimalPlaces: 2 });
-	const nomineesStakedPercent = loading ? 0 : ((nomineesStaked * 100) /rawAmountToDecimal(balance.data).toNumber()).toFixed(2);
+	const nomineesStakedPercent = loading ? 0 : ((nomineesStaked * 100) / rawAmountToDecimal(balance.data).toNumber()).toFixed(2);
 
 	return loading ? (
 		<div css={spinnerContainer}>
