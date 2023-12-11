@@ -30,6 +30,8 @@ export async function getValidator(filter: ValidatorsFilter) {
 					id
 					owner
 					validatorStake
+					validatorPermits
+					registrations
 				}
 			}
 		}`,
@@ -138,5 +140,7 @@ export async function getValidatorStakeHistory(
 }
 
 const transformValidator = (validator: Validator): Validator => {
+	validator.parsedRegistrations = JSON.parse(validator.registrations);
+	validator.parsedValidatorPermits = JSON.parse(validator.validatorPermits);
 	return validator;
 };

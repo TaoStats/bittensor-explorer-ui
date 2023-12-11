@@ -12,6 +12,10 @@ export type Validator = {
 	totalDailyReturn: bigint;
 	validatorStake: bigint;
 	validatorReturn: bigint;
+	registrations: string;
+	parsedRegistrations?: bigint[];
+	validatorPermits: string;
+	parsedValidatorPermits?: bigint[];
 	name?: string;
 };
 

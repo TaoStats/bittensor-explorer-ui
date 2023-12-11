@@ -25,6 +25,9 @@ import { ValidatorStakeHistoryChart } from "../components/validators/ValidatorSt
 import { useValidatorStakeHistory } from "../hooks/useValidatorHistory";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidator } from "../hooks/useValidator";
+import { useSubnets } from "../hooks/useSubnets";
+import { SubnetsOrder } from "../services/subnetsService";
+import SubnetsTable from "../components/subnets/SubnetsTable";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -167,6 +170,11 @@ export const ValidatorPage = () => {
 		}
 	}, [tab]);
 
+	const subnetsInitialOrder: SubnetsOrder = "NET_UID_ASC";
+	const [subnetSort, setSubnetSort] =
+    useState<SubnetsOrder>(subnetsInitialOrder);
+	const subnets = useSubnets(undefined, subnetSort);
+
 	return (
 		<>
 			<CardRow css={infoSection}>
@@ -194,7 +202,11 @@ export const ValidatorPage = () => {
 					{info?.description && (
 						<div css={validatorDescription}>{info?.description}</div>
 					)}
-					<ValidatorInfoTable account={address} balance={balance} info={validator} />
+					<ValidatorInfoTable
+						account={address}
+						balance={balance}
+						info={validator}
+					/>
 					<div css={stakeButton}>
 						<ButtonLink
 							to={`https://delegate.taostats.io/staking?hkey=${address}`}
@@ -203,7 +215,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-							DELEGATE STAKE
+              DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
@@ -262,6 +274,24 @@ export const ValidatorPage = () => {
 								setDelegatesFilter({ ...delegatesFilter, ...newFilter })
 							}
 							initialFilter={delegatesInitialFilter}
+						/>
+					</TabPane>
+					<TabPane
+						label="Subnets"
+						count={subnets.pagination.totalCount}
+						loading={subnets.loading}
+						error={subnets.error}
+						value="subnets"
+					>
+						<SubnetsTable
+							subnets={subnets}
+							onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
+							initialSort={subnetsInitialOrder}
+							fromValidator
+							validatorInfo={{
+								registrations: validator.data?.parsedRegistrations,
+								validatorPermits: validator.data?.parsedValidatorPermits,
+							}}
 						/>
 					</TabPane>
 				</TabbedContent>

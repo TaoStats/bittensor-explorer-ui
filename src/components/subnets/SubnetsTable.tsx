@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { useEffect, useMemo, useState } from "react";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { SortDirection } from "../../model/sortDirection";
@@ -17,12 +18,28 @@ import {
 	rawAmountToDecimal,
 } from "../../utils/number";
 import Spinner from "../Spinner";
+import { Theme, css } from "@emotion/react";
+
+const successStyle = (theme: Theme) => css`
+  font-size: 16px;
+  color: ${theme.palette.success.main};
+`;
+
+const failedStyle = (theme: Theme) => css`
+  font-size: 16px;
+  color: ${theme.palette.error.main};
+`;
 
 export type SubnetsTableProps = {
 	subnets: PaginatedResource<Subnet>;
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: SubnetsOrder) => void;
 	initialSort?: string;
+	fromValidator?: boolean;
+	validatorInfo?: {
+		registrations?: bigint[];
+		validatorPermits?: bigint[];
+	};
 };
 
 const SubnetsTableAttribute = ItemsTableAttribute<Subnet>;
@@ -43,7 +60,7 @@ const orderMappings = {
 };
 
 function SubnetsTable(props: SubnetsTableProps) {
-	const { subnets } = props;
+	const { subnets, fromValidator, validatorInfo } = props;
 
 	const emissions = useSubnetEmissions();
 
@@ -53,9 +70,9 @@ function SubnetsTable(props: SubnetsTableProps) {
 	const sortedSubnets = useMemo(() => {
 		if (
 			subnets.loading ||
-			subnets.error ||
-			subnets.data === undefined ||
-			emissions === undefined
+      subnets.error ||
+      subnets.data === undefined ||
+      emissions === undefined
 		)
 			return subnets.data;
 		if (sort?.property !== "emission") return subnets.data;
@@ -128,50 +145,99 @@ function SubnetsTable(props: SubnetsTableProps) {
 					</Link>
 				)}
 			/>
-			<SubnetsTableAttribute
-				label="Created At (UTC)"
-				sortable
-				render={(subnet) => (
-					<Time time={subnet.timestamp} utc timezone={false} />
-				)}
-				sortProperty="createdAt"
-			/>
-			<SubnetsTableAttribute
-				label="Owner"
-				render={(subnet) => (
-					<AccountAddress
-						address={decodeAddress(subnet.owner)}
-						prefix={NETWORK_CONFIG.prefix}
-						copyToClipboard="normal"
-						shorten
+			{
+				fromValidator && (
+					<SubnetsTableAttribute
+						label="Registration"
+						render={(subnet) =>
+							// <>{JSON.stringify(validatorInfo?.registrations)}</>
+							// <>{typeof validatorInfo?.registrations}</>
+							validatorInfo?.registrations?.find((regist: bigint) => {
+								if(regist.toString() == subnet.netUid.toString())
+									return true;
+								return false;
+							}) ? (
+									<span css={successStyle}>&#x1F5F9;</span>
+								) : (
+									<span css={failedStyle}>&#x1F5F5;</span>
+								)
+						}
 					/>
-				)}
-			/>
-			<SubnetsTableAttribute
-				label="Emission"
-				sortable
-				render={(subnet) =>
-					emissions === undefined ? (
-						<Spinner small />
-					) : (
-						<>
-							{emissions[subnet.netUid] >= 100000
-								? formatNumber(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									{ decimalPlaces: 2 }
+				)
+			}
+			{
+				fromValidator && (
+					<SubnetsTableAttribute
+						label="Validator Permits"
+						render={(subnet) =>
+							validatorInfo?.validatorPermits?.find((permit: bigint) => {
+								if(permit.toString() == subnet.netUid.toString())
+									return true;
+								return false;
+							}) ? (
+									<span css={successStyle}>&#x1F5F9;</span>
+								) : (
+									<span css={failedStyle}>&#x1F5F5;</span>
 								)
-								: formatNumberWithPrecision(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									1,
-									true
-								)
-							}
-							%
-						</>
-					)
-				}
-				sortProperty="emission"
-			/>
+						}
+					/>
+				)
+			}
+			{
+				!fromValidator && (
+					<SubnetsTableAttribute
+						label="Created At (UTC)"
+						sortable
+						render={(subnet) => (
+							<Time time={subnet.timestamp} utc timezone={false} />
+						)}
+						sortProperty="createdAt"
+					/>
+				)
+			}
+			{
+				!fromValidator && (
+					<SubnetsTableAttribute
+						label="Owner"
+						render={(subnet) => (
+							<AccountAddress
+								address={decodeAddress(subnet.owner)}
+								prefix={NETWORK_CONFIG.prefix}
+								copyToClipboard="normal"
+								shorten
+							/>
+						)}
+					/>
+				)
+			}
+			{
+				!fromValidator && (
+					<SubnetsTableAttribute
+						label="Emission"
+						sortable
+						render={(subnet) =>
+							emissions === undefined ? (
+								<Spinner small />
+							) : (
+								<>
+									{emissions[subnet.netUid] >= 100000
+										? formatNumber(
+											rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+											{ decimalPlaces: 2 }
+										)
+										: formatNumberWithPrecision(
+											rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
+											1,
+											true
+										)}
+										%
+								</>
+							)
+						}
+						sortProperty="emission"
+					/>
+				)
+			}
 		</ItemsTable>
 	);
 }
