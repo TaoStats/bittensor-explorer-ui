@@ -86,7 +86,7 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 				)}
 			/>
 			<ValidatorInfoTableAttribute
-				label="NOM. / 24h / k𝞃"
+				label="Nominator / 24h / k𝞃"
 				render={() => (
 					<Currency
 						amount={info?.data?.nominatorReturnPerK ?? BigInt(0)}
@@ -97,7 +97,7 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 				)}
 			/>
 			<ValidatorInfoTableAttribute
-				label="VAL. / 24h"
+				label="Validator / 24h"
 				render={() => (
 					<Currency
 						amount={info?.data?.validatorReturn ?? BigInt(0)}
