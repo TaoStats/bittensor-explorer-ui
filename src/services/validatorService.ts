@@ -29,6 +29,9 @@ export async function getValidator(filter: ValidatorsFilter) {
 				nodes {
 					id
 					owner
+					totalDailyReturn
+					nominatorReturnPerK
+					validatorReturn
 					validatorStake
 					validatorPermits
 					registrations

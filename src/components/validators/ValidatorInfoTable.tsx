@@ -74,6 +74,39 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 					<AccountAddress address={info.data?.owner || ""} prefix={prefix} link />
 				)}
 			/>
+			<ValidatorInfoTableAttribute
+				label="Daily return"
+				render={() => (
+					<Currency
+						amount={info?.data?.totalDailyReturn ?? BigInt(0)}
+						currency={currency}
+						decimalPlaces={3}
+						showFullInTooltip
+					/>
+				)}
+			/>
+			<ValidatorInfoTableAttribute
+				label="NOM. / 24h / k𝞃"
+				render={() => (
+					<Currency
+						amount={info?.data?.nominatorReturnPerK ?? BigInt(0)}
+						currency={currency}
+						decimalPlaces={3}
+						showFullInTooltip
+					/>
+				)}
+			/>
+			<ValidatorInfoTableAttribute
+				label="VAL. / 24h"
+				render={() => (
+					<Currency
+						amount={info?.data?.validatorReturn ?? BigInt(0)}
+						currency={currency}
+						decimalPlaces={3}
+						showFullInTooltip
+					/>
+				)}
+			/>
 		</InfoTable>
 	);
 };
