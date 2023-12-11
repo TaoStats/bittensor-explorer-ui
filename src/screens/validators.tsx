@@ -27,7 +27,7 @@ import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidator } from "../hooks/useValidator";
 import { useSubnets } from "../hooks/useSubnets";
 import { SubnetsOrder } from "../services/subnetsService";
-import SubnetsTable from "../components/subnets/SubnetsTable";
+import SubnetsTable from "../components/validators/SubnetsTable";
 
 const validatorHeader = (theme: Theme) => css`
   display: flex;
@@ -215,7 +215,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-              DELEGATE STAKE
+							DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
@@ -287,11 +287,8 @@ export const ValidatorPage = () => {
 							subnets={subnets}
 							onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
 							initialSort={subnetsInitialOrder}
-							fromValidator
-							validatorInfo={{
-								registrations: validator.data?.parsedRegistrations,
-								validatorPermits: validator.data?.parsedValidatorPermits,
-							}}
+							registrations={validator.data?.parsedRegistrations}
+							validatorPermits={validator.data?.parsedValidatorPermits}
 						/>
 					</TabPane>
 				</TabbedContent>

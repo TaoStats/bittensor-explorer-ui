@@ -1,25 +1,29 @@
+/** @jsxImportSource @emotion/react */
 import { useEffect, useMemo, useState } from "react";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { SortDirection } from "../../model/sortDirection";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { Link } from "../Link";
-import { Time } from "../Time";
-import { NETWORK_CONFIG } from "../../config";
-import { decodeAddress } from "../../utils/formatAddress";
-import { AccountAddress } from "../AccountAddress";
 import { Subnet } from "../../model/subnet";
 import { SubnetsOrder } from "../../services/subnetsService";
 import { SortOrder } from "../../model/sortOrder";
 import { useSubnetEmissions } from "../../hooks/useSubnetEmissions";
-import {
-	formatNumber,
-	formatNumberWithPrecision,
-	rawAmountToDecimal,
-} from "../../utils/number";
-import Spinner from "../Spinner";
+import { Theme, css } from "@emotion/react";
+
+const successStyle = (theme: Theme) => css`
+  font-size: 16px;
+  color: ${theme.palette.success.main};
+`;
+
+const failedStyle = (theme: Theme) => css`
+  font-size: 16px;
+  color: ${theme.palette.error.main};
+`;
 
 export type SubnetsTableProps = {
 	subnets: PaginatedResource<Subnet>;
+	registrations?: bigint[];
+	validatorPermits?: bigint[];
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: SubnetsOrder) => void;
 	initialSort?: string;
@@ -43,7 +47,7 @@ const orderMappings = {
 };
 
 function SubnetsTable(props: SubnetsTableProps) {
-	const { subnets } = props;
+	const { subnets, registrations, validatorPermits } = props;
 
 	const emissions = useSubnetEmissions();
 
@@ -129,47 +133,32 @@ function SubnetsTable(props: SubnetsTableProps) {
 				)}
 			/>
 			<SubnetsTableAttribute
-				label="Created At (UTC)"
-				sortable
-				render={(subnet) => (
-					<Time time={subnet.timestamp} utc timezone={false} />
-				)}
-				sortProperty="createdAt"
-			/>
-			<SubnetsTableAttribute
-				label="Owner"
-				render={(subnet) => (
-					<AccountAddress
-						address={decodeAddress(subnet.owner)}
-						prefix={NETWORK_CONFIG.prefix}
-						copyToClipboard="normal"
-						shorten
-					/>
-				)}
-			/>
-			<SubnetsTableAttribute
-				label="Emission"
-				sortable
+				label="Registration"
 				render={(subnet) =>
-					emissions === undefined ? (
-						<Spinner small />
-					) : (
-						<>
-							{emissions[subnet.netUid] >= 100000
-								? formatNumber(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									{ decimalPlaces: 2 }
-								)
-								: formatNumberWithPrecision(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									1,
-									true
-								)}
-								%
-						</>
-					)
+					registrations?.find((regist: bigint) => {
+						if(regist.toString() == subnet.netUid.toString())
+							return true;
+						return false;
+					}) ? (
+							<span css={successStyle}>&#x1F5F9;</span>
+						) : (
+							<span css={failedStyle}>&#x1F5F5;</span>
+						)
 				}
-				sortProperty="emission"
+			/>
+			<SubnetsTableAttribute
+				label="Validator Permits"
+				render={(subnet) =>
+					validatorPermits?.find((permit: bigint) => {
+						if(permit.toString() == subnet.netUid.toString())
+							return true;
+						return false;
+					}) ? (
+							<span css={successStyle}>&#x1F5F9;</span>
+						) : (
+							<span css={failedStyle}>&#x1F5F5;</span>
+						)
+				}
 			/>
 		</ItemsTable>
 	);
