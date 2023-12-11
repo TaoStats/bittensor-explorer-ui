@@ -18,8 +18,8 @@ export type Validator = {
 };
 
 export type ValidatorX = Validator & {
-	parsedRegistrations?: bigint[];
-	parsedValidatorPermits?: bigint[];
+	parsedRegistrations?: number[];
+	parsedValidatorPermits?: number[];
 }
 
 export type ValidatorStakeHistory = {

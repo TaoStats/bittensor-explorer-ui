@@ -17,8 +17,8 @@ const failedStyle = (theme: Theme) => css`
 
 export type SubnetsTableProps = {
 	subnets: PaginatedResource<Subnet>;
-	registrations?: bigint[];
-	validatorPermits?: bigint[];
+	registrations?: number[];
+	validatorPermits?: number[];
 };
 
 const SubnetsTableAttribute = ItemsTableAttribute<Subnet>;
@@ -50,7 +50,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 			<SubnetsTableAttribute
 				label="Registration"
 				render={(subnet) =>
-					registrations?.find((regist: bigint) => {
+					registrations?.find((regist: number) => {
 						if(regist.toString() == subnet.netUid.toString())
 							return true;
 						return false;
@@ -64,7 +64,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 			<SubnetsTableAttribute
 				label="Validator Permits"
 				render={(subnet) =>
-					validatorPermits?.find((permit: bigint) => {
+					validatorPermits?.find((permit: number) => {
 						if(permit.toString() == subnet.netUid.toString())
 							return true;
 						return false;
