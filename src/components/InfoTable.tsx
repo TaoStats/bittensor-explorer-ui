@@ -66,7 +66,7 @@ const attributeStyle = css`
 `;
 
 const labelCellStyle = (theme: Theme) => css`
-  width: 120px;
+  width: 140px;
   padding-left: 0;
   border: none;
   opacity: 0.8;

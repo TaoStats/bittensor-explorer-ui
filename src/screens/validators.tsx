@@ -26,7 +26,6 @@ import { useValidatorStakeHistory } from "../hooks/useValidatorHistory";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidator } from "../hooks/useValidator";
 import { useSubnets } from "../hooks/useSubnets";
-import { SubnetsOrder } from "../services/subnetsService";
 import SubnetsTable from "../components/validators/SubnetsTable";
 
 const validatorHeader = (theme: Theme) => css`
@@ -170,10 +169,7 @@ export const ValidatorPage = () => {
 		}
 	}, [tab]);
 
-	const subnetsInitialOrder: SubnetsOrder = "NET_UID_ASC";
-	const [subnetSort, setSubnetSort] =
-    useState<SubnetsOrder>(subnetsInitialOrder);
-	const subnets = useSubnets(undefined, subnetSort);
+	const subnets = useSubnets(undefined);
 
 	return (
 		<>
@@ -285,8 +281,6 @@ export const ValidatorPage = () => {
 					>
 						<SubnetsTable
 							subnets={subnets}
-							onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
-							initialSort={subnetsInitialOrder}
 							registrations={validator.data?.parsedRegistrations}
 							validatorPermits={validator.data?.parsedValidatorPermits}
 						/>
