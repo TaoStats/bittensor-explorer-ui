@@ -43,7 +43,6 @@ export const AccountAddress = (props: AccountLinkProps) => {
 		prefix,
 		icon = true,
 		link = true,
-		delegate = false,
 		shorten,
 		copyToClipboard
 	} = props;
@@ -53,14 +52,7 @@ export const AccountAddress = (props: AccountLinkProps) => {
 	const content = useMemo(() => {
 		let content = <span>{shorten ? shortenHash(encodedAddress) : encodedAddress}</span>;
 
-		if (delegate) {
-			content = (
-				<Link to={`/validators/${address}`} css={linkStyle}>
-					{content}
-				</Link>
-			);
-		}
-		else if (link) {
+		if (link) {
 			content = (
 				<Link to={`/account/${address}`} css={linkStyle}>
 					{content}
