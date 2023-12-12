@@ -177,6 +177,8 @@ export const AccountPage = () => {
 									transfers={transfers}
 									showTime
 									direction={{ show: true, source: address }}
+									address={address}
+									download
 								/>
 							</TabPane>
 						</TabbedContent>
