@@ -62,6 +62,7 @@ export type DelegatesTableProps = {
 	initialSearch?: string;
 	address?: string;
 	download?: boolean;
+	fromValidator?: boolean;
 };
 
 const DelegatesTableAttribute = ItemsTableAttribute<Delegate>;
@@ -105,6 +106,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 		onSearchChange,
 		address,
 		download,
+		fromValidator,
 	} = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
@@ -189,7 +191,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 	}, [search]);
 
 	const getExportCSV = async () => {
-		const columns = [
+		let columns = [
 			{
 				key: "height",
 				displayLabel: "Block height"
@@ -197,6 +199,10 @@ function DelegatesTable(props: DelegatesTableProps) {
 			{
 				key: "createdAt",
 				displayLabel: "Time(UTC)"
+			},
+			{
+				key: "account",
+				displayLabel: "Account"
 			},
 			{
 				key: "validator",
@@ -211,6 +217,18 @@ function DelegatesTable(props: DelegatesTableProps) {
 				displayLabel: "Amount",
 			},
 		];
+		let omitColumnKey = "account";
+		if(fromValidator) {
+			omitColumnKey = "validator";
+		}
+		columns = columns.reduce((reduced: {key: string; displayLabel: string}[], cur: {key: string; displayLabel: string}) => {
+			if(cur.key === omitColumnKey)
+				return reduced;
+			return [
+				...reduced,
+				cur,
+			];
+		}, []);
 		const data: any[] = [];
 		if(!delegates.loading && !delegates.notFound && delegates.data !== undefined) {
 			const blockNumbers = delegates.data.reduce((prev: bigint[], cur: Delegate) => {
@@ -231,6 +249,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 				data.push({
 					height: delegate.blockNumber,
 					createdAt,
+					account: delegate.account,
 					validator: delegate.delegateName ?? delegate.delegate,
 					action: delegate.action,
 					amount,
