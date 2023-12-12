@@ -12,12 +12,16 @@ import { DelegateBalancesOrder } from "../../services/delegateService";
 import { DelegateBalance } from "../../model/delegate";
 import useIsMobile from "../../hooks/useIsMobile";
 import { BlockTimestamp } from "../BlockTimestamp";
+import { fetchBlockTimestamps } from "../../utils/block";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 
 export type NominatorsTableProps = {
 	nominators: PaginatedResource<DelegateBalance>;
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: DelegateBalancesOrder) => void;
 	initialSort?: string;
+	address?: string;
+	download?: boolean;
 };
 
 const NominatorsTableAttribute = ItemsTableAttribute<DelegateBalance>;
@@ -34,7 +38,7 @@ const orderMappings = {
 };
 
 function NominatorsTable(props: NominatorsTableProps) {
-	const { nominators } = props;
+	const { nominators, address, download } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
@@ -76,6 +80,52 @@ function NominatorsTable(props: NominatorsTableProps) {
 			return;
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
+	
+	const getExportCSV = async () => {
+		const columns = [
+			{
+				key: "account",
+				displayLabel: "Account"
+			},
+			{
+				key: "amount",
+				displayLabel: "Amount"
+			},
+			{
+				key: "delegatedFrom",
+				displayLabel: "Delegated From(UTC)"
+			},
+		];
+		const data: any[] = [];
+		if(!nominators.loading && !nominators.notFound && nominators.data !== undefined) {
+			const blockNumbers = nominators.data.reduce((prev: bigint[], cur: DelegateBalance) => {
+				prev.push(cur.delegateFrom);
+				return prev;
+			}, []);
+			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
+
+			nominators.data.forEach((delegate: DelegateBalance) => {
+				const delegatedFrom = blockTimestamps[delegate.delegateFrom.toString()];
+				const amount = formatCurrency(
+					rawAmountToDecimal(delegate.amount.toString()),
+					currency,
+					{
+						decimalPlaces: "optimal",
+					}
+				);
+				data.push({
+					account: delegate.account,
+					amount,
+					delegatedFrom,
+				});
+			});
+		}
+		return {
+			columns,
+			data,
+			filename: `nominators-${address}`,
+		};
+	};
 
 	return (
 		<ItemsTable
@@ -88,6 +138,7 @@ function NominatorsTable(props: NominatorsTableProps) {
 			data-test='nominators-table'
 			sort={sort}
 			onSortChange={handleSortChange}
+			getExportCSV={download ? getExportCSV : undefined}
 		>
 			<NominatorsTableAttribute
 				label='Account'
