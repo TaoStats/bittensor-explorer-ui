@@ -5,8 +5,10 @@ import {
 	HTMLAttributes,
 	ReactElement,
 	ReactNode,
+	useState,
 } from "react";
 import {
+	Button,
 	Table,
 	TableBody,
 	TableCell,
@@ -25,6 +27,8 @@ import NotFound from "./NotFound";
 import { TablePagination } from "./TablePagination";
 import { SortDirection } from "../model/sortDirection";
 import { TablePaginationHeader } from "./TablePaginationHeader";
+import { mkConfig, generateCsv, download } from "export-to-csv";
+import LoadingSpinner from "../assets/loading.svg";
 
 const tableStyle = css`
   table-layout: auto;
@@ -93,17 +97,17 @@ const sortArrows = css`
     display: block;
     line-height: 8px;
     font-weight: 500;
-	opacity: 1;
+    opacity: 1;
   }
 
   ::before {
-    content: '\\25B2';
+    content: "\\25B2";
     font-size: 10px !important;
   }
 
   ::after {
-	margin-left: -4px;
-	content: '\\25BC';
+    margin-left: -4px;
+    content: "\\25BC";
     font-size: 10px !important;
   }
 `;
@@ -128,6 +132,35 @@ const sortDesc = (theme: Theme) => css`
   }
 `;
 
+const tableOptions = css`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: start;
+  }
+`;
+
+const tableFiltering = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const csvDownload = css`
+  text-align: right;
+  margin-bottom: 10px;
+`;
+
+const spinnerStyle = css`
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 44px;
+`;
+
 type ItemsTableItem = {
 	id: string;
 };
@@ -136,6 +169,12 @@ type ItemsTableDataFn<T, A extends any[], R> = (
 	data: T,
 	...additionalData: A
 ) => R;
+
+type CSVData = {
+	columns: { key: string; displayLabel: string }[];
+	data: any[];
+	filename: string;
+};
 
 export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
@@ -158,14 +197,25 @@ export const ItemsTableAttribute = <
 >(
 	props: ItemsTableAttributeProps<T, A, S>
 ) => {
-	const { align, colSpan, render, hide, _data, _additionalData = [] as any } = props;
+	const {
+		align,
+		colSpan,
+		render,
+		hide,
+		_data,
+		_additionalData = [] as any,
+	} = props;
 
 	if (!_data || hide?.(_data, ..._additionalData)) {
 		return null;
 	}
 
 	return (
-		<TableCell align={align} css={cellStyle} colSpan={colSpan?.(_data, ..._additionalData)}>
+		<TableCell
+			align={align}
+			css={cellStyle}
+			colSpan={colSpan?.(_data, ..._additionalData)}
+		>
 			{render(_data, ..._additionalData)}
 		</TableCell>
 	);
@@ -195,6 +245,7 @@ export type ItemsTableProps<
 	)[];
 	showRank?: boolean;
 	onSortChange?: (property: string | undefined) => void;
+	getExportCSV?: () => Promise<CSVData>;
 };
 
 export const ItemsTable = <
@@ -217,8 +268,11 @@ export const ItemsTable = <
 		children,
 		showRank,
 		onSortChange,
+		getExportCSV,
 		...restProps
 	} = props;
+
+	const [isDownloading, setDownloading] = useState(false);
 
 	if (loading) {
 		return <Loading />;
@@ -239,8 +293,39 @@ export const ItemsTable = <
 	}
 
 	return (
-		<div {...restProps} data-class='table'>
-			{pagination && <TablePaginationHeader {...pagination} />}
+		<div {...restProps} data-class="table">
+			{getExportCSV && (
+				<div css={csvDownload}>
+					<Button
+						size="small"
+						variant="outlined"
+						color="secondary"
+						style={{ height: "48px" }}
+						onClick={async () => {
+							if (isDownloading) return;
+							setDownloading(true);
+							const { columns, data, filename } = await getExportCSV();
+							const csvConfig = mkConfig({
+								columnHeaders: columns,
+								filename,
+							});
+							const csv = generateCsv(csvConfig)(data);
+							download(csvConfig)(csv);
+							setDownloading(false);
+						}}
+					>
+						{isDownloading && <img src={LoadingSpinner} css={spinnerStyle} />}
+						<span style={{ marginLeft: isDownloading ? "24px" : 0 }}>
+							Download CSV
+						</span>
+					</Button>
+				</div>
+			)}
+			<div css={tableOptions}>
+				<div css={tableFiltering}>
+					{pagination && <TablePaginationHeader {...pagination} />}
+				</div>
+			</div>
 			<TableContainer>
 				<Table css={tableStyle}>
 					<colgroup>
@@ -256,7 +341,11 @@ export const ItemsTable = <
 								if (!child) return null;
 								const { label, align, sortable, sortProperty } = child.props;
 								if (sortable !== true)
-									return <TableCell align={align} css={cellStyle}>{label}</TableCell>;
+									return (
+										<TableCell align={align} css={cellStyle}>
+											{label}
+										</TableCell>
+									);
 
 								const isActive = sort?.property === sortProperty;
 
@@ -302,7 +391,12 @@ export const ItemsTable = <
 								)}
 								{Children.map(
 									children,
-									(child) =>child && cloneElement(child, { _data: item, _additionalData: additionalData})
+									(child) =>
+										child &&
+											cloneElement(child, {
+												_data: item,
+												_additionalData: additionalData,
+											})
 								)}
 							</TableRow>
 						))}

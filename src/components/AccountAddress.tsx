@@ -43,7 +43,6 @@ export const AccountAddress = (props: AccountLinkProps) => {
 		prefix,
 		icon = true,
 		link = true,
-		delegate = false,
 		shorten,
 		copyToClipboard
 	} = props;
