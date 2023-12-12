@@ -13,6 +13,8 @@ import { SortDirection } from "../../model/sortDirection";
 import { TransfersOrder } from "../../services/transfersService";
 import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
+import { fetchBlockTimestamps } from "../../utils/block";
 
 const dirContainer = css`
   display: flex;
@@ -58,6 +60,8 @@ export type TransfersTableProps = {
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: TransfersOrder) => void;
 	initialSort?: string;
+	address?: string;
+	download?: boolean;
 };
 
 const TransfersTableAttribute = ItemsTableAttribute<Transfer>;
@@ -70,11 +74,11 @@ const orderMappings = {
 	time: {
 		[SortDirection.ASC]: "BLOCK_NUMBER_ASC",
 		[SortDirection.DESC]: "BLOCK_NUMBER_DESC",
-	}
+	},
 };
 
 function TransfersTable(props: TransfersTableProps) {
-	const { transfers, showTime, direction } = props;
+	const { transfers, showTime, direction, address, download } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
@@ -99,7 +103,10 @@ function TransfersTable(props: TransfersTableProps) {
 		if (property === sort?.property) {
 			setSort({
 				...sort,
-				direction: sort.direction === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC,
+				direction:
+					sort.direction === SortDirection.ASC
+						? SortDirection.DESC
+						: SortDirection.ASC,
 			});
 		} else {
 			setSort({
@@ -115,20 +122,89 @@ function TransfersTable(props: TransfersTableProps) {
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
 
+	const getExportCSV = async () => {
+		const columns = [
+			{
+				key: "height",
+				displayLabel: "Block height",
+			},
+			{
+				key: "createdAt",
+				displayLabel: "Time(UTC)",
+			},
+			{
+				key: "from",
+				displayLabel: "From",
+			},
+			{
+				key: "to",
+				displayLabel: "To",
+			},
+			{
+				key: "direction",
+				displayLabel: "Direction",
+			},
+			{
+				key: "amount",
+				displayLabel: "Amount",
+			},
+		];
+		const data: any[] = [];
+		if (
+			!transfers.loading &&
+			!transfers.notFound &&
+			transfers.data !== undefined
+		) {
+			const blockNumbers = transfers.data.reduce(
+				(prev: bigint[], cur: Transfer) => {
+					prev.push(cur.blockNumber);
+					return prev;
+				},
+				[]
+			);
+			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
+
+			transfers.data.forEach((transfer: Transfer) => {
+				const createdAt = blockTimestamps[transfer.blockNumber.toString()];
+				const amount = formatCurrency(
+					rawAmountToDecimal(transfer.amount.toString()),
+					currency,
+					{
+						decimalPlaces: "optimal",
+					}
+				);
+				data.push({
+					height: transfer.blockNumber,
+					createdAt,
+					from: transfer.from,
+					to: transfer.to,
+					direction: transfer.from === address ? "Out" : "In",
+					amount,
+				});
+			});
+		}
+		return {
+			columns,
+			data,
+			filename: `transfer-${address}`,
+		};
+	};
+
 	return (
 		<ItemsTable
 			data={transfers.data}
 			loading={transfers.loading}
 			notFound={transfers.notFound}
-			notFoundMessage='No transfers found'
+			notFoundMessage="No transfers found"
 			error={transfers.error}
 			pagination={transfers.pagination}
-			data-test='transfers-table'
+			data-test="transfers-table"
 			sort={sort}
 			onSortChange={handleSortChange}
+			getExportCSV={download ? getExportCSV : undefined}
 		>
 			<TransfersTableAttribute
-				label='Extrinsic'
+				label="Extrinsic"
 				render={(transfer) =>
 					transfer.extrinsicId && (
 						<Link
@@ -138,7 +214,7 @@ function TransfersTable(props: TransfersTableProps) {
 				}
 			/>
 			<TransfersTableAttribute
-				label='From'
+				label="From"
 				render={(transfer) => (
 					<AccountAddress
 						address={transfer.from}
@@ -149,13 +225,13 @@ function TransfersTable(props: TransfersTableProps) {
 								? false
 								: true
 						}
-						copyToClipboard='small'
+						copyToClipboard="small"
 					/>
 				)}
 			/>
 			{direction?.show && (
 				<TransfersTableAttribute
-					label=''
+					label=""
 					render={(transfer) => {
 						const dir = transfer.from === direction?.source ? "out" : "in";
 						return (
@@ -167,13 +243,13 @@ function TransfersTable(props: TransfersTableProps) {
 				/>
 			)}
 			<TransfersTableAttribute
-				label='To'
+				label="To"
 				render={(transfer) => (
 					<AccountAddress
 						address={transfer.to}
 						prefix={prefix}
 						shorten
-						copyToClipboard='small'
+						copyToClipboard="small"
 						link={
 							direction?.show && transfer.from !== direction?.source
 								? false
@@ -183,21 +259,21 @@ function TransfersTable(props: TransfersTableProps) {
 				)}
 			/>
 			<TransfersTableAttribute
-				label='Amount'
+				label="Amount"
 				render={(transfer) => (
 					<Currency
 						amount={transfer.amount}
 						currency={currency}
-						decimalPlaces='optimal'
+						decimalPlaces="optimal"
 						showFullInTooltip
 					/>
 				)}
 				sortable
-				sortProperty='amount'
+				sortProperty="amount"
 			/>
 			{showTime && (
 				<TransfersTableAttribute
-					label='Time (UTC)'
+					label="Time (UTC)"
 					colCss={{ width: 200 }}
 					render={(transfer) => (
 						<BlockTimestamp
@@ -208,7 +284,7 @@ function TransfersTable(props: TransfersTableProps) {
 						/>
 					)}
 					sortable
-					sortProperty='time'
+					sortProperty="time"
 				/>
 			)}
 		</ItemsTable>
