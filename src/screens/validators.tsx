@@ -250,6 +250,8 @@ export const ValidatorPage = () => {
 								setNominatorSort(sortKey)
 							}
 							initialSort={nominatorSort}
+							address={info?.name ?? address}
+							download
 						/>
 					</TabPane>
 					<TabPane
