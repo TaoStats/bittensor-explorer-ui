@@ -109,8 +109,8 @@ export const TokenHistoricalDistributionRateChart = (
 					},
 				},
 				colors: [
-					theme.palette.neutral.main,
 					theme.palette.success.main,
+					theme.palette.neutral.main,
 					theme.palette.error.main,
 				],
 				dataLabels: {
@@ -180,7 +180,7 @@ export const TokenHistoricalDistributionRateChart = (
 							`
 								<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${formattedDate}</div>
 								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;">
-									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.neutral.main};"></span>
+									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.success.main};"></span>
 									<div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
 										<div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Rate: </span><span class="apexcharts-tooltip-text-y-value">${stakedRate}%</span></div>
 										<div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div>
@@ -188,7 +188,7 @@ export const TokenHistoricalDistributionRateChart = (
 									</div>
 								</div>
 								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 2; display: flex;">
-									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.success.main};"></span>
+									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.neutral.main};"></span>
 									<div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
 										<div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Total Issued: </span><span class="apexcharts-tooltip-text-y-value">${totalIssued}</span></div>
 										<div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div>
