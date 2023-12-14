@@ -11,6 +11,9 @@ import { SortDirection } from "../../model/sortDirection";
 import { useState, useEffect } from "react";
 import { SortOrder } from "../../model/sortOrder";
 import { PaginatedResource } from "../../model/paginatedResource";
+import { weightCopiers } from "../../consts";
+import { Tooltip } from "@mui/material";
+import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
 
 export type ValidatorsTableProps = {
 	validators: PaginatedResource<Validator>;
@@ -195,7 +198,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 							{change24h != BigInt("0") && (
 								<span
 									css={day_change_css}
-									className={`${change24h > 0 ? "up" : "down"}`}
+									className={`${change24h > 0 ? "success" : "warning"}`}
 								>
 									{change24h > 0 ? "▴" : "▾"}
 									<>{(change24h > 0 ? change24h : -change24h).toString()}</>
@@ -211,10 +214,20 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 			<ValidatorsTableAttribute
 				label="NOM. / 24h / k𝞃"
 				align="right"
-				render={(validator) => {
-					return (
+				render={({nominatorReturnPerK, address}) => {
+					return weightCopiers.includes(address) ? (
+						<>
+							<Tooltip arrow placement="top" title="Copying Weights">
+								<span className='warning'>
+									{formatCurrency(rawAmountToDecimal(nominatorReturnPerK.toString()), currency, {
+										decimalPlaces: 3,
+									})}
+								</span>
+							</Tooltip>
+						</>
+					) : (
 						<Currency
-							amount={validator.nominatorReturnPerK}
+							amount={nominatorReturnPerK}
 							currency={currency}
 							decimalPlaces={3}
 							showFullInTooltip
