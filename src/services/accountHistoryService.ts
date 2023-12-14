@@ -61,7 +61,7 @@ export async function getAccountDelegateHistory(
 		delegates: ResponseItems<AccountDelegateHistory>;
 	}>(
 		`query($after: Cursor, $first: Int!) {
-			delegates(after: $after, first: $first, filter: {account: {equalTo: "${address}"}}, orderBy: HEIGHT_ASC) {
+			delegates(after: $after, first: $first, filter: {amount: {greaterThan: "0"}, account: {equalTo: "${address}"}}, orderBy: HEIGHT_ASC) {
 				nodes {
 					timestamp
 					amount
