@@ -44,9 +44,9 @@ export const Header = () => {
 									<span
 										className={`${
 											priceChange24h > 0
-												? "warning"
+												? "success"
 												: priceChange24h < 0
-													? "success"
+													? "warning"
 													: ""
 										}`}
 									>
