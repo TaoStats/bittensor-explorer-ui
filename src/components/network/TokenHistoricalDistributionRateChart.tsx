@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 import LoadingSpinner from "../../assets/loading.svg";
 import { TokenStats, TokenStatsResponse } from "../../model/tokenStats";
 import { useMemo } from "react";
-import { formatNumber, nFormatter } from "../../utils/number";
+import { formatNumber, nFormatter, rawAmountToDecimal } from "../../utils/number";
 
 const spinnerContainer = css`
   display: flex;
@@ -50,11 +50,23 @@ export const TokenHistoricalDistributionRateChart = (
 		);
 		return resp;
 	}, [tokenStats]);
+	const [minRate, maxRate] = useMemo(() => {
+		if(!stakingRate) return [0, 0];
+		const resp = stakingRate.reduce(
+			(prev: [number, number], cur: number) => {
+				const min = prev[0] < cur ? prev[0] : cur;
+				const max = prev[1] > cur ? prev[1] : cur;
+				return [min, max];
+			},
+			[100, 0]
+		);
+		return resp;
+	}, [stakingRate]);
 	const totalIssuance = useMemo(() => {
 		if (!tokenStats.data) return [];
 		const resp = (tokenStats.data as any).reduce(
-			(prev: bigint[], cur: TokenStats) => {
-				prev.push(cur.totalIssuance);
+			(prev: number[], cur: TokenStats) => {
+				prev.push(rawAmountToDecimal(cur.totalIssuance.toString()).toNumber());
 				return prev;
 			},
 			[]
@@ -64,8 +76,8 @@ export const TokenHistoricalDistributionRateChart = (
 	const totalStake = useMemo(() => {
 		if (!tokenStats.data) return [];
 		const resp = (tokenStats.data as any).reduce(
-			(prev: bigint[], cur: TokenStats) => {
-				prev.push(cur.totalStake);
+			(prev: number[], cur: TokenStats) => {
+				prev.push(rawAmountToDecimal(cur.totalStake.toString()).toNumber());
 				return prev;
 			},
 			[]
@@ -158,15 +170,24 @@ export const TokenHistoricalDistributionRateChart = (
 					width: 1,
 				},
 				tooltip: {
-					custom: ({ dataPointIndex}) => {
+					custom: ({ series, dataPointIndex}) => {
 						const dateFormatOptions: Intl.DateTimeFormatOptions = { day: "2-digit", month: "short", year: "2-digit" };
 						const formattedDate = new Date(timestamps[dataPointIndex]).toLocaleDateString("en-US", dateFormatOptions);
+						const stakedRate = formatNumber(series[0][dataPointIndex], {decimalPlaces: 2});
 						const totalIssued = formatNumber(totalIssuance[dataPointIndex], {decimalPlaces: 2});
 						const totalStaked = formatNumber(totalStake[dataPointIndex], {decimalPlaces: 2});
 						return (
 							`
 								<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${formattedDate}</div>
 								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 1; display: flex;">
+									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.neutral.main};"></span>
+									<div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
+										<div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Rate: </span><span class="apexcharts-tooltip-text-y-value">${stakedRate}%</span></div>
+										<div class="apexcharts-tooltip-goals-group"><span class="apexcharts-tooltip-text-goals-label"></span><span class="apexcharts-tooltip-text-goals-value"></span></div>
+										<div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
+									</div>
+								</div>
+								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 2; display: flex;">
 									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.success.main};"></span>
 									<div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
 										<div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Total Issued: </span><span class="apexcharts-tooltip-text-y-value">${totalIssued}</span></div>
@@ -174,7 +195,7 @@ export const TokenHistoricalDistributionRateChart = (
 										<div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
 									</div>
 								</div>
-								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 2; display: flex;">
+								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 3; display: flex;">
 									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.error.main};"></span>
 									<div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
 										<div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-y-label">Total Staked: </span><span class="apexcharts-tooltip-text-y-value">${totalStaked}</span></div>
@@ -188,22 +209,6 @@ export const TokenHistoricalDistributionRateChart = (
 					theme: "dark", 
 					shared: true,
 					intersect: false,
-					// x: {
-					// 	format: "dd MMM yy",
-					// },
-					// y: {
-					// 	title: {
-					// 		formatter: () => "Total Issued<br />Total Staked",
-					// 	},
-					// 	formatter: (_val: number, { dataPointIndex }) =>
-					// 		formatNumber(totalIssuance[dataPointIndex], {
-					// 			decimalPlaces: 2,
-					// 		}) +
-					// 		"<br />" +
-					// 		formatNumber(totalStake[dataPointIndex], {
-					// 			decimalPlaces: 2,
-					// 		}),
-					// },
 				},
 				xaxis: {
 					axisTicks: {
@@ -235,8 +240,8 @@ export const TokenHistoricalDistributionRateChart = (
 					axisBorder: {
 						show: false,
 					},
-					min: 0,
-					max: 100,
+					min: minRate,
+					max: maxRate,
 				},
 			}}
 		/>
