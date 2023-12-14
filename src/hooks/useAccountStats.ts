@@ -22,7 +22,7 @@ export function useAccountStats(): AccountStatsResponse {
 			const result: AccountStats[] = [];
 			while (!finished) {
 				const stats: AccountStatsPaginatedResponse =
-          await getAccountStats(after, limit);
+					await getAccountStats(after, limit);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;
