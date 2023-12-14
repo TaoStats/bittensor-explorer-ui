@@ -227,7 +227,7 @@ export const TokenHistoricalDistributionChart = (props: TokenHistoricalDistribut
 						style: {
 							colors: "#a8a8a8",
 						},
-						formatter: (val: number) => nFormatter(val, 0).toString(),
+						formatter: (val: number) => nFormatter(val, 1).toString(),
 					},
 					axisTicks: {
 						show: false,
