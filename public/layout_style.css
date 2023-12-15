@@ -2442,7 +2442,6 @@ span.menuItem-glow {
 
 .main-menu nav .menu-item-has-children:hover .subMenu {
   clip-path: none;
-  visibility: visible;
   transform: translateY(0);
 }
 
