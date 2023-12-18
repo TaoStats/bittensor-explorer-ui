@@ -97,7 +97,7 @@ const filterMappings: DelegateFilter = {
 
 function DelegatesTable(props: DelegatesTableProps) {
 	const {
-		delegates,
+		delegates: {loading, data, notFound, error, pagination},
 		showTime,
 		initialFilter,
 		onFilterChange,
@@ -212,14 +212,11 @@ function DelegatesTable(props: DelegatesTableProps) {
 			},
 		];
 		const data: any[] = [];
-		if(!delegates.loading && !delegates.notFound && delegates.data !== undefined) {
-			const blockNumbers = delegates.data.reduce((prev: bigint[], cur: Delegate) => {
-				prev.push(cur.blockNumber);
-				return prev;
-			}, []);
+		if(!loading && !notFound && data !== undefined) {
+			const blockNumbers = data.map(({blockNumber}) => blockNumber, []);
 			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
 
-			delegates.data.forEach((delegate: Delegate) => {
+			data.forEach((delegate: Delegate) => {
 				const createdAt = blockTimestamps[delegate.blockNumber.toString()];
 				const amount = formatCurrency(
 					rawAmountToDecimal(delegate.amount.toString()),
@@ -246,12 +243,12 @@ function DelegatesTable(props: DelegatesTableProps) {
 
 	return (
 		<ItemsTable
-			data={delegates.data}
-			loading={delegates.loading}
-			notFound={delegates.notFound}
+			data={data}
+			loading={loading}
+			notFound={notFound}
 			notFoundMessage="No delegate/undelegate events found"
-			error={delegates.error}
-			pagination={delegates.pagination}
+			error={error}
+			pagination={pagination}
 			data-test="delegates-table"
 			sort={sort}
 			onSortChange={handleSortChange}

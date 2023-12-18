@@ -38,7 +38,7 @@ const orderMappings = {
 };
 
 function NominatorsTable(props: NominatorsTableProps) {
-	const { nominators, address, download } = props;
+	const { nominators: {data, loading, notFound, error, pagination}, address, download } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
@@ -97,14 +97,11 @@ function NominatorsTable(props: NominatorsTableProps) {
 			},
 		];
 		const data: any[] = [];
-		if(!nominators.loading && !nominators.notFound && nominators.data !== undefined) {
-			const blockNumbers = nominators.data.reduce((prev: bigint[], cur: DelegateBalance) => {
-				prev.push(cur.delegateFrom);
-				return prev;
-			}, []);
+		if(!loading && !notFound && data !== undefined) {
+			const blockNumbers = data.reduce(({ delegateFrom }) => delegateFrom, []);
 			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
 
-			nominators.data.forEach((delegate: DelegateBalance) => {
+			data.forEach((delegate: DelegateBalance) => {
 				const delegatedFrom = blockTimestamps[delegate.delegateFrom.toString()];
 				const amount = formatCurrency(
 					rawAmountToDecimal(delegate.amount.toString()),
@@ -129,12 +126,12 @@ function NominatorsTable(props: NominatorsTableProps) {
 
 	return (
 		<ItemsTable
-			data={nominators.data}
-			loading={nominators.loading}
-			notFound={nominators.notFound}
+			data={data}
+			loading={loading}
+			notFound={notFound}
 			notFoundMessage='No nominators found'
-			error={nominators.error}
-			pagination={nominators.pagination}
+			error={error}
+			pagination={pagination}
 			data-test='nominators-table'
 			sort={sort}
 			onSortChange={handleSortChange}

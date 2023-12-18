@@ -102,7 +102,7 @@ const filterMappings: TransfersFilter = {
 
 function TransfersTable(props: TransfersTableProps) {
 	const {
-		transfers,
+		transfers: {loading, notFound, data, pagination, error},
 		showTime,
 		direction,
 		initialFilter,
@@ -209,14 +209,11 @@ function TransfersTable(props: TransfersTableProps) {
 			},
 		];
 		const data: any[] = [];
-		if(!transfers.loading && !transfers.notFound && transfers.data !== undefined) {
-			const blockNumbers = transfers.data.reduce((prev: bigint[], cur: Transfer) => {
-				prev.push(cur.blockNumber);
-				return prev;
-			}, []);
+		if(!loading && !notFound && data !== undefined) {
+			const blockNumbers = data.map(({blockNumber}) => blockNumber, []);
 			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
 
-			transfers.data.forEach((transfer: Transfer) => {
+			data.forEach((transfer: Transfer) => {
 				const createdAt = blockTimestamps[transfer.blockNumber.toString()];
 				const amount = formatCurrency(
 					rawAmountToDecimal(transfer.amount.toString()),
@@ -244,12 +241,12 @@ function TransfersTable(props: TransfersTableProps) {
 
 	return (
 		<ItemsTable
-			data={transfers.data}
-			loading={transfers.loading}
-			notFound={transfers.notFound}
+			data={data}
+			loading={loading}
+			notFound={notFound}
 			notFoundMessage="No transfers found"
-			error={transfers.error}
-			pagination={transfers.pagination}
+			error={error}
+			pagination={pagination}
 			data-test="transfers-table"
 			sort={sort}
 			onSortChange={handleSortChange}
