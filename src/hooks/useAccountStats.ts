@@ -3,7 +3,7 @@ import { getAccountStats } from "../services/accountService";
 
 import { useRollbar } from "@rollbar/react";
 import { DataError } from "../utils/error";
-import { AccountStats, AccountStatsResponse } from "../model/accountStats";
+import { AccountStats, AccountStatsPaginatedResponse, AccountStatsResponse } from "../model/accountStats";
 
 export function useAccountStats(): AccountStatsResponse {
 	const rollbar = useRollbar();
@@ -21,7 +21,10 @@ export function useAccountStats(): AccountStatsResponse {
 
 			const result: AccountStats[] = [];
 			while (!finished) {
-				const stats = await getAccountStats(after, limit);
+				const stats: AccountStatsPaginatedResponse = await getAccountStats(
+					after,
+					limit
+				);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;

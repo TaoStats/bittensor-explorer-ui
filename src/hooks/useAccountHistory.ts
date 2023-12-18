@@ -8,8 +8,10 @@ import { useRollbar } from "@rollbar/react";
 import { DataError } from "../utils/error";
 import {
 	AccountBalanceHistory,
+	AccountBalanceHistoryPaginatedResponse,
 	AccountBalanceHistoryResponse,
 	AccountDelegateHistory,
+	AccountDelegateHistoryPaginatedResponse,
 	AccountDelegateHistoryResponse,
 } from "../model/accountHistory";
 
@@ -31,7 +33,8 @@ export function useAccountBalanceHistory(
 
 			const result: AccountBalanceHistory[] = [];
 			while (!finished) {
-				const stats = await getAccountBalanceHistory(address, after, limit);
+				const stats: AccountBalanceHistoryPaginatedResponse =
+          await getAccountBalanceHistory(address, after, limit);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;
@@ -81,7 +84,8 @@ export function useAccountDelegateHistory(
 
 			const result: AccountDelegateHistory[] = [];
 			while (!finished) {
-				const stats = await getAccountDelegateHistory(address, after, limit);
+				const stats: AccountDelegateHistoryPaginatedResponse =
+          await getAccountDelegateHistory(address, after, limit);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;

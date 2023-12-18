@@ -3,7 +3,7 @@ import { getTokenStats } from "../services/tokenService";
 
 import { useRollbar } from "@rollbar/react";
 import { DataError } from "../utils/error";
-import { TokenStats, TokenStatsResponse } from "../model/tokenStats";
+import { TokenStats, TokenStatsPaginatedResponse, TokenStatsResponse } from "../model/tokenStats";
 
 export function useTokenStats(): TokenStatsResponse {
 	const rollbar = useRollbar();
@@ -21,7 +21,10 @@ export function useTokenStats(): TokenStatsResponse {
 
 			const result: TokenStats[] = [];
 			while (!finished) {
-				const stats = await getTokenStats(after, limit);
+				const stats: TokenStatsPaginatedResponse = await getTokenStats(
+					after,
+					limit
+				);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;

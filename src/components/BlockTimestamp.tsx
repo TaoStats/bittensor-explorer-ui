@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { Time, TimeProps } from "./Time";
 import Spinner from "../components/Spinner";
-import useSWRImmutable  from "swr/immutable";
 import ErrorIcon from "@mui/icons-material/Warning";
 import { css } from "@emotion/react";
 import { fetchBlockTimestamp } from "../utils/block";
+import { useResource } from "../hooks/useResource";
 
 const errorIconStyle = css`
   margin-left: 8px;
@@ -14,15 +14,17 @@ const errorIconStyle = css`
 `;
 
 interface BlockTimestampProps extends Omit<TimeProps, "time"> {
-	blockHeight: bigint
+	blockHeight: bigint;
 }
 export const BlockTimestamp = ({
 	blockHeight,
 	...props
 }: BlockTimestampProps) => {
-	const { data, isLoading, error } = useSWRImmutable (blockHeight.toString(), fetchBlockTimestamp);
+	const { data, loading, error } = useResource(fetchBlockTimestamp, [
+		blockHeight,
+	]);
 
-	return isLoading ? (
+	return loading ? (
 		<Spinner small />
 	) : error ? (
 		<ErrorIcon css={errorIconStyle} />

@@ -5,6 +5,7 @@ import { useRollbar } from "@rollbar/react";
 import { DataError } from "../utils/error";
 import {
 	ValidatorStakeHistory,
+	ValidatorStakeHistoryPaginatedResponse,
 	ValidatorStakeHistoryResponse,
 } from "../model/validator";
 
@@ -26,7 +27,8 @@ export function useValidatorStakeHistory(
 
 			const result: ValidatorStakeHistory[] = [];
 			while (!finished) {
-				const stats = await getValidatorStakeHistory(address, after, limit);
+				const stats: ValidatorStakeHistoryPaginatedResponse =
+          await getValidatorStakeHistory(address, after, limit);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;
