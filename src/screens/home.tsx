@@ -200,9 +200,6 @@ export const HomePage = () => {
 					<Card css={statsContainer}>
 						<NetworkStats />
 					</Card>
-					<Card css={chartContainer}>
-						<TokenDistributionChart />
-					</Card>
 				</CardRow>
 				<Card>
 					<TabbedContent defaultTab={tab.slice(1).toString()}>
