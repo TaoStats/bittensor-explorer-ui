@@ -16,55 +16,35 @@ const spinnerContainer = css`
 
 export type AccountStatChartProps = {
 	accountStats: AccountStatsResponse;
-}
+};
 
 export const AccountStatChart = (props: AccountStatChartProps) => {
 	const theme = useTheme();
 
-	const { accountStats } = props;
+	const {
+		accountStats: { loading, data },
+	} = props;
 
-	const loading = accountStats.loading;
 	const totalAccount = useMemo(() => {
-		if (!accountStats.data) return 0;
-		const resp = (accountStats.data as any).reduce(
+		if (!data) return 0;
+		const resp = (data as any).reduce(
 			(prev: number, cur: AccountStats) => parseInt(cur.total.toString()),
 			0
 		);
 		return resp;
-	}, [accountStats]);
-	const timestamps = useMemo(() => {
-		if (!accountStats.data) return [];
-		const resp = (accountStats.data as any).reduce(
-			(prev: string[], cur: AccountStats) => {
-				prev.push(cur.timestamp);
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [accountStats]);
-	const totalAccounts = useMemo(() => {
-		if (!accountStats.data) return [];
-		const resp = (accountStats.data as any).reduce(
-			(prev: bigint[], cur: AccountStats) => {
-				prev.push(cur.total);
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [accountStats]);
-	const holders = useMemo(() => {
-		if (!accountStats.data) return [];
-		const resp = (accountStats.data as any).reduce(
-			(prev: bigint[], cur: AccountStats) => {
-				prev.push(cur.holders);
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [accountStats]);
+	}, [data]);
+	const timestamps = useMemo(
+		() => (!data ? [] : data.map(({ timestamp }) => timestamp)),
+		[data]
+	);
+	const totalAccounts = useMemo(
+		() => (!data ? [] : data.map(({ total }) => Number(total))),
+		[data]
+	);
+	const holders = useMemo(
+		() => (!data ? [] : data.map(({ holders }) => Number(holders))),
+		[data]
+	);
 
 	return loading ? (
 		<div css={spinnerContainer}>

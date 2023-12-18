@@ -236,7 +236,7 @@ export const NetworkStats = () => {
 				<TabPane label="Accounts" value="accountStats">
 					<AccountStatChart accountStats={accountStats} />
 				</TabPane>
-				<TabPane label="Token" value="token">
+				<TabPane label="TAO issuance" value="token">
 					<HistoricalTokenDistributionChart tokenStats={tokenHistoricalStats} />
 				</TabPane>
 			</TabbedContent>
