@@ -15,7 +15,7 @@ export const fetchBlockTimestamp = async (blockHeight: bigint) => {
 			filter: { height: { equalTo: blockHeight } },
 		},
 	);
-	return res.blocks.nodes[0]?.timestamp ?? new Date();
+	return res.blocks.nodes[0]?.timestamp;
 };
 
 type BlockTimestampType = {
