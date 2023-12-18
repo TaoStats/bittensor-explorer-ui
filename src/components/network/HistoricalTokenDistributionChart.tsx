@@ -14,11 +14,11 @@ const spinnerContainer = css`
   justify-content: center;
 `;
 
-export type TokenHistoricalDistributionChartProps = {
+export type HistoricalTokenDistributionChartProps = {
 	tokenStats: TokenStatsResponse;
 }
 
-export const TokenHistoricalDistributionChart = (props: TokenHistoricalDistributionChartProps) => {
+export const HistoricalTokenDistributionChart = (props: HistoricalTokenDistributionChartProps) => {
 	const theme = useTheme();
 
 	const { tokenStats } = props;

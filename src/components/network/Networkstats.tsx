@@ -14,8 +14,7 @@ import { TabbedContent, TabPane } from "../TabbedContent";
 import { useAccountStats } from "../../hooks/useAccountStats";
 import { useMemo } from "react";
 import { useTokenStats } from "../../hooks/useTokenStats";
-import { TokenHistoricalDistributionChart } from "./TokenHistoricalDistributionChart";
-import { TokenHistoricalDistributionRateChart } from "./TokenHistoricalDistributionRateChart";
+import { HistoricalTokenDistributionChart } from "./HistoricalTokenDistributionChart";
 
 const stakingDataBlock = css`
   width: 100%;
@@ -238,10 +237,7 @@ export const NetworkStats = () => {
 					<AccountStatChart accountStats={accountStats} />
 				</TabPane>
 				<TabPane label="Token" value="token">
-					<TokenHistoricalDistributionChart tokenStats={tokenHistoricalStats} />
-				</TabPane>
-				<TabPane label="Rate" value="rate">
-					<TokenHistoricalDistributionRateChart tokenStats={tokenHistoricalStats} />
+					<HistoricalTokenDistributionChart tokenStats={tokenHistoricalStats} />
 				</TabPane>
 			</TabbedContent>
 		</div>
