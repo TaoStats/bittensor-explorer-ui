@@ -2431,8 +2431,7 @@ span.menuItem-glow {
   left: 0;
   top: 100%;
   transform: translateY(13px);
-  opacity: 0;
-  visibility: hidden;
+  clip-path: circle(0);
   transition: all 0.5s;
 }
 
@@ -2442,8 +2441,7 @@ span.menuItem-glow {
 }
 
 .main-menu nav .menu-item-has-children:hover .subMenu {
-  opacity: 1;
-  visibility: visible;
+  clip-path: none;
   transform: translateY(0);
 }
 
