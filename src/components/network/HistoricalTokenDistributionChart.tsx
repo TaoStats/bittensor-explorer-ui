@@ -3,9 +3,13 @@ import { css, useTheme } from "@emotion/react";
 import Chart from "react-apexcharts";
 
 import LoadingSpinner from "../../assets/loading.svg";
-import { TokenStats, TokenStatsResponse } from "../../model/tokenStats";
+import { TokenStatsResponse } from "../../model/tokenStats";
 import { useMemo } from "react";
-import { formatNumber, nFormatter, rawAmountToDecimal } from "../../utils/number";
+import {
+	formatNumber,
+	nFormatter,
+	rawAmountToDecimal,
+} from "../../utils/number";
 
 const spinnerContainer = css`
   display: flex;
@@ -16,62 +20,48 @@ const spinnerContainer = css`
 
 export type HistoricalTokenDistributionChartProps = {
 	tokenStats: TokenStatsResponse;
-}
+};
 
-export const HistoricalTokenDistributionChart = (props: HistoricalTokenDistributionChartProps) => {
+export const HistoricalTokenDistributionChart = (
+	props: HistoricalTokenDistributionChartProps
+) => {
 	const theme = useTheme();
 
-	const { tokenStats } = props;
+	const {
+		tokenStats: { loading, data },
+	} = props;
 
-	const loading = tokenStats.loading;
-	const timestamps = useMemo(() => {
-		if (!tokenStats.data) return [];
-		const resp = (tokenStats.data as any).reduce(
-			(prev: string[], cur: TokenStats) => {
-				prev.push(cur.timestamp);
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [tokenStats]);
-	const totalIssuance = useMemo(() => {
-		if (!tokenStats.data) return [];
-		const resp = (tokenStats.data as any).reduce(
-			(prev: number[], cur: TokenStats) => {
-				prev.push(rawAmountToDecimal(cur.totalIssuance.toString()).toNumber());
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [tokenStats]);
-	const totalStake = useMemo(() => {
-		if (!tokenStats.data) return [];
-		const resp = (tokenStats.data as any).reduce(
-			(prev: number[], cur: TokenStats) => {
-				prev.push(rawAmountToDecimal(cur.totalStake.toString()).toNumber());
-				return prev;
-			},
-			[]
-		);
-		return resp;
-	}, [tokenStats]);
+	const timestamps = useMemo(
+		() => (!data ? [] : data.map(({ timestamp }) => timestamp)),
+		[data]
+	);
+	const totalIssuance = useMemo(
+		() =>
+			!data
+				? []
+				: data.map(({ totalIssuance }) =>
+					rawAmountToDecimal(totalIssuance.toString()).toNumber()
+				),
+		[data]
+	);
+	const totalStake = useMemo(
+		() =>
+			!data
+				? []
+				: data.map(({ totalStake }) =>
+					rawAmountToDecimal(totalStake.toString()).toNumber()
+				),
+		[data]
+	);
 	const [min, max] = useMemo(() => {
-		if(!totalIssuance || !totalStake) return [0, 0];
-		const max = totalIssuance.reduce(
-			(prev: number, cur: number) => {
-				return prev > cur ? prev : cur;
-			},
-			0
-		);
-		const min = totalStake.reduce(
-			(prev: number, cur: number) => {
-				if(prev == -1) return cur;
-				return prev < cur ? prev : cur;
-			},
-			-1
-		);
+		if (!totalIssuance || !totalStake) return [0, 0];
+		const max = totalIssuance.reduce((prev: number, cur: number) => {
+			return prev > cur ? prev : cur;
+		}, 0);
+		const min = totalStake.reduce((prev: number, cur: number) => {
+			if (prev == -1) return cur;
+			return prev < cur ? prev : cur;
+		}, -1);
 		return [min, max];
 	}, [totalIssuance, totalStake]);
 
@@ -165,14 +155,26 @@ export const HistoricalTokenDistributionChart = (props: HistoricalTokenDistribut
 					width: 1,
 				},
 				tooltip: {
-					custom: ({ series, dataPointIndex}) => {
-						const dateFormatOptions: Intl.DateTimeFormatOptions = { day: "2-digit", month: "short", year: "2-digit" };
-						const formattedDate = new Date(timestamps[dataPointIndex]).toLocaleDateString("en-US", dateFormatOptions);
-						const totalIssued = formatNumber(series[0][dataPointIndex], {decimalPlaces: 2});
-						const totalStaked = formatNumber(series[1][dataPointIndex], {decimalPlaces: 2});
-						const stakedRate = formatNumber(series[1][dataPointIndex] * 100 / series[0][dataPointIndex], {decimalPlaces: 2});
-						return (
-							`
+					custom: ({ series, dataPointIndex }) => {
+						const dateFormatOptions: Intl.DateTimeFormatOptions = {
+							day: "2-digit",
+							month: "short",
+							year: "2-digit",
+						};
+						const formattedDate = new Date(
+							timestamps[dataPointIndex] ?? ""
+						).toLocaleDateString("en-US", dateFormatOptions);
+						const totalIssued = formatNumber(series[0][dataPointIndex], {
+							decimalPlaces: 2,
+						});
+						const totalStaked = formatNumber(series[1][dataPointIndex], {
+							decimalPlaces: 2,
+						});
+						const stakedRate = formatNumber(
+							(series[1][dataPointIndex] * 100) / series[0][dataPointIndex],
+							{ decimalPlaces: 2 }
+						);
+						return `
 								<div class="apexcharts-tooltip-title" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">${formattedDate}</div>
 								<div class="apexcharts-tooltip-series-group apexcharts-active" style="order: 2; display: flex;">
 									<span class="apexcharts-tooltip-marker" style="background-color: ${theme.palette.neutral.main};"></span>
@@ -198,8 +200,7 @@ export const HistoricalTokenDistributionChart = (props: HistoricalTokenDistribut
 										<div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
 									</div>
 								</div>
-							`
-						);
+							`;
 					},
 					theme: "dark",
 					shared: true,
