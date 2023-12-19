@@ -10,6 +10,7 @@ import { decodeAddress } from "../../utils/formatAddress";
 import { AccountAddress } from "../AccountAddress";
 import { Currency } from "../Currency";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
+import { rawAmountToDecimaledString } from "../../utils/number";
 
 export type BalancesTableProps = {
 	balances: PaginatedResource<Balance>;
@@ -43,13 +44,34 @@ const orderMappings = {
 	},
 };
 
+const filterMappings: BalancesFilter = {
+	balanceTotal: {
+		key: "Balance >",
+		labels: ["50k", "10k", "5k", "1k", "500", "100", "50", "..."],
+		values: [
+			rawAmountToDecimaledString(50000),
+			rawAmountToDecimaledString(10000),
+			rawAmountToDecimaledString(5000),
+			rawAmountToDecimaledString(1000),
+			rawAmountToDecimaledString(500),
+			rawAmountToDecimaledString(100),
+			rawAmountToDecimaledString(50),
+			0,
+		],
+		operator: "greaterThan",
+	},
+};
+
 function BalancesTable(props: BalancesTableProps) {
 	const {
 		balances,
 		initialSort,
 		onSortChange,
+		initialFilter,
+		onFilterChange,
 	} = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
+	const [filter, setFilter] = useState<BalancesFilter | undefined>();
 
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
@@ -85,6 +107,35 @@ function BalancesTable(props: BalancesTableProps) {
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
 
+	useEffect(() => {
+		Object.entries(filterMappings).forEach(([property, mapping]) => {
+			mapping.values.forEach((value: number) => {
+				if (value === initialFilter?.[property]?.[mapping.operator]) {
+					setFilter({
+						...filter,
+						[property]: {
+							[mapping.operator]: value,
+						},
+					});
+				}
+			});
+		});
+	}, [JSON.stringify(initialFilter)]);
+
+	const handleFilterChange = (key: string, value: number) => {
+		setFilter({
+			...filter,
+			[key]: {
+				[filterMappings[key].operator]: value,
+			},
+		});
+	};
+
+	useEffect(() => {
+		if (!onFilterChange) return;
+		onFilterChange(filter);
+	}, [JSON.stringify(filter)]);
+
 	return (
 		<ItemsTable
 			data={balances.data}
@@ -98,6 +149,9 @@ function BalancesTable(props: BalancesTableProps) {
 			showRank
 			sort={sort}
 			onSortChange={handleSortChange}
+			filterMappings={filterMappings}
+			filter={filter}
+			onFilterChange={handleFilterChange}
 		>
 			<BalancesItemsTableAttribute
 				label="Account"
