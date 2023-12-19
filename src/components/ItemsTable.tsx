@@ -29,6 +29,7 @@ import { SortDirection } from "../model/sortDirection";
 import { TablePaginationHeader } from "./TablePaginationHeader";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import LoadingSpinner from "../assets/loading.svg";
+import { TableFilter } from "./TableFilter";
 
 const tableStyle = css`
   table-layout: auto;
@@ -245,6 +246,9 @@ export type ItemsTableProps<
 	)[];
 	showRank?: boolean;
 	onSortChange?: (property: string | undefined) => void;
+	filterMappings?: any;
+	filter?: any;
+	onFilterChange?: (key: string, value: any) => void;
 	getExportCSV?: () => Promise<CSVData>;
 };
 
@@ -268,6 +272,9 @@ export const ItemsTable = <
 		children,
 		showRank,
 		onSortChange,
+		filterMappings,
+		filter,
+		onFilterChange,
 		getExportCSV,
 		...restProps
 	} = props;
@@ -324,6 +331,20 @@ export const ItemsTable = <
 			<div css={tableOptions}>
 				<div css={tableFiltering}>
 					{pagination && <TablePaginationHeader {...pagination} />}
+					{
+						filterMappings &&
+						filter &&
+							Object.entries(filterMappings).map(([property, value], index) => (
+								<TableFilter
+									property={property}
+									filter={value}
+									value={filter[property][(value as any).operator]}
+									key={`filter-${property}-${index}`}
+									onFilterChange={onFilterChange}
+									pagination={pagination}
+								/>
+							))
+					}
 				</div>
 			</div>
 			<TableContainer>
