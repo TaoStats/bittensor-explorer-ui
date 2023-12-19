@@ -12,7 +12,7 @@ import BalancesTable from "../components/balances/BalancesTable";
 import { useEffect, useRef, useState } from "react";
 import { BlocksOrder } from "../services/blocksService";
 import { BalancesOrder } from "../services/balancesService";
-import { TransfersOrder } from "../services/transfersService";
+import { TransfersFilter, TransfersOrder } from "../services/transfersService";
 import { useLocation } from "react-router-dom";
 
 const contentStyle = css`
@@ -35,14 +35,22 @@ export const HomePage = () => {
 	const blocks = useBlocks(undefined, blockSort);
 
 	const balancesInitialOrder: BalancesOrder = "BALANCE_TOTAL_DESC";
-	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(balancesInitialOrder);
+	const [balanceSort, setBalanceSort] = useState<BalancesOrder>(
+		balancesInitialOrder
+	);
 	const balances = useBalances(undefined, balanceSort);
 
 	const transfersInitialOrder: TransfersOrder = "BLOCK_NUMBER_DESC";
 	const [transferSort, setTransferSort] = useState<TransfersOrder>(
 		transfersInitialOrder
 	);
-	const transfers = useTransfers(undefined, transferSort);
+	const transfersInitialFilter: TransfersFilter = {
+		amount: { greaterThan: 0 },
+	};
+	const [transfersFilter, setTransfersFilter] = useState<TransfersFilter>(
+		transfersInitialFilter
+	);
+	const transfers = useTransfers(transfersFilter, transferSort);
 
 	useEffect(() => {
 		if (blocks.pagination.offset === 0) {
@@ -109,6 +117,10 @@ export const HomePage = () => {
 										setTransferSort(sortKey)
 									}
 									initialSort={transfersInitialOrder}
+									onFilterChange={(newFilter?: TransfersFilter) =>
+										setTransfersFilter({ ...transfersFilter, ...newFilter })
+									}
+									initialFilter={transfersInitialFilter}
 								/>
 							</TabPane>
 							<TabPane
