@@ -10,10 +10,10 @@ import { NETWORK_CONFIG } from "../../config";
 import { BlockTimestamp } from "../BlockTimestamp";
 import { css, Theme } from "@mui/material";
 import { SortDirection } from "../../model/sortDirection";
-import { TransfersOrder } from "../../services/transfersService";
+import { TransfersFilter, TransfersOrder } from "../../services/transfersService";
 import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
-import { formatCurrency, rawAmountToDecimal } from "../../utils/number";
+import { formatCurrency, rawAmountToDecimal, rawAmountToDecimaledString } from "../../utils/number";
 import { fetchBlockTimestamps } from "../../utils/block";
 
 const dirContainer = css`
@@ -60,6 +60,8 @@ export type TransfersTableProps = {
 	initialSortOrder?: string;
 	onSortChange?: (orderBy: TransfersOrder) => void;
 	initialSort?: string;
+	onFilterChange?: (newFilter?: TransfersFilter) => void;
+	initialFilter?: TransfersFilter;
 	address?: string;
 	download?: boolean;
 };
@@ -77,13 +79,35 @@ const orderMappings = {
 	},
 };
 
+const filterMappings: TransfersFilter = {
+	amount: {
+		key: "Amount >",
+		labels: ["50k", "10k", "5k", "1k", "500", "100", "50", "..."],
+		values: [
+			rawAmountToDecimaledString(50000),
+			rawAmountToDecimaledString(10000),
+			rawAmountToDecimaledString(5000),
+			rawAmountToDecimaledString(1000),
+			rawAmountToDecimaledString(500),
+			rawAmountToDecimaledString(100),
+			rawAmountToDecimaledString(50),
+			0,
+		],
+		operator: "greaterThan",
+	},
+};
+
 function TransfersTable(props: TransfersTableProps) {
-	const { transfers, showTime, direction, address, download } = props;
+	const { transfers, showTime, direction, 
+		address, download } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
 	const { initialSort, onSortChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
+
+	const { initialFilter, onFilterChange } = props;
+	const [filter, setFilter] = useState<TransfersFilter | undefined>();
 
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
@@ -121,6 +145,35 @@ function TransfersTable(props: TransfersTableProps) {
 			return;
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
+
+	useEffect(() => {
+		Object.entries(filterMappings).forEach(([property, mapping]) => {
+			mapping.values.forEach((value: number) => {
+				if (value === initialFilter?.[property]?.[mapping.operator]) {
+					setFilter({
+						...filter,
+						[property]: {
+							[mapping.operator]: value,
+						},
+					});
+				}
+			});
+		});
+	}, [JSON.stringify(initialFilter)]);
+
+	const handleFilterChange = (key: string, value: number) => {
+		setFilter({
+			...filter,
+			[key]: {
+				[filterMappings[key].operator]: value,
+			},
+		});
+	};
+
+	useEffect(() => {
+		if (!onFilterChange) return;
+		onFilterChange(filter);
+	}, [JSON.stringify(filter)]);
 
 	const getExportCSV = async () => {
 		const columns = [
@@ -201,6 +254,9 @@ function TransfersTable(props: TransfersTableProps) {
 			data-test="transfers-table"
 			sort={sort}
 			onSortChange={handleSortChange}
+			filterMappings={filterMappings}
+			filter={filter}
+			onFilterChange={handleFilterChange}
 			getExportCSV={download ? getExportCSV : undefined}
 		>
 			<TransfersTableAttribute
