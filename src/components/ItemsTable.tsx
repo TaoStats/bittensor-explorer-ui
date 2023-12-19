@@ -281,24 +281,6 @@ export const ItemsTable = <
 
 	const [isDownloading, setDownloading] = useState(false);
 
-	if (loading) {
-		return <Loading />;
-	}
-
-	if (notFound) {
-		return <NotFound>{notFoundMessage}</NotFound>;
-	}
-
-	if (error) {
-		return (
-			<ErrorMessage
-				message={errorMessage}
-				details={error.message}
-				showReported
-			/>
-		);
-	}
-
 	return (
 		<div {...restProps} data-class="table">
 			{getExportCSV && (
@@ -399,7 +381,10 @@ export const ItemsTable = <
 						</TableRow>
 					</TableHead>
 					<TableBody>
-						{data?.map((item, index) => (
+						{!loading &&
+						!notFound &&
+						!error &&
+						data?.map((item, index) => (
 							<TableRow key={item.id}>
 								{showRank ? (
 									<TableCell>
@@ -423,8 +408,21 @@ export const ItemsTable = <
 						))}
 					</TableBody>
 				</Table>
+				{loading ? (
+					<Loading />
+				) : notFound ? (
+					<NotFound>{notFoundMessage}</NotFound>
+				) : error ? (
+					<ErrorMessage
+						message={errorMessage}
+						details={error.message}
+						showReported
+					/>
+				) : null}
 			</TableContainer>
-			{pagination && <TablePagination {...pagination} />}
+			{!loading && !notFound && !error && pagination && (
+				<TablePagination {...pagination} />
+			)}
 		</div>
 	);
 };
