@@ -12,15 +12,15 @@
   "10": "Map Reduce",
   "11": "Text Training",
   "12": "Unknown",
-  "13": "Unknown",
+  "13": "Dataverse",
   "14": "LLM Defender",
   "15": "Blockchain Insights",
   "16": "Audio",
   "17": "Petal",
   "18": "Cortex.t",
-  "19": "Unknown",
+  "19": "Vision",
   "20": "The Oracle",
-  "21": "Unknown",
+  "21": "Filetao",
   "31": "Game of Life",
   "23": "Prime",
   "22": "Unknown",
@@ -29,7 +29,7 @@
   "26": "Image Alchemy",
   "27": "Compute",
   "28": "ZK Tensor",
-  "29": "Unknown",
+  "29": "3D Gen",
   "30": "Lovelace",
-  "32": "Unknown"
+  "32": "Roleplay"
 }
