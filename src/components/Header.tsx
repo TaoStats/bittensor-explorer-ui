@@ -102,6 +102,15 @@ export const Header = () => {
 										</li>
 										<li>
 											<a
+												href="https://www.kucoin.com/trade/TAO-USDT"
+												target="_blank"
+												rel="noreferrer"
+											>
+												KUCOIN
+											</a>
+										</li>
+										<li>
+											<a
 												href="https://www.gate.io/trade/TAO_USDT?ref=A1QSXVla&amp;ref_type=106"
 												target="_blank"
 												rel="noreferrer"
@@ -139,13 +148,13 @@ export const Header = () => {
 									</ul>
 								</div>
 								<a
-									href="https://bitapai.io"
+									href="https://corcel.io"
 									target="_blank"
 									className="btn"
 									rel="noreferrer"
 								>
 									<img
-										src="https://app.bitapai.io/images/logo.png"
+										src="https://taostats.io/wp-content/themes/taostats/images/corcel-logo.png"
 										data-xblocker="passed"
 										style={{ visibility: "visible" }}
 									/>
@@ -352,6 +361,15 @@ export const Header = () => {
 											</li>
 											<li>
 												<a
+													href="https://www.kucoin.com/trade/TAO-USDT"
+													target="_blank"
+													rel="noreferrer"
+												>
+													KUCOIN
+												</a>
+											</li>
+											<li>
+												<a
 													href="https://www.gate.io/trade/TAO_USDT?ref=A1QSXVla&amp;ref_type=106"
 													target="_blank"
 													rel="noreferrer"
@@ -389,13 +407,13 @@ export const Header = () => {
 										</ul>
 									</div>
 									<a
-										href="https://bitapai.io"
+										href="https://corcel.io"
 										target="_blank"
 										className="btn"
 										rel="noreferrer"
 									>
 										<img
-											src="https://app.bitapai.io/images/logo.png"
+											src="https://taostats.io/wp-content/themes/taostats/images/corcel-logo.png"
 											data-xblocker="passed"
 											style={{ visibility: "visible" }}
 										/>
