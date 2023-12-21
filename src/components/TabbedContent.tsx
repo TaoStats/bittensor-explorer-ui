@@ -5,6 +5,7 @@ import {
 	PropsWithChildren,
 	ReactElement,
 	ReactNode,
+	useEffect,
 	useState,
 } from "react";
 import { Theme, css } from "@emotion/react";
@@ -145,7 +146,12 @@ export const TabbedContent = (props: TabbedContentProps) => {
 		(child) => child && cloneElement(child, { key: child.props.value })
 	);
 
-	const [tab, setTab] = useState<string | undefined>(tabPanes.find((it) => it.props.value === defaultTab) ? defaultTab : tabPanes[0]?.props.value);
+	const [tab, setTab] = useState<string | undefined>(tabPanes[0]?.props.value);
+	
+	useEffect(() => {
+		if(tabPanes.find((it) => it.props.value === defaultTab))
+			setTab(defaultTab);
+	}, [defaultTab]);
 
 	return (
 		<>
