@@ -11,44 +11,44 @@ export const Footer = () => {
 								<img src={TaoIcon} /> Powered by Bittensor
 							</div>
 							<p>
-                τaostats is a Block Explorer and Analytics Platform for
-                Bittensor, a decentralized machine learning network.
+								τaostats is a Block Explorer and Analytics Platform for
+								Bittensor, a decentralized machine learning network.
 							</p>
 							<p>This site is not affiliated with the Opentensor Foundation.</p>
 							<p>
-                The content of this website is provided for information purposes
-                only.
+								The content of this website is provided for information purposes
+								only.
 								<br />
-                No claim is made as to the accuracy or currency of the content
-                on this site at any time.
+								No claim is made as to the accuracy or currency of the content
+								on this site at any time.
 							</p>
 							<p>
-                τaosτaτs is created and maintained by{" "}
+								τaosτaτs is created and maintained by{" "}
 								<a
 									href="https://twitter.com/mogmachine"
 									target="_blank"
 									rel="noreferrer"
 								>
-                  mogmachine
+									mogmachine
 								</a>
-                . We hope you found it helpful, if you have any suggestions or
-                issues please contact us at{" "}
+								. We hope you found it helpful, if you have any suggestions or
+								issues please contact us at{" "}
 								<a href="mailto:taostats@mogmachine.com">
-                  taostats@mogmachine.com
+									taostats@mogmachine.com
 								</a>
-                .
+								.
 							</p>
 						</div>
 						<div className="ft-right">
 							<div className="f-col">
 								<h5>Apps</h5>
 								<ul>
-									<li><a href="https://chat.bitapai.io/">Chat UI</a></li>
-									<li><a href="https://studio.bitapai.io/">Image Studio</a></li>
+									<li><a href="https://app.corcel.io/chat">Corcel Chat</a></li>
+									<li><a href="https://app.corcel.io/studio">Corcel Image Studio</a></li>
 								</ul>
 								<h5>Developers</h5>
 								<ul>
-									<li><a href="https://bitapi.io/">BitAPAI</a></li>
+									<li><a href="https://corcel.io/">Corcel</a></li>
 									<li><a href="https://taostats.io/api/">Taostats API</a></li>
 								</ul>
 							</div>
@@ -82,12 +82,12 @@ export const Footer = () => {
 							<p>Taostats ©2023.</p>
 						</div>
 						<p>
-              Taostats is funded by public delegation. Support us by delegating{" "}
+							Taostats is funded by public delegation. Support us by delegating{" "}
 							<a
 								href="https://delegate.taostats.io/staking?hkey=5Hddm3iBFD2GLT5ik7LZnT3XJUnRnN8PoeCFgGQgawUVKNm8"
 								style={{ color: "#14dec2" }}
 							>
-                stake to the taostats.io validator
+								stake to the taostats.io validator
 							</a>
 						</p>
 					</div>
