@@ -1358,11 +1358,11 @@ table.dataTable thead > tr > th.sorting.sorting_asc span:before {
   color: #ffffff;
 }
 
-.up {
+.success {
   color: #7aff97;
 }
 
-.down {
+.warning {
   color: #ff7a7a;
 }
 
