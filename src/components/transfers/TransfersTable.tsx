@@ -208,7 +208,7 @@ function TransfersTable(props: TransfersTableProps) {
 				displayLabel: "Amount",
 			},
 		];
-		const data: any[] = [];
+		const result: any[] = [];
 		if(!loading && !notFound && data !== undefined) {
 			const blockNumbers = data.map(({blockNumber}) => blockNumber, []);
 			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
@@ -222,7 +222,7 @@ function TransfersTable(props: TransfersTableProps) {
 						decimalPlaces: "optimal",
 					}
 				);
-				data.push({
+				result.push({
 					height: transfer.blockNumber,
 					createdAt,
 					from: transfer.from,
@@ -234,7 +234,7 @@ function TransfersTable(props: TransfersTableProps) {
 		}
 		return {
 			columns,
-			data,
+			data: result,
 			filename: `transfer-${address}`,
 		};
 	};

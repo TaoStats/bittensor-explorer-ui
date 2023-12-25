@@ -96,9 +96,9 @@ function NominatorsTable(props: NominatorsTableProps) {
 				displayLabel: "Delegated From(UTC)"
 			},
 		];
-		const data: any[] = [];
+		const result: any[] = [];
 		if(!loading && !notFound && data !== undefined) {
-			const blockNumbers = data.reduce(({ delegateFrom }) => delegateFrom, []);
+			const blockNumbers = data.map(({ delegateFrom }) => delegateFrom, []);
 			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
 
 			data.forEach((delegate: DelegateBalance) => {
@@ -110,7 +110,7 @@ function NominatorsTable(props: NominatorsTableProps) {
 						decimalPlaces: "optimal",
 					}
 				);
-				data.push({
+				result.push({
 					account: delegate.account,
 					amount,
 					delegatedFrom,
@@ -119,7 +119,7 @@ function NominatorsTable(props: NominatorsTableProps) {
 		}
 		return {
 			columns,
-			data,
+			data: result,
 			filename: `nominators-${address}`,
 		};
 	};

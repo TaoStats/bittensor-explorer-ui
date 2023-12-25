@@ -229,7 +229,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 				cur,
 			];
 		}, []);
-		const data: any[] = [];
+		const result: any[] = [];
 		if(!loading && !notFound && data !== undefined) {
 			const blockNumbers = data.map(({blockNumber}) => blockNumber, []);
 			const blockTimestamps = await fetchBlockTimestamps(blockNumbers);
@@ -243,7 +243,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 						decimalPlaces: "optimal",
 					}
 				);
-				data.push({
+				result.push({
 					height: delegate.blockNumber,
 					createdAt,
 					account: delegate.account,
@@ -255,7 +255,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 		}
 		return {
 			columns,
-			data,
+			data: result,
 			filename: `delegation-${address}`,
 		};
 	};
