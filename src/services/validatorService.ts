@@ -14,14 +14,15 @@ import { isAddress } from "@polkadot/util-crypto";
 import { DataError } from "../utils/error";
 import { fetchVerifiedDelegates } from "./delegateService";
 import { DelegateInfo } from "../model/delegate";
+import { rawAmountToDecimaledString } from "../utils/number";
 
 export type ValidatorsFilter = object;
 
-export type ValidatorsOrder = 
-	| "AMOUNT_ASC"
-	| "AMOUNT_DESC"
-	| "NOMINATORS_ASC"
-	| "NOMINATORS_DESC";
+export type ValidatorsOrder =
+  | "AMOUNT_ASC"
+  | "AMOUNT_DESC"
+  | "NOMINATORS_ASC"
+  | "NOMINATORS_DESC";
 
 export async function getValidator(filter: ValidatorsFilter) {
 	const response = await fetchIndexer<{ validators: ResponseItems<Validator> }>(
@@ -52,7 +53,7 @@ export async function getValidator(filter: ValidatorsFilter) {
 	const verifiedDelegates = await fetchVerifiedDelegates();
 	const data = extractItems(
 		response.validators,
-		{limit: 1},
+		{ limit: 1 },
 		addValidatorName,
 		verifiedDelegates
 	);
@@ -67,7 +68,13 @@ export async function getValidators(
 		validators: ResponseItems<ValidatorResponse>;
 	}>(
 		`query($first: Int!, $order: [ValidatorsOrderBy!]!) {
-			validators(first: $first, orderBy: $order) {
+			validators(first: $first, orderBy: $order, 
+				filter: {
+					amount: {
+						greaterThanOrEqualTo: "${rawAmountToDecimaledString(1024)}"
+					}
+				}
+			) {
 				nodes {
 					address
 					amount
@@ -108,7 +115,7 @@ function addValidatorName(
 	resp: ValidatorResponse,
 	verifiedDelegates: Record<string, DelegateInfo>
 ): Validator {
-	const {registrations, validatorPermits, ...rest} = resp;
+	const { registrations, validatorPermits, ...rest } = resp;
 	const info = (verifiedDelegates as Record<string, DelegateInfo>)[
 		resp.address
 	];
