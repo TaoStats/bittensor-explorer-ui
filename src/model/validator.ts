@@ -20,11 +20,14 @@ export type Validator = ValidatorResponse & {
 	registrations: number[];
 	validatorPermits: number[];
 	name?: string;
-}
+};
 
 export type ValidatorStakeHistory = {
 	amount: bigint;
 	nominators: bigint;
+	totalDailyReturn: bigint;
+	validatorReturn: bigint;
+	nominatorReturnPerK: bigint;
 	rank: bigint;
 	timestamp: string;
 };

@@ -19,10 +19,10 @@ import { rawAmountToDecimaledString } from "../utils/number";
 export type ValidatorsFilter = object;
 
 export type ValidatorsOrder =
-  | "AMOUNT_ASC"
-  | "AMOUNT_DESC"
-  | "NOMINATORS_ASC"
-  | "NOMINATORS_DESC";
+	| "AMOUNT_ASC"
+	| "AMOUNT_DESC"
+	| "NOMINATORS_ASC"
+	| "NOMINATORS_DESC";
 
 export async function getValidator(filter: ValidatorsFilter) {
 	const response = await fetchIndexer<{ validators: ResponseItems<Validator> }>(
@@ -146,6 +146,9 @@ export async function getValidatorStakeHistory(
 					amount
 					nominators
 					rank
+					totalDailyReturn
+					validatorReturn
+					nominatorReturnPerK
 					timestamp
 				}
 				pageInfo {
