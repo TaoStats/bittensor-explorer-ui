@@ -23,7 +23,7 @@ export const router = createBrowserRouter(
 					element: <HomePage />,
 				},
 				{
-					path: "extrinsic/:id",
+					path: "extrinsic/:query",
 					element: <ExtrinsicPage />,
 				},
 				{

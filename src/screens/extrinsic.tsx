@@ -1,5 +1,7 @@
 /** @jsxImportSource @emotion/react */
+import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import { isHex } from "@polkadot/util";
 
 import { Card, CardHeader } from "../components/Card";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
@@ -9,17 +11,43 @@ import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { useEvents } from "../hooks/useEvents";
 import { useExtrinsic } from "../hooks/useExtrinsic";
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useEffect } from "react";
 
 type ExtrinsicPageParams = {
-	id: string;
+	query: string;
 };
 
 export const ExtrinsicPage = () => {
-	const { id } = useParams() as ExtrinsicPageParams;
-	const [blockHeight, extrinsicId] = id.split("-");
+	const { query } = useParams() as ExtrinsicPageParams;
 
-	const extrinsic = useExtrinsic({ id: { equalTo: id } });
+	const maybeHash = isHex(query);
+
+	const [blockHeight, setBlockHeight] = useState<string | undefined>();
+	const [extrinsicId, setExtrinsicId] = useState<string | undefined>();
+
+	const extrinsicByHash = useExtrinsic(
+		{ txHash: { equalTo: query } },
+		{ skip: !maybeHash }
+	);
+	const extrinsicById = useExtrinsic(
+		{ id: { equalTo: query } },
+		{ skip: maybeHash }
+	);
+
+	useEffect(() => {
+		const extrinsic = maybeHash ? extrinsicByHash : extrinsicById;
+		if (
+			!extrinsic.error &&
+			!extrinsic.loading &&
+			!extrinsic.notFound &&
+			extrinsic.data
+		) {
+			const id = extrinsic.data.id;
+			const [newBlockHeight, newExtrinsicId] = id.split("-");
+			setBlockHeight(newBlockHeight);
+			setExtrinsicId(newExtrinsicId);
+		}
+	}, [extrinsicByHash, extrinsicById]);
+
 	const events = useEvents(
 		{
 			and: [
@@ -27,11 +55,16 @@ export const ExtrinsicPage = () => {
 				{ blockHeight: { equalTo: parseInt(blockHeight ?? "") } },
 			],
 		},
-		"NATURAL"
+		"NATURAL",
+		{ skip: !blockHeight || !extrinsicId }
 	);
 
-	useDOMEventTrigger("data-loaded", !extrinsic.loading && !events.loading);
-	
+	const allResources = [extrinsicByHash, extrinsicById, events];
+	useDOMEventTrigger(
+		"data-loaded",
+		allResources.every((it) => !it.loading)
+	);
+
 	const { hash: tab } = useLocation();
 	useEffect(() => {
 		if (tab) {
@@ -42,12 +75,14 @@ export const ExtrinsicPage = () => {
 		}
 	}, [tab]);
 
+	const extrinsic = maybeHash ? extrinsicByHash : extrinsicById;
+
 	return (
 		<>
 			<Card>
 				<CardHeader>
-          Extrinsic #{id}
-					<CopyToClipboardButton value={id} />
+					Extrinsic #{blockHeight}-{extrinsicId}
+					<CopyToClipboardButton value={blockHeight + "-" + extrinsicId} />
 				</CardHeader>
 				<ExtrinsicInfoTable extrinsic={extrinsic} />
 			</Card>
@@ -55,11 +90,11 @@ export const ExtrinsicPage = () => {
 				<Card>
 					<TabbedContent>
 						<TabPane
-							label='Events'
+							label="Events"
 							count={events.pagination.totalCount}
 							loading={events.loading}
 							error={events.error}
-							value='events'
+							value="events"
 						>
 							<EventsTable events={events} />
 						</TabPane>
