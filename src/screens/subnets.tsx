@@ -3,7 +3,6 @@
 import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
 import { Card } from "../components/Card";
 import { useState } from "react";
-import { css } from "@emotion/react";
 import SubnetsTable from "../components/subnets/SubnetsTable";
 import { useSubnets } from "../hooks/useSubnets";
 import { SubnetsOrder } from "../services/subnetsService";
