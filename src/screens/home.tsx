@@ -20,9 +20,6 @@ import { DelegateFilter, DelegatesOrder } from "../services/delegateService";
 import { useLocation } from "react-router-dom";
 import { MIN_DELEGATION_AMOUNT } from "../config";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
-import SubnetsTable from "../components/subnets/SubnetsTable";
-import { useSubnets } from "../hooks/useSubnets";
-import { SubnetsOrder } from "../services/subnetsService";
 
 const contentStyle = css`
 	position: relative;
@@ -140,11 +137,6 @@ export const HomePage = () => {
 		},
 		delegateSort
 	);
-
-	const subnetsInitialOrder: SubnetsOrder = "NET_UID_ASC";
-	const [subnetSort, setSubnetSort] =
-		useState<SubnetsOrder>(subnetsInitialOrder);
-	const subnets = useSubnets(undefined, subnetSort);
 
 	useEffect(() => {
 		if (blocks.pagination.page === 1) {
@@ -265,19 +257,6 @@ export const HomePage = () => {
 									setBalanceSearch(newSearch)
 								}
 								initialSearch={balancesInitialSearch}
-							/>
-						</TabPane>
-						<TabPane
-							label="Subnets"
-							count={subnets.pagination.totalCount}
-							loading={subnets.loading}
-							error={subnets.error}
-							value="subnets"
-						>
-							<SubnetsTable
-								subnets={subnets}
-								onSortChange={(sortKey: SubnetsOrder) => setSubnetSort(sortKey)}
-								initialSort={subnetsInitialOrder}
 							/>
 						</TabPane>
 					</TabbedContent>

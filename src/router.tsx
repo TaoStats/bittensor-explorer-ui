@@ -13,6 +13,7 @@ import { SearchPage } from "./screens/search";
 import { NETWORK_CONFIG } from "./config";
 import { ValidatorPage } from "./screens/validator";
 import { ValidatorsPage } from "./screens/validators";
+import { SubnetsPage } from "./screens/subnets";
 
 export const router = createBrowserRouter(
 	[
@@ -67,6 +68,10 @@ export const router = createBrowserRouter(
 				{
 					path: "validators",
 					element: <ValidatorsPage />,
+				},
+				{
+					path: "subnets",
+					element: <SubnetsPage />,
 				},
 				{
 					path: "*",

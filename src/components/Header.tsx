@@ -275,7 +275,7 @@ export const Header = () => {
 													<a href="/#accounts">Accounts</a>
 												</li>
 												<li>
-													<a href="/#subnets">Subnets</a>
+													<a href="/subnets">Subnets</a>
 												</li>
 												<li>
 													<a href="https://taostats.io/tokenomics/">
