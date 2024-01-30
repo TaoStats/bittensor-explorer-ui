@@ -126,7 +126,7 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 				label={() => (
 					<div css={tipStyle}>
 						<div>Tip</div>
-						<InfoTooltip value="..." />
+						<InfoTooltip value="A TIP is an extra transaction fee used to prioritize your extrinsic for inclusion in the block." />
 					</div>
 				)}
 				render={(data) => (
