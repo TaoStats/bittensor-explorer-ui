@@ -105,7 +105,6 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 	useEffect(() => {
 		if (!onSortChange || !sort?.property || sort.direction === undefined)
 			return;
-		console.log(sort);
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
 
