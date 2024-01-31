@@ -162,7 +162,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 							{change24h != BigInt("0") && (
 								<span
 									css={day_change_css}
-									className={`${change24h > 0 ? "up" : "down"}`}
+									className={`${change24h > 0 ? "success" : "warning"}`}
 								>
 									{change24h > 0 ? "▴" : "▾"}
 									<Currency
