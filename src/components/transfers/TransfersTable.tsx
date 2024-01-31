@@ -10,44 +10,50 @@ import { NETWORK_CONFIG } from "../../config";
 import { BlockTimestamp } from "../BlockTimestamp";
 import { css, Theme } from "@mui/material";
 import { SortDirection } from "../../model/sortDirection";
-import { TransfersFilter, TransfersOrder } from "../../services/transfersService";
+import {
+	TransfersFilter,
+	TransfersOrder,
+} from "../../services/transfersService";
 import { useEffect, useState } from "react";
 import { SortOrder } from "../../model/sortOrder";
-import { formatCurrency, rawAmountToDecimal, rawAmountToDecimaledString } from "../../utils/number";
+import {
+	rawAmountToDecimal,
+	rawAmountToDecimaledString,
+} from "../../utils/number";
 import { fetchBlockTimestamps } from "../../utils/block";
 
 const dirContainer = css`
-  display: flex;
-  align-items: center;
-  justify-content: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
 
 const dirIn = (theme: Theme) => css`
-  background-color: rgba(255, 153, 0, 0.8);
-  text-transform: uppercase;
-  display: inline-block;
-  color: #141414;
-  padding: 0px 4px;
-  border-radius: 4px;
-  font-size: 10px;
-  font-weight: 500;
-  border: 2px solid ${theme.palette.neutral.main};
-  width: 28px;
-  text-align: center;
+	background-color: rgba(255, 153, 0, 0.8);
+	text-transform: uppercase;
+	display: inline-block;
+	color: #141414;
+	padding: 0px 4px;
+	border-radius: 4px;
+	font-size: 10px;
+	font-weight: 500;
+	border: 2px solid ${theme.palette.neutral.main};
+	width: 28px;
+	text-align: center;
 `;
 
 const dirOut = (theme: Theme) => css`
-  background-color: rgb(20, 222, 194, 0.8);
-  text-transform: uppercase;
-  display: inline-block;
-  color: #141414;
-  font-size: 10px;
-  padding: 0 4px;
-  border: 2px solid ${theme.palette.success.main};
-  font-weight: 400;
-  border-radius: 4px;
-  width: 36px;
-  text-align: center;
+	background-color: rgb(20, 222, 194, 0.8);
+	text-transform: uppercase;
+	display: inline-block;
+	color: #141414;
+	font-size: 10px;
+	padding: 0 4px;
+	border: 2px solid ${theme.palette.success.main};
+	font-weight: 400;
+	border-radius: 4px;
+	width: 36px;
+	text-align: center;
 `;
 
 export type TransfersTableProps = {
@@ -98,8 +104,7 @@ const filterMappings: TransfersFilter = {
 };
 
 function TransfersTable(props: TransfersTableProps) {
-	const { transfers, showTime, direction, 
-		address, download } = props;
+	const { transfers, showTime, direction, address, download } = props;
 
 	const { currency, prefix } = NETWORK_CONFIG;
 
@@ -219,13 +224,7 @@ function TransfersTable(props: TransfersTableProps) {
 
 			transfers.data.forEach((transfer: Transfer) => {
 				const createdAt = blockTimestamps[transfer.blockNumber.toString()];
-				const amount = formatCurrency(
-					rawAmountToDecimal(transfer.amount.toString()),
-					currency,
-					{
-						decimalPlaces: "optimal",
-					}
-				);
+				const amount = rawAmountToDecimal(transfer.amount.toString());
 				data.push({
 					height: transfer.blockNumber,
 					createdAt,
