@@ -105,6 +105,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 	useEffect(() => {
 		if (!onSortChange || !sort?.property || sort.direction === undefined)
 			return;
+		console.log(sort);
 		onSortChange((orderMappings as any)[sort.property][sort.direction]);
 	}, [JSON.stringify(sort)]);
 
@@ -164,7 +165,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 									css={day_change_css}
 									className={`${change24h > 0 ? "success" : "warning"}`}
 								>
-									{change24h > 0 ? "▴" : "▾"}
+									{change24h > 0 ? <>&#9653;</> : <>&#9662;</>}
 									<Currency
 										amount={change24h > 0 ? change24h : -change24h}
 										currency={currency}
@@ -201,7 +202,7 @@ function ValidatorsTable(props: ValidatorsTableProps) {
 									css={day_change_css}
 									className={`${change24h > 0 ? "success" : "warning"}`}
 								>
-									{change24h > 0 ? "▴" : "▾"}
+									{change24h > 0 ? <>&#9653;</> : <>&#9662;</>}
 									<>{(change24h > 0 ? change24h : -change24h).toString()}</>
 								</span>
 							)}
