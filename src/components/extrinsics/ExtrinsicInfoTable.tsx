@@ -16,6 +16,8 @@ import { BlockTimestamp } from "../BlockTimestamp";
 import { NETWORK_CONFIG } from "../../config";
 import { useBlock } from "../../hooks/useBlock";
 import { useRuntimeSpec } from "../../hooks/useRuntimeSpec";
+import { Currency } from "../Currency";
+import InfoTooltip from "../InfoTooltip";
 
 export type ExtrinsicInfoTableProps = {
 	extrinsic: Resource<Extrinsic>;
@@ -33,40 +35,47 @@ const failedStyle = (theme: Theme) => css`
 	color: ${theme.palette.error.main};
 `;
 
+const tipStyle = css`
+	display: flex;
+	align-items: center;
+	gap: 4px;
+`;
+
 export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 	const { extrinsic } = props;
 	const block = useBlock({ id: { equalTo: extrinsic.data?.blockHeight } });
 	const { runtimeSpec, loading: loadingRuntimeSpec } = useRuntimeSpec(
 		block?.data?.specVersion
 	);
+	const { currency } = NETWORK_CONFIG;
 
 	return (
 		<InfoTable
 			data={extrinsic.data}
 			loading={extrinsic.loading}
 			notFound={extrinsic.notFound}
-			notFoundMessage='No extrinsic found'
+			notFoundMessage="No extrinsic found"
 			error={extrinsic.error}
 		>
 			<ExtrinsicInfoTableAttribute
-				label='Timestamp'
+				label="Timestamp"
 				render={(data) => (
 					<BlockTimestamp blockHeight={data.blockHeight} timezone utc />
 				)}
 			/>
 			<ExtrinsicInfoTableAttribute
-				label='Block time'
+				label="Block time"
 				render={(data) => (
 					<BlockTimestamp blockHeight={data.blockHeight} fromNow utc />
 				)}
 			/>
 			<ExtrinsicInfoTableAttribute
-				label='Hash'
+				label="Hash"
 				render={(data) => data.txHash}
 				copyToClipboard={(data) => data.txHash}
 			/>
 			<ExtrinsicInfoTableAttribute
-				label='Block'
+				label="Block"
 				render={(data) => (
 					<Link to={`/block/${data.blockHeight.toString()}`}>
 						{data.blockHeight.toString()}
@@ -75,7 +84,7 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 				copyToClipboard={(data) => data.blockHeight.toString()}
 			/>
 			<ExtrinsicInfoTableAttribute
-				label='Account'
+				label="Account"
 				render={(data) =>
 					data.signer && (
 						<AccountAddress
@@ -91,36 +100,56 @@ export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 			/>
 			<ExtrinsicInfoTableAttribute
 				label="Result"
-				render={(data) =>
+				render={(data) => (
 					<>
-						{
-							data.success ?
-								<span css={successStyle}>&#x1F5F9;</span> :
-								<span css={failedStyle}>&#x1F5F5;</span>
-						}
+						{data.success ? (
+							<span css={successStyle}>&#x1F5F9;</span>
+						) : (
+							<span css={failedStyle}>&#x1F5F5;</span>
+						)}
 					</>
-				}
+				)}
 			/>
 			<ExtrinsicInfoTableAttribute
-				label='Name'
+				label="Name"
 				render={(data) => (
 					<ButtonLink
 						to={`/search?query=${data.module}.${data.call}`}
-						size='small'
-						color='secondary'
+						size="small"
+						color="secondary"
 					>
 						{data.module}.{data.call}
 					</ButtonLink>
 				)}
 			/>
+			<ExtrinsicInfoTableAttribute
+				label={() => (
+					<div css={tipStyle}>
+						<div>Tip</div>
+						<InfoTooltip value="A TIP is an extra transaction fee used to prioritize your extrinsic for inclusion in the block." />
+					</div>
+				)}
+				render={(data) => (
+					<Currency
+						amount={data.tip}
+						currency={currency}
+						decimalPlaces="optimal"
+						showFullInTooltip
+					/>
+				)}
+			/>
 			{!loadingRuntimeSpec && runtimeSpec ? (
 				<ExtrinsicInfoTableAttribute
-					label='Parameters'
+					label="Parameters"
 					render={(data) => (
 						<DataViewer
 							data={data.args}
 							metadata={
-								getCallMetadataByName(runtimeSpec.metadata, data.module, data.call)?.args
+								getCallMetadataByName(
+									runtimeSpec.metadata,
+									data.module,
+									data.call
+								)?.args
 							}
 							runtimeSpec={runtimeSpec}
 							copyToClipboard

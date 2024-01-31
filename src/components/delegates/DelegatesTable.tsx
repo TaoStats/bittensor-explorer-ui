@@ -14,7 +14,6 @@ import { SortOrder } from "../../model/sortOrder";
 import { DelegateFilter, DelegatesOrder } from "../../services/delegateService";
 import { Delegate } from "../../model/delegate";
 import {
-	formatCurrency,
 	rawAmountToDecimal,
 	rawAmountToDecimaledString,
 } from "../../utils/number";
@@ -242,13 +241,7 @@ function DelegatesTable(props: DelegatesTableProps) {
 
 			data.forEach((delegate: Delegate) => {
 				const createdAt = blockTimestamps[delegate.blockNumber.toString()];
-				const amount = formatCurrency(
-					rawAmountToDecimal(delegate.amount.toString()),
-					currency,
-					{
-						decimalPlaces: "optimal",
-					}
-				);
+				const amount = rawAmountToDecimal(delegate.amount.toString());
 				result.push({
 					height: delegate.blockNumber,
 					createdAt,
