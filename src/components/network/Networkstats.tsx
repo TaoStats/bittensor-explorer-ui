@@ -219,14 +219,14 @@ export const NetworkStats = () => {
 							animating={rawAmountToDecimal(chain.issued.toString()).toString()}
 							suffix={NETWORK_CONFIG.currency}
 						/>
-						<StatItem
+						{/*<StatItem
 							title="Finalized blocks"
 							animating={chain.blocksFinalized.toString()}
 						/>
 						<StatItem
 							title="Signed extrinsics"
 							animating={chain.extrinsicsSigned.toString()}
-						/>
+						/>*/}
 						<StatItem
 							title="Total Accounts"
 							value={formatNumber(totalAccount)}
