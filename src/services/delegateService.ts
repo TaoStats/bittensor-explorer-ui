@@ -14,24 +14,24 @@ export type DelegateFilter = {
 	[key: string]: any;
 };
 export type DelegatesOrder =
-  | "ID_ASC"
-  | "ID_DESC"
-  | "AMOUNT_ASC"
-  | "AMOUNT_DESC"
-  | "BLOCK_NUMBER_ASC"
-  | "BLOCK_NUMBER_DESC";
+	| "ID_ASC"
+	| "ID_DESC"
+	| "AMOUNT_ASC"
+	| "AMOUNT_DESC"
+	| "BLOCK_NUMBER_ASC"
+	| "BLOCK_NUMBER_DESC";
 
 export type ValidatorFilter = object;
 export type DelegateBalanceFilter = object;
 export type DelegateBalancesOrder =
-  | "ID_ASC"
-  | "ID_DESC"
-  | "AMOUNT_ASC"
-  | "AMOUNT_DESC"
-  | "DELEGATE_FROM_ASC"
-  | "DELEGATE_FROM_DESC"
-  | "UPDATED_AT_ASC"
-  | "UPDATED_AT_DESC";
+	| "ID_ASC"
+	| "ID_DESC"
+	| "AMOUNT_ASC"
+	| "AMOUNT_DESC"
+	| "DELEGATE_FROM_ASC"
+	| "DELEGATE_FROM_DESC"
+	| "UPDATED_AT_ASC"
+	| "UPDATED_AT_DESC";
 
 export async function getDelegates(
 	filter: DelegateFilter | undefined,
@@ -177,9 +177,7 @@ export async function countNominators(filter: DelegateBalanceFilter) {
 	return response.delegateBalances.totalCount;
 }
 
-async function fetchValidatorBalances(
-	filter: ValidatorFilter | undefined
-) {
+async function fetchValidatorBalances(filter: ValidatorFilter | undefined) {
 	const response = await fetchIndexer<{ validators: ValidatorBalance }>(
 		`query ($filter: ValidatorFilter) {
 			validators(filter: $filter) {

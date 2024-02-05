@@ -4,9 +4,10 @@ export interface EventResponse {
 	event: string;
 	blockHeight: bigint;
 	data: string;
-	extrinsicId: string | null;
+	extrinsicId: number;
 }
 
-export interface Event extends Omit<EventResponse, "data"> {
+export interface Event extends Omit<Omit<EventResponse, "data">, "extrinsicId"> {
 	data: string[];
+	extrinsicId: string;
 }

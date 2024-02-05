@@ -119,3 +119,7 @@ export function getOptimalDecimalPlaces(usdRate: Decimal, minimalUsdValue = new 
 	const mostSignificantDecimalPlace = cryptoValueOfMinimalUsdValue.log().neg().ceil().toNumber();
 	return mostSignificantDecimalPlace;
 }
+
+export function zeroPad(input: string | number, length: number): string {
+	return (Array(length + 1).join("0") + input).slice(-length);
+}
