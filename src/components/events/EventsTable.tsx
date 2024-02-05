@@ -21,22 +21,22 @@ function EventsTable(props: EventsTableProps) {
 			data={events.data}
 			loading={events.loading}
 			notFound={events.notFound}
-			notFoundMessage='No events found'
+			notFoundMessage="No events found"
 			error={events.error}
 			pagination={events.pagination}
-			data-test='events-table'
+			data-test="events-table"
 		>
 			<EventsItemsTableAttribute
-				label='ID'
+				label="ID"
 				render={(event) => <Link to={`/event/${event.id}`}>{event.id}</Link>}
 			/>
 			<EventsItemsTableAttribute
-				label='Name'
+				label="Name"
 				render={(event) => (
 					<ButtonLink
 						to={`/search?query=${event.module}.${event.event}`}
-						size='small'
-						color='secondary'
+						size="small"
+						color="secondary"
 					>
 						{event.module}.{event.event}
 					</ButtonLink>
@@ -44,14 +44,14 @@ function EventsTable(props: EventsTableProps) {
 			/>
 			{showExtrinsic && (
 				<EventsItemsTableAttribute
-					label='Extrinsic'
+					label="Extrinsic"
 					render={(event) =>
-						event.extrinsicId != null && (
+						event.extrinsicId != "-1" ? (
 							<Link to={`/extrinsic/${event.blockHeight}-${event.extrinsicId}`}>
-								<span>
-									{`${ event.blockHeight } - ${ event.extrinsicId }`}
-								</span>
+								<span>{`${event.blockHeight}-${event.extrinsicId}`}</span>
 							</Link>
+						) : (
+							"System Event"
 						)
 					}
 				/>

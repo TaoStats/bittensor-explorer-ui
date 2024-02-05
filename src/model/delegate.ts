@@ -30,4 +30,4 @@ export type DelegateInfo = {
 	url: string;
 	description: string;
 	signature: string;
-}
+};

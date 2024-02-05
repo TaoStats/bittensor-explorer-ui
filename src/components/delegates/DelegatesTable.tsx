@@ -16,6 +16,7 @@ import { Delegate } from "../../model/delegate";
 import {
 	rawAmountToDecimal,
 	rawAmountToDecimaledString,
+	zeroPad,
 } from "../../utils/number";
 import { fetchBlockTimestamps } from "../../utils/block";
 
@@ -283,8 +284,8 @@ function DelegatesTable(props: DelegatesTableProps) {
 				render={(delegate) =>
 					delegate.extrinsicId && (
 						<Link
-							to={`/extrinsic/${delegate.blockNumber}-${delegate.extrinsicId}`}
-						>{`${delegate.blockNumber}-${delegate.extrinsicId}`}</Link>
+							to={`/extrinsic/${delegate.blockNumber}-${zeroPad(delegate.extrinsicId, 4)}`}
+						>{`${delegate.blockNumber}-${zeroPad(delegate.extrinsicId, 4)}`}</Link>
 					)
 				}
 			/>
