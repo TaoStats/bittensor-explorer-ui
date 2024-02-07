@@ -92,7 +92,7 @@ const transformEvent = (event: EventResponse): Event => {
 	const { extrinsicId } = event;
 	return {
 		...event,
-		extrinsicId: extrinsicId === -1 ? "-1" : zeroPad(extrinsicId, 4),
+		extrinsicId: extrinsicId === -1 ? "-1" : zeroPad(extrinsicId, 3),
 		data,
 	};
 };

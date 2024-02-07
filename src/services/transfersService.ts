@@ -72,6 +72,6 @@ const transformTransfer = (transfer: TransferResponse): Transfer => {
 	const { extrinsicId } = transfer;
 	return {
 		...transfer,
-		extrinsicId: extrinsicId === -1 ? "-1" : zeroPad(extrinsicId, 4),
+		extrinsicId: extrinsicId === -1 ? "-1" : zeroPad(extrinsicId, 3),
 	};
 };
