@@ -45,10 +45,12 @@ function EventsTable(props: EventsTableProps) {
 				<EventsItemsTableAttribute
 					label="Extrinsic"
 					render={(event) =>
-						event.extrinsicId != null && (
+						event.extrinsicId !== "-1" ? (
 							<Link to={`/extrinsic/${event.blockHeight}-${event.extrinsicId}`}>
 								<span>{`${event.blockHeight} - ${event.extrinsicId}`}</span>
 							</Link>
+						) : (
+							"System Event"
 						)
 					}
 				/>
