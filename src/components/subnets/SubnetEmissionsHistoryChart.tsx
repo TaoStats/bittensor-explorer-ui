@@ -35,28 +35,35 @@ export const SubnetEmissionsHistoryChart = (
 	const loading = subnetHistory.loading;
 	const timestamps = useMemo(() => {
 		if (!subnetHistory.data) return [];
-		const defaultSubnetId = subnetHistory.data[0]?.subnetId.toString();
-		return subnetHistory.data
-			.filter((x) => x.subnetId.toString() == defaultSubnetId)
-			.map((x: SubnetHistory) => x.timestamp);
+		const resp: string[] = (subnetHistory.data as any).reduce(
+			(prev: string[], cur: SubnetHistory) => {
+				if (prev.find((x) => x === cur.timestamp) === undefined)
+					prev.push(cur.timestamp);
+				return prev;
+			},
+			[]
+		);
+		return resp;
 	}, [subnetHistory]);
 	const series = useMemo(() => {
 		if (!subnetHistory.data) return [];
 
 		const subnets: any = {};
 		for (const subnet of subnetHistory.data) {
-			const { subnetId, emission } = subnet;
+			const { subnetId, timestamp, emission } = subnet;
 			const subnetIdStr = subnetId.toString();
 
-			if (subnets[subnetIdStr]) {
-				subnets[subnetIdStr].data.push(emission);
-			} else {
+			if (!subnets[subnetIdStr]) {
 				subnets[subnetIdStr] = {
 					name: subnetIdStr,
 					type: "line",
-					data: [emission],
+					data: [],
 				};
 			}
+			subnets[subnetIdStr].data.push({
+				x: timestamp,
+				y: emission
+			});
 		}
 
 		const result: any = [];
