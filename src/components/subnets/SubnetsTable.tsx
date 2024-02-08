@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { SortDirection } from "../../model/sortDirection";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
@@ -10,13 +10,12 @@ import { AccountAddress } from "../AccountAddress";
 import { Subnet } from "../../model/subnet";
 import { SubnetsOrder } from "../../services/subnetsService";
 import { SortOrder } from "../../model/sortOrder";
-import { useSubnetEmissions } from "../../hooks/useSubnetEmissions";
 import {
 	formatNumber,
 	formatNumberWithPrecision,
 	rawAmountToDecimal,
 } from "../../utils/number";
-import Spinner from "../Spinner";
+import { Currency } from "../Currency";
 
 export type SubnetsTableProps = {
 	subnets: PaginatedResource<Subnet>;
@@ -37,34 +36,24 @@ const orderMappings = {
 		[SortDirection.DESC]: "CREATED_AT_DESC",
 	},
 	emission: {
-		[SortDirection.ASC]: "ID_ASC",
-		[SortDirection.DESC]: "ID_DESC",
+		[SortDirection.ASC]: "EMISSION_ASC",
+		[SortDirection.DESC]: "EMISSION_DESC",
+	},
+	raoRecycled: {
+		[SortDirection.ASC]: "RAO_RECYCLED_ASC",
+		[SortDirection.DESC]: "RAO_RECYCLED_DESC",
+	},
+	raoRecycled24H: {
+		[SortDirection.ASC]: "RAO_RECYCLED24H_ASC",
+		[SortDirection.DESC]: "RAO_RECYCLED24H_DESC",
 	},
 };
 
 function SubnetsTable(props: SubnetsTableProps) {
-	const { subnets } = props;
+	const { subnets, initialSort, onSortChange } = props;
 
-	const emissions = useSubnetEmissions();
-
-	const { initialSort, onSortChange } = props;
+	const { currency } = NETWORK_CONFIG;
 	const [sort, setSort] = useState<SortOrder<string>>();
-
-	const sortedSubnets = useMemo(() => {
-		if (
-			subnets.loading ||
-			subnets.error ||
-			subnets.data === undefined ||
-			emissions === undefined
-		)
-			return subnets.data;
-		if (sort?.property !== "emission") return subnets.data;
-		return subnets.data.sort((left: Subnet, right: Subnet) => {
-			if (sort?.direction === SortDirection.ASC)
-				return emissions[left.netUid] - emissions[right.netUid];
-			return emissions[right.netUid] - emissions[left.netUid];
-		});
-	}, [subnets, emissions, sort]);
 
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
@@ -105,7 +94,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 
 	return (
 		<ItemsTable
-			data={sortedSubnets}
+			data={subnets.data}
 			loading={subnets.loading}
 			notFound={subnets.notFound}
 			notFoundMessage="No subnets found"
@@ -150,26 +139,51 @@ function SubnetsTable(props: SubnetsTableProps) {
 			<SubnetsTableAttribute
 				label="Emission"
 				sortable
-				render={(subnet) =>
-					emissions === undefined ? (
-						<Spinner small />
-					) : (
-						<>
-							{emissions[subnet.netUid] >= 100000
-								? formatNumber(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									{ decimalPlaces: 2 }
-								)
-								: formatNumberWithPrecision(
-									rawAmountToDecimal(emissions[subnet.netUid]).toNumber() * 100,
-									1,
-									true
-								)}
-								%
-						</>
-					)
-				}
+				render={({ emission }) => (
+					<>
+						{emission >= 100000
+							? formatNumber(rawAmountToDecimal(emission).toNumber() * 100, {
+								decimalPlaces: 2,
+							})
+							: formatNumberWithPrecision(
+								rawAmountToDecimal(emission).toNumber() * 100,
+								1,
+								true
+							)}
+						%
+					</>
+				)}
 				sortProperty="emission"
+			/>
+			<SubnetsTableAttribute
+				label="Rao Recycled"
+				render={({ raoRecycled }) => {
+					return (
+						<Currency
+							amount={raoRecycled}
+							currency={currency}
+							decimalPlaces={2}
+							showFullInTooltip
+						/>
+					);
+				}}
+				sortable
+				sortProperty="raoRecycled"
+			/>
+			<SubnetsTableAttribute
+				label="Rao Recycled(24h)"
+				render={({ raoRecycled24H }) => {
+					return (
+						<Currency
+							amount={raoRecycled24H}
+							currency={currency}
+							decimalPlaces={2}
+							showFullInTooltip
+						/>
+					);
+				}}
+				sortable
+				sortProperty="raoRecycled24H"
 			/>
 		</ItemsTable>
 	);

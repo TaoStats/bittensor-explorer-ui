@@ -1,5 +1,9 @@
 import { FetchOptions } from "../model/fetchOptions";
-import { SubnetsFilter, SubnetsOrder, getSubnets } from "../services/subnetsService";
+import {
+	SubnetsFilter,
+	SubnetsOrder,
+	getSubnets,
+} from "../services/subnetsService";
 
 import { usePaginatedResource } from "./usePaginatedResource";
 
@@ -8,5 +12,5 @@ export function useSubnets(
 	order?: SubnetsOrder,
 	options?: FetchOptions
 ) {
-	return usePaginatedResource(getSubnets, [order], options);
+	return usePaginatedResource(getSubnets, [filter, order], options);
 }

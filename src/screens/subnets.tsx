@@ -10,7 +10,7 @@ import { useSubnetEmissionsHistory } from "../hooks/useSubnetEmissionsHistory";
 import { SubnetEmissionsHistoryChart } from "../components/subnets/SubnetEmissionsHistoryChart";
 
 export const SubnetsPage = () => {
-	const subnetsInitialOrder: SubnetsOrder = "NET_UID_ASC";
+	const subnetsInitialOrder: SubnetsOrder = "EMISSION_DESC";
 	const [subnetSort, setSubnetSort] =
 		useState<SubnetsOrder>(subnetsInitialOrder);
 	const subnets = useSubnets(undefined, subnetSort);

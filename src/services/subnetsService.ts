@@ -16,6 +16,12 @@ export type SubnetsOrder =
 	| "ID_DESC"
 	| "NET_UID_ASC"
 	| "NET_UID_DESC"
+	| "EMISSION_ASC"
+	| "EMISSION_DESC"
+	| "RAO_RECYCLED_ASC"
+	| "RAO_RECYCLED_DESC"
+	| "RAO_RECYCLED24H_ASC"
+	| "RAO_RECYCLED24H_DESC"
 	| "CREATED_AT_ASC"
 	| "CREATED_AT_DESC";
 
@@ -26,6 +32,7 @@ export type SubnetEmissionsHistoryOrder =
 	| "HEIGHT_DESC";
 
 export async function getSubnets(
+	filter: SubnetsFilter | undefined,
 	order: SubnetsOrder = "NET_UID_ASC",
 	pagination: PaginationOptions
 ) {
@@ -38,6 +45,9 @@ export async function getSubnets(
 					createdAt
 					owner
 					extrinsicId
+					emission
+					raoRecycled
+					raoRecycled24H
 					timestamp
 				}
 				pageInfo {

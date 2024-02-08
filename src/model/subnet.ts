@@ -7,6 +7,9 @@ export type Subnet = {
 	createdAt: bigint;
 	owner: string;
 	extrinsicId: number;
+	emission: number;
+	raoRecycled: bigint;
+	raoRecycled24H: bigint;
 	timestamp: string;
 };
 

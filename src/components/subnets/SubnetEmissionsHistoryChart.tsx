@@ -8,6 +8,7 @@ import {
 	formatNumber,
 	formatNumberWithPrecision,
 	rawAmountToDecimal,
+	zeroPad,
 } from "../../utils/number";
 import {
 	SubnetEmissionsHistory,
@@ -63,7 +64,10 @@ export const SubnetEmissionsHistoryChart = (
 
 		const result: any = [];
 		for (const x in subnets) {
-			subnets[x].name = names[subnets[x].name] || "Unknown";
+			subnets[x].name =
+				zeroPad(subnets[x].name, 2) +
+				": " +
+				(names[subnets[x].name] || "Unknown");
 			result.push(subnets[x]);
 		}
 		return result;
