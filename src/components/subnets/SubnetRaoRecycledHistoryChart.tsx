@@ -252,7 +252,7 @@ export const SubnetRaoRecycledHistoryChart = (
 							}) + ` ${currency}`,
 					},
 					title: {
-						text: "RAO RECYCLED",
+						text: "TAO RECYCLED",
 						style: {
 							color: theme.palette.neutral.main,
 						},
