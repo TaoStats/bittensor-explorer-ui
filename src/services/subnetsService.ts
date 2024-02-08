@@ -1,7 +1,7 @@
 import {
 	Subnet,
-	SubnetEmissionsHistory,
-	SubnetEmissionsHistoryPaginatedResponse,
+	SubnetHistory,
+	SubnetHistoryPaginatedResponse,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -25,7 +25,7 @@ export type SubnetsOrder =
 	| "CREATED_AT_ASC"
 	| "CREATED_AT_DESC";
 
-export type SubnetEmissionsHistoryOrder =
+export type SubnetHistoryOrder =
 	| "ID_ASC"
 	| "ID_DESC"
 	| "HEIGHT_ASC"
@@ -66,24 +66,24 @@ export async function getSubnets(
 	return extractItems(response.subnets, pagination, addSubnetName, subnetNames);
 }
 
-export async function getSubnetEmissionsHistory(
+export async function getSubnetHistory(
 	filter?: object,
-	order: SubnetEmissionsHistoryOrder = "ID_ASC",
+	order: SubnetHistoryOrder = "ID_ASC",
 	distinct?: string,
 	after?: string,
 	limit = 100
-): Promise<SubnetEmissionsHistoryPaginatedResponse> {
+): Promise<SubnetHistoryPaginatedResponse> {
 	const response = await fetchHistorical<{
-		subnets: ResponseItems<SubnetEmissionsHistory>;
+		subnets: ResponseItems<SubnetHistory>;
 	}>(
 		`query($filter: SubnetFilter, $order: [SubnetsOrderBy!]!, $distinct: [subnets_distinct_enum], $after: Cursor, $first: Int!) {
 			subnets(filter: $filter, orderBy: $order, distinct: $distinct, after: $after, first: $first) {
 				nodes {
-					emission
-					height
 					id
-					nodeId
 					subnetId
+					height
+					emission
+					raoRecycled
 					timestamp
 				}
 				pageInfo {

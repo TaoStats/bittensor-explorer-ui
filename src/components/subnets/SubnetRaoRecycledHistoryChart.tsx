@@ -5,13 +5,13 @@ import Chart from "react-apexcharts";
 import LoadingSpinner from "../../assets/loading.svg";
 import { useMemo } from "react";
 import {
-	formatNumber,
-	formatNumberWithPrecision,
+	formatCurrency,
 	rawAmountToDecimal,
 	zeroPad,
 } from "../../utils/number";
 import { SubnetHistory, SubnetHistoryResponse } from "../../model/subnet";
 import subnetNames from "../../subnets_names.json";
+import { NETWORK_CONFIG } from "../../config";
 const names = subnetNames as Record<string, string>;
 
 const spinnerContainer = css`
@@ -21,16 +21,17 @@ const spinnerContainer = css`
 	justify-content: center;
 `;
 
-export type SubnetEmissionsHistoryChartProps = {
+export type SubnetRaoRecycledHistoryChartProps = {
 	subnetHistory: SubnetHistoryResponse;
 };
 
-export const SubnetEmissionsHistoryChart = (
-	props: SubnetEmissionsHistoryChartProps
+export const SubnetRaoRecycledHistoryChart = (
+	props: SubnetRaoRecycledHistoryChartProps
 ) => {
 	const theme = useTheme();
 
 	const { subnetHistory } = props;
+	const { currency } = NETWORK_CONFIG;
 
 	const loading = subnetHistory.loading;
 	const timestamps = useMemo(() => {
@@ -45,16 +46,16 @@ export const SubnetEmissionsHistoryChart = (
 
 		const subnets: any = {};
 		for (const subnet of subnetHistory.data) {
-			const { subnetId, emission } = subnet;
+			const { subnetId, raoRecycled } = subnet;
 			const subnetIdStr = subnetId.toString();
 
 			if (subnets[subnetIdStr]) {
-				subnets[subnetIdStr].data.push(emission);
+				subnets[subnetIdStr].data.push(raoRecycled);
 			} else {
 				subnets[subnetIdStr] = {
 					name: subnetIdStr,
 					type: "line",
-					data: [emission],
+					data: [raoRecycled],
 				};
 			}
 		}
@@ -67,18 +68,19 @@ export const SubnetEmissionsHistoryChart = (
 				(names[subnets[x].name] || "Unknown");
 			result.push(subnets[x]);
 		}
+
 		return result;
 	}, [subnetHistory]);
 	const minValue = useMemo(() => {
 		return subnetHistory.data.reduce((min: number, cur: SubnetHistory) => {
-			const newMin = parseInt(cur.emission.toString());
+			const newMin = parseInt(cur.raoRecycled.toString());
 			if (min === -1) return newMin;
 			return min < newMin ? min : newMin;
 		}, -1);
 	}, [subnetHistory]);
 	const maxValue = useMemo(() => {
 		return subnetHistory.data.reduce((max: number, cur: SubnetHistory) => {
-			const newMax = parseInt(cur.emission.toString());
+			const newMax = parseInt(cur.raoRecycled.toString());
 			return max > newMax ? max : newMax;
 		}, 0);
 	}, [subnetHistory]);
@@ -217,15 +219,9 @@ export const SubnetEmissionsHistoryChart = (
 					},
 					y: {
 						formatter: (val: number) =>
-							(val >= 100000
-								? formatNumber(rawAmountToDecimal(val).toNumber() * 100, {
-									decimalPlaces: 2,
-								})
-								: formatNumberWithPrecision(
-									rawAmountToDecimal(val).toNumber() * 100,
-									1,
-									true
-								)) + "%",
+							formatCurrency(rawAmountToDecimal(val), "USD", {
+								decimalPlaces: 2,
+							}) + ` ${currency}`,
 					},
 				},
 				xaxis: {
@@ -251,18 +247,12 @@ export const SubnetEmissionsHistoryChart = (
 							colors: theme.palette.neutral.main,
 						},
 						formatter: (val: number) =>
-							(val >= 100000
-								? formatNumber(rawAmountToDecimal(val).toNumber() * 100, {
-									decimalPlaces: 2,
-								})
-								: formatNumberWithPrecision(
-									rawAmountToDecimal(val).toNumber() * 100,
-									1,
-									true
-								)) + "%",
+							formatCurrency(rawAmountToDecimal(val), "USD", {
+								decimalPlaces: 2,
+							}) + ` ${currency}`,
 					},
 					title: {
-						text: "EMISSION",
+						text: "RAO RECYCLED",
 						style: {
 							color: theme.palette.neutral.main,
 						},

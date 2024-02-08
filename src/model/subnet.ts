@@ -13,21 +13,22 @@ export type Subnet = {
 	timestamp: string;
 };
 
-export type SubnetEmissionsHistory = {
+export type SubnetHistory = {
 	subnetId: bigint;
 	height: bigint;
 	timestamp: string;
 	emission: bigint;
+	raoRecycled: bigint;
 };
 
-export type SubnetEmissionsHistoryPaginatedResponse = {
+export type SubnetHistoryPaginatedResponse = {
 	hasNextPage: boolean;
 	endCursor: string;
-	data: SubnetEmissionsHistory[];
+	data: SubnetHistory[];
 };
 
-export type SubnetEmissionsHistoryResponse = {
+export type SubnetHistoryResponse = {
 	loading: boolean;
 	error?: DataError;
-	data: SubnetEmissionsHistory[];
+	data: SubnetHistory[];
 };
