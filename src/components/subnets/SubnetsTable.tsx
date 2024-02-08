@@ -156,7 +156,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 				sortProperty="emission"
 			/>
 			<SubnetsTableAttribute
-				label="Rao Recycled"
+				label="TAO Recycled"
 				render={({ raoRecycled }) => {
 					return (
 						<Currency
@@ -171,7 +171,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 				sortProperty="raoRecycled"
 			/>
 			<SubnetsTableAttribute
-				label="Rao Recycled(24h)"
+				label="TAO Recycled(24h)"
 				render={({ raoRecycled24H }) => {
 					return (
 						<Currency
