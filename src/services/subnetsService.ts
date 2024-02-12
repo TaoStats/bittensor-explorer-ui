@@ -37,8 +37,8 @@ export async function getSubnets(
 	pagination: PaginationOptions
 ) {
 	const response = await fetchIndexer<{ subnets: ResponseItems<Subnet> }>(
-		`query ($order: [SubnetsOrderBy!]!) {
-			subnets(orderBy: $order) {
+		`query ($first: Int!, $after: Cursor, $filter: SubnetFilter, $order: [SubnetsOrderBy!]!) {
+			subnets(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
 					netUid
@@ -59,6 +59,9 @@ export async function getSubnets(
 			}
 		}`,
 		{
+			after: pagination.after,
+			first: pagination.limit,
+			filter,
 			order,
 		}
 	);
