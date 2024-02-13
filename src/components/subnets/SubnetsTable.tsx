@@ -13,6 +13,7 @@ import { SortOrder } from "../../model/sortOrder";
 import {
 	formatNumber,
 	formatNumberWithPrecision,
+	nFormatter,
 	rawAmountToDecimal,
 } from "../../utils/number";
 import { Currency } from "../Currency";
@@ -159,12 +160,12 @@ function SubnetsTable(props: SubnetsTableProps) {
 				label="Recycled"
 				render={({ raoRecycled }) => {
 					return (
-						<Currency
-							amount={raoRecycled}
-							currency={currency}
-							decimalPlaces={2}
-							showFullInTooltip
-						/>
+						<>
+							{nFormatter(
+								rawAmountToDecimal(raoRecycled.toString()).toNumber(),
+								2
+							).toString() + ` ${NETWORK_CONFIG.currency}`}
+						</>
 					);
 				}}
 				sortable
