@@ -4,7 +4,7 @@
   "2": "Machine Translation",
   "3": "Data Scraping",
   "4": "Multi Modality",
-  "5": "Image Generation",
+  "5": "Unknown",
   "6": "Nous Finetuning",
   "7": "Storage",
   "8": "Time Series Prediction",
@@ -24,13 +24,13 @@
   "22": "Meta Search",
   "23": "Niche Image",
   "22": "Metasearch",
-  "24": "BitAds",
+  "24": "Unknown",
   "25": "Bitcurrent",
   "26": "Image Alchemy",
   "27": "Compute",
   "28": "ZK Tensor",
-  "29": "Unknown",
+  "29": "3D Gen",
   "30": "Unknown",
   "31": "Healthcare",
-  "32": "Lovelace"
+  "32": "DAASI"
 }
