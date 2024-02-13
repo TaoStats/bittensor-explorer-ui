@@ -13,6 +13,7 @@ export function useSubnetsHistory(): SubnetHistoryResponse {
 	const rollbar = useRollbar();
 
 	const [data, setData] = useState<SubnetHistory[]>([]);
+	const [ids, setIds] = useState<number[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<DataError>();
 
@@ -21,7 +22,8 @@ export function useSubnetsHistory(): SubnetHistoryResponse {
 			const subnets = await getSubnets(undefined, "EMISSION_DESC", {
 				limit: 12,
 			});
-			const subnetIds = subnets.data.map((x) => x.netUid);
+			const subnetIds = subnets.data.slice(0, 12).map((x) => x.netUid);
+			setIds(subnetIds);
 
 			const limit = 100;
 
@@ -75,5 +77,6 @@ export function useSubnetsHistory(): SubnetHistoryResponse {
 		loading,
 		error,
 		data,
+		ids,
 	};
 }

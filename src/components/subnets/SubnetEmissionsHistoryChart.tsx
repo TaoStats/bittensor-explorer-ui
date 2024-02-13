@@ -48,32 +48,33 @@ export const SubnetEmissionsHistoryChart = (
 	const series = useMemo(() => {
 		if (!subnetHistory.data) return [];
 
-		const subnets: any = {};
+		const subnets: any[] = [];
 		for (const subnet of subnetHistory.data) {
 			const { subnetId, timestamp, emission } = subnet;
 			const subnetIdStr = subnetId.toString();
 
-			if (!subnets[subnetIdStr]) {
-				subnets[subnetIdStr] = {
-					name: subnetIdStr,
+			let subnetIdx = subnets.findIndex((x) => x.id == subnetIdStr);
+			if (subnetIdx === -1) {
+				subnets.push({
+					name:
+						zeroPad(subnetIdStr, 2) + ": " + (names[subnetIdStr] || "Unknown"),
+					id: subnetIdStr,
 					type: "line",
 					data: [],
-				};
+				});
+				subnetIdx = subnets.length - 1;
 			}
-			subnets[subnetIdStr].data.push({
+			subnets[subnetIdx].data.push({
 				x: timestamp,
-				y: emission
+				y: emission,
 			});
 		}
 
-		const result: any = [];
-		for (const x in subnets) {
-			subnets[x].name =
-				zeroPad(subnets[x].name, 2) +
-				": " +
-				(names[subnets[x].name] || "Unknown");
-			result.push(subnets[x]);
-		}
+		const result: any[] = [];
+		subnetHistory.ids.forEach(id => {
+			const subnet = subnets.find(x => x.id == id);
+			result.push(subnet);
+		});
 		return result;
 	}, [subnetHistory]);
 	const minValue = useMemo(() => {

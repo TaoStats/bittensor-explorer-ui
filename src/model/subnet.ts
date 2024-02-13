@@ -31,4 +31,5 @@ export type SubnetHistoryResponse = {
 	loading: boolean;
 	error?: DataError;
 	data: SubnetHistory[];
+	ids: number[];
 };
