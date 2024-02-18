@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { SortDirection } from "../../model/sortDirection";
 import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
@@ -56,6 +56,26 @@ function SubnetsTable(props: SubnetsTableProps) {
 	const { currency } = NETWORK_CONFIG;
 	const [sort, setSort] = useState<SortOrder<string>>();
 
+	const rows = useMemo(() => {
+		if (!subnets || subnets.loading || !subnets.data) return [];
+		const { totalSum, daySum } = subnets.data.reduce(
+			({ totalSum, daySum }: { totalSum: bigint; daySum: bigint }, subnet) => {
+				return {
+					totalSum: totalSum + BigInt(subnet.raoRecycled),
+					daySum: daySum + BigInt(subnet.raoRecycled24H),
+				};
+			},
+			{ totalSum: BigInt(0), daySum: BigInt(0) }
+		);
+		return [
+			...subnets.data,
+			{
+				raoRecycled: totalSum,
+				raoRecycled24H: daySum,
+			},
+		] as Subnet[];
+	}, [subnets]);
+
 	useEffect(() => {
 		Object.entries(orderMappings).forEach(([property, value]) => {
 			Object.entries(value).forEach(([dir, orderKey]) => {
@@ -95,7 +115,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 
 	return (
 		<ItemsTable
-			data={subnets.data}
+			data={rows}
 			loading={subnets.loading}
 			notFound={subnets.notFound}
 			notFoundMessage="No subnets found"
@@ -112,48 +132,58 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Name"
-				render={(subnet) => (
-					<Link to={`https://taostats.io/subnets/netuid-${subnet.netUid}`}>
-						{subnet.name}
-					</Link>
-				)}
+				render={(subnet) =>
+					subnet.name ? (
+						<Link to={`https://taostats.io/subnets/netuid-${subnet.netUid}`}>
+							{subnet.name}
+						</Link>
+					) : (
+						<>SUM</>
+					)
+				}
 			/>
 			<SubnetsTableAttribute
 				label="Created At (UTC)"
 				sortable
-				render={(subnet) => (
-					<Time time={subnet.timestamp} utc timezone={false} />
-				)}
+				render={(subnet) =>
+					subnet.timestamp !== undefined && (
+						<Time time={subnet.timestamp} utc timezone={false} />
+					)
+				}
 				sortProperty="createdAt"
 			/>
 			<SubnetsTableAttribute
 				label="Owner"
-				render={(subnet) => (
-					<AccountAddress
-						address={decodeAddress(subnet.owner)}
-						prefix={NETWORK_CONFIG.prefix}
-						copyToClipboard="normal"
-						shorten
-					/>
-				)}
+				render={(subnet) =>
+					subnet.owner !== undefined && (
+						<AccountAddress
+							address={decodeAddress(subnet.owner)}
+							prefix={NETWORK_CONFIG.prefix}
+							copyToClipboard="normal"
+							shorten
+						/>
+					)
+				}
 			/>
 			<SubnetsTableAttribute
 				label="Emission"
 				sortable
-				render={({ emission }) => (
-					<>
-						{emission >= 100000
-							? formatNumber(rawAmountToDecimal(emission).toNumber() * 100, {
-								decimalPlaces: 2,
-							})
-							: formatNumberWithPrecision(
-								rawAmountToDecimal(emission).toNumber() * 100,
-								1,
-								true
-							)}
-						%
-					</>
-				)}
+				render={({ emission }) =>
+					emission !== undefined && (
+						<>
+							{emission >= 100000
+								? formatNumber(rawAmountToDecimal(emission).toNumber() * 100, {
+									decimalPlaces: 2,
+								})
+								: formatNumberWithPrecision(
+									rawAmountToDecimal(emission).toNumber() * 100,
+									1,
+									true
+								)}
+							%
+						</>
+					)
+				}
 				sortProperty="emission"
 			/>
 			<SubnetsTableAttribute
