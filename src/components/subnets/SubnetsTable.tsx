@@ -173,13 +173,13 @@ function SubnetsTable(props: SubnetsTableProps) {
 						<>
 							{emission >= 100000
 								? formatNumber(rawAmountToDecimal(emission).toNumber() * 100, {
-										decimalPlaces: 2,
-								  })
+									decimalPlaces: 2,
+								})
 								: formatNumberWithPrecision(
-										rawAmountToDecimal(emission).toNumber() * 100,
-										1,
-										true
-								  )}
+									rawAmountToDecimal(emission).toNumber() * 100,
+									1,
+									true
+								)}
 							%
 						</>
 					)
