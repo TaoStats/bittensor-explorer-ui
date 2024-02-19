@@ -12,7 +12,7 @@ import { Link } from "../Link";
 
 export type EventInfoTableProps = {
 	event: Resource<Event>;
-}
+};
 
 const EventInfoTableAttribute = InfoTableAttribute<Event>;
 
@@ -28,15 +28,15 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 			data={event.data}
 			loading={event.loading}
 			notFound={event.notFound}
-			notFoundMessage='No event found'
+			notFoundMessage="No event found"
 			error={event.error}
 		>
 			<EventInfoTableAttribute
-				label='Timestamp'
+				label="Timestamp"
 				render={(data) => <BlockTimestamp blockHeight={data.blockHeight} utc />}
 			/>
 			<EventInfoTableAttribute
-				label='Block'
+				label="Block"
 				render={(data) => (
 					<Link to={`/block/${data.blockHeight.toString()}`}>
 						{data.blockHeight.toString()}
@@ -45,23 +45,27 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 				copyToClipboard={(data) => data.blockHeight.toString()}
 			/>
 			<EventInfoTableAttribute
-				label='Extrinsic'
+				label="Extrinsic"
 				render={(data) =>
-					data.extrinsicId != null && (
+					data.extrinsicId !== "-1" ? (
 						<Link to={`/extrinsic/${data.blockHeight}-${data.extrinsicId}`}>
 							{`${data.blockHeight}-${data.extrinsicId}`}
 						</Link>
+					) : (
+						"System Event"
 					)
 				}
-				copyToClipboard={(data) => data.extrinsicId}
+				copyToClipboard={(data) =>
+					data.extrinsicId !== "-1" ? data.extrinsicId : undefined
+				}
 			/>
 			<EventInfoTableAttribute
-				label='Name'
+				label="Name"
 				render={(data) => (
 					<ButtonLink
 						to={`/search?query=${data.module}.${data.event}`}
-						size='small'
-						color='secondary'
+						size="small"
+						color="secondary"
 					>
 						{data.module}.{data.event}
 					</ButtonLink>
@@ -69,7 +73,7 @@ export const EventInfoTable = (props: EventInfoTableProps) => {
 			/>
 			{!loadingRuntimeSpec && runtimeSpec ? (
 				<EventInfoTableAttribute
-					label='Parameters'
+					label="Parameters"
 					render={(data) => (
 						<DataViewer
 							data={data.data}

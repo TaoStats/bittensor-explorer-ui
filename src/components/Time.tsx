@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { formatDistanceToNowStrict } from "date-fns";
 import enGB from "date-fns/locale/en-GB";
-import { format as formatTime, formatInTimeZone as formatTimeInTimeZone } from "date-fns-tz";
+import { format as formatTime } from "date-fns-tz";
 import { Tooltip } from "@mui/material";
 
 export type TimeProps = {

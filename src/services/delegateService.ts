@@ -1,4 +1,8 @@
-import { DelegateBalance, DelegateInfo, ValidatorBalance } from "./../model/delegate";
+import {
+	DelegateBalance,
+	DelegateInfo,
+	ValidatorBalance,
+} from "./../model/delegate";
 import { Delegate } from "../model/delegate";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -31,7 +35,7 @@ export type DelegateBalancesOrder =
 export async function getDelegates(
 	filter: DelegateFilter | undefined,
 	order: DelegatesOrder = "BLOCK_NUMBER_DESC",
-	pagination: PaginationOptions,
+	pagination: PaginationOptions
 ) {
 	return fetchDelegates(filter, order, pagination);
 }
@@ -39,13 +43,13 @@ export async function getDelegates(
 export async function getDelegateBalances(
 	filter: DelegateBalanceFilter | undefined,
 	order: DelegateBalancesOrder = "UPDATED_AT_DESC",
-	pagination: PaginationOptions,
+	pagination: PaginationOptions
 ) {
 	return fetchDelegateBalances(filter, order, pagination);
 }
 
 export async function getValidatorBalances(
-	filter: DelegateBalanceFilter | undefined,
+	filter: DelegateBalanceFilter | undefined
 ) {
 	return fetchValidatorBalances(filter);
 }
@@ -55,7 +59,7 @@ export async function getValidatorBalances(
 async function fetchDelegates(
 	filter: DelegateFilter | undefined,
 	order: DelegatesOrder = "BLOCK_NUMBER_DESC",
-	pagination: PaginationOptions,
+	pagination: PaginationOptions
 ) {
 	const response = await fetchIndexer<{ delegates: ResponseItems<Delegate> }>(
 		`query ($first: Int!, $after: Cursor, $filter: DelegateFilter, $order: [DelegatesOrderBy!]!) {
@@ -92,16 +96,18 @@ async function fetchDelegates(
 async function fetchDelegateBalances(
 	filter: DelegateBalanceFilter | undefined,
 	order: DelegateBalancesOrder = "UPDATED_AT_DESC",
-	pagination: PaginationOptions,
+	pagination: PaginationOptions
 ) {
-	const response = await fetchIndexer<{ delegateBalances: ResponseItems<DelegateBalance> }>(
+	const response = await fetchIndexer<{
+		delegateBalances: ResponseItems<DelegateBalance>;
+	}>(
 		`query ($first: Int!, $after: Cursor, $filter: DelegateBalanceFilter, $order: [DelegateBalancesOrderBy!]!) {
 			delegateBalances(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
-                    account
-                    delegate
-                    amount
+					account
+					delegate
+					amount
 					updatedAt
 					delegateFrom
 				}
@@ -120,13 +126,17 @@ async function fetchDelegateBalances(
 			order,
 		}
 	);
-	const items = extractItems(response.delegateBalances, pagination, addDelegateName);
+	const items = extractItems(
+		response.delegateBalances,
+		pagination,
+		addDelegateName
+	);
 
 	return items;
 }
 
 async function fetchValidatorBalances(
-	filter: DelegateBalanceFilter | undefined,
+	filter: DelegateBalanceFilter | undefined
 ) {
 	const response = await fetchIndexer<{ delegateBalances: ValidatorBalance }>(
 		`query ($filter: DelegateBalanceFilter) {
@@ -147,8 +157,12 @@ async function fetchValidatorBalances(
 	return data;
 }
 
-function addDelegateName<T extends { delegate: string; delegateName?: string; }>(item: T): T {
-	const info = (verifiedDelegates as Record<string, DelegateInfo>)[item.delegate];
+function addDelegateName<T extends { delegate: string; delegateName?: string }>(
+	item: T
+): T {
+	const info = (verifiedDelegates as Record<string, DelegateInfo>)[
+		item.delegate
+	];
 	if (info === undefined) return item;
 	return { ...item, delegateName: info.name } as T;
 }
