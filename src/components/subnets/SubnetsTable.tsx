@@ -220,7 +220,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 					);
 				}}
 				sortable
-				sortProperty="recycledLifetime"
+				sortProperty="recycled24H"
 			/>
 			<SubnetsTableAttribute
 				label="Lifetime"
