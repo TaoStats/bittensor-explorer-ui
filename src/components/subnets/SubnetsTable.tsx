@@ -184,15 +184,8 @@ function SubnetsTable(props: SubnetsTableProps) {
 				render={({ emission }) =>
 					emission !== undefined && (
 						<>
-							{emission >= 100000
-								? formatNumber(rawAmountToDecimal(emission).toNumber() * 100, {
-									decimalPlaces: 2,
-								})
-								: formatNumberWithPrecision(
-									rawAmountToDecimal(emission).toNumber() * 100,
-									1,
-									true
-								)}
+							{emission >= 100000 ? formatNumber(rawAmountToDecimal(emission).toNumber() * 100, {decimalPlaces: 2})
+								: formatNumberWithPrecision(rawAmountToDecimal(emission).toNumber() * 100, 1, true)}
 							%
 						</>
 					)
@@ -216,10 +209,10 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Recycled(24h)"
-				render={({ raoRecycled24H }) => {
+				render={({ recycled24H }) => {
 					return (
 						<Currency
-							amount={raoRecycled24H}
+							amount={recycled24H}
 							currency={currency}
 							decimalPlaces={2}
 							showFullInTooltip
