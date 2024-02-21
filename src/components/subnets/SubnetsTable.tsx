@@ -216,7 +216,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Recycled(24h)"
-				render={({ recycledLifetime }) => {
+				render={({ raoRecycled24H }) => {
 					return (
 						<Currency
 							amount={recycledLifetime}
