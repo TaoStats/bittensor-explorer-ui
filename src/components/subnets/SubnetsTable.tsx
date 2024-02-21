@@ -219,7 +219,7 @@ function SubnetsTable(props: SubnetsTableProps) {
 				render={({ raoRecycled24H }) => {
 					return (
 						<Currency
-							amount={recycledLifetime}
+							amount={raoRecycled24H}
 							currency={currency}
 							decimalPlaces={2}
 							showFullInTooltip
