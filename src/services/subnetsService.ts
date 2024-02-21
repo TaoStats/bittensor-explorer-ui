@@ -46,8 +46,10 @@ export async function getSubnets(
 					owner
 					extrinsicId
 					emission
-					raoRecycled
-					raoRecycled24H
+					recycled24H
+					recycledAtCreation
+					recycledByOwner
+					recycledLifetime
 					timestamp
 				}
 				pageInfo {

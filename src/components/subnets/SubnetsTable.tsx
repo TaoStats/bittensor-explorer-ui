@@ -40,13 +40,17 @@ const orderMappings = {
 		[SortDirection.ASC]: "EMISSION_ASC",
 		[SortDirection.DESC]: "EMISSION_DESC",
 	},
-	raoRecycled: {
-		[SortDirection.ASC]: "RAO_RECYCLED_ASC",
-		[SortDirection.DESC]: "RAO_RECYCLED_DESC",
+	recycledLifetime: {
+		[SortDirection.ASC]: "RECYCLED_LIFETIME_ASC",
+		[SortDirection.DESC]: "RECYCLED_LIFETIME_DESC",
 	},
-	raoRecycled24H: {
-		[SortDirection.ASC]: "RAO_RECYCLED24H_ASC",
-		[SortDirection.DESC]: "RAO_RECYCLED24H_DESC",
+	recycled24H: {
+		[SortDirection.ASC]: "RECYCLED24H_ASC",
+		[SortDirection.DESC]: "RECYCLED24H_DESC",
+	},
+	recycledByOwner: {
+		[SortDirection.ASC]: "RECYCLED_BY_OWNER_ASC",
+		[SortDirection.DESC]: "RECYCLED_BY_OWNER_DESC",
 	},
 };
 
@@ -58,20 +62,29 @@ function SubnetsTable(props: SubnetsTableProps) {
 
 	const rows = useMemo(() => {
 		if (!subnets || subnets.loading || !subnets.data) return [];
-		const { totalSum, daySum } = subnets.data.reduce(
-			({ totalSum, daySum }: { totalSum: bigint; daySum: bigint }, subnet) => {
+		const { totalSum, daySum, ownerSum } = subnets.data.reduce(
+			(
+				{
+					totalSum,
+					daySum,
+					ownerSum,
+				}: { totalSum: bigint; daySum: bigint; ownerSum: bigint },
+				subnet
+			) => {
 				return {
-					totalSum: totalSum + BigInt(subnet.raoRecycled),
-					daySum: daySum + BigInt(subnet.raoRecycled24H),
+					totalSum: totalSum + BigInt(subnet.recycledLifetime),
+					daySum: daySum + BigInt(subnet.recycled24H),
+					ownerSum: ownerSum + BigInt(subnet.recycledByOwner),
 				};
 			},
-			{ totalSum: BigInt(0), daySum: BigInt(0) }
+			{ totalSum: BigInt(0), daySum: BigInt(0), ownerSum: BigInt(0) }
 		);
 		return [
 			...subnets.data,
 			{
-				raoRecycled: totalSum,
-				raoRecycled24H: daySum,
+				recycledLifetime: totalSum,
+				recycled24H: daySum,
+				recycledByOwner: ownerSum,
 			},
 		] as Subnet[];
 	}, [subnets]);
@@ -188,25 +201,25 @@ function SubnetsTable(props: SubnetsTableProps) {
 			/>
 			<SubnetsTableAttribute
 				label="Recycled"
-				render={({ raoRecycled }) => {
+				render={({ recycledByOwner }) => {
 					return (
 						<>
 							{nFormatter(
-								rawAmountToDecimal(raoRecycled.toString()).toNumber(),
+								rawAmountToDecimal(recycledByOwner.toString()).toNumber(),
 								2
 							).toString() + ` ${NETWORK_CONFIG.currency}`}
 						</>
 					);
 				}}
 				sortable
-				sortProperty="raoRecycled"
+				sortProperty="recycledByOwner"
 			/>
 			<SubnetsTableAttribute
 				label="Recycled(24h)"
-				render={({ raoRecycled24H }) => {
+				render={({ recycledLifetime }) => {
 					return (
 						<Currency
-							amount={raoRecycled24H}
+							amount={recycledLifetime}
 							currency={currency}
 							decimalPlaces={2}
 							showFullInTooltip
@@ -214,7 +227,22 @@ function SubnetsTable(props: SubnetsTableProps) {
 					);
 				}}
 				sortable
-				sortProperty="raoRecycled24H"
+				sortProperty="recycledLifetime"
+			/>
+			<SubnetsTableAttribute
+				label="Lifetime"
+				render={({ recycledLifetime }) => {
+					return (
+						<>
+							{nFormatter(
+								rawAmountToDecimal(recycledLifetime.toString()).toNumber(),
+								2
+							).toString() + ` ${NETWORK_CONFIG.currency}`}
+						</>
+					);
+				}}
+				sortable
+				sortProperty="recycledLifetime"
 			/>
 		</ItemsTable>
 	);
