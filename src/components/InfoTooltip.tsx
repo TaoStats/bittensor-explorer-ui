@@ -2,14 +2,27 @@
 import { Tooltip } from "@mui/material";
 
 export type InfoTooltipProps = {
-	value: string|null|undefined;
-}
+	value: string | null | undefined;
+	place?:
+	| "top"
+	| "bottom-end"
+	| "bottom-start"
+	| "bottom"
+	| "left-end"
+	| "left-start"
+	| "left"
+	| "right-end"
+	| "right-start"
+	| "right"
+	| "top-end"
+	| "top-start";
+};
 
 const InfoTooltip = (props: InfoTooltipProps) => {
-	const {value} = props;
+	const { value, place } = props;
 
 	return (
-		<Tooltip arrow placement="top" title={value}>
+		<Tooltip arrow placement={place ?? "top"} title={value}>
 			<svg
 				width="14"
 				height="14"
