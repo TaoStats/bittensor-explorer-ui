@@ -19,11 +19,13 @@ export const config = {
 	},
 };
 
-export const DICTIONARY_ENDPOINT = process.env.REACT_APP_DICTIONARY_ENDPOINT || "";
+export const DICTIONARY_ENDPOINT =
+	process.env.REACT_APP_DICTIONARY_ENDPOINT || "";
 export const INDEXER_ENDPOINT = process.env.REACT_APP_INDEXER_ENDPOINT || "";
-export const HISTORICAL_ENDPOINT = process.env.REACT_APP_HISTORICAL_ENDPOINT || "";
-export const TAOSTATS_DATA_ENDPOINT = process.env.REACT_APP_TAOSTATS_DATA_ENDPOINT || "";
-export const RPC_ENDPOINT = process.env.REACT_APP_RPC_ENDPOINT || "";
+export const HISTORICAL_ENDPOINT =
+	process.env.REACT_APP_HISTORICAL_ENDPOINT || "";
+export const TAOSTATS_DATA_ENDPOINT =
+	process.env.REACT_APP_TAOSTATS_DATA_ENDPOINT || "";
 
 export const NETWORK_CONFIG = {
 	currency: "𝞃",

@@ -5,17 +5,15 @@ import { Provider as RollbarProvider } from "@rollbar/react";
 import { theme } from "./theme";
 import { rollbar } from "./rollbar";
 import { router } from "./router";
-import { ApiContextProvider, StatsContextProvider } from "./contexts";
+import { StatsContextProvider } from "./contexts";
 
 function App() {
 	return (
 		<RollbarProvider instance={rollbar}>
 			<ThemeProvider theme={theme}>
-				<ApiContextProvider>
-					<StatsContextProvider>
-						<RouterProvider router={router} />
-					</StatsContextProvider>
-				</ApiContextProvider>
+				<StatsContextProvider>
+					<RouterProvider router={router} />
+				</StatsContextProvider>
 			</ThemeProvider>
 		</RollbarProvider>
 	);
