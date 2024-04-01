@@ -237,8 +237,7 @@ export const Header = () => {
 																return (
 																	<li key={`subnet-menu-item-${itemIndex}`}>
 																		<a href={`/subnet/${netUid}`}>
-																			{netUid < 10 ? "0" : ""}
-																			{netUid} - {name}
+																			{netUid}: {name}
 																		</a>
 																	</li>
 																);
