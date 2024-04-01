@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { SubnetTaoRecycled24HHistoryChart } from "../components/subnets/SubnetTaoRecycled24HHistoryChart";
 import Spinner from "../components/Spinner";
-import { formatNumber, rawAmountToDecimal } from "../utils/number";
+import { containsOnlyDigits, formatNumber, rawAmountToDecimal } from "../utils/number";
 import { NETWORK_CONFIG } from "../config";
 import { useNeuronRegCostHistory } from "../hooks/useNeuronRegCostHistory";
 import { NeuronRegistrationChart } from "../components/subnets/NeuronRegistrationChart";
@@ -183,7 +183,7 @@ export const SubnetPage = () => {
 						includesInsensitive: searchText,
 					},
 				},
-				...(searchText ? [{ uid: { equalTo: parseInt(searchText) } }]: [])
+				...(searchText && containsOnlyDigits(searchText) ? [{ uid: { equalTo: parseInt(searchText) } }]: [])
 			],
 		},
 		neuronMetagraphSort

@@ -172,3 +172,7 @@ export function numberToIP(val: number | string) {
 	const ipStr = part4 + "." + part3 + "." + part2 + "." + part1;
 	return ipStr.slice(0, 7) + "xx.xx";
 }
+
+export function containsOnlyDigits(str: string) {
+	return /^\d+$/.test(str);
+}
