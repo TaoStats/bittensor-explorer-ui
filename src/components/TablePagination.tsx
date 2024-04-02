@@ -6,35 +6,35 @@ import { theme } from "../theme";
 import { formatNumber } from "../utils/number";
 
 const paginationStyle = css`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
-  padding: 0 0 0 10px;
-  font-size: 14px;
-  @media (max-width: 999px) {
-    flex-direction: column;
-    gap: 5px;
-  }
+	display: flex;
+	justify-content: space-between;
+	margin-top: 16px;
+	padding: 0 0 0 10px;
+	font-size: 14px;
+	@media (max-width: 999px) {
+		flex-direction: column;
+		gap: 5px;
+	}
 `;
 
 const pagesStyle = css`
-  display: flex;
-  gap: 3px;
+	display: flex;
+	gap: 3px;
 `;
 
 const disabledPageStyle = css`
-  color: ${theme.palette.secondary.main};
-  padding: 0 10px;
+	color: ${theme.palette.secondary.main};
+	padding: 0 10px;
 `;
 
 const pageStyle = (theme: Theme) => css`
-  color: ${theme.palette.secondary.main};
-  cursor: pointer;
-  padding: 0 10px;
+	color: ${theme.palette.secondary.main};
+	cursor: pointer;
+	padding: 0 10px;
 
-  &:hover {
-    color: ${theme.palette.secondary.light};
-  }
+	&:hover {
+		color: ${theme.palette.secondary.light};
+	}
 `;
 
 type TablePaginationProps = Pagination;
@@ -47,6 +47,7 @@ export function TablePagination(props: TablePaginationProps) {
 	const {
 		hasNextPage,
 		hasPreviousPage,
+		page,
 		limit,
 		offset,
 		setNextPage,
@@ -60,7 +61,7 @@ export function TablePagination(props: TablePaginationProps) {
 				css={disabled ? disabledPageStyle : pageStyle}
 				onClick={() => !disabled && setPreviousPage()}
 			>
-        &#9664; Previous
+				&#9664; Previous
 			</div>
 		);
 	};
@@ -71,7 +72,7 @@ export function TablePagination(props: TablePaginationProps) {
 				css={disabled ? disabledPageStyle : pageStyle}
 				onClick={() => !disabled && setNextPage()}
 			>
-        Next &#9654;
+				Next &#9654;
 			</div>
 		);
 	};
@@ -82,11 +83,12 @@ export function TablePagination(props: TablePaginationProps) {
 	return (
 		<div css={paginationStyle}>
 			<div css={disabledPageStyle}>
-        Showing {formatNumber(startOffset)} to {formatNumber(endOffset)} of{" "}
+				Showing {formatNumber(startOffset)} to {formatNumber(endOffset)} of{" "}
 				{formatNumber(totalCount ?? 0)} entries
 			</div>
 			<div css={pagesStyle}>
 				<PrevPage disabled={!hasPreviousPage} />
+				{page}
 				<NextPage disabled={!hasNextPage} />
 			</div>
 		</div>
