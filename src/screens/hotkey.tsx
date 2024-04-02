@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Navigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Theme, css } from "@emotion/react";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import { Link } from "../components/Link";
@@ -10,7 +10,6 @@ import { useAppStats } from "../contexts";
 import { NeuronMetagraph } from "../model/subnet";
 import { useMemo } from "react";
 import InfoTooltip from "../components/InfoTooltip";
-import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 
 const hotkeyStyle = css`
 	display: flex;
@@ -86,11 +85,6 @@ export const HotkeyPage = () => {
 	const {
 		state: { chainStats },
 	} = useAppStats();
-
-	const verifiedDelegates = useVerifiedDelegates();
-	if (verifiedDelegates[hkey]) {
-		return <Navigate to={`/validator/${hkey}`} replace />;
-	}
 
 	return (
 		<>
