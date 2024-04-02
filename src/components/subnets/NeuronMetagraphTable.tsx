@@ -206,10 +206,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				label="uid"
 				sortable
 				render={(data) => (
-					<Link
-						to={`https://taostats.io/hotkey/?hkey=${data.hotkey}`}
-						css={boldText}
-					>
+					<Link to={`/hotkey/${data.hotkey}`} css={boldText}>
 						{data.uid}
 					</Link>
 				)}
