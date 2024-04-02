@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Navigate, redirect, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Theme, css } from "@emotion/react";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import { Link } from "../components/Link";
@@ -104,7 +104,7 @@ export const HotkeyPage = () => {
 			<div css={hotkeyStyle}>
 				<span css={labelStyle}>Account: </span>
 				<div css={valueStyle}>
-					<Link href={`/account/${hkey}`} color="white" target="_blank">
+					<Link href={`/account/${hkey}`} color="white" target="_self">
 						/account/{hkey} ▶
 					</Link>
 				</div>
