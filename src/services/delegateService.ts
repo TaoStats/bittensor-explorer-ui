@@ -65,8 +65,7 @@ export async function fetchVerifiedDelegates() {
 
 	if (res.status !== 200) return {};
 
-	let delegates: Record<string, DelegateInfo> = {};
-	if (res.status === 200) delegates = await res.json();
+	const delegates: Record<string, DelegateInfo> = await res.json();
 
 	return delegates;
 }
