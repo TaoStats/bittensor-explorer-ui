@@ -9,6 +9,7 @@ export type PaginationState = {
 	page: number;
 	prevEndCursor: string[];
 	prevPage: number;
+	pageNumbers: boolean;
 	totalCount?: number;
 };
 
@@ -16,6 +17,7 @@ export type Pagination = PaginationState & {
 	set: (pagination: Partial<PaginationState>) => void;
 	setPreviousPage: () => void;
 	setNextPage: () => void;
+	setPage: (page: number) => void;
 	pageSizes: number[];
 };
 
@@ -23,7 +25,7 @@ export type UsePaginationProps = {
 	limit?: number;
 };
 
-export function usePagination(limit = 10) {
+export function usePagination(limit = 10, pageNumbers = false) {
 	const pageSizes = [10, 25, 50, 100];
 	const [state, setState] = useState<PaginationState>({
 		endCursor: "",
@@ -34,11 +36,12 @@ export function usePagination(limit = 10) {
 		page: 1,
 		prevEndCursor: [],
 		prevPage: 1,
+		pageNumbers,
 		totalCount: 0,
 	});
 
 	const setPreviousPage = useCallback(() => {
-		if (!state.hasPreviousPage) {
+		if (state.pageNumbers ? state.page === 1 : !state.hasPreviousPage) {
 			return;
 		}
 		setState({
@@ -51,7 +54,8 @@ export function usePagination(limit = 10) {
 	}, [state]);
 
 	const setNextPage = useCallback(() => {
-		if (!state.hasNextPage) {
+		const maxPage = Math.ceil((state.totalCount ?? 1) / state.limit);
+		if (state.pageNumbers ? state.page === maxPage : !state.hasNextPage) {
 			return;
 		}
 		setState({
@@ -62,6 +66,17 @@ export function usePagination(limit = 10) {
 			prevPage: state.page,
 		});
 	}, [state]);
+
+	const setPage = useCallback(
+		(page: number) => {
+			setState({
+				...state,
+				offset: state.limit * (page - 1) + 1,
+				page: page,
+			});
+		},
+		[state]
+	);
 
 	const set = useCallback(
 		(newState: Partial<Pagination>) => {
@@ -82,6 +97,7 @@ export function usePagination(limit = 10) {
 				set,
 				setPreviousPage,
 				setNextPage,
+				setPage,
 			} as Pagination),
 		[state, setPreviousPage, setNextPage, setState]
 	);

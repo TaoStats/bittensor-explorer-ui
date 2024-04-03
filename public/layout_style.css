@@ -528,6 +528,31 @@ textarea {
 }
 
 .apexcharts-toolbar {
+    z-index: 1!important;
+    top: -24px!important
+}
+
+.blur-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    z-index: 2;
+    background-color: rgba(18,18,18,.8);
+    opacity: 0;
+    visibility: hidden;
+    transition: all .5s
+}
+
+.active-overlay .blur-overlay {
+    opacity: 1;
+    visibility: visible
+}
+
+.apexcharts-toolbar {
 	z-index: 1 !important;
 	top: -24px !important;
 }

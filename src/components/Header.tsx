@@ -32,6 +32,14 @@ export const Header = () => {
 	const totalSubnets = subnetIDs.length;
 	const subnetMenuColumn = 3;
 
+	const onSubMenuMouseEnter = () => {
+		document.body.classList.add("active-overlay");
+	};
+
+	const onSubMenuMouseLeave = () => {
+		document.body.classList.remove("active-overlay");
+	};
+
 	return (
 		<header className="new-site-header">
 			<div className="header-top">
@@ -203,7 +211,11 @@ export const Header = () => {
 											<a href="https://taostats.io">Home</a>
 											<span className="menuItem-glow" />
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="https://taostats.io/subnets/">
 												Subnets
 												<span
@@ -249,7 +261,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
-										<li className="current-menu-item menu-item-has-children">
+										<li
+											className="current-menu-item menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="/">
 												Blockchain
 												<span
@@ -290,7 +306,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="https://taostats.io/verified-validators/">
 												Validators
 												<span
@@ -312,7 +332,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="https://taostats.io/developers/">
 												Developers
 												<span
@@ -330,7 +354,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow" />
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="#">
 												Resources
 												<span

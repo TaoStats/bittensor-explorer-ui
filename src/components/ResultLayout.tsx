@@ -34,6 +34,7 @@ const contentStyle = css`
 export const ResultLayout = () => {
 	return (
 		<div css={containerStyle}>
+			<div className="blur-overlay" />
 			<Header />
 			<div css={contentWrapperStyle}>
 				<div css={contentStyle}>

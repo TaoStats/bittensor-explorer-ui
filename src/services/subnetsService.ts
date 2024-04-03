@@ -386,8 +386,8 @@ export async function getNeuronMetagraph(
 	const response = await fetchSubnets<{
 		neuronInfos: ResponseItems<NeuronMetagraph>;
 	}>(
-		`query ($first: Int!, $after: Cursor, $filter: NeuronInfoFilter, $order: [NeuronInfosOrderBy!]!) {
-			neuronInfos(first: $first, after: $after, filter: $filter, orderBy: $order) {
+		`query ($first: Int!, $offset: Int!, $filter: NeuronInfoFilter, $order: [NeuronInfosOrderBy!]!) {
+			neuronInfos(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
 				nodes {
 					id
 					active
@@ -416,11 +416,11 @@ export async function getNeuronMetagraph(
 					hasNextPage
 					hasPreviousPage
 				}
-				${pagination.after === undefined ? "totalCount" : ""}
+				totalCount
 			}
 		}`,
 		{
-			after: pagination.after,
+			offset: (pagination.offset ?? 1) - 1,
 			first: pagination.limit,
 			filter,
 			order,
