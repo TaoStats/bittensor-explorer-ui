@@ -10,6 +10,7 @@ import { useAppStats } from "../contexts";
 import { NeuronMetagraph } from "../model/subnet";
 import { useMemo } from "react";
 import InfoTooltip from "../components/InfoTooltip";
+import { BlockTimestamp } from "../components/BlockTimestamp";
 
 const hotkeyStyle = css`
 	display: flex;
@@ -36,29 +37,23 @@ const valueStyle = css`
 `;
 
 const netsStyle = css`
-	display: flex;
-	flex-direction: column;
-	gap: 25px;
 	margin-top: 30px;
-`;
+	text-align: left;
 
-const netStyle = css`
-	display: flex;
-	flex-direction: row;
-	gap: 25px;
-`;
-
-const netItemStyle = css`
-	display: flex;
-	flex-direction: column;
+	& > tr > th:first-of-type,
+	& > tr > td:first-of-type {
+		padding-left: 0;
+	}
 `;
 
 const netItemLabelStyle = (theme: Theme) => css`
 	font-size: 13px;
 	color: ${theme.palette.secondary.dark};
 	min-width: 35px;
+`;
+
+const verticalCenterStyle = css`
 	display: flex;
-	flex-direction: row;
 	align-items: center;
 	gap: 3px;
 `;
@@ -91,75 +86,76 @@ export const HotkeyPage = () => {
 			<div css={hotkeyStyle}>
 				<span css={labelStyle}>Hotkey: </span>
 				<div css={valueStyle}>
-					{hkey}
-					<CopyToClipboardButton value={hkey} bg="white" size="small" />
-				</div>
-			</div>
-			<div css={hotkeyStyle}>
-				<span css={labelStyle}>Account: </span>
-				<div css={valueStyle}>
 					<Link href={`/account/${hkey}`} color="white" target="_self">
-						/account/{hkey} ▶
+						{hkey} ▶
 					</Link>
+					<CopyToClipboardButton value={hkey} bg="white" size="small" />
 				</div>
 			</div>
 			{coldkey && (
 				<div css={hotkeyStyle}>
 					<span css={labelStyle}>Coldkey: </span>
 					<div css={valueStyle}>
-						{coldkey}
+						<Link href={`/coldkey/${coldkey}`} color="white" target="_self">
+							{coldkey} ▶
+						</Link>
 						<CopyToClipboardButton value={coldkey} bg="white" size="small" />
 					</div>
 				</div>
 			)}
-			<div css={netsStyle}>
+			<table css={netsStyle}>
+				<tr>
+					<th css={netItemLabelStyle}>NetUID</th>
+					<th css={netItemLabelStyle}>Position</th>
+					<th css={netItemLabelStyle}>UID</th>
+					<th css={netItemLabelStyle}>Registered(UTC)</th>
+					<th css={netItemLabelStyle}>Daily Rewards</th>
+					<th css={netItemLabelStyle}>Incentive</th>
+					<th css={[netItemLabelStyle, verticalCenterStyle]}>
+						Updated
+						<InfoTooltip
+							place="bottom"
+							value="This is a performance metric that shows the last time that weights were set on the chain by this hotkey. A higher value over 500 indicates a longer than optimum time to perform this action, which can be an early sign of validator or chain issues if experienced across multiple UIDs. Sustained numbers above 500 for longer periods of time require attention."
+						/>
+					</th>
+					<th css={netItemLabelStyle}>Axon</th>
+				</tr>
 				{neuronMetagraph.data.map((meta, index) => (
-					<div css={netStyle} key={`metagraph_${index}`}>
-						<div css={netItemStyle}>
-							<span css={netItemLabelStyle}>NetUID</span>
-							<span css={netItemValueStyle}>{meta.netUid}</span>
-						</div>
-						<div css={netItemStyle}>
-							<span css={netItemLabelStyle}>Position</span>
-							<span css={netItemValueStyle}>{meta.rank}</span>
-						</div>
-						<div css={netItemStyle}>
-							<span css={netItemLabelStyle}>UID</span>
-							<span css={netItemValueStyle}>{meta.uid}</span>
-						</div>
-						<div css={netItemStyle}>
-							<span css={netItemLabelStyle}>Daily Rewards</span>
-							<span css={netItemValueStyle}>
-								{formatNumber(rawAmountToDecimal(meta.dailyReward.toString()), {
-									decimalPlaces: 3,
-								})}
-								{NETWORK_CONFIG.currency}
-							</span>
-						</div>
-						<div css={netItemStyle}>
-							<span css={netItemLabelStyle}>
-								Updated
-								<InfoTooltip
-									place="bottom"
-									value="This is a performance metric that shows the last time that weights were set on the chain by this hotkey. A higher value over 500 indicates a longer than optimum time to perform this action, which can be an early sign of validator or chain issues if experienced across multiple UIDs. Sustained numbers above 500 for longer periods of time require attention."
-								/>
-							</span>
-							<span css={netItemValueStyle}>
-								{chainStats
-									? parseInt(chainStats.blocksFinalized.toString()) -
-									meta.lastUpdate
-									: 0}
-							</span>
-						</div>
-						<div css={netItemStyle}>
-							<span css={netItemLabelStyle}>Axon</span>
-							<span css={netItemValueStyle}>
-								{numberToIP(parseInt(meta.axonIp.toString()))}
-							</span>
-						</div>
-					</div>
+					<tr key={`metagraph_${index}`}>
+						<td css={netItemValueStyle}>{meta.netUid}</td>
+						<td css={netItemValueStyle}>{meta.rank}</td>
+						<td css={netItemValueStyle}>{meta.uid}</td>
+						<td css={netItemValueStyle}>
+							<BlockTimestamp
+								blockHeight={meta.registeredAt}
+								utc
+								timezone={false}
+								tooltip
+							/>
+						</td>
+						<td css={netItemValueStyle}>
+							{formatNumber(rawAmountToDecimal(meta.dailyReward.toString()), {
+								decimalPlaces: 3,
+							})}
+							{NETWORK_CONFIG.currency}
+						</td>
+						<td css={netItemValueStyle}>
+							{formatNumber(meta.incentive / 65535, {
+								decimalPlaces: 5,
+							})}
+						</td>
+						<td css={netItemValueStyle}>
+							{chainStats
+								? parseInt(chainStats.blocksFinalized.toString()) -
+								meta.lastUpdate
+								: 0}
+						</td>
+						<td css={netItemValueStyle}>
+							{numberToIP(parseInt(meta.axonIp.toString()))}
+						</td>
+					</tr>
 				))}
-			</div>
+			</table>
 		</>
 	);
 };

@@ -404,6 +404,7 @@ export async function getNeuronMetagraph(
 					lastUpdate
 					netUid
 					rank
+					registeredAt
 					stake
 					totalReward
 					uid

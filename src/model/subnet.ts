@@ -128,6 +128,7 @@ export type NeuronMetagraph = {
 	lastUpdate: number;
 	netUid: number;
 	rank: number;
+	registeredAt: bigint;
 	stake: bigint;
 	totalReward: bigint;
 	uid: number;
