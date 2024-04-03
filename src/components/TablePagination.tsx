@@ -2,8 +2,8 @@
 import { Theme, css } from "@mui/material";
 
 import { Pagination } from "../hooks/usePagination";
-import { theme } from "../theme";
 import { formatNumber } from "../utils/number";
+import { useMemo } from "react";
 
 const paginationStyle = css`
 	display: flex;
@@ -22,7 +22,7 @@ const pagesStyle = css`
 	gap: 3px;
 `;
 
-const disabledPageStyle = css`
+const disabledPageStyle = (theme: Theme) => css`
 	color: ${theme.palette.secondary.main};
 	padding: 0 10px;
 `;
@@ -35,6 +35,23 @@ const pageStyle = (theme: Theme) => css`
 	&:hover {
 		color: ${theme.palette.secondary.light};
 	}
+`;
+
+const activePage = (theme: Theme) => css`
+	color: ${theme.palette.secondary.light};
+`;
+
+const inactivePage = (theme: Theme) => css`
+	color: ${theme.palette.secondary.main};
+	cursor: pointer;
+
+	&:hover {
+		color: ${theme.palette.secondary.light};
+	}
+`;
+
+const disabledPage = (theme: Theme) => css`
+	color: ${theme.palette.secondary.main};
 `;
 
 type TablePaginationProps = Pagination;
@@ -52,7 +69,9 @@ export function TablePagination(props: TablePaginationProps) {
 		offset,
 		setNextPage,
 		setPreviousPage,
+		setPage,
 		totalCount,
+		pageNumbers,
 	} = props;
 
 	const PrevPage = ({ disabled }: PageNavProps) => {
@@ -79,6 +98,31 @@ export function TablePagination(props: TablePaginationProps) {
 
 	const startOffset = Math.min(offset, totalCount ?? 0);
 	const endOffset = Math.min(offset + limit - 1, totalCount ?? 0);
+	const maxPage = Math.ceil((totalCount ?? 1) / limit);
+
+	const availablePages = useMemo(() => {
+		const pages: number[] = [];
+
+		const adjust = Math.max(Math.min(page, maxPage - 2), 3);
+		let left = Math.max(adjust - 2, 1),
+			right = Math.min(adjust + 2, maxPage);
+
+		if (left <= 3) left = 1;
+		else {
+			pages.push(1);
+			pages.push(-1);
+		}
+		if (right >= maxPage - 2) right = maxPage;
+		for (let i = left; i <= right; i++) {
+			pages.push(i);
+		}
+		if (right < maxPage - 2) {
+			pages.push(-1);
+			pages.push(maxPage);
+		}
+
+		return pages;
+	}, [page]);
 
 	return (
 		<div css={paginationStyle}>
@@ -87,9 +131,23 @@ export function TablePagination(props: TablePaginationProps) {
 				{formatNumber(totalCount ?? 0)} entries
 			</div>
 			<div css={pagesStyle}>
-				<PrevPage disabled={!hasPreviousPage} />
-				{page}
-				<NextPage disabled={!hasNextPage} />
+				<PrevPage disabled={pageNumbers ? page === 1 : !hasPreviousPage} />
+				{pageNumbers &&
+					availablePages.map((candidate: number) => (
+						<span
+							css={
+								candidate === -1
+									? disabledPage
+									: candidate === page
+										? activePage
+										: inactivePage
+							}
+							onClick={() => setPage(candidate)}
+						>
+							{candidate === -1 ? "..." : candidate}
+						</span>
+					))}
+				<NextPage disabled={pageNumbers ? page === maxPage : !hasNextPage} />
 			</div>
 		</div>
 	);

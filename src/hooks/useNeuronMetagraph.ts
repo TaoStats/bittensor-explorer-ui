@@ -5,12 +5,17 @@ import {
 	getNeuronMetagraph,
 } from "../services/subnetsService";
 
-import { usePaginatedResource } from "./usePaginatedResource";
+import { useFullPaginatedResource } from "./useFullPaginatedResource";
 
 export function useNeuronMetagraph(
 	filter: NeuronMetagraphFilter | undefined,
 	order?: NeuronMetagraphOrder,
 	options?: FetchOptions
 ) {
-	return usePaginatedResource(getNeuronMetagraph, [filter, order], options, 25);
+	return useFullPaginatedResource(
+		getNeuronMetagraph,
+		[filter, order],
+		options,
+		25
+	);
 }
