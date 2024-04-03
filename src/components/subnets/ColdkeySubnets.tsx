@@ -4,6 +4,7 @@ import NeuronMetagraphTable from "./NeuronMetagraphTable";
 import { useNeuronMetagraph } from "../../hooks/useNeuronMetagraph";
 import { useState } from "react";
 import { NeuronMetagraphOrder } from "../../services/subnetsService";
+import { Link } from "../Link";
 
 const containerCss = css`
 	display: flex;
@@ -12,7 +13,7 @@ const containerCss = css`
 `;
 
 const subnetTitleCss = css`
-	color: white;
+	text-decoration: underline;
 `;
 
 type ColdkeySubnetsProps = {
@@ -24,36 +25,28 @@ export const ColdkeySubnets = ({ netUid, coldkey }: ColdkeySubnetsProps) => {
 	const neuronMetagraphInitialOrder: NeuronMetagraphOrder = "STAKE_DESC";
 	const [neuronMetagraphSort, setNeuronMetagraphSort] =
 		useState<NeuronMetagraphOrder>(neuronMetagraphInitialOrder);
-	const metagraphInitialSearch = "";
-	const [searchText, setSearchText] = useState<string | undefined>(
-		metagraphInitialSearch
-	);
 	const neuronMetagraph = useNeuronMetagraph(
 		{
 			netUid: { equalTo: netUid },
 			coldkey: { equalTo: coldkey },
-			or: [
-				{
-					hotkey: {
-						includesInsensitive: searchText,
-					},
-				},
-			],
 		},
 		neuronMetagraphSort
 	);
 
 	return (
 		<div css={containerCss}>
-			<h2 css={subnetTitleCss}>Subnet {netUid}</h2>
+			<h2 css={subnetTitleCss}>
+				<Link to={`/subnet/${netUid}`} color="white">
+					Subnet {netUid}
+				</Link>
+			</h2>
 			<NeuronMetagraphTable
 				metagraph={neuronMetagraph}
 				onSortChange={(sortKey: NeuronMetagraphOrder) =>
 					setNeuronMetagraphSort(sortKey)
 				}
 				initialSort={neuronMetagraphInitialOrder}
-				onSearchChange={(newSearch?: string) => setSearchText(newSearch)}
-				initialSearch={metagraphInitialSearch}
+				showAll={true}
 			/>
 		</div>
 	);
