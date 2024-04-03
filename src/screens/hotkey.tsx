@@ -122,7 +122,11 @@ export const HotkeyPage = () => {
 				</tr>
 				{neuronMetagraph.data.map((meta, index) => (
 					<tr key={`metagraph_${index}`}>
-						<td css={netItemValueStyle}>{meta.netUid}</td>
+						<td css={netItemValueStyle}>
+							<Link href={`/subnet/${meta.netUid}`} color="white" target="_self">
+								{meta.netUid}
+							</Link>
+						</td>
 						<td css={netItemValueStyle}>{meta.rank}</td>
 						<td css={netItemValueStyle}>{meta.uid}</td>
 						<td css={netItemValueStyle}>
