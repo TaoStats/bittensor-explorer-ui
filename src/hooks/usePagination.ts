@@ -36,7 +36,7 @@ export function usePagination(limit = 10, pageNumbers = false) {
 		page: 1,
 		prevEndCursor: [],
 		prevPage: 1,
-		pageNumbers: pageNumbers,
+		pageNumbers,
 		totalCount: 0,
 	});
 
