@@ -204,7 +204,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 			} as NeuronMetagraph);
 		}
 
-		return result.concat(metagraph.data);
+		return [...metagraph.data, ...result];
 	}, [metagraph, showAll]);
 
 	return (
@@ -398,10 +398,9 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<span css={orangeText}>
-						{data.axonIp >= 0 &&
-							formatNumber(rawAmountToDecimal(data.dailyReward.toString()), {
-								decimalPlaces: 3,
-							})}
+						{formatNumber(rawAmountToDecimal(data.dailyReward.toString()), {
+							decimalPlaces: 3,
+						})}
 					</span>
 				)}
 				sortProperty="dailyReward"
