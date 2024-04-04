@@ -12,10 +12,6 @@ const containerCss = css`
 	gap: 15px;
 `;
 
-const subnetTitleCss = css`
-	text-decoration: underline;
-`;
-
 type ColdkeySubnetsProps = {
 	netUid: number;
 	coldkey: string;
@@ -35,10 +31,8 @@ export const ColdkeySubnets = ({ netUid, coldkey }: ColdkeySubnetsProps) => {
 
 	return (
 		<div css={containerCss}>
-			<h2 css={subnetTitleCss}>
-				<Link to={`/subnet/${netUid}`} color="white">
-					Subnet {netUid}
-				</Link>
+			<h2>
+				<Link to={`/subnet/${netUid}`}>Subnet {netUid}</Link>
 			</h2>
 			<NeuronMetagraphTable
 				metagraph={neuronMetagraph}
