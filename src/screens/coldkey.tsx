@@ -5,9 +5,12 @@ import { css } from "@emotion/react";
 import Certification from "../assets/certification.svg";
 import { useColdKeySubnets } from "../hooks/useColdKeySubnets";
 import { ColdkeySubnets } from "../components/subnets/ColdkeySubnets";
+import { useColdKeyInfo } from "../hooks/useColdKeyInfo";
+import { ColdkeyInfoTable } from "../components/subnets/ColdkeyInfoTable";
 
 const metagraphComment = () => css`
 	font-size: 13px;
+	margin-top: 50px;
 	margin-bottom: 25px;
 `;
 
@@ -22,6 +25,7 @@ const subnetColdkeys = css`
 	display: flex;
 	flex-direction: column;
 	gap: 50px;
+	margin-top: 50px;
 `;
 
 export type ColdkeyPageParams = {
@@ -31,11 +35,13 @@ export type ColdkeyPageParams = {
 export const ColdkeyPage = () => {
 	const { coldkey } = useParams() as ColdkeyPageParams;
 	const subnetIds = useColdKeySubnets({ coldkey: { equalTo: coldkey } });
+	const coldkeyInfo = useColdKeyInfo({ coldkey: { equalTo: coldkey } });
 
 	useDOMEventTrigger("data-loaded", !subnetIds.loading);
 
 	return (
 		<>
+			<ColdkeyInfoTable info={coldkeyInfo} />
 			<div css={metagraphComment}>
 				<div>Click on any UID for detailed stats.</div>
 				<div css={validatorComment}>

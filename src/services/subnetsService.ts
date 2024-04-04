@@ -704,6 +704,31 @@ export async function getColdkeySubnets(filter: NeuronMetagraphFilter) {
 	return extractItems(response.neuronInfos, { limit: 1024 }, transform);
 }
 
+export async function getColdkeyInfo(filter: NeuronMetagraphFilter) {
+	const response = await fetchSubnets<{
+		neuronInfos: ResponseItems<NeuronMetagraph>;
+	}>(
+		`query($filter: NeuronInfoFilter) {
+			neuronInfos(filter: $filter) {
+				nodes {
+					hotkey
+					stake
+					dailyReward
+				}
+				pageInfo {
+					hasNextPage
+					endCursor
+				}
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	return extractItems(response.neuronInfos, { limit: 1024 }, transform);
+}
+
 function addSubnetName<T extends { netUid: number; name?: string }>(
 	subnet: T,
 	subnetNames: Record<string, Record<string, string>>
