@@ -18,6 +18,7 @@ import {
 	MinerIPPaginatedResponse,
 	MinerIncentive,
 	MinerIncentivePaginatedResponse,
+	NeuronPerformance,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -28,6 +29,7 @@ import { fetchSubnets } from "./fetchService";
 export type SubnetsFilter = object;
 export type SingleSubnetStatsFilter = object;
 export type NeuronMetagraphFilter = object;
+export type NeuronPerformanceFilter = object;
 export type NeuronRegEventsFilter = object;
 
 export type SubnetsOrder =
@@ -93,8 +95,6 @@ export type NeuronMetagraphOrder =
 	| "RANK_DESC"
 	| "STAKE_ASC"
 	| "STAKE_DESC"
-	| "TOTAL_REWARD_ASC"
-	| "TOTAL_REWARD_DESC"
 	| "TRUST_ASC"
 	| "TRUST_DESC"
 	| "UID_ASC"
@@ -103,6 +103,12 @@ export type NeuronMetagraphOrder =
 	| "VALIDATOR_PERMIT_DESC"
 	| "VALIDATOR_TRUST_ASC"
 	| "VALIDATOR_TRUST_DESC";
+
+export type NeuronPerformanceOrder =
+	| "ID_ASC"
+	| "ID_DESC"
+	| "HEIGHT_ASC"
+	| "HEIGHT_DESC";
 
 export type NeuronRegEventsOrder =
 	| "ID_ASC"
@@ -406,7 +412,6 @@ export async function getNeuronMetagraph(
 					rank
 					registeredAt
 					stake
-					totalReward
 					uid
 					trust
 					validatorPermit
@@ -429,6 +434,42 @@ export async function getNeuronMetagraph(
 	);
 
 	return extractItems(response.neuronInfos, pagination, transform);
+}
+
+export async function getNeuronPerformance(
+	filter: NeuronPerformanceFilter | undefined,
+	order: NeuronPerformanceOrder = "ID_DESC",
+	pagination: PaginationOptions
+) {
+	const response = await fetchSubnets<{
+		neuronPerformances: ResponseItems<NeuronPerformance>;
+	}>(
+		`query ($first: Int!, $offset: Int!, $filter: NeuronPerformanceFilter, $order: [NeuronPerformancesOrderBy!]!) {
+			neuronPerformances(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+				nodes {
+					id
+					emission
+					height
+					timestamp
+					updated
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+					hasPreviousPage
+				}
+				totalCount
+			}
+		}`,
+		{
+			offset: (pagination.offset ?? 1) - 1,
+			first: pagination.limit,
+			filter,
+			order,
+		}
+	);
+
+	return extractItems(response.neuronPerformances, pagination, transform);
 }
 
 export async function getNeuronRegEvents(
