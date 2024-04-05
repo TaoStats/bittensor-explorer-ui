@@ -23,7 +23,7 @@ export function useHotkeyNet(hotkey: string) {
 				},
 				"NET_UID_ASC",
 				{
-					limit: 100,
+					limit: 1024,
 				}
 			);
 			setData(result.data);

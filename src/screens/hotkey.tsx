@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { Theme, css } from "@emotion/react";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import { Link } from "../components/Link";
@@ -92,6 +92,7 @@ export type HotkeyPageParams = {
 
 export const HotkeyPage = () => {
 	const { hkey } = useParams() as HotkeyPageParams;
+
 	const neuronMetagraph = useHotkeyNet(hkey);
 	const coldkey = useMemo(() => {
 		if (neuronMetagraph.loading) return undefined;
@@ -100,6 +101,15 @@ export const HotkeyPage = () => {
 			undefined
 		);
 	}, [neuronMetagraph]);
+	const isValidator = useMemo(() => {
+		if (neuronMetagraph.loading) return false;
+		return neuronMetagraph.data.reduce(
+			(_isValidator: boolean, cur: NeuronMetagraph) =>
+				cur.dividends > 0 && rawAmountToDecimal(cur.stake.toString()).gt(1000),
+			false
+		);
+	}, [neuronMetagraph]);
+
 	const {
 		state: { chainStats },
 	} = useAppStats();
@@ -114,6 +124,10 @@ export const HotkeyPage = () => {
 		if (activeSubnet === -1) setActiveSubnet(firstId);
 		return ids;
 	}, [neuronMetagraph]);
+
+	if (isValidator) {
+		return <Navigate to={`/validator/${hkey}`} replace />;
+	}
 
 	return (
 		<>

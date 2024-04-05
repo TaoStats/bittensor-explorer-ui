@@ -206,15 +206,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				label="uid"
 				sortable
 				render={(data) => (
-					<Link
-						to={
-							data.validatorPermit &&
-							rawAmountToDecimal(data.stake.toString()).gt(1000)
-								? `/validator/${data.hotkey}`
-								: `/hotkey/${data.hotkey}`
-						}
-						css={boldText}
-					>
+					<Link to={`/hotkey/${data.hotkey}`} css={boldText}>
 						{data.uid}
 					</Link>
 				)}
