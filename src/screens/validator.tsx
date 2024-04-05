@@ -14,7 +14,7 @@ import {
 	DelegateFilter,
 	DelegatesOrder,
 } from "../services/delegateService";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
@@ -27,73 +27,96 @@ import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidator } from "../hooks/useValidator";
 import { useSubnets } from "../hooks/useSubnets";
 import SubnetsTable from "../components/validators/SubnetsTable";
+import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
 
 const validatorHeader = (theme: Theme) => css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  align-items: center;
-  word-break: keep-all;
-  color: ${theme.palette.text.primary};
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	align-items: center;
+	word-break: keep-all;
+	color: ${theme.palette.text.primary};
 `;
 
 const infoSection = css`
-  display: flex;
-  @media only screen and (max-width: 767px) {
-    flex-direction: column;
-  }
+	display: flex;
+	@media only screen and (max-width: 767px) {
+		flex-direction: column;
+	}
 `;
 
 const validatorInfo = css`
-  display: flex;
-  gap: 10px;
+	display: flex;
+	gap: 10px;
 `;
 
 const validatorAddress = css`
-  opacity: 0.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	opacity: 0.5;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 
 const validatorTitle = css`
-  display: block;
-  opacity: 0.8;
-  width: 144px;
-  font-size: 12px;
+	display: block;
+	opacity: 0.8;
+	width: 144px;
+	font-size: 12px;
 `;
 
 const verifiedBadge = css`
-  background-color: #7aff97;
-  color: #000;
-  font-size: 10px;
-  text-transform: uppercase;
-  padding: 5px;
-  font-weight: 500;
+	background-color: #7aff97;
+	color: #000;
+	font-size: 10px;
+	text-transform: uppercase;
+	padding: 5px;
+	font-weight: 500;
 `;
 
 const website = css`
-  line-height: 18px;
-  cursor: pointer;
+	line-height: 18px;
+	cursor: pointer;
 `;
 
 const validatorDescription = css`
-  padding: 0px 20px 20px;
-  display: block;
-  opacity: 0.8;
-  font-size: 12px;
+	padding: 0px 20px 20px;
+	display: block;
+	opacity: 0.8;
+	font-size: 12px;
 `;
 
 const stakeButton = css`
-  padding: 20px;
+	padding: 20px;
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-  flex: 0 0 auto;
-  width: 400px;
+	flex: 0 0 auto;
+	width: 400px;
 
-  ${theme.breakpoints.down("lg")} {
-    width: auto;
-  }
+	${theme.breakpoints.down("lg")} {
+		width: auto;
+	}
+`;
+
+const perfContainer = css`
+	margin-top: 50px;
+`;
+
+const perfSubnet = css`
+	font-size: 14px;
+	min-width: 32px;
+	height: 32px;
+	background: rgba(255, 255, 255, 0.06);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 2px;
+	padding: 0 8px;
+	margin: 5px 10px;
+	cursor: pointer;
+`;
+
+const activePerfSubnet = css`
+	box-shadow: 0 0 8px 0 #ff990085 inset;
 `;
 
 export type ValidatorPageParams = {
@@ -171,6 +194,14 @@ export const ValidatorPage = () => {
 
 	const subnets = useSubnets(undefined);
 
+	const [activeSubnet, setActiveSubnet] = useState(-1);
+	const subnetIDs = useMemo(() => {
+		const ids: number[] = validator.data?.validatorPermits || [];
+		const firstId = ids[0] ?? -1;
+		if (activeSubnet === -1) setActiveSubnet(firstId);
+		return ids;
+	}, [validator]);
+
 	return (
 		<>
 			<CardRow css={infoSection}>
@@ -211,7 +242,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-              DELEGATE STAKE
+							DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
@@ -232,6 +263,35 @@ export const ValidatorPage = () => {
 							stakeHistory={validatorStakeHistory}
 							balance={balance}
 						/>
+					</TabPane>
+					<TabPane
+						label="Performance"
+						loading={validator.loading}
+						error={!!validator.error}
+						value="perf"
+					>
+						<div css={perfContainer}>
+							<div>
+								{subnetIDs.map((id: number) => (
+									<div
+										css={[
+											perfSubnet,
+											id === activeSubnet ? activePerfSubnet : undefined,
+										]}
+										key={`perf_subnet_${id}`}
+										onClick={() => setActiveSubnet(id)}
+									>
+										{id}
+									</div>
+								))}
+							</div>
+							{activeSubnet > -1 && (
+								<HotkeyPerformanceChart
+									netUid={activeSubnet}
+									hotkey={address}
+								/>
+							)}
+						</div>
 					</TabPane>
 				</TabbedContent>
 			</Card>
