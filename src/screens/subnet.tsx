@@ -160,7 +160,7 @@ export type SubnetPageParams = {
 
 export const SubnetPage = () => {
 	const { id } = useParams() as SubnetPageParams;
-	const subnetObj = (subnetsJson as any)[id];
+	const subnetObj = (subnetsJson as any)[id] ?? {};
 	const subnet = useSubnet({ id: { equalTo: id } });
 	const subnetStat = useSingleSubnetStat({ netUid: { equalTo: parseInt(id) } });
 	const subnetsHistory = useSubnetHistory(id);
