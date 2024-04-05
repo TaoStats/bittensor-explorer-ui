@@ -107,7 +107,9 @@ export const HotkeyPage = () => {
 	const [activeSubnet, setActiveSubnet] = useState(-1);
 	const subnetIDs = useMemo(() => {
 		if (neuronMetagraph.loading) return [];
-		const ids = neuronMetagraph.data.map((cur: NeuronMetagraph) => cur.netUid);
+		const ids = neuronMetagraph.data
+			.map((cur: NeuronMetagraph) => cur.netUid)
+			.filter((id) => id > 0);
 		const firstId = ids[0] ?? -1;
 		if (activeSubnet === -1) setActiveSubnet(firstId);
 		return ids;
