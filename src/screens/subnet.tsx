@@ -47,6 +47,8 @@ import { useMinerIPs } from "../hooks/useMinerIPs";
 import { MinerIPDistributionChart } from "../components/subnets/MinerIPDistributionChart";
 import { usePaginatedMinerIPs } from "../hooks/usePaginatedMinerIPs";
 import MinerIPTable from "../components/subnets/MinerIPTable";
+import { useSubnetHyperparams } from "../hooks/useSubnetHyperparams";
+import SubnetHyperparamTable from "../components/subnets/SubnetHyperparamTable";
 
 const subnetHeader = (theme: Theme) => css`
 	display: flex;
@@ -240,6 +242,11 @@ export const SubnetPage = () => {
 		minerIPSort
 	);
 
+	const subnetHyperparams = useSubnetHyperparams({
+		netUid: { equalTo: parseInt(id) },
+	});
+	console.log(subnetHyperparams);
+
 	useDOMEventTrigger("data-loaded", !subnet.loading);
 
 	const { hash: tab } = useLocation();
@@ -362,6 +369,14 @@ export const SubnetPage = () => {
 							onSearchChange={(newSearch?: string) => setSearchText(newSearch)}
 							initialSearch={metagraphInitialSearch}
 						/>
+					</TabPane>
+					<TabPane
+						label="Hyperparam"
+						loading={subnetHyperparams.loading}
+						error={subnetHyperparams.error}
+						value="hyperparam"
+					>
+						<SubnetHyperparamTable hyperparam={subnetHyperparams} />
 					</TabPane>
 					<TabPane
 						label="Registration"
