@@ -14,7 +14,12 @@ import { useEffect, useState } from "react";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { SubnetTaoRecycled24HHistoryChart } from "../components/subnets/SubnetTaoRecycled24HHistoryChart";
 import Spinner from "../components/Spinner";
-import { containsOnlyDigits, formatNumber, rawAmountToDecimal } from "../utils/number";
+import {
+	containsOnlyDigits,
+	formatNumber,
+	isIPFormat,
+	rawAmountToDecimal,
+} from "../utils/number";
 import { NETWORK_CONFIG } from "../config";
 import { useNeuronRegCostHistory } from "../hooks/useNeuronRegCostHistory";
 import { NeuronRegistrationChart } from "../components/subnets/NeuronRegistrationChart";
@@ -183,7 +188,12 @@ export const SubnetPage = () => {
 						includesInsensitive: searchText,
 					},
 				},
-				...(searchText && containsOnlyDigits(searchText) ? [{ uid: { equalTo: parseInt(searchText) } }]: [])
+				...(searchText && isIPFormat(searchText)
+					? [{ axonIp: { includesInsensitive: searchText } }]
+					: []),
+				...(searchText && containsOnlyDigits(searchText)
+					? [{ uid: { equalTo: parseInt(searchText) } }]
+					: []),
 			],
 		},
 		neuronMetagraphSort
@@ -349,9 +359,7 @@ export const SubnetPage = () => {
 								setNeuronMetagraphSort(sortKey)
 							}
 							initialSort={neuronMetagraphInitialOrder}
-							onSearchChange={(newSearch?: string) =>
-								setSearchText(newSearch)
-							}
+							onSearchChange={(newSearch?: string) => setSearchText(newSearch)}
 							initialSearch={metagraphInitialSearch}
 						/>
 					</TabPane>

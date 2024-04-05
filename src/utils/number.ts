@@ -166,6 +166,10 @@ export function shortenIP(ip: string) {
 	return ip.slice(0, 7) + "xx.xx";
 }
 
+export function isIPFormat(ip: string) {
+	return /^\d+\.\d+\.\d+\.\d+$/.test(ip);
+}
+
 export function containsOnlyDigits(str: string) {
 	return /^\d+$/.test(str);
 }
