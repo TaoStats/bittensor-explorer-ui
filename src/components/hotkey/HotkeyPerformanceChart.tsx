@@ -33,22 +33,6 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 		if (!perf.data) return [];
 		return perf.data.map((x: NeuronPerformance) => x.timestamp);
 	}, [perf]);
-	const minUpdated = useMemo(() => {
-		if (!perf.data) return 0;
-		return perf.data.reduce((prev: number, cur: NeuronPerformance) => {
-			const now = cur.updated;
-			if (prev === -1) return now;
-			return now < prev ? now : prev;
-		}, -1);
-	}, [perf]);
-	const maxUpdated = useMemo(() => {
-		if (!perf.data) return 0;
-		return perf.data.reduce((prev: number, cur: NeuronPerformance) => {
-			const now = cur.updated;
-			if (prev === -1) return now;
-			return now > prev ? now : prev;
-		}, -1);
-	}, [perf]);
 	const minEmision = useMemo(() => {
 		if (!perf.data) return 0;
 		return perf.data.reduce((prev: number, cur: NeuronPerformance) => {
@@ -208,8 +192,8 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 						axisBorder: {
 							show: false,
 						},
-						min: minUpdated,
-						max: maxUpdated,
+						min: 0,
+						max: 2000,
 					},
 					{
 						opposite: true,
@@ -217,7 +201,7 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 							style: {
 								colors: theme.palette.neutral.main,
 							},
-							formatter: (val: number) => nFormatter(val, 2).toString(),
+							formatter: (val: number) => nFormatter(val, 4).toString(),
 						},
 						title: {
 							text: `Emission (${NETWORK_CONFIG.currency})`,
