@@ -10,7 +10,7 @@ import { NeuronMetagraph } from "../../model/subnet";
 import { NETWORK_CONFIG } from "../../config";
 import {
 	formatNumber,
-	numberToIP,
+	shortenIP,
 	rawAmountToDecimal,
 	rawAmountToDecimalBy,
 } from "../../utils/number";
@@ -333,7 +333,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 			<NeuronMetagraphTableAttribute
 				label="axon"
 				sortable
-				render={(data) => <>{numberToIP(parseInt(data.axonIp.toString()))}</>}
+				render={(data) => <>{shortenIP(data.axonIp)}</>}
 				sortProperty="axon"
 			/>
 			<NeuronMetagraphTableAttribute

@@ -3,7 +3,7 @@ import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
 import { MinerIP } from "../../model/subnet";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { css } from "@emotion/react";
-import { numberToIP } from "../../utils/number";
+import { shortenIP } from "../../utils/number";
 import { MinerIPOrder } from "../../services/subnetsService";
 import { useState, useEffect } from "react";
 import { SortDirection } from "../../model/sortDirection";
@@ -90,7 +90,7 @@ function MinerIPTable(props: MinerIPTableProps) {
 				label="IP"
 				sortable
 				render={(minerIP) => (
-					<span css={whiteText}> {numberToIP(minerIP.ipAddress)} </span>
+					<span css={whiteText}> {shortenIP(minerIP.ipAddress)} </span>
 				)}
 				sortProperty="ipAddress"
 			/>
