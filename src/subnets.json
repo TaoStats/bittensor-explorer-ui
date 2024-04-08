@@ -61,7 +61,7 @@
     },
     "12": {
         "name": "Horde",
-        "github": "https://github.com/backend-developers-ltd/ComputeHorde>",
+        "github": "https://github.com/backend-developers-ltd/ComputeHorde",
         "description": ""
     },
     "13": {
@@ -155,9 +155,9 @@
         "description": ""
     },
     "31": {
-        "name": "TAS",
-        "github": "https://github.com/tao-accounting-system-protocol/tas-protocol",
-        "description": ""
+        "name": "NAS Chain",
+        "github": "https://github.com/nimaaghli/NASChain",
+        "description": "Neural Architecture Search (NAS) is a critical field in machine learning that focuses on automating the design of artificial neural network architectures."
     },
     "32": {
         "name": "It's AI",
