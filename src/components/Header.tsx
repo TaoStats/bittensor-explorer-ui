@@ -217,7 +217,7 @@ export const Header = () => {
 											onMouseEnter={onSubMenuMouseEnter}
 											onMouseLeave={onSubMenuMouseLeave}
 										>
-											<a href="https://taostats.io/subnets/">
+											<a href="/subnets/">
 												Subnets
 												<span
 													className="has-btn"
