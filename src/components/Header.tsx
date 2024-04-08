@@ -3,7 +3,7 @@ import Logo from "../assets/logo.png";
 import PolygonGray from "../assets/polygon-gray.svg";
 import { useAppStats } from "../contexts";
 import { nFormatter } from "../utils/number";
-import subnetNames from "../subnets_names.json";
+import subnets from "../subnets.json";
 
 export const Header = () => {
 	const {
@@ -27,10 +27,18 @@ export const Header = () => {
 		(event.target as any).parentElement.classList.toggle("open-menu");
 		event.preventDefault();
 	};
-	
-	const subnetIDs = Object.keys(subnetNames);
+
+	const subnetIDs = Object.keys(subnets);
 	const totalSubnets = subnetIDs.length;
 	const subnetMenuColumn = 3;
+
+	const onSubMenuMouseEnter = () => {
+		document.body.classList.add("active-overlay");
+	};
+
+	const onSubMenuMouseLeave = () => {
+		document.body.classList.remove("active-overlay");
+	};
 
 	return (
 		<header className="new-site-header">
@@ -41,15 +49,7 @@ export const Header = () => {
 							<ul>
 								<li>
 									<label>Price.</label> ${price}{" "}
-									<span
-										className={`${
-											priceChange24h > 0
-												? "success"
-												: priceChange24h < 0
-													? "warning"
-													: ""
-										}`}
-									>
+									<span className={`${priceChange24h > 0 ? "success" : priceChange24h < 0 ? "warning" : ""}`}>
 										{priceChange24h > 0 ? "▴" : priceChange24h < 0 ? "▾" : ""}
 										{` ${priceChange24h}%`}
 									</span>
@@ -142,7 +142,16 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												UNISWAP(WTAO)
+												UNISWAP(wTAO)
+											</a>
+										</li>
+										<li>
+											<a
+												href="https://app.uniswap.org/swap?outputCurrency=0xB60acD2057067DC9ed8c083f5aa227a244044fD6"
+												target="_blank"
+												rel="noreferrer"
+											>
+												UNISWAP(stTAO)
 											</a>
 										</li>
 									</ul>
@@ -179,9 +188,9 @@ export const Header = () => {
 								toggleFade();
 							}}
 						>
-							<span/>
-							<span/>
-							<span/>
+							<span />
+							<span />
+							<span />
 						</div>
 
 						<div className={`main-menu fade-in-out ${isFaded ? "active" : ""}`}>
@@ -201,10 +210,14 @@ export const Header = () => {
 									<ul>
 										<li className="menu-item">
 											<a href="https://taostats.io">Home</a>
-											<span className="menuItem-glow"/>
+											<span className="menuItem-glow" />
 										</li>
-										<li className="menu-item-has-children">
-											<a href="https://taostats.io/subnets/">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
+											<a href="https://x.taostats.io/subnets/">
 												Subnets
 												<span
 													className="has-btn"
@@ -215,20 +228,23 @@ export const Header = () => {
 												{Array.from(Array(3)).map((_, menuIndex) => (
 													<li key={`subnet-menu-column-${menuIndex}`}>
 														<ul>
-															{Array.from(Array(Math.floor((totalSubnets + 2 - menuIndex) / subnetMenuColumn))).map((_, itemIndex) => {
+															{Array.from(
+																Array(Math.floor((totalSubnets + 2 - menuIndex) / subnetMenuColumn))
+															).map((_, itemIndex) => {
 																let passed = 0;
 																for (let i = 0; i < menuIndex; i++) {
-																	passed += Math.floor((totalSubnets + 2 - i) / subnetMenuColumn);
+																	passed += Math.floor(
+																		(totalSubnets + 2 - i) / subnetMenuColumn
+																	);
 																}
-																const netUid = parseInt(subnetIDs[passed + itemIndex] ?? "0");
-																const name = (subnetNames as any)[netUid];
+																const netUid = parseInt(
+																	subnetIDs[passed + itemIndex] ?? "0"
+																);
+																const name = (subnets as any)[netUid]?.name || "Unknown";
 																return (
 																	<li key={`subnet-menu-item-${itemIndex}`}>
-																		<a
-																			href={`https://taostats.io/subnets/netuid-${netUid}`}
-																		>
-																			{netUid < 10 ? "0" : ""}
-																			{netUid} - {name}
+																		<a href={ netUid ? `https://x.taostats.io/subnet/${netUid}` : "https://taostats.io/subnets/netuid-0"}>
+																			{netUid}: {name}
 																		</a>
 																	</li>
 																);
@@ -239,7 +255,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
-										<li className="current-menu-item menu-item-has-children">
+										<li
+											className="current-menu-item menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="/">
 												Blockchain
 												<span
@@ -255,10 +275,21 @@ export const Header = () => {
 													<a href="/#transfers">Transfers</a>
 												</li>
 												<li>
+													<a href="/#delegation">Delegation</a>
+												</li>
+												<li>
+													<a href="/validators">Validators</a>
+												</li>
+												<li>
 													<a href="/#accounts">Accounts</a>
 												</li>
 												<li>
-													<a href="https://taostats.io/tokenomics/">Tokenomics</a>
+													<a href="https://x.taostats.io/subnets">Subnets</a>
+												</li>
+												<li>
+													<a href="https://taostats.io/tokenomics/">
+														Tokenomics
+													</a>
 												</li>
 												<li>
 													<a href="https://nx.taostats.io/">Nakamoto</a>
@@ -269,7 +300,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="https://taostats.io/verified-validators/">
 												Validators
 												<span
@@ -291,7 +326,11 @@ export const Header = () => {
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="https://taostats.io/developers/">
 												Developers
 												<span
@@ -307,9 +346,13 @@ export const Header = () => {
 													<a href="https://taostats.io/api/">Taostats API</a>
 												</li>
 											</ul>
-											<span className="menuItem-glow"/>
+											<span className="menuItem-glow" />
 										</li>
-										<li className="menu-item-has-children">
+										<li
+											className="menu-item-has-children"
+											onMouseEnter={onSubMenuMouseEnter}
+											onMouseLeave={onSubMenuMouseLeave}
+										>
 											<a href="#">
 												Resources
 												<span
@@ -325,7 +368,7 @@ export const Header = () => {
 													<a href="https://taostats.io/media/">Media</a>
 												</li>
 											</ul>
-											<span className="menuItem-glow"/>
+											<span className="menuItem-glow" />
 										</li>
 									</ul>
 								</nav>
@@ -386,13 +429,23 @@ export const Header = () => {
 													TENSOR EXCHANGE
 												</a>
 											</li>
+
 											<li>
 												<a
 													href="https://app.uniswap.org/#/swap?outputCurrency=0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44"
 													target="_blank"
 													rel="noreferrer"
 												>
-													UNISWAP(WTAO)
+													UNISWAP(wTAO)
+												</a>
+											</li>
+											<li>
+												<a
+													href="https://app.uniswap.org/swap?outputCurrency=0xB60acD2057067DC9ed8c083f5aa227a244044fD6"
+													target="_blank"
+													rel="noreferrer"
+												>
+													UNISWAP(stTAO)
 												</a>
 											</li>
 										</ul>
