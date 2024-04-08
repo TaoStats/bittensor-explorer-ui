@@ -50,7 +50,7 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 			data={info}
 			loading={info.loading}
 			notFound={info.notFound}
-			notFoundMessage="No coldkey found"
+			notFoundMessage="Invalid coldkey."
 			error={info.error}
 		>
 			<ColdkeyInfoTableAttribute label="Total keys" render={() => totalKeys} />
