@@ -371,10 +371,10 @@ export const SubnetPage = () => {
 						/>
 					</TabPane>
 					<TabPane
-						label="Hyperparam"
+						label="Hyperparams"
 						loading={subnetHyperparams.loading}
 						error={subnetHyperparams.error}
-						value="hyperparam"
+						value="hyperparams"
 					>
 						<SubnetHyperparamTable hyperparam={subnetHyperparams} />
 					</TabPane>
