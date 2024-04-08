@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PaginatedResource } from "../../model/paginatedResource";
 import { SortOrder } from "../../model/sortOrder";
 import { SortDirection } from "../../model/sortDirection";
@@ -45,6 +45,7 @@ export type NeuronMetagraphTableProps = {
 	initialSort?: string;
 	onSearchChange?: (newSearch?: string) => void;
 	initialSearch?: string;
+	showAll?: boolean;
 };
 
 const NeuronMetagraphTableAttribute = ItemsTableAttribute<NeuronMetagraph>;
@@ -117,7 +118,7 @@ const orderMappings = {
 };
 
 function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
-	const { metagraph } = props;
+	const { metagraph, showAll } = props;
 
 	const taoPrice = useTaoPrice();
 	const {
@@ -174,21 +175,52 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 		onSearchChange(search);
 	}, [search]);
 
+	const data = useMemo(() => {
+		if (metagraph.loading || !metagraph.data) return [];
+
+		const result: NeuronMetagraph[] = [];
+		if (showAll) {
+			const { dailyReward, stake } = metagraph.data.reduce(
+				(
+					{ dailyReward, stake }: { dailyReward: bigint; stake: bigint },
+					cur
+				) => {
+					return {
+						dailyReward: dailyReward + BigInt(cur.dailyReward),
+						stake: stake + BigInt(cur.stake),
+					};
+				},
+				{
+					dailyReward: BigInt(0),
+					stake: BigInt(0),
+				}
+			);
+			result.push({
+				id: "total",
+				emission: BigInt(-1),
+				dailyReward,
+				stake,
+			} as NeuronMetagraph);
+		}
+
+		return [...metagraph.data, ...result];
+	}, [metagraph, showAll]);
+
 	return (
 		<ItemsTable
-			data={metagraph.data}
+			data={data}
 			loading={metagraph.loading}
 			notFound={metagraph.notFound}
 			notFoundMessage="No metagraph records."
 			error={metagraph.error}
-			pagination={metagraph.pagination}
+			pagination={showAll ? undefined : metagraph.pagination}
 			data-test="metagraph-table"
 			sort={sort}
 			onSortChange={handleSortChange}
 			search={search}
 			onSearchChange={handleSearchChange}
 			searchBackground="#1a1a1a"
-			showRank
+			showRank={!showAll}
 			rankLabel="POS"
 		>
 			<NeuronMetagraphTableAttribute
@@ -205,14 +237,18 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 			<NeuronMetagraphTableAttribute
 				label="uid"
 				sortable
-				render={(data) => (
-					<Link
-						to={`https://taostats.io/hotkey/?hkey=${data.hotkey}`}
-						css={boldText}
-					>
-						{data.uid}
-					</Link>
-				)}
+				render={(data) =>
+					data.emission >= 0 ? (
+						<Link
+							to={`https://taostats.io/hotkey/?hkey=${data.hotkey}`}
+							css={boldText}
+						>
+							{data.uid}
+						</Link>
+					) : (
+						"Total"
+					)
+				}
 				sortProperty="uid"
 			/>
 			<NeuronMetagraphTableAttribute
@@ -220,9 +256,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<span css={orangeText}>
-						{formatNumber(rawAmountToDecimal(data.stake.toString()), {
-							decimalPlaces: 0,
-						})}
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimal(data.stake.toString()), {
+								decimalPlaces: 0,
+							})}
 					</span>
 				)}
 				sortProperty="stake"
@@ -232,12 +269,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<>
-						{formatNumber(
-							rawAmountToDecimalBy(data.validatorTrust.toString(), 65535),
-							{
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimalBy(data.validatorTrust, 65535), {
 								decimalPlaces: 5,
-							}
-						)}
+							})}
 					</>
 				)}
 				sortProperty="vTrust"
@@ -247,9 +282,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<>
-						{formatNumber(rawAmountToDecimalBy(data.trust.toString(), 65535), {
-							decimalPlaces: 5,
-						})}
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimalBy(data.trust, 65535), {
+								decimalPlaces: 5,
+							})}
 					</>
 				)}
 				sortProperty="trust"
@@ -259,12 +295,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<>
-						{formatNumber(
-							rawAmountToDecimalBy(data.consensus.toString(), 65535),
-							{
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimalBy(data.consensus, 65535), {
 								decimalPlaces: 5,
-							}
-						)}
+							})}
 					</>
 				)}
 				sortProperty="consensus"
@@ -274,12 +308,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<>
-						{formatNumber(
-							rawAmountToDecimalBy(data.incentive.toString(), 65535),
-							{
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimalBy(data.incentive, 65535), {
 								decimalPlaces: 5,
-							}
-						)}
+							})}
 					</>
 				)}
 				sortProperty="incentive"
@@ -289,12 +321,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<>
-						{formatNumber(
-							rawAmountToDecimalBy(data.dividends.toString(), 65535),
-							{
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimalBy(data.dividends, 65535), {
 								decimalPlaces: 5,
-							}
-						)}
+							})}
 					</>
 				)}
 				sortProperty="dividends"
@@ -304,9 +334,10 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<>
-						{formatNumber(rawAmountToDecimal(data.emission.toString()), {
-							decimalPlaces: 5,
-						})}
+						{data.emission >= 0 &&
+							formatNumber(rawAmountToDecimal(data.emission.toString()), {
+								decimalPlaces: 5,
+							})}
 					</>
 				)}
 				sortProperty="emission"
@@ -316,10 +347,11 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				sortable
 				render={(data) => (
 					<span css={whiteText}>
-						{chainStats
-							? parseInt(chainStats.blocksFinalized.toString()) -
-							data.lastUpdate
-							: 0}
+						{data.emission >= 0 &&
+							(chainStats
+								? parseInt(chainStats.blocksFinalized.toString()) -
+								data.lastUpdate
+								: 0)}
 					</span>
 				)}
 				sortProperty="updated"
@@ -327,13 +359,13 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 			<NeuronMetagraphTableAttribute
 				label="active"
 				sortable
-				render={(data) => <>{data.active ? 1 : 0}</>}
+				render={(data) => <>{data.emission >= 0 && (data.active ? 1 : 0)}</>}
 				sortProperty="active"
 			/>
 			<NeuronMetagraphTableAttribute
 				label="axon"
 				sortable
-				render={(data) => <>{shortenIP(data.axonIp)}</>}
+				render={(data) => <>{data.emission >= 0 && shortenIP(data.axonIp)}</>}
 				sortProperty="axon"
 			/>
 			<NeuronMetagraphTableAttribute
@@ -404,7 +436,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 									taoPrice.data || 0
 								),
 								{
-									decimalPlaces: 2,
+									decimalPlaces: 0,
 								}
 							)}
 						</span>

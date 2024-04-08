@@ -167,7 +167,9 @@ export function shortenIP(ip: string) {
 }
 
 export function isIPFormat(ip: string) {
-	return /^\d+\.\d+\.\d+\.\d+$/.test(ip);
+	if (/^\d{1,3}(\.\d{1,3}){0,3}$/.test(ip)) return true;
+	if (/^(\d{1,3}\.){1,3}$/.test(ip)) return true;
+	return false;
 }
 
 export function containsOnlyDigits(str: string) {
