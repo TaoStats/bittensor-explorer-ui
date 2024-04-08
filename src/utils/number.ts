@@ -167,13 +167,8 @@ export function shortenIP(ip: string) {
 }
 
 export function isIPFormat(ip: string) {
-	if (/^\d+$/.test(ip)) return true;
-	if (/^\d+\.$/.test(ip)) return true;
-	if (/^\d+\.\d+$/.test(ip)) return true;
-	if (/^\d+\.\d+\.$/.test(ip)) return true;
-	if (/^\d+\.\d+\.\d+$/.test(ip)) return true;
-	if (/^\d+\.\d+\.\d+\.$/.test(ip)) return true;
-	if (/^\d+\.\d+\.\d+\.\d+$/.test(ip)) return true;
+	if (/^\d{1,3}(\.\d{1,3}){0,3}$/.test(ip)) return true;
+	if (/^(\d{1,3}\.){1,3}$/.test(ip)) return true;
 	return false;
 }
 
