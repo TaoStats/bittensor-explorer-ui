@@ -245,7 +245,6 @@ export const SubnetPage = () => {
 	const subnetHyperparams = useSubnetHyperparams({
 		netUid: { equalTo: parseInt(id) },
 	});
-	console.log(subnetHyperparams);
 
 	useDOMEventTrigger("data-loaded", !subnet.loading);
 
