@@ -4,7 +4,7 @@ import { Theme, css } from "@emotion/react";
 import CopyToClipboardButton from "../components/CopyToClipboardButton";
 import { Link } from "../components/Link";
 import { useHotkeyNet } from "../hooks/useHotkeyNet";
-import { formatNumber, numberToIP, rawAmountToDecimal } from "../utils/number";
+import { formatNumber, rawAmountToDecimal, shortenIP } from "../utils/number";
 import { NETWORK_CONFIG } from "../config";
 import { useAppStats } from "../contexts";
 import { NeuronMetagraph } from "../model/subnet";
@@ -205,9 +205,7 @@ export const HotkeyPage = () => {
 									meta.lastUpdate
 									: 0}
 							</td>
-							<td css={netItemValueStyle}>
-								{numberToIP(parseInt(meta.axonIp.toString()))}
-							</td>
+							<td css={netItemValueStyle}>{shortenIP(meta.axonIp)}</td>
 						</tr>
 					))}
 				</tbody>
