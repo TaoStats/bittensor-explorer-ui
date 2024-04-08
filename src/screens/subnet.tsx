@@ -14,7 +14,12 @@ import { useEffect, useState } from "react";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import { SubnetTaoRecycled24HHistoryChart } from "../components/subnets/SubnetTaoRecycled24HHistoryChart";
 import Spinner from "../components/Spinner";
-import { containsOnlyDigits, formatNumber, rawAmountToDecimal } from "../utils/number";
+import {
+	containsOnlyDigits,
+	formatNumber,
+	isIPFormat,
+	rawAmountToDecimal,
+} from "../utils/number";
 import { NETWORK_CONFIG } from "../config";
 import { useNeuronRegCostHistory } from "../hooks/useNeuronRegCostHistory";
 import { NeuronRegistrationChart } from "../components/subnets/NeuronRegistrationChart";
@@ -155,7 +160,7 @@ export type SubnetPageParams = {
 
 export const SubnetPage = () => {
 	const { id } = useParams() as SubnetPageParams;
-	const subnetObj = (subnetsJson as any)[id];
+	const subnetObj = (subnetsJson as any)[id] ?? {};
 	const subnet = useSubnet({ id: { equalTo: id } });
 	const subnetStat = useSingleSubnetStat({ netUid: { equalTo: parseInt(id) } });
 	const subnetsHistory = useSubnetHistory(id);
@@ -169,22 +174,43 @@ export const SubnetPage = () => {
 	const [searchText, setSearchText] = useState<string | undefined>(
 		metagraphInitialSearch
 	);
+
+	const getSearchQuery = (searchText: string) => {
+		const query = [];
+
+		// Search by hotkey
+		query.push({
+			hotkey: {
+				includesInsensitive: searchText,
+			},
+		});
+
+		// Search by coldkey
+		query.push({
+			coldkey: {
+				includesInsensitive: searchText,
+			},
+		});
+
+		// If the string is an integer, search by UID
+		if (containsOnlyDigits(searchText)) {
+			query.push({ uid: { equalTo: parseInt(searchText) } });
+		}
+
+		// If the string is a valid IP string
+		if (isIPFormat(searchText)) {
+			query.push({ axonIp: { includesInsensitive: searchText } });
+		}
+
+
+		return query;
+	};
+
+
 	const neuronMetagraph = useNeuronMetagraph(
 		{
 			netUid: { equalTo: parseInt(id) },
-			or: [
-				{
-					hotkey: {
-						includesInsensitive: searchText,
-					},
-				},
-				{
-					coldkey: {
-						includesInsensitive: searchText,
-					},
-				},
-				...(searchText && containsOnlyDigits(searchText) ? [{ uid: { equalTo: parseInt(searchText) } }]: [])
-			],
+			...(searchText ? {or: getSearchQuery(searchText)}: {})
 		},
 		neuronMetagraphSort
 	);
@@ -349,9 +375,7 @@ export const SubnetPage = () => {
 								setNeuronMetagraphSort(sortKey)
 							}
 							initialSort={neuronMetagraphInitialOrder}
-							onSearchChange={(newSearch?: string) =>
-								setSearchText(newSearch)
-							}
+							onSearchChange={(newSearch?: string) => setSearchText(newSearch)}
 							initialSearch={metagraphInitialSearch}
 						/>
 					</TabPane>

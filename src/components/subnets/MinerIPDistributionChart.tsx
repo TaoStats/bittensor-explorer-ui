@@ -5,7 +5,7 @@ import Chart from "react-apexcharts";
 import LoadingSpinner from "../../assets/loading.svg";
 import { useMemo } from "react";
 import { MinerIPResponse } from "../../model/subnet";
-import { numberToIP } from "../../utils/number";
+import { shortenIP } from "../../utils/number";
 
 const spinnerContainer = css`
 	display: flex;
@@ -27,7 +27,7 @@ export const MinerIPDistributionChart = (
 	const series = useMemo(() => {
 		if (loading) return [];
 		return minerIPs.data.map(({ ipAddress, minersCount }) => ({
-			x: numberToIP(ipAddress),
+			x: shortenIP(ipAddress),
 			y: minersCount,
 		}));
 	}, [minerIPs]);

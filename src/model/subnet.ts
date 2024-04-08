@@ -115,7 +115,7 @@ export type NeuronRegCostHistoryResponse = {
 export type NeuronMetagraph = {
 	id: string;
 	active: boolean;
-	axonIp: bigint;
+	axonIp: string;
 	axonPort: number;
 	coldkey: string;
 	consensus: number;
