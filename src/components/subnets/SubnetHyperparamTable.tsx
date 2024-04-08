@@ -24,8 +24,9 @@ function SubnetHyperparamTable(props: SubnetHyperparamTableProps) {
 		const result: SubnetHyperparamTableData[] = [];
 		if (hyperparam.data) {
 			const params = hyperparam.data;
+			const omitKeys = ["id", "lastUpdate", "timestamp"];
 			Object.keys(params).forEach((key) => {
-				if (key !== "id") {
+				if (!omitKeys.includes(key)) {
 					const value = (params as any)[key];
 					const formattedKey = key.replace(/([A-Z])/g, " $1");
 					const formattedValue =
