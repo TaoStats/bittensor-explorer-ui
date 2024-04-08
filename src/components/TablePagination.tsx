@@ -142,6 +142,7 @@ export function TablePagination(props: TablePaginationProps) {
 										? activePage
 										: inactivePage
 							}
+							key={`table_pagination_${candidate}`}
 							onClick={() => candidate > 0 && setPage(candidate)}
 						>
 							{candidate === -1 ? "..." : candidate}

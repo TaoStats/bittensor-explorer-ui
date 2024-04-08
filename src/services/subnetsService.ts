@@ -405,7 +405,6 @@ export async function getNeuronMetagraph(
 					netUid
 					rank
 					stake
-					totalReward
 					uid
 					trust
 					validatorPermit

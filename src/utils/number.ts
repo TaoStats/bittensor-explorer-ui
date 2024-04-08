@@ -161,16 +161,15 @@ export function zeroPad(input: string | number, length: number): string {
 	return (Array(length + 1).join("0") + input).slice(-length);
 }
 
-export function numberToIP(val: number | string) {
-	const ip = parseInt(val.toString());
+export function shortenIP(ip: string) {
+	if (ip.length <= 7) return ip;
+	return ip.slice(0, 7) + "xx.xx";
+}
 
-	const part1 = ip & 255;
-	const part2 = (ip >> 8) & 255;
-	const part3 = (ip >> 16) & 255;
-	const part4 = (ip >> 24) & 255;
-
-	const ipStr = part4 + "." + part3 + "." + part2 + "." + part1;
-	return ipStr.slice(0, 7) + "xx.xx";
+export function isIPFormat(ip: string) {
+	if (/^\d{1,3}(\.\d{1,3}){0,3}$/.test(ip)) return true;
+	if (/^(\d{1,3}\.){1,3}$/.test(ip)) return true;
+	return false;
 }
 
 export function containsOnlyDigits(str: string) {
