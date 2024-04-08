@@ -404,7 +404,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 									taoPrice.data || 0
 								),
 								{
-									decimalPlaces: 2,
+									decimalPlaces: 0,
 								}
 							)}
 						</span>
