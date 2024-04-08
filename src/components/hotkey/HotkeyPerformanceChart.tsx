@@ -157,6 +157,21 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 						format: "dd MMM H:mm",
 					},
 				},
+				annotations: {
+					yaxis: [
+						{
+							y: 300,
+							borderColor: "#14dec2",
+							label: {
+								text: "Optimum Updated Performance Threshold",
+								style: {
+									color: "#fff",
+									background: "#000000",
+								},
+							},
+						},
+					],
+				},
 				xaxis: {
 					axisTicks: {
 						show: false,
