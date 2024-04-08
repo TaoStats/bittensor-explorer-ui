@@ -174,27 +174,43 @@ export const SubnetPage = () => {
 	const [searchText, setSearchText] = useState<string | undefined>(
 		metagraphInitialSearch
 	);
+
+	const getSearchQuery = (searchText: string) => {
+		const query = [];
+
+		// Search by hotkey
+		query.push({
+			hotkey: {
+				includesInsensitive: searchText,
+			},
+		});
+
+		// Search by coldkey
+		query.push({
+			coldkey: {
+				includesInsensitive: searchText,
+			},
+		});
+
+		// If the string is an integer, search by UID
+		if (containsOnlyDigits(searchText)) {
+			query.push({ uid: { equalTo: parseInt(searchText) } });
+		}
+
+		// If the string is a valid IP string
+		if (isIPFormat(searchText)) {
+			query.push({ axonIp: { includesInsensitive: searchText } });
+		}
+
+
+		return query;
+	};
+
+
 	const neuronMetagraph = useNeuronMetagraph(
 		{
 			netUid: { equalTo: parseInt(id) },
-			or: [
-				{
-					hotkey: {
-						includesInsensitive: searchText,
-					},
-				},
-				{
-					coldkey: {
-						includesInsensitive: searchText,
-					},
-				},
-				...(searchText && isIPFormat(searchText)
-					? [{ axonIp: { includesInsensitive: searchText } }]
-					: []),
-				...(searchText && containsOnlyDigits(searchText)
-					? [{ uid: { equalTo: parseInt(searchText) } }]
-					: []),
-			],
+			...(searchText ? {or: getSearchQuery(searchText)}: {})
 		},
 		neuronMetagraphSort
 	);
