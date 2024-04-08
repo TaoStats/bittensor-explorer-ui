@@ -16,6 +16,6 @@ export function useNeuronMetagraph(
 		getNeuronMetagraph,
 		[filter, order],
 		options,
-		25
+		1024
 	);
 }
