@@ -21,29 +21,32 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 
 	const taoPrice = useTaoPrice();
 
-	const [totalKeys, totalStake, totalDailyReward] = useMemo(() => {
-		const hotkeys: string[] = [];
-		let totalStake: Decimal = new Decimal(0);
-		let totalDailyReward: Decimal = new Decimal(0);
+	const [totalKeys, totalNeurons, totalStake, totalDailyReward] =
+		useMemo(() => {
+			const hotkeys: string[] = [];
+			const neurons: string[] = [];
+			let totalStake: Decimal = new Decimal(0);
+			let totalDailyReward: Decimal = new Decimal(0);
 
-		if (info.loading || !info.data)
-			return [hotkeys.length, totalStake, totalDailyReward];
+			if (info.loading || !info.data)
+				return [hotkeys.length, neurons.length, totalStake, totalDailyReward];
 
-		info.data.data.forEach((metagraph) => {
-			const hotkey = metagraph.hotkey;
-			if (!hotkeys.includes(hotkey)) {
-				hotkeys.push(hotkey);
-			}
-			totalStake = totalStake.add(
-				rawAmountToDecimal(metagraph.stake.toString())
-			);
-			totalDailyReward = totalDailyReward.add(
-				rawAmountToDecimal(metagraph.dailyReward.toString())
-			);
-		});
+			info.data.data.forEach((metagraph) => {
+				const hotkey = metagraph.hotkey;
+				if (!hotkeys.includes(hotkey)) {
+					hotkeys.push(hotkey);
+				}
+				neurons.push(hotkey);
+				totalStake = totalStake.add(
+					rawAmountToDecimal(metagraph.stake.toString())
+				);
+				totalDailyReward = totalDailyReward.add(
+					rawAmountToDecimal(metagraph.dailyReward.toString())
+				);
+			});
 
-		return [hotkeys.length, totalStake, totalDailyReward];
-	}, [info]);
+			return [hotkeys.length, neurons.length, totalStake, totalDailyReward];
+		}, [info]);
 
 	return (
 		<InfoTable
@@ -53,7 +56,14 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 			notFoundMessage="Invalid coldkey."
 			error={info.error}
 		>
-			<ColdkeyInfoTableAttribute label="Total keys" render={() => totalKeys} />
+			<ColdkeyInfoTableAttribute
+				label="Total Neurons"
+				render={() => totalNeurons}
+			/>
+			<ColdkeyInfoTableAttribute
+				label="Total Hotkeys"
+				render={() => totalKeys}
+			/>
 			<ColdkeyInfoTableAttribute
 				label="Daily Rewards"
 				render={() =>
