@@ -6,4 +6,5 @@ export const weightCopiers = [
 	"5G1NjW9YhXLadMWajvTkfcJy6up3yH2q1YzMXDTi6ijanChe",
 	"5HeKSHGdsRCwVgyrHchijnZJnq4wiv6GqoDLNah8R5WMfnLB",
 	"5HbScNssaEfioJHXjcXdpyqo1AKnYjymidGF8opcF9rTFZdT",
+	"5GsL9zNp1CdKmKSYBGjeF9kGReRpS8KdQv2yJ3mHVwKq2YCq",
 ];

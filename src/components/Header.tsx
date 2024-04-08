@@ -49,15 +49,7 @@ export const Header = () => {
 							<ul>
 								<li>
 									<label>Price.</label> ${price}{" "}
-									<span
-										className={`${
-											priceChange24h > 0
-												? "success"
-												: priceChange24h < 0
-													? "warning"
-													: ""
-										}`}
-									>
+									<span className={`${priceChange24h > 0 ? "success" : priceChange24h < 0 ? "warning" : ""}`}>
 										{priceChange24h > 0 ? "▴" : priceChange24h < 0 ? "▾" : ""}
 										{` ${priceChange24h}%`}
 									</span>
@@ -150,7 +142,16 @@ export const Header = () => {
 												target="_blank"
 												rel="noreferrer"
 											>
-												UNISWAP(WTAO)
+												UNISWAP(wTAO)
+											</a>
+										</li>
+										<li>
+											<a
+												href="https://app.uniswap.org/swap?outputCurrency=0xB60acD2057067DC9ed8c083f5aa227a244044fD6"
+												target="_blank"
+												rel="noreferrer"
+											>
+												UNISWAP(stTAO)
 											</a>
 										</li>
 									</ul>
@@ -228,12 +229,7 @@ export const Header = () => {
 													<li key={`subnet-menu-column-${menuIndex}`}>
 														<ul>
 															{Array.from(
-																Array(
-																	Math.floor(
-																		(totalSubnets + 2 - menuIndex) /
-																			subnetMenuColumn
-																	)
-																)
+																Array(Math.floor((totalSubnets + 2 - menuIndex) / subnetMenuColumn))
 															).map((_, itemIndex) => {
 																let passed = 0;
 																for (let i = 0; i < menuIndex; i++) {
@@ -244,13 +240,11 @@ export const Header = () => {
 																const netUid = parseInt(
 																	subnetIDs[passed + itemIndex] ?? "0"
 																);
-																const name =
-																	(subnets as any)[netUid]?.name || "Unknown";
+																const name = (subnets as any)[netUid]?.name || "Unknown";
 																return (
 																	<li key={`subnet-menu-item-${itemIndex}`}>
-																		<a href={`/subnet/${netUid}`}>
-																			{netUid < 10 ? "0" : ""}
-																			{netUid} - {name}
+																		<a href={ netUid ? `/subnet/${netUid}` : "https://taostats.io/subnets/netuid-0"}>
+																			{netUid}: {name}
 																		</a>
 																	</li>
 																);
@@ -435,13 +429,23 @@ export const Header = () => {
 													TENSOR EXCHANGE
 												</a>
 											</li>
+
 											<li>
 												<a
 													href="https://app.uniswap.org/#/swap?outputCurrency=0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44"
 													target="_blank"
 													rel="noreferrer"
 												>
-													UNISWAP(WTAO)
+													UNISWAP(wTAO)
+												</a>
+											</li>
+											<li>
+												<a
+													href="https://app.uniswap.org/swap?outputCurrency=0xB60acD2057067DC9ed8c083f5aa227a244044fD6"
+													target="_blank"
+													rel="noreferrer"
+												>
+													UNISWAP(stTAO)
 												</a>
 											</li>
 										</ul>
