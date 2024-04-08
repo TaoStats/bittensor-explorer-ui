@@ -23,20 +23,17 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 
 	const [totalKeys, totalNeurons, totalStake, totalDailyReward] =
 		useMemo(() => {
-			const hotkeys: string[] = [];
-			const neurons: string[] = [];
+			const hotkeys: Set<string> = new Set();
+			let neurons = 0;
 			let totalStake: Decimal = new Decimal(0);
 			let totalDailyReward: Decimal = new Decimal(0);
 
 			if (info.loading || !info.data)
-				return [hotkeys.length, neurons.length, totalStake, totalDailyReward];
+				return [hotkeys.size, neurons, totalStake, totalDailyReward];
 
 			info.data.data.forEach((metagraph) => {
-				const hotkey = metagraph.hotkey;
-				if (!hotkeys.includes(hotkey)) {
-					hotkeys.push(hotkey);
-				}
-				neurons.push(hotkey);
+				hotkeys.add(metagraph.hotkey);
+				neurons++;
 				totalStake = totalStake.add(
 					rawAmountToDecimal(metagraph.stake.toString())
 				);
@@ -45,7 +42,7 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 				);
 			});
 
-			return [hotkeys.length, neurons.length, totalStake, totalDailyReward];
+			return [hotkeys.size, neurons, totalStake, totalDailyReward];
 		}, [info]);
 
 	return (
