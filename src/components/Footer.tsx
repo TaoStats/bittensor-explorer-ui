@@ -111,7 +111,7 @@ export const Footer = () => {
 					</div>
 					<div className="footer-bottom">
 						<div className="copyright">
-							<p>Taostats ©2023.</p>
+							<p>Taostats © 2024.</p>
 						</div>
 						<p>
 							Taostats is funded by public delegation. Support us by delegating{" "}
