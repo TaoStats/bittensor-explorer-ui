@@ -56,7 +56,7 @@ export const HotkeyInfoTable = (props: HotkeyInfoTableProps) => {
 						target="_self"
 						css={addressItem}
 					>
-						{hotkey} ▶
+						{coldkey} ▶
 					</Link>
 				)}
 				copyToClipboard={() => coldkey}
