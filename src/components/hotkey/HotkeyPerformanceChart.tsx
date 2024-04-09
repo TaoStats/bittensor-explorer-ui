@@ -75,7 +75,7 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 			options={{
 				chart: {
 					toolbar: {
-						show: true,
+						show: false,
 						offsetX: 0,
 						offsetY: 0,
 						autoSelected: "pan",
