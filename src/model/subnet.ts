@@ -93,6 +93,34 @@ export type SubnetStat = {
 	timestamp: string;
 };
 
+export type SubnetHyperparams = {
+	id: string;
+	activityCutoff: number;
+	adjustmentAlpha: bigint;
+	adjustmentInterval: number;
+	bondsMovingAvg: number;
+	difficulty: bigint;
+	immunityPeriod: number;
+	kappa: number;
+	lastUpdate: number;
+	maxBurn: bigint;
+	maxDifficulty: bigint;
+	maxRegsPerBlock: number;
+	maxValidators: number;
+	minAllowedWeights: number;
+	maxWeightsLimit: number;
+	minBurn: bigint;
+	minDifficulty: bigint;
+	registrationAllowed: boolean;
+	rho: number;
+	servingRateLimit: number;
+	targetRegsPerInterval: number;
+	tempo: number;
+	timestamp: string;
+	weightsRateLimit: number;
+	weightsVersion: number;
+};
+
 export type NeuronRegCostHistory = {
 	height: bigint;
 	timestamp: string;

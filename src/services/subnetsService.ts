@@ -18,6 +18,7 @@ import {
 	MinerIPPaginatedResponse,
 	MinerIncentive,
 	MinerIncentivePaginatedResponse,
+	SubnetHyperparams,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -26,6 +27,7 @@ import { extractItems } from "../utils/extractItems";
 import { fetchSubnets } from "./fetchService";
 
 export type SubnetsFilter = object;
+export type SubnetHyperparamsFilter = object;
 export type SingleSubnetStatsFilter = object;
 export type NeuronMetagraphFilter = object;
 export type NeuronRegEventsFilter = object;
@@ -210,6 +212,62 @@ export async function getSubnets(
 	);
 
 	return extractItems(response.subnets, pagination, addSubnetName, subnetsJson);
+}
+
+export async function getSubnetHyperparams(
+	filter: SubnetHyperparamsFilter | undefined
+) {
+	const response = await fetchSubnets<{
+		subnetHyperparams: ResponseItems<SubnetHyperparams>;
+	}>(
+		`query ($filter: SubnetHyperparamFilter) {
+			subnetHyperparams(filter: $filter) {
+				nodes {
+					id
+					activityCutoff
+					adjustmentAlpha
+					adjustmentInterval
+					bondsMovingAvg
+					difficulty
+					immunityPeriod
+					kappa
+					lastUpdate
+					maxBurn
+					maxDifficulty
+					maxRegsPerBlock
+					maxValidators
+					minAllowedWeights
+					maxWeightsLimit
+					minBurn
+					minDifficulty
+					registrationAllowed
+					rho
+					servingRateLimit
+					targetRegsPerInterval
+					tempo
+					timestamp
+					weightsRateLimit
+					weightsVersion
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+					hasPreviousPage
+				}
+				totalCount
+			}
+		}`,
+		{
+			filter,
+		}
+	);
+
+	const data = extractItems(
+		response.subnetHyperparams,
+		{ limit: 1 },
+		transform
+	);
+	return data.data[0];
 }
 
 export async function getSubnetHistory(
