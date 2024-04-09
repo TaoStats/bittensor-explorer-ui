@@ -47,6 +47,8 @@ import { useMinerIPs } from "../hooks/useMinerIPs";
 import { MinerIPDistributionChart } from "../components/subnets/MinerIPDistributionChart";
 import { usePaginatedMinerIPs } from "../hooks/usePaginatedMinerIPs";
 import MinerIPTable from "../components/subnets/MinerIPTable";
+import { useSubnetHyperparams } from "../hooks/useSubnetHyperparams";
+import SubnetHyperparamTable from "../components/subnets/SubnetHyperparamTable";
 
 const subnetHeader = (theme: Theme) => css`
 	display: flex;
@@ -202,15 +204,13 @@ export const SubnetPage = () => {
 			query.push({ axonIp: { includesInsensitive: searchText } });
 		}
 
-
 		return query;
 	};
-
 
 	const neuronMetagraph = useNeuronMetagraph(
 		{
 			netUid: { equalTo: parseInt(id) },
-			...(searchText ? {or: getSearchQuery(searchText)}: {})
+			...(searchText ? { or: getSearchQuery(searchText) } : {}),
 		},
 		neuronMetagraphSort
 	);
@@ -255,6 +255,10 @@ export const SubnetPage = () => {
 		},
 		minerIPSort
 	);
+
+	const subnetHyperparams = useSubnetHyperparams({
+		netUid: { equalTo: parseInt(id) },
+	});
 
 	useDOMEventTrigger("data-loaded", !subnet.loading);
 
@@ -378,6 +382,14 @@ export const SubnetPage = () => {
 							onSearchChange={(newSearch?: string) => setSearchText(newSearch)}
 							initialSearch={metagraphInitialSearch}
 						/>
+					</TabPane>
+					<TabPane
+						label="Hyperparams"
+						loading={subnetHyperparams.loading}
+						error={subnetHyperparams.error}
+						value="hyperparams"
+					>
+						<SubnetHyperparamTable hyperparams={subnetHyperparams} />
 					</TabPane>
 					<TabPane
 						label="Registration"
