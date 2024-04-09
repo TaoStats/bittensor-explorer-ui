@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
-import { MIN_DELEGATION_AMOUNT } from "../config";
+import { MIN_DELEGATION_AMOUNT, NETWORK_CONFIG } from "../config";
 import { ButtonLink } from "../components/ButtonLink";
 import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio";
 import { ValidatorStakeHistoryChart } from "../components/validators/ValidatorStakeHistoryChart";
@@ -28,6 +28,14 @@ import { useValidator } from "../hooks/useValidator";
 import { useSubnets } from "../hooks/useSubnets";
 import SubnetsTable from "../components/validators/SubnetsTable";
 import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
+import { useNeuronMetagraph } from "../hooks/useNeuronMetagraph";
+import {
+	formatNumber,
+	rawAmountToDecimal,
+	rawAmountToDecimalBy,
+	shortenIP,
+} from "../utils/number";
+import { useAppStats } from "../contexts";
 
 const validatorHeader = (theme: Theme) => css`
 	display: flex;
@@ -82,6 +90,27 @@ const validatorDescription = css`
 	display: block;
 	opacity: 0.8;
 	font-size: 12px;
+`;
+
+const neuronBoxes = css`
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 5px;
+`;
+const neuronBox = css`
+	border: 1px solid white;
+	padding: 5px;
+`;
+const statFourItems = css`
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 2fr;
+`;
+const statTwoItems = css`
+	display: grid;
+	grid-template-columns: 3fr 2fr;
+`;
+const statBreak = css`
+	margin-top: 15px;
 `;
 
 const stakeButton = css`
@@ -165,6 +194,13 @@ export const ValidatorPage = () => {
 		delegateSort
 	);
 
+	const neuronMetagraph = useNeuronMetagraph({
+		hotkey: { equalTo: address },
+	});
+	const {
+		state: { chainStats },
+	} = useAppStats();
+
 	useDOMEventTrigger(
 		"data-loaded",
 		!balance.loading && !nominators.loading && !delegates.loading
@@ -238,6 +274,61 @@ export const ValidatorPage = () => {
 						balance={balance}
 						info={validator}
 					/>
+					<div css={neuronBoxes}>
+						{neuronMetagraph.data?.map((meta) => (
+							<div css={neuronBox}>
+								<div css={statFourItems}>
+									<span>SN</span>
+									<span>Pos</span>
+									<span>UID</span>
+									<span>Axon</span>
+								</div>
+								<div css={statFourItems}>
+									<span>{meta.netUid}</span>
+									<span>{meta.rank}</span>
+									<span>{meta.uid}</span>
+									<span>{shortenIP(meta.axonIp)}</span>
+								</div>
+								<div css={[statTwoItems, statBreak]}>
+									<span>Daily Rewards</span>
+									<span>Dividends</span>
+								</div>
+								<div css={statTwoItems}>
+									<span>
+										{NETWORK_CONFIG.currency}
+										{formatNumber(
+											rawAmountToDecimal(meta.dailyReward.toString()),
+											{
+												decimalPlaces: 2,
+											}
+										)}
+									</span>
+									<span>
+										{formatNumber(rawAmountToDecimalBy(meta.dividends, 65535), {
+											decimalPlaces: 5,
+										})}
+									</span>
+								</div>
+								<div css={[statTwoItems, statBreak]}>
+									<span>Updated</span>
+									<span>vTrust</span>
+								</div>
+								<div css={statTwoItems}>
+									<span>
+										{chainStats ? parseInt(chainStats.blocksFinalized.toString()) - meta.lastUpdate : 0}
+									</span>
+									<span>
+										{formatNumber(
+											rawAmountToDecimalBy(meta.validatorTrust, 65535),
+											{
+												decimalPlaces: 5,
+											}
+										)}
+									</span>
+								</div>
+							</div>
+						))}
+					</div>
 					<div css={stakeButton}>
 						<ButtonLink
 							to={`https://delegate.taostats.io/staking?hkey=${address}`}

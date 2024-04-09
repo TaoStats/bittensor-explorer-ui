@@ -348,10 +348,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				render={(data) => (
 					<span css={whiteText}>
 						{data.emission >= 0 &&
-							(chainStats
-								? parseInt(chainStats.blocksFinalized.toString()) -
-								data.lastUpdate
-								: 0)}
+							(chainStats ? parseInt(chainStats.blocksFinalized.toString()) - data.lastUpdate : 0)}
 					</span>
 				)}
 				sortProperty="updated"
