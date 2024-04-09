@@ -93,9 +93,9 @@ export type SubnetStat = {
 	timestamp: string;
 };
 
-export type SubnetHyperparam = {
+export type SubnetHyperparams = {
 	id: string;
-	activitCutoff: number;
+	activityCutoff: number;
 	adjustmentAlpha: bigint;
 	adjustmentInterval: number;
 	bondsMovingAvg: number;

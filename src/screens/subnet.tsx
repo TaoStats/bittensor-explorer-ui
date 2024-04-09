@@ -204,15 +204,13 @@ export const SubnetPage = () => {
 			query.push({ axonIp: { includesInsensitive: searchText } });
 		}
 
-
 		return query;
 	};
-
 
 	const neuronMetagraph = useNeuronMetagraph(
 		{
 			netUid: { equalTo: parseInt(id) },
-			...(searchText ? {or: getSearchQuery(searchText)}: {})
+			...(searchText ? { or: getSearchQuery(searchText) } : {}),
 		},
 		neuronMetagraphSort
 	);
@@ -391,7 +389,7 @@ export const SubnetPage = () => {
 						error={subnetHyperparams.error}
 						value="hyperparams"
 					>
-						<SubnetHyperparamTable hyperparam={subnetHyperparams} />
+						<SubnetHyperparamTable hyperparams={subnetHyperparams} />
 					</TabPane>
 					<TabPane
 						label="Registration"

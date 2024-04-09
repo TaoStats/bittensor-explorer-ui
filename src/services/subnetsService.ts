@@ -18,7 +18,7 @@ import {
 	MinerIPPaginatedResponse,
 	MinerIncentive,
 	MinerIncentivePaginatedResponse,
-	SubnetHyperparam,
+	SubnetHyperparams,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -218,13 +218,13 @@ export async function getSubnetHyperparams(
 	filter: SubnetHyperparamsFilter | undefined
 ) {
 	const response = await fetchSubnets<{
-		subnetHyperparams: ResponseItems<SubnetHyperparam>;
+		subnetHyperparams: ResponseItems<SubnetHyperparams>;
 	}>(
 		`query ($filter: SubnetHyperparamFilter) {
 			subnetHyperparams(filter: $filter) {
 				nodes {
 					id
-					activitCutoff
+					activityCutoff
 					adjustmentAlpha
 					adjustmentInterval
 					bondsMovingAvg
