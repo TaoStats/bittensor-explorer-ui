@@ -83,10 +83,7 @@ function HotkeyMetagraphTable(props: HotkeyMetagraphTableProps) {
 				label="Updated"
 				render={(meta) => (
 					<>
-						{chainStats
-							? parseInt(chainStats.blocksFinalized.toString()) -
-							meta.lastUpdate
-							: 0}
+						{chainStats ? parseInt(chainStats.blocksFinalized.toString()) - meta.lastUpdate : 0}
 					</>
 				)}
 			/>
