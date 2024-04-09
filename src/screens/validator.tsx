@@ -29,71 +29,71 @@ import { useSubnets } from "../hooks/useSubnets";
 import SubnetsTable from "../components/validators/SubnetsTable";
 
 const validatorHeader = (theme: Theme) => css`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  align-items: center;
-  word-break: keep-all;
-  color: ${theme.palette.text.primary};
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	align-items: center;
+	word-break: keep-all;
+	color: ${theme.palette.text.primary};
 `;
 
 const infoSection = css`
-  display: flex;
-  @media only screen and (max-width: 767px) {
-    flex-direction: column;
-  }
+	display: flex;
+	@media only screen and (max-width: 767px) {
+		flex-direction: column;
+	}
 `;
 
 const validatorInfo = css`
-  display: flex;
-  gap: 10px;
+	display: flex;
+	gap: 10px;
 `;
 
 const validatorAddress = css`
-  opacity: 0.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	opacity: 0.5;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 
 const validatorTitle = css`
-  display: block;
-  opacity: 0.8;
-  width: 144px;
-  font-size: 12px;
+	display: block;
+	opacity: 0.8;
+	width: 144px;
+	font-size: 12px;
 `;
 
 const verifiedBadge = css`
-  background-color: #7aff97;
-  color: #000;
-  font-size: 10px;
-  text-transform: uppercase;
-  padding: 5px;
-  font-weight: 500;
+	background-color: #7aff97;
+	color: #000;
+	font-size: 10px;
+	text-transform: uppercase;
+	padding: 5px;
+	font-weight: 500;
 `;
 
 const website = css`
-  line-height: 18px;
-  cursor: pointer;
+	line-height: 18px;
+	cursor: pointer;
 `;
 
 const validatorDescription = css`
-  padding: 0px 20px 20px;
-  display: block;
-  opacity: 0.8;
-  font-size: 12px;
+	padding: 0px 20px 20px;
+	display: block;
+	opacity: 0.8;
+	font-size: 12px;
 `;
 
 const stakeButton = css`
-  padding: 20px;
+	padding: 20px;
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-  flex: 0 0 auto;
-  width: 400px;
+	flex: 0 0 auto;
+	width: 400px;
 
-  ${theme.breakpoints.down("lg")} {
-    width: auto;
-  }
+	${theme.breakpoints.down("lg")} {
+		width: auto;
+	}
 `;
 
 export type ValidatorPageParams = {
@@ -171,7 +171,11 @@ export const ValidatorPage = () => {
 
 	const subnets = useSubnets(undefined);
 
-	return (
+	return validator.notFound ? (
+		<CardRow css={infoSection}>
+			<Card>Invalid validator address</Card>
+		</CardRow>
+	) : (
 		<>
 			<CardRow css={infoSection}>
 				<Card>
@@ -211,7 +215,7 @@ export const ValidatorPage = () => {
 							color="secondary"
 							target="_blank"
 						>
-              DELEGATE STAKE
+							DELEGATE STAKE
 						</ButtonLink>
 					</div>
 				</Card>
