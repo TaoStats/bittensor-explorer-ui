@@ -202,7 +202,11 @@ export const ValidatorPage = () => {
 		return ids;
 	}, [validator]);
 
-	return (
+	return validator.notFound ? (
+		<CardRow css={infoSection}>
+			<Card>Invalid validator address</Card>
+		</CardRow>
+	) : (
 		<>
 			<CardRow css={infoSection}>
 				<Card>
