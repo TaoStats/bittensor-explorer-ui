@@ -198,7 +198,7 @@ export const ValidatorPage = () => {
 	const subnetIDs = useMemo(() => {
 		const ids: number[] = validator.data?.validatorPermits || [];
 		const firstId = ids[0] ?? -1;
-		if (activeSubnet === -1) setActiveSubnet(firstId);
+		if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
 		return ids;
 	}, [validator]);
 
