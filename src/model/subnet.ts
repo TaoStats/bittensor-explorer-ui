@@ -156,11 +156,33 @@ export type NeuronMetagraph = {
 	lastUpdate: number;
 	netUid: number;
 	rank: number;
+	registeredAt: bigint;
 	stake: bigint;
 	uid: number;
 	trust: number;
 	validatorPermit: any;
 	validatorTrust: number;
+};
+
+export type NeuronPerformance = {
+	id: string;
+	emission: bigint;
+	height: number;
+	netUid: number;
+	timestamp: string;
+	updated: number;
+};
+
+export type NeuronPerformancePaginatedResponse = {
+	hasNextPage: boolean;
+	endCursor: string;
+	data: NeuronPerformance[];
+};
+
+export type NeuronPerformanceResponse = {
+	loading: boolean;
+	error?: DataError;
+	data: NeuronPerformance[];
 };
 
 export type NeuronRegEvent = {

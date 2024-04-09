@@ -16,6 +16,7 @@ import { ValidatorsPage } from "./screens/validators";
 import { SubnetsPage } from "./screens/subnets";
 import { SubnetPage } from "./screens/subnet";
 import { ColdkeyPage } from "./screens/coldkey";
+import { HotkeyPage } from "./screens/hotkey";
 
 export const router = createBrowserRouter(
 	[
@@ -82,6 +83,10 @@ export const router = createBrowserRouter(
 				{
 					path: "coldkey/:coldkey",
 					element: <ColdkeyPage />,
+				},
+				{
+					path: "hotkey/:hkey",
+					element: <HotkeyPage />,
 				},
 				{
 					path: "*",

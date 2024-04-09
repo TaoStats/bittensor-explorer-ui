@@ -10,9 +10,9 @@ import { ValidatorResponse } from "../../model/validator";
 import { AccountAddress } from "../AccountAddress";
 
 const addressItem = css`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 `;
 
 export type ValidatorInfoTableProps = {
@@ -31,8 +31,14 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 	const {
 		state: { tokenLoading, tokenStats },
 	} = useAppStats();
-	const dominance = tokenLoading || tokenStats === undefined || tokenStats.delegatedSupply === 0 ? 0 : 
-		((rawAmountToDecimal(balance.data).toNumber() / tokenStats.delegatedSupply) * 100).toFixed(2);
+	const dominance =
+		tokenLoading || tokenStats === undefined || tokenStats.delegatedSupply === 0
+			? 0
+			: (
+				(rawAmountToDecimal(balance.data).toNumber() /
+					tokenStats.delegatedSupply) *
+				100
+			).toFixed(2);
 
 	return (
 		<InfoTable
@@ -71,6 +77,7 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 						link
 					/>
 				)}
+				copyToClipboard={() => info.data?.owner}
 			/>
 			<ValidatorInfoTableAttribute
 				label="Daily return"

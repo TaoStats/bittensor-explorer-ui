@@ -19,6 +19,8 @@ import {
 	MinerIncentive,
 	MinerIncentivePaginatedResponse,
 	SubnetHyperparams,
+	NeuronPerformance,
+	NeuronPerformancePaginatedResponse,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -30,6 +32,7 @@ export type SubnetsFilter = object;
 export type SubnetHyperparamsFilter = object;
 export type SingleSubnetStatsFilter = object;
 export type NeuronMetagraphFilter = object;
+export type NeuronPerformanceFilter = object;
 export type NeuronRegEventsFilter = object;
 
 export type SubnetsOrder =
@@ -95,8 +98,6 @@ export type NeuronMetagraphOrder =
 	| "RANK_DESC"
 	| "STAKE_ASC"
 	| "STAKE_DESC"
-	| "TOTAL_REWARD_ASC"
-	| "TOTAL_REWARD_DESC"
 	| "TRUST_ASC"
 	| "TRUST_DESC"
 	| "UID_ASC"
@@ -105,6 +106,12 @@ export type NeuronMetagraphOrder =
 	| "VALIDATOR_PERMIT_DESC"
 	| "VALIDATOR_TRUST_ASC"
 	| "VALIDATOR_TRUST_DESC";
+
+export type NeuronPerformanceOrder =
+	| "ID_ASC"
+	| "ID_DESC"
+	| "HEIGHT_ASC"
+	| "HEIGHT_DESC";
 
 export type NeuronRegEventsOrder =
 	| "ID_ASC"
@@ -462,6 +469,7 @@ export async function getNeuronMetagraph(
 					lastUpdate
 					netUid
 					rank
+					registeredAt
 					stake
 					uid
 					trust
@@ -485,6 +493,45 @@ export async function getNeuronMetagraph(
 	);
 
 	return extractItems(response.neuronInfos, pagination, transform);
+}
+
+export async function getNeuronPerformance(
+	filter: NeuronPerformanceFilter | undefined,
+	order: NeuronPerformanceOrder = "ID_DESC",
+	after?: string
+): Promise<NeuronPerformancePaginatedResponse> {
+	const response = await fetchSubnets<{
+		neuronPerformances: ResponseItems<NeuronPerformance>;
+	}>(
+		`query ($after: Cursor, $filter: NeuronPerformanceFilter, $order: [NeuronPerformancesOrderBy!]!) {
+			neuronPerformances(after: $after, filter: $filter, orderBy: $order) {
+				nodes {
+					id
+					emission
+					height
+					timestamp
+					updated
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+					hasPreviousPage
+				}
+				totalCount
+			}
+		}`,
+		{
+			after,
+			filter,
+			order,
+		}
+	);
+
+	return {
+		hasNextPage: response.neuronPerformances?.pageInfo.hasNextPage,
+		endCursor: response.neuronPerformances?.pageInfo.endCursor,
+		data: response.neuronPerformances?.nodes,
+	};
 }
 
 export async function getNeuronRegEvents(

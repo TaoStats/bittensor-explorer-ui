@@ -240,7 +240,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				render={(data) =>
 					data.emission >= 0 ? (
 						<Link
-							to={`https://taostats.io/hotkey/?hkey=${data.hotkey}`}
+							to={`/hotkey/${data.hotkey}`}
 							css={boldText}
 						>
 							{data.uid}

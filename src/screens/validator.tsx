@@ -14,7 +14,7 @@ import {
 	DelegateFilter,
 	DelegatesOrder,
 } from "../services/delegateService";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import WebSvg from "../assets/web.svg";
 import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
@@ -27,6 +27,7 @@ import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 import { useValidator } from "../hooks/useValidator";
 import { useSubnets } from "../hooks/useSubnets";
 import SubnetsTable from "../components/validators/SubnetsTable";
+import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
 
 const validatorHeader = (theme: Theme) => css`
 	display: flex;
@@ -94,6 +95,28 @@ const portfolioStyle = (theme: Theme) => css`
 	${theme.breakpoints.down("lg")} {
 		width: auto;
 	}
+`;
+
+const perfContainer = css`
+	margin-top: 50px;
+`;
+
+const perfSubnet = css`
+	font-size: 14px;
+	min-width: 32px;
+	height: 32px;
+	background: rgba(255, 255, 255, 0.06);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 2px;
+	padding: 0 8px;
+	margin: 5px 10px;
+	cursor: pointer;
+`;
+
+const activePerfSubnet = css`
+	box-shadow: 0 0 8px 0 #ff990085 inset;
 `;
 
 export type ValidatorPageParams = {
@@ -171,6 +194,14 @@ export const ValidatorPage = () => {
 
 	const subnets = useSubnets(undefined);
 
+	const [activeSubnet, setActiveSubnet] = useState(-1);
+	const subnetIDs = useMemo(() => {
+		const ids: number[] = validator.data?.validatorPermits || [];
+		const firstId = ids[0] ?? -1;
+		if (activeSubnet === -1) setActiveSubnet(firstId);
+		return ids;
+	}, [validator]);
+
 	return validator.notFound ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid validator address</Card>
@@ -236,6 +267,35 @@ export const ValidatorPage = () => {
 							stakeHistory={validatorStakeHistory}
 							balance={balance}
 						/>
+					</TabPane>
+					<TabPane
+						label="Performance"
+						loading={validator.loading}
+						error={!!validator.error}
+						value="performance"
+					>
+						<div css={perfContainer}>
+							<div>
+								{subnetIDs.map((id: number) => (
+									<div
+										css={[
+											perfSubnet,
+											id === activeSubnet ? activePerfSubnet : undefined,
+										]}
+										key={`perf_subnet_${id}`}
+										onClick={() => setActiveSubnet(id)}
+									>
+										{id}
+									</div>
+								))}
+							</div>
+							{activeSubnet > -1 && (
+								<HotkeyPerformanceChart
+									netUid={activeSubnet}
+									hotkey={address}
+								/>
+							)}
+						</div>
 					</TabPane>
 				</TabbedContent>
 			</Card>
