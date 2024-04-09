@@ -71,11 +71,13 @@ export const ValidatorInfoTable = (props: ValidatorInfoTableProps) => {
 			<ValidatorInfoTableAttribute
 				label="Owner"
 				render={() => (
-					<AccountAddress
-						address={info.data?.owner || ""}
-						prefix={prefix}
-						link
-					/>
+					<div css={addressItem}>
+						<AccountAddress
+							address={info.data?.owner || ""}
+							prefix={prefix}
+							link
+						/>
+					</div>
 				)}
 				copyToClipboard={() => info.data?.owner}
 			/>

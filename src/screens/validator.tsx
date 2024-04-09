@@ -96,6 +96,12 @@ const neuronBoxes = css`
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	gap: 5px;
+	@media only screen and (max-width: 1199px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+	@media only screen and (max-width: 767px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
 `;
 const neuronBox = css`
 	border: 1px solid white;
