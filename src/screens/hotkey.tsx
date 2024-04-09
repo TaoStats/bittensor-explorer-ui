@@ -42,10 +42,11 @@ export const HotkeyPage = () => {
 	const neuronMetagraph = useHotkeyNet(hkey);
 	const isValidator = useMemo(() => {
 		if (neuronMetagraph.loading) return false;
-		return neuronMetagraph.data.reduce(
-			(_isValidator: boolean, cur: NeuronMetagraph) =>
-				cur.dividends > 0 && rawAmountToDecimal(cur.stake.toString()).gt(1000),
-			false
+		return (
+			neuronMetagraph.data.find(
+				(cur) =>
+					cur.dividends > 0 && rawAmountToDecimal(cur.stake.toString()).gt(1000)
+			) != undefined
 		);
 	}, [neuronMetagraph]);
 
