@@ -109,7 +109,7 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 					size: 0,
 				},
 				noData: {
-					text: "No performance yet",
+					text: "No performance records found",
 					align: "center",
 					verticalAlign: "middle",
 					offsetX: 0,

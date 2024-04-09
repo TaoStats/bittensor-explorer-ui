@@ -23,9 +23,6 @@ export function useHotkeyPerformance(
 			let finished = false;
 			let after: string | undefined = undefined;
 
-			const now = Date.now();
-			const from = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
-
 			const result: NeuronPerformance[] = [];
 			while (!finished) {
 				const performance: NeuronPerformancePaginatedResponse =
@@ -36,9 +33,6 @@ export function useHotkeyPerformance(
 							},
 							netUid: {
 								equalTo: subnetId,
-							},
-							timestamp: {
-								greaterThan: new Date(from).toISOString().substring(0, 19),
 							},
 						},
 						"HEIGHT_ASC",

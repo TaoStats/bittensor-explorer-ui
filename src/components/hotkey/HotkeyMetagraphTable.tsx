@@ -49,7 +49,7 @@ function HotkeyMetagraphTable(props: HotkeyMetagraphTableProps) {
 				render={(meta) => <>{meta.uid}</>}
 			/>
 			<HotkeyMetagraphTableAttribute
-				label="Registered(UTC)"
+				label="Registered (UTC)"
 				render={(meta) => (
 					<BlockTimestamp
 						blockHeight={meta.registeredAt}

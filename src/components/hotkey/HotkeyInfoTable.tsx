@@ -25,10 +25,7 @@ export const HotkeyInfoTable = (props: HotkeyInfoTableProps) => {
 
 	const coldkey = useMemo(() => {
 		if (loading) return undefined;
-		return data.reduce(
-			(_coldkey: string | undefined, cur: NeuronMetagraph) => cur.coldkey,
-			undefined
-		);
+		return data.at(-1)?.coldkey;
 	}, [data]);
 
 	return (

@@ -3,7 +3,6 @@ import { Navigate, useParams } from "react-router-dom";
 import { css } from "@emotion/react";
 import { useHotkeyNet } from "../hooks/useHotkeyNet";
 import { rawAmountToDecimal } from "../utils/number";
-import { NeuronMetagraph } from "../model/subnet";
 import { useMemo, useState } from "react";
 import { Card } from "../components/Card";
 import { HotkeyInfoTable } from "../components/hotkey/HotkeyInfoTable";
@@ -54,7 +53,7 @@ export const HotkeyPage = () => {
 	const subnetIDs = useMemo(() => {
 		if (neuronMetagraph.loading) return [];
 		const ids = neuronMetagraph.data
-			.map((cur: NeuronMetagraph) => cur.netUid)
+			.map(({ netUid }) => netUid)
 			.filter((id) => id > 0);
 		const firstId = ids[0] ?? -1;
 		if (activeSubnet === -1) setActiveSubnet(firstId);
