@@ -503,8 +503,8 @@ export async function getNeuronPerformance(
 	const response = await fetchSubnets<{
 		neuronPerformances: ResponseItems<NeuronPerformance>;
 	}>(
-		`query ($first: Int!, $offset: Int!, $filter: NeuronPerformanceFilter, $order: [NeuronPerformancesOrderBy!]!) {
-			neuronPerformances(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+		`query ($after: Cursor, $filter: NeuronPerformanceFilter, $order: [NeuronPerformancesOrderBy!]!) {
+			neuronPerformances(after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
 					emission
