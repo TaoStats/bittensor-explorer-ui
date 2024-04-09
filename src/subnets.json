@@ -49,10 +49,10 @@
         "github": "https://github.com/RaoFoundation/pretraining",
         "description": ""
     },
-    "10": {
-        "name": "Map Reduce",
-        "github": "https://github.com/dream-well/map-reduce-subnet",
-        "description": ""
+   "10": {
+        "name": "Decentralized Distributed Data",
+        "github": "https://github.com/gitphantomman/d3_subnet",
+        "description": "The D3 Subnet, standing for Decentralized Distributed Data Scraping subnet, plays a crucial role in the advancement of artificial intelligence by ensuring ample training data for all Bittensor AI networks."
     },
     "11": {
         "name": "Transcription",
