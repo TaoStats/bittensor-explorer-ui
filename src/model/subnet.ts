@@ -173,6 +173,18 @@ export type NeuronPerformance = {
 	updated: number;
 };
 
+export type NeuronPerformancePaginatedResponse = {
+	hasNextPage: boolean;
+	endCursor: string;
+	data: NeuronPerformance[];
+};
+
+export type NeuronPerformanceResponse = {
+	loading: boolean;
+	error?: DataError;
+	data: NeuronPerformance[];
+};
+
 export type NeuronRegEvent = {
 	id: string;
 	uid: number;

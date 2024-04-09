@@ -1,12 +1,17 @@
 import { useRollbar } from "@rollbar/react";
 import { useState, useCallback, useEffect } from "react";
-import { NeuronPerformance } from "../model/subnet";
+import {
+	NeuronPerformance,
+	NeuronPerformancePaginatedResponse,
+	NeuronPerformanceResponse,
+} from "../model/subnet";
 import { getNeuronPerformance } from "../services/subnetsService";
 import { DataError } from "../utils/error";
 
-import { ItemsResponse } from "../model/itemsResponse";
-
-export function useHotkeyPerformance(hotkey: string, netUid: number) {
+export function useHotkeyPerformance(
+	hotkey: string,
+	netUid: number
+): NeuronPerformanceResponse {
 	const rollbar = useRollbar();
 
 	const [data, setData] = useState<NeuronPerformance[]>([]);
@@ -15,22 +20,35 @@ export function useHotkeyPerformance(hotkey: string, netUid: number) {
 
 	const fetchData = useCallback(async (hkey: string, subnetId: number) => {
 		try {
-			const result: ItemsResponse<NeuronPerformance> =
-				await getNeuronPerformance(
-					{
-						hotkey: {
-							equalTo: hkey,
+			let finished = false;
+			let after: string | undefined = undefined;
+
+			const now = Date.now();
+			const from = new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+			const result: NeuronPerformance[] = [];
+			while (!finished) {
+				const performance: NeuronPerformancePaginatedResponse =
+					await getNeuronPerformance(
+						{
+							hotkey: {
+								equalTo: hkey,
+							},
+							netUid: {
+								equalTo: subnetId,
+							},
+							timestamp: {
+								greaterThan: new Date(from).toISOString().substring(0, 19),
+							},
 						},
-						netUid: {
-							equalTo: subnetId,
-						},
-					},
-					"HEIGHT_ASC",
-					{
-						limit: 1024,
-					}
-				);
-			setData(result.data);
+						"HEIGHT_ASC",
+						after
+					);
+				result.push(...performance.data);
+				finished = !performance.hasNextPage;
+				after = performance.endCursor;
+			}
+			setData(result);
 		} catch (e) {
 			if (e instanceof DataError) {
 				rollbar.error(e);

@@ -20,6 +20,7 @@ import {
 	MinerIncentivePaginatedResponse,
 	SubnetHyperparams,
 	NeuronPerformance,
+	NeuronPerformancePaginatedResponse,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -497,8 +498,8 @@ export async function getNeuronMetagraph(
 export async function getNeuronPerformance(
 	filter: NeuronPerformanceFilter | undefined,
 	order: NeuronPerformanceOrder = "ID_DESC",
-	pagination: PaginationOptions
-) {
+	after?: string
+): Promise<NeuronPerformancePaginatedResponse> {
 	const response = await fetchSubnets<{
 		neuronPerformances: ResponseItems<NeuronPerformance>;
 	}>(
@@ -520,14 +521,17 @@ export async function getNeuronPerformance(
 			}
 		}`,
 		{
-			offset: (pagination.offset ?? 1) - 1,
-			first: pagination.limit,
+			after,
 			filter,
 			order,
 		}
 	);
 
-	return extractItems(response.neuronPerformances, pagination, transform);
+	return {
+		hasNextPage: response.neuronPerformances?.pageInfo.hasNextPage,
+		endCursor: response.neuronPerformances?.pageInfo.endCursor,
+		data: response.neuronPerformances?.nodes,
+	};
 }
 
 export async function getNeuronRegEvents(

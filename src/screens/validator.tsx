@@ -272,7 +272,7 @@ export const ValidatorPage = () => {
 						label="Performance"
 						loading={validator.loading}
 						error={!!validator.error}
-						value="perf"
+						value="performance"
 					>
 						<div css={perfContainer}>
 							<div>
