@@ -33,21 +33,14 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 		if (!perf.data) return [];
 		return perf.data.map((x: NeuronPerformance) => x.timestamp);
 	}, [perf]);
-	const minEmision = useMemo(() => {
-		if (!perf.data) return 0;
-		return perf.data.reduce((prev: number, cur: NeuronPerformance) => {
-			const now = rawAmountToDecimal(cur.emission.toString()).toNumber();
-			if (prev === -1) return now;
-			return now < prev ? now : prev;
-		}, -1);
-	}, [perf]);
-	const maxEmission = useMemo(() => {
-		if (!perf.data) return 0;
-		return perf.data.reduce((prev: number, cur: NeuronPerformance) => {
-			const now = rawAmountToDecimal(cur.emission.toString()).toNumber();
-			if (prev === -1) return now;
-			return now > prev ? now : prev;
-		}, -1);
+	const [minEmission, maxEmission] = useMemo(() => {
+		const { data } = perf;
+		if (!data) return [0, 0];
+
+		const dat = data.map(({ emission }) =>
+			rawAmountToDecimal(emission.toString()).toNumber()
+		);
+		return [Math.min(...dat), Math.max(...dat)];
 	}, [perf]);
 	const updated = useMemo(() => {
 		if (!perf.data) return [];
@@ -230,8 +223,8 @@ export const HotkeyPerformanceChart = (props: HotkeyPerformanceChartProps) => {
 						axisBorder: {
 							show: false,
 						},
-						min: minEmision,
-						max: maxEmission,
+						min: minEmission * 0.95,
+						max: maxEmission * 1.05,
 					},
 				],
 			}}
