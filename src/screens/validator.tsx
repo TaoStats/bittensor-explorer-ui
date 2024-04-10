@@ -128,7 +128,7 @@ const neuronBox = css`
 	}
 `;
 const selectedNeuronBox = css`
-	border-color: #7aff97 !important;
+	border-color: #14dec2 !important;
 `;
 const statRow = css`
 	display: flex;
