@@ -94,8 +94,17 @@ const validatorDescription = css`
 
 const neuronBoxes = css`
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(8, 1fr);
 	gap: 5px;
+	@media only screen and (max-width: 1779px) {
+		grid-template-columns: repeat(7, 1fr);
+	}
+	@media only screen and (max-width: 1569px) {
+		grid-template-columns: repeat(6, 1fr);
+	}
+	@media only screen and (max-width: 1339px) {
+		grid-template-columns: repeat(5, 1fr);
+	}
 	@media only screen and (max-width: 1199px) {
 		grid-template-columns: repeat(4, 1fr);
 	}
@@ -143,6 +152,7 @@ const statTwoItems = css`
 	grid-template-columns: 3fr 2fr;
 `;
 const statLabel = css`
+	color: gray;
 	font-size: 11px;
 `;
 const statValue = css`
