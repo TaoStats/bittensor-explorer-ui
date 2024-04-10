@@ -119,7 +119,7 @@ const neuronBox = css`
 	}
 `;
 const selectedNeuronBox = css`
-	border-color: blue;
+	border-color: #7aff97;
 `;
 const statRow = css`
 	display: flex;
@@ -136,7 +136,7 @@ const statFullWidth = css`
 `;
 const statThreeItems = css`
 	display: grid;
-	grid-template-columns: 1fr 1fr 2fr;
+	grid-template-columns: 1fr 1fr 3fr;
 `;
 const statTwoItems = css`
 	display: grid;
@@ -316,7 +316,7 @@ export const ValidatorPage = () => {
 				</Card>
 			</CardRow>
 			<Card data-test="account-historical-items">
-				<TabbedContent>
+				<TabbedContent defaultTab={tab.slice(1).toString()}>
 					<TabPane
 						label="Staked"
 						loading={validatorStakeHistory.loading}
@@ -346,6 +346,7 @@ export const ValidatorPage = () => {
 												: undefined,
 										]}
 										onClick={() => setActiveSubnet(meta.netUid)}
+										key={`validator_performance_subnet_${meta.netUid}`}
 									>
 										<div css={statRow}>
 											<span css={statBigLabel}>{meta.netUid}</span>
