@@ -84,7 +84,7 @@ export const HotkeyPage = () => {
 								key={`perf_subnet_${id}`}
 								onClick={() => setActiveSubnet(id)}
 							>
-								{id}
+								SN{id}
 							</div>
 						))}
 					</div>
