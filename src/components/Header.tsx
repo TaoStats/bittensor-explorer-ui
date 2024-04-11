@@ -154,6 +154,15 @@ export const Header = () => {
 												UNISWAP(stTAO)
 											</a>
 										</li>
+										<li>
+											<a
+												href="https://accounts.binance.com/register?ref=JCEYWLC3"
+												target="_blank"
+												rel="noreferrer"
+											>
+												BINANCE
+											</a>
+										</li>
 									</ul>
 								</div>
 								<a
@@ -446,6 +455,15 @@ export const Header = () => {
 													rel="noreferrer"
 												>
 													UNISWAP(stTAO)
+												</a>
+											</li>
+											<li>
+												<a
+													href="https://accounts.binance.com/register?ref=JCEYWLC3"
+													target="_blank"
+													rel="noreferrer"
+												>
+													BINANCE
 												</a>
 											</li>
 										</ul>
