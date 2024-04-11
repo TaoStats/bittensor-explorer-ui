@@ -10,9 +10,9 @@
         "description": ""
     },
     "2": {
-        "name": "Machine Translation",
-        "github": "https://github.com/bittranslateio/bittranslate",
-        "description": ""
+        "name": "Omron",
+        "github": "",
+        "description": "Omron subnet, building cryptographically verified efficient and intelligent capital networks. "
     },
     "3": {
         "name": "MyShell TTS",
