@@ -369,7 +369,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				label="hotkey"
 				sortable
 				render={(data) => (
-					<Link to={`/account/${data.hotkey}`} color="white">
+					<Link to={`/hotkey/${data.hotkey}`} color="white">
 						{shortenHash(data.hotkey, true, false)}
 					</Link>
 				)}
@@ -379,7 +379,7 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 				label="coldkey"
 				sortable
 				render={(data) => (
-					<Link to={`/account/${data.coldkey}`} color="white">
+					<Link to={`/coldkey/${data.coldkey}`} color="white">
 						{shortenHash(data.coldkey, true, false)}
 					</Link>
 				)}
