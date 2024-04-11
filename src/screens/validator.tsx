@@ -230,6 +230,7 @@ export const ValidatorPage = () => {
 			hotkey: { equalTo: address },
 			netUid: { notEqualTo: 0 },
 		},
+		1024,
 		"NET_UID_ASC"
 	);
 	const {
