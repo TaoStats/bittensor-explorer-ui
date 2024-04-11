@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { SortDirection } from "../../model/sortDirection";
 import { SortOrder } from "../../model/sortOrder";
 import { MinerColdKey } from "../../model/subnet";
+import { Link } from "../Link";
 
 const whiteText = css`
 	color: white;
@@ -89,7 +90,9 @@ function MinerColdkeyTable(props: MinerColdkeyTableProps) {
 				label="Coldkey"
 				sortable
 				render={(minerColdkey) => (
-					<span css={whiteText}> {minerColdkey.coldkey} </span>
+					<Link to={`/coldkey/${minerColdkey.coldkey}`} color="white">
+						{minerColdkey.coldkey}
+					</Link>
 				)}
 				sortProperty="coldkey"
 			/>
