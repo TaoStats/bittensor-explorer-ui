@@ -268,9 +268,7 @@ export const ValidatorPage = () => {
 
 	const [activeSubnet, setActiveSubnet] = useState(-1);
 	useEffect(() => {
-		const ids: number[] =
-			neuronMetagraph.data?.map((meta) => meta.netUid) || [];
-		const firstId = ids[0] ?? -1;
+		const firstId = neuronMetagraph.data?.at(-1)?.netUid || -1;
 		if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
 	}, [neuronMetagraph]);
 
