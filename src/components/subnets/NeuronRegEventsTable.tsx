@@ -108,10 +108,7 @@ function NeuronRegEventsTable(props: NeuronRegEventsTableProps) {
 				label="uid"
 				sortable
 				render={(data) => (
-					<Link
-						to={`https://taostats.io/hotkey/?hkey=${data.hotkey}`}
-						css={boldText}
-					>
+					<Link to={`/hotkey/${data.hotkey}`} css={boldText}>
 						{data.uid}
 					</Link>
 				)}
@@ -120,13 +117,21 @@ function NeuronRegEventsTable(props: NeuronRegEventsTableProps) {
 			<NeuronRegEventsTableAttribute
 				label="hotkey"
 				sortable
-				render={(data) => <span css={whiteText}>{data.hotkey}</span>}
+				render={(data) => (
+					<Link to={`/hotkey/${data.hotkey}`} color="white">
+						{data.hotkey}
+					</Link>
+				)}
 				sortProperty="hotkey"
 			/>
 			<NeuronRegEventsTableAttribute
 				label="coldkey"
 				sortable
-				render={(data) => <span css={whiteText}>{data.coldkey}</span>}
+				render={(data) => (
+					<Link to={`/coldkey/${data.coldkey}`} color="white">
+						{data.coldkey}
+					</Link>
+				)}
 				sortProperty="coldkey"
 			/>
 			<NeuronRegEventsTableAttribute
