@@ -37,7 +37,7 @@ function SubnetHyperparamTable(props: SubnetHyperparamTableProps) {
 				result.push({
 					id: key,
 					key: formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1),
-					value: value.toString(),
+					value: value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","),
 				});
 			});
 		}
