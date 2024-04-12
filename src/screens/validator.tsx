@@ -48,7 +48,7 @@ const validatorHeader = (theme: Theme) => css`
 
 const infoSection = css`
 	display: flex;
-	@media only screen and (max-width: 767px) {
+	@media only screen and (max-width: 1139px) {
 		flex-direction: column;
 	}
 `;
@@ -114,7 +114,7 @@ const neuronBoxes = css`
 	@media only screen and (max-width: 767px) {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	@media only screen and (max-width: 599px) {
+	@media only screen and (max-width: 429px) {
 		grid-template-columns: repeat(1, 1fr);
 	}
 `;
