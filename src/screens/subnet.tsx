@@ -212,6 +212,7 @@ export const SubnetPage = () => {
 			netUid: { equalTo: parseInt(id) },
 			...(searchText ? { or: getSearchQuery(searchText) } : {}),
 		},
+		25,
 		neuronMetagraphSort
 	);
 

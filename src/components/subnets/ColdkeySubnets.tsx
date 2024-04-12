@@ -26,6 +26,7 @@ export const ColdkeySubnets = ({ netUid, coldkey }: ColdkeySubnetsProps) => {
 			netUid: { equalTo: netUid },
 			coldkey: { equalTo: coldkey },
 		},
+		1024,
 		neuronMetagraphSort
 	);
 

@@ -56,7 +56,7 @@ export const HotkeyPage = () => {
 			.map(({ netUid }) => netUid)
 			.filter((id) => id > 0);
 		const firstId = ids[0] ?? -1;
-		if (activeSubnet === -1) setActiveSubnet(firstId);
+		if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
 		return ids;
 	}, [neuronMetagraph]);
 
@@ -84,7 +84,7 @@ export const HotkeyPage = () => {
 								key={`perf_subnet_${id}`}
 								onClick={() => setActiveSubnet(id)}
 							>
-								{id}
+								SN{id}
 							</div>
 						))}
 					</div>

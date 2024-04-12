@@ -9,6 +9,7 @@ import { useFullPaginatedResource } from "./useFullPaginatedResource";
 
 export function useNeuronMetagraph(
 	filter: NeuronMetagraphFilter | undefined,
+	limit: number,
 	order?: NeuronMetagraphOrder,
 	options?: FetchOptions
 ) {
@@ -16,6 +17,6 @@ export function useNeuronMetagraph(
 		getNeuronMetagraph,
 		[filter, order],
 		options,
-		1024
+		limit
 	);
 }
