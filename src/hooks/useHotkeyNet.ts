@@ -20,6 +20,9 @@ export function useHotkeyNet(hotkey: string) {
 					hotkey: {
 						equalTo: hotkey,
 					},
+					netUid: {
+						notEqualTo: 0,
+					},
 				},
 				"NET_UID_ASC",
 				{
