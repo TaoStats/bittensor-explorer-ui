@@ -89,9 +89,9 @@ function MinerColdkeyTable(props: MinerColdkeyTableProps) {
 			<MinerColdkeyTableAttribute
 				label="Coldkey"
 				sortable
-				render={(minerColdkey) => (
-					<Link to={`/coldkey/${minerColdkey.coldkey}`} color="white">
-						{minerColdkey.coldkey}
+				render={({coldkey}) => (
+					<Link to={`/coldkey/${coldkey}`} color="white">
+						{coldkey}
 					</Link>
 				)}
 				sortProperty="coldkey"
@@ -99,8 +99,8 @@ function MinerColdkeyTable(props: MinerColdkeyTableProps) {
 			<MinerColdkeyTableAttribute
 				label="UIDs"
 				sortable
-				render={(minerColdkey) => (
-					<span css={whiteText}> {minerColdkey.minersCount} </span>
+				render={({minersCount}) => (
+					<span css={whiteText}> {minersCount} </span>
 				)}
 				sortProperty="minersCount"
 			/>
