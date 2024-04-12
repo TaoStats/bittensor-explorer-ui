@@ -133,12 +133,13 @@ const selectedNeuronBox = css`
 const statRow = css`
 	display: flex;
 	flex-direction: row;
-	align-items: center;
+	align-items: end;
 	gap: 10px;
 `;
 const statBigLabel = css`
 	font-size: 28px;
 	color: #fa9b00;
+	padding-bottom: 3px;
 `;
 const statFullWidth = css`
 	flex: 1;
