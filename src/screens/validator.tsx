@@ -120,7 +120,7 @@ const neuronBoxes = css`
 `;
 const neuronBox = css`
 	border: 1px solid gray;
-	padding: 5px;
+	padding: 10px 0 10px 10px;
 	cursor: pointer;
 
 	&:hover {
@@ -146,20 +146,20 @@ const statFullWidth = css`
 const statThreeItems = css`
 	display: grid;
 	grid-template-columns: 1fr 1fr 3fr;
+	margin-top: -5px;
 `;
 const statTwoItems = css`
 	display: grid;
 	grid-template-columns: 3fr 2fr;
+	margin-top: -5px;
 `;
 const statLabel = css`
 	color: gray;
 	font-size: 11px;
 `;
 const statValue = css`
+	color: #fff;
 	font-size: 13px;
-`;
-const statBreak = css`
-	margin-top: 5px;
 `;
 
 const stakeButton = css`
@@ -372,7 +372,7 @@ export const ValidatorPage = () => {
 												</div>
 											</div>
 										</div>
-										<div css={[statTwoItems, statBreak]}>
+										<div css={statTwoItems}>
 											<span css={statLabel}>Daily Rewards</span>
 											<span css={statLabel}>Dividends</span>
 										</div>
@@ -395,7 +395,7 @@ export const ValidatorPage = () => {
 												)}
 											</span>
 										</div>
-										<div css={[statTwoItems, statBreak]}>
+										<div css={statTwoItems}>
 											<span css={statLabel}>Updated</span>
 											<span css={statLabel}>vTrust</span>
 										</div>
