@@ -31,15 +31,14 @@ function SubnetHyperparamTable(props: SubnetHyperparamTableProps) {
 			const params = hyperparams.data;
 			const omitKeys = ["id", "lastUpdate", "timestamp"];
 			Object.keys(params).forEach((key) => {
-				if (!omitKeys.includes(key)) {
-					const value = (params as any)[key];
-					const formattedKey = key.replace(/([A-Z])/g, " $1");
-					result.push({
-						id: key,
-						key: formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1),
-						value: value.toString(),
-					});
-				}
+				if (omitKeys.includes(key)) return;
+				const value = (params as any)[key];
+				const formattedKey = key.replace(/([A-Z])/g, " $1");
+				result.push({
+					id: key,
+					key: formattedKey.charAt(0).toUpperCase() + formattedKey.slice(1),
+					value: value.toString(),
+				});
 			});
 		}
 		return result;
