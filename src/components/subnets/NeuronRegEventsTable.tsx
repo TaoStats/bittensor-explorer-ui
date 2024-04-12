@@ -107,9 +107,9 @@ function NeuronRegEventsTable(props: NeuronRegEventsTableProps) {
 			<NeuronRegEventsTableAttribute
 				label="uid"
 				sortable
-				render={(data) => (
-					<Link to={`/hotkey/${data.hotkey}`} css={boldText}>
-						{data.uid}
+				render={({hotkey, uid}) => (
+					<Link to={`/hotkey/${hotkey}`} css={boldText}>
+						{uid}
 					</Link>
 				)}
 				sortProperty="uid"
@@ -117,9 +117,9 @@ function NeuronRegEventsTable(props: NeuronRegEventsTableProps) {
 			<NeuronRegEventsTableAttribute
 				label="hotkey"
 				sortable
-				render={(data) => (
-					<Link to={`/hotkey/${data.hotkey}`} color="white">
-						{data.hotkey}
+				render={({hotkey}) => (
+					<Link to={`/hotkey/${hotkey}`} color="white">
+						{hotkey}
 					</Link>
 				)}
 				sortProperty="hotkey"
@@ -127,9 +127,9 @@ function NeuronRegEventsTable(props: NeuronRegEventsTableProps) {
 			<NeuronRegEventsTableAttribute
 				label="coldkey"
 				sortable
-				render={(data) => (
-					<Link to={`/coldkey/${data.coldkey}`} color="white">
-						{data.coldkey}
+				render={({coldkey}) => (
+					<Link to={`/coldkey/${coldkey}`} color="white">
+						{coldkey}
 					</Link>
 				)}
 				sortProperty="coldkey"
@@ -147,8 +147,8 @@ function NeuronRegEventsTable(props: NeuronRegEventsTableProps) {
 			<NeuronRegEventsTableAttribute
 				label="block"
 				sortable
-				render={(data) => (
-					<Link to={`/block/${data.height}`}>{data.height}</Link>
+				render={({height}) => (
+					<Link to={`/block/${height}`}>{height}</Link>
 				)}
 				sortProperty="height"
 			/>
