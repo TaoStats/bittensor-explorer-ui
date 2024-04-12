@@ -114,9 +114,6 @@ const neuronBoxes = css`
 	@media only screen and (max-width: 767px) {
 		grid-template-columns: repeat(2, 1fr);
 	}
-	@media only screen and (max-width: 429px) {
-		grid-template-columns: repeat(1, 1fr);
-	}
 `;
 const neuronBox = css`
 	border: 1px solid gray;
@@ -125,6 +122,10 @@ const neuronBox = css`
 
 	&:hover {
 		border-color: white;
+	}
+
+	@media only screen and (max-width: 429px) {
+		padding: 5px 0 5px 5px;
 	}
 `;
 const selectedNeuronBox = css`
@@ -157,10 +158,16 @@ const statTwoItems = css`
 const statLabel = css`
 	color: gray;
 	font-size: 11px;
+	@media only screen and (max-width: 429px) {
+		font-size: 9px;
+	}
 `;
 const statValue = css`
 	color: #fff;
 	font-size: 13px;
+	@media only screen and (max-width: 429px) {
+		font-size: 11px;
+	}
 `;
 
 const stakeButton = css`
