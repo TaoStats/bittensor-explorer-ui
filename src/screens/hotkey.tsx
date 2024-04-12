@@ -3,7 +3,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { css } from "@emotion/react";
 import { useHotkeyNet } from "../hooks/useHotkeyNet";
 import { rawAmountToDecimal } from "../utils/number";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "../components/Card";
 import { HotkeyInfoTable } from "../components/hotkey/HotkeyInfoTable";
 import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
@@ -50,14 +50,9 @@ export const HotkeyPage = () => {
 	}, [neuronMetagraph]);
 
 	const [activeSubnet, setActiveSubnet] = useState(-1);
-	const subnetIDs = useMemo(() => {
-		if (neuronMetagraph.loading) return [];
-		const ids = neuronMetagraph.data
-			.map(({ netUid }) => netUid)
-			.filter((id) => id > 0);
-		const firstId = ids[0] ?? -1;
+	useEffect(() => {
+		const firstId = neuronMetagraph.data?.at(0)?.netUid || -1;
 		if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
-		return ids;
 	}, [neuronMetagraph]);
 
 	if (isValidator) {
@@ -75,16 +70,16 @@ export const HotkeyPage = () => {
 			<Card>
 				<div css={perfContainer}>
 					<div>
-						{subnetIDs.map((id: number) => (
+						{neuronMetagraph.data.map(({ netUid }) => (
 							<div
 								css={[
 									perfSubnet,
-									id === activeSubnet ? activePerfSubnet : undefined,
+									netUid === activeSubnet ? activePerfSubnet : undefined,
 								]}
-								key={`perf_subnet_${id}`}
-								onClick={() => setActiveSubnet(id)}
+								key={`perf_subnet_${netUid}`}
+								onClick={() => setActiveSubnet(netUid)}
 							>
-								SN{id}
+								SN{netUid}
 							</div>
 						))}
 					</div>
