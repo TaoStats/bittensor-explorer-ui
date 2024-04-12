@@ -134,13 +134,13 @@ const selectedNeuronBox = css`
 const statRow = css`
 	display: flex;
 	flex-direction: row;
-	align-items: end;
+	align-items: center;
 	gap: 10px;
 `;
 const statBigLabel = css`
-	font-size: 28px;
+	font-size: 26px;
+	line-height: 26px;
 	color: #fa9b00;
-	padding-bottom: 3px;
 `;
 const statFullWidth = css`
 	flex: 1;
@@ -148,26 +148,33 @@ const statFullWidth = css`
 const statThreeItems = css`
 	display: grid;
 	grid-template-columns: 1fr 1fr 3fr;
-	margin-top: -5px;
+	margin: 2px 0;
 `;
 const statTwoItems = css`
 	display: grid;
 	grid-template-columns: 3fr 2fr;
-	margin-top: -5px;
+	margin: 2px 0;
 `;
 const statLabel = css`
 	color: gray;
 	font-size: 11px;
+	line-height: 11px;
 	@media only screen and (max-width: 429px) {
 		font-size: 9px;
+		line-height: 9px;
 	}
 `;
 const statValue = css`
 	color: #fff;
 	font-size: 13px;
+	line-height: 13px;
 	@media only screen and (max-width: 429px) {
 		font-size: 11px;
+		line-height: 11px;
 	}
+`;
+const statBreak = css`
+	margin-top: 5px;
 `;
 
 const stakeButton = css`
@@ -366,7 +373,7 @@ export const ValidatorPage = () => {
 										key={`validator_performance_subnet_${meta.netUid}`}
 									>
 										<div css={statRow}>
-											<span css={statBigLabel}>{meta.netUid}</span>
+											<div css={statBigLabel}>{meta.netUid}</div>
 											<div css={statFullWidth}>
 												<div css={statThreeItems}>
 													<span css={statLabel}>Pos</span>
@@ -380,7 +387,7 @@ export const ValidatorPage = () => {
 												</div>
 											</div>
 										</div>
-										<div css={statTwoItems}>
+										<div css={[statTwoItems, statBreak]}>
 											<span css={statLabel}>Daily Rewards</span>
 											<span css={statLabel}>Dividends</span>
 										</div>
@@ -403,7 +410,7 @@ export const ValidatorPage = () => {
 												)}
 											</span>
 										</div>
-										<div css={statTwoItems}>
+										<div css={[statTwoItems, statBreak]}>
 											<span css={statLabel}>Updated</span>
 											<span css={statLabel}>vTrust</span>
 										</div>
