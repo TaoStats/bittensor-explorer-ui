@@ -31,15 +31,17 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 				return [hotkeys.size, 0, totalStake, totalDailyReward];
 
 			info.data.data.forEach(({hotkey, stake, dailyReward}) => {
+				totalDailyReward = totalDailyReward.add(
+					rawAmountToDecimal(dailyReward.toString())
+				);
 				if (hotkeys.has(hotkey)) return;
 				hotkeys.add(hotkey);
 				totalStake = totalStake.add(
 					rawAmountToDecimal(stake.toString())
 				);
-				totalDailyReward = totalDailyReward.add(
-					rawAmountToDecimal(dailyReward.toString())
-				);
+				
 			});
+
 
 			return [hotkeys.size, info.data.data.length, totalStake, totalDailyReward];
 		}, [info]);
