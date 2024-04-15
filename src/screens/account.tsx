@@ -230,7 +230,11 @@ export const AccountPage = () => {
 		}
 	}, [tab]);
 
-	return (
+	return account.error ? (
+		<CardRow css={infoSection}>
+			<Card>Invalid account address</Card>
+		</CardRow>
+	) : (
 		<>
 			<CardRow css={infoSection}>
 				<Card css={accountInfoStyle} data-test="account-info">
