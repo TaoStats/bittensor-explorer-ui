@@ -416,7 +416,7 @@ export const ValidatorPage = () => {
 										</div>
 										<div css={statTwoItems}>
 											<span css={statValue}>
-												{chainStats ? parseInt(chainStats.blocksFinalized.toString()) - meta.lastUpdate : 0}
+												{meta.lastUpdate}
 											</span>
 											<span css={statValue}>
 												{formatNumber(
