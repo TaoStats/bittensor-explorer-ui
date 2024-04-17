@@ -16,7 +16,6 @@ import {
 } from "../../utils/number";
 import { shortenHash } from "../../utils/shortenHash";
 import { useTaoPrice } from "../../hooks/useTaoPrice";
-import { useAppStats } from "../../contexts";
 import CheckShield from "../../assets/check-shield.svg";
 import Certification from "../../assets/certification.svg";
 import Spinner from "../Spinner";
@@ -121,9 +120,6 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 	const { metagraph, showAll } = props;
 
 	const taoPrice = useTaoPrice();
-	const {
-		state: { chainStats },
-	} = useAppStats();
 
 	const { initialSort, onSortChange, initialSearch, onSearchChange } = props;
 	const [sort, setSort] = useState<SortOrder<string>>();
@@ -345,10 +341,9 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 			<NeuronMetagraphTableAttribute
 				label="updated"
 				sortable
-				render={(data) => (
+				render={({emission, lastUpdate}) => (
 					<span css={whiteText}>
-						{data.emission >= 0 &&
-							(chainStats ? parseInt(chainStats.blocksFinalized.toString()) - data.lastUpdate : 0)}
+						{emission >= 0 && lastUpdate}
 					</span>
 				)}
 				sortProperty="updated"

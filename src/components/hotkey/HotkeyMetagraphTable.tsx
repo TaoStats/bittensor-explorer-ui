@@ -8,7 +8,6 @@ import {
 	shortenIP,
 } from "../../utils/number";
 import { BlockTimestamp } from "../BlockTimestamp";
-import { useAppStats } from "../../contexts";
 
 export type HotkeyMetagraphTableProps = {
 	loading: boolean;
@@ -20,10 +19,6 @@ const HotkeyMetagraphTableAttribute = ItemsTableAttribute<NeuronMetagraph>;
 
 function HotkeyMetagraphTable(props: HotkeyMetagraphTableProps) {
 	const { loading, error, data } = props;
-
-	const {
-		state: { chainStats },
-	} = useAppStats();
 
 	return (
 		<ItemsTable
@@ -81,11 +76,7 @@ function HotkeyMetagraphTable(props: HotkeyMetagraphTableProps) {
 			/>
 			<HotkeyMetagraphTableAttribute
 				label="Updated"
-				render={(meta) => (
-					<>
-						{chainStats ? parseInt(chainStats.blocksFinalized.toString()) - meta.lastUpdate : 0}
-					</>
-				)}
+				render={({ lastUpdate }) => <>{lastUpdate}</>}
 			/>
 			<HotkeyMetagraphTableAttribute
 				label="Axon"
