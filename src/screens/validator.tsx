@@ -35,7 +35,6 @@ import {
 	rawAmountToDecimalBy,
 	shortenIP,
 } from "../utils/number";
-import { useAppStats } from "../contexts";
 
 const validatorHeader = (theme: Theme) => css`
 	display: flex;
@@ -248,9 +247,6 @@ export const ValidatorPage = () => {
 		1024,
 		"NET_UID_ASC"
 	);
-	const {
-		state: { chainStats },
-	} = useAppStats();
 
 	useDOMEventTrigger(
 		"data-loaded",
@@ -415,9 +411,7 @@ export const ValidatorPage = () => {
 											<span css={statLabel}>vTrust</span>
 										</div>
 										<div css={statTwoItems}>
-											<span css={statValue}>
-												{meta.lastUpdate}
-											</span>
+											<span css={statValue}>{meta.lastUpdate}</span>
 											<span css={statValue}>
 												{formatNumber(
 													rawAmountToDecimalBy(meta.validatorTrust, 65535),
