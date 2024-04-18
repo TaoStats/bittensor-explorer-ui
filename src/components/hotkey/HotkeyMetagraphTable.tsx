@@ -76,7 +76,7 @@ function HotkeyMetagraphTable(props: HotkeyMetagraphTableProps) {
 			/>
 			<HotkeyMetagraphTableAttribute
 				label="Updated"
-				render={({ lastUpdate }) => <>{lastUpdate}</>}
+				render={({ updated }) => <>{updated}</>}
 			/>
 			<HotkeyMetagraphTableAttribute
 				label="Axon"

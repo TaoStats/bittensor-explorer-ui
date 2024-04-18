@@ -416,7 +416,7 @@ export const ValidatorPage = () => {
 										</div>
 										<div css={statTwoItems}>
 											<span css={statValue}>
-												{meta.lastUpdate}
+												{meta.updated}
 											</span>
 											<span css={statValue}>
 												{formatNumber(
