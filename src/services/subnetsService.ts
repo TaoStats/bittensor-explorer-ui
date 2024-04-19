@@ -466,7 +466,7 @@ export async function getNeuronMetagraph(
 					hotkey
 					incentive
 					isImmunityPeriod
-					lastUpdate
+					updated
 					netUid
 					rank
 					registeredAt

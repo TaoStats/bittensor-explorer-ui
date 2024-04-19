@@ -411,7 +411,9 @@ export const ValidatorPage = () => {
 											<span css={statLabel}>vTrust</span>
 										</div>
 										<div css={statTwoItems}>
-											<span css={statValue}>{meta.lastUpdate}</span>
+											<span css={statValue}>
+												{meta.updated}
+											</span>
 											<span css={statValue}>
 												{formatNumber(
 													rawAmountToDecimalBy(meta.validatorTrust, 65535),

@@ -341,9 +341,9 @@ function NeuronMetagraphTable(props: NeuronMetagraphTableProps) {
 			<NeuronMetagraphTableAttribute
 				label="updated"
 				sortable
-				render={({emission, lastUpdate}) => (
+				render={({emission, updated}) => (
 					<span css={whiteText}>
-						{emission >= 0 && lastUpdate}
+						{emission >= 0 && updated}
 					</span>
 				)}
 				sortProperty="updated"

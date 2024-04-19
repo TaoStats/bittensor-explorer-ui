@@ -153,7 +153,7 @@ export type NeuronMetagraph = {
 	hotkey: string;
 	incentive: number;
 	isImmunityPeriod: boolean;
-	lastUpdate: number;
+	updated: number;
 	netUid: number;
 	rank: number;
 	registeredAt: bigint;
