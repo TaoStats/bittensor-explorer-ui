@@ -43,7 +43,10 @@ const tipStyle = css`
 
 export const ExtrinsicInfoTable = (props: ExtrinsicInfoTableProps) => {
 	const { extrinsic } = props;
-	const block = useBlock({ id: { equalTo: extrinsic.data?.blockHeight } });
+	const block = useBlock(
+		{ id: { equalTo: extrinsic.data?.blockHeight } },
+		{ skip: extrinsic.loading }
+	);
 	const { runtimeSpec, loading: loadingRuntimeSpec } = useRuntimeSpec(
 		block?.data?.specVersion
 	);
