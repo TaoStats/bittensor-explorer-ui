@@ -43,6 +43,7 @@
     "react-apexcharts": "^1.4.1",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^18.2.0",
+    "react-fast-marquee": "^1.6.4",
     "react-icons": "^4.10.1",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",
