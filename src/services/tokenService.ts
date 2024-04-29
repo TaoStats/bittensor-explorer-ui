@@ -3,14 +3,13 @@ import { ResponseItems } from "../model/itemsConnection";
 import { fetchHistorical } from "./fetchService";
 
 export async function getTokenStats(
-	after?: string,
-	limit = 100
+	after?: string
 ): Promise<TokenStatsPaginatedResponse> {
 	const response = await fetchHistorical<{
 		tokenStats: ResponseItems<TokenStats>;
 	}>(
 		`query($after: Cursor, $first: Int!) {
-			tokenStats(after: $after, first: $first, orderBy: HEIGHT_ASC) {
+			tokenStats(after: $after, orderBy: HEIGHT_ASC) {
 				pageInfo {
 					hasNextPage
 					endCursor
@@ -24,7 +23,6 @@ export async function getTokenStats(
 			  }
 		}`,
 		{
-			first: limit,
 			after,
 		}
 	);

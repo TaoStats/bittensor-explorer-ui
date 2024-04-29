@@ -39,14 +39,13 @@ export async function getAccount(
 }
 
 export async function getAccountStats(
-	after?: string,
-	limit = 100
+	after?: string
 ): Promise<AccountStatsPaginatedResponse> {
 	const response = await fetchHistorical<{
 		accountStats: ResponseItems<AccountStats>;
 	}>(
-		`query($after: Cursor, $first: Int!) {
-			accountStats(after: $after, first: $first, orderBy: HEIGHT_ASC) {
+		`query($after: Cursor) {
+			accountStats(after: $after, orderBy: HEIGHT_ASC) {
 				pageInfo {
 					hasNextPage
 					endCursor
@@ -63,7 +62,6 @@ export async function getAccountStats(
 			  }
 		}`,
 		{
-			first: limit,
 			after,
 		}
 	);

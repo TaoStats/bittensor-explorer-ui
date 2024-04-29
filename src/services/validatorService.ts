@@ -133,8 +133,7 @@ function addValidatorName(
 export async function getValidatorStakeHistory(
 	address: string[],
 	from?: string,
-	after?: string,
-	limit = 100
+	after?: string
 ): Promise<ValidatorStakeHistoryPaginatedResponse> {
 	address.forEach((addr) => {
 		if (!isAddress(addr)) {
@@ -150,8 +149,8 @@ export async function getValidatorStakeHistory(
 	const response = await fetchHistorical<{
 		validators: ResponseItems<ValidatorStakeHistory>;
 	}>(
-		`query($after: Cursor, $first: Int!) {
-			validators(after: $after, first: $first, filter: { ${filter} }, orderBy: HEIGHT_ASC) {
+		`query($after: Cursor) {
+			validators(after: $after, filter: { ${filter} }, orderBy: HEIGHT_ASC) {
 				nodes {
 					address
 					amount
@@ -169,7 +168,6 @@ export async function getValidatorStakeHistory(
 			  }
 		}`,
 		{
-			first: limit,
 			after,
 		}
 	);
