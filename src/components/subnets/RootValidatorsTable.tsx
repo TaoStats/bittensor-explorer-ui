@@ -172,6 +172,7 @@ function RootValidatorsTable(props: RootValidatorsTableProps) {
 								Object.keys(wei).forEach((id) => {
 									weiSum += wei[id];
 								});
+								if (weiSum === 0) weiSum = 1;
 								return (
 									<span css={whiteText}>
 										{nFormatter((wei[snId] || 0) / weiSum, 2)}
