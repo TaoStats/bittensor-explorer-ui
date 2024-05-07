@@ -70,14 +70,6 @@ const subnetName = css`
 	font-size: 28px;
 `;
 
-const stakingDataBlock = css`
-	padding: 0px 20px 20px;
-	margin: 8px 0 0;
-	display: flex;
-	flex-wrap: wrap;
-	align-items: flex-end;
-`;
-
 const stakingDataItem = css`
 	padding: 0 35px 0 0;
 `;
@@ -582,14 +574,6 @@ export const RootSubnetPage = () => {
 				<CardHeader css={subnetHeader}>
 					<div css={subnetName}>Subnet 0 - Root</div>
 				</CardHeader>
-				<div css={stakingDataBlock}>
-					{["More", "data", "coming", "soon"].map((label) => (
-						<div css={stakingDataItem} key={label}>
-							<label>{label}</label>
-							<div className="stake_val">--</div>
-						</div>
-					))}
-				</div>
 				<div css={subnetDescription}>
 					<p>
 						The ‘root’ network is a meta subnet with id 0. This network
