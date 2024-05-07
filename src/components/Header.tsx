@@ -252,7 +252,7 @@ export const Header = () => {
 																const name = (subnets as any)[netUid]?.name || "Unknown";
 																return (
 																	<li key={`subnet-menu-item-${itemIndex}`}>
-																		<a href={ netUid ? `/subnet/${netUid}` : "https://taostats.io/subnets/netuid-0"}>
+																		<a href={`/subnet/${netUid}`}>
 																			{netUid}: {name}
 																		</a>
 																	</li>
