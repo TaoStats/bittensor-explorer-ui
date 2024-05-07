@@ -26,15 +26,13 @@ export function useAccountBalanceHistory(
 
 	const fetchData = useCallback(async () => {
 		try {
-			const limit = 100;
-
 			let finished = false;
 			let after: string | undefined = undefined;
 
 			const result: AccountBalanceHistory[] = [];
 			while (!finished) {
 				const stats: AccountBalanceHistoryPaginatedResponse =
-          await getAccountBalanceHistory(address, after, limit);
+					await getAccountBalanceHistory(address, after);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;
@@ -77,15 +75,13 @@ export function useAccountDelegateHistory(
 
 	const fetchData = useCallback(async () => {
 		try {
-			const limit = 100;
-
 			let finished = false;
 			let after: string | undefined = undefined;
 
 			const result: AccountDelegateHistory[] = [];
 			while (!finished) {
 				const stats: AccountDelegateHistoryPaginatedResponse =
-          await getAccountDelegateHistory(address, after, limit);
+					await getAccountDelegateHistory(address, after);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;

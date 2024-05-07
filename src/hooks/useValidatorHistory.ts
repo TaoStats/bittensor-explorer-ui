@@ -27,15 +27,13 @@ export function useValidatorStakeHistory(
 
 	const fetchData = useCallback(async () => {
 		try {
-			const limit = 100;
-
 			let finished = false;
 			let after: string | undefined = undefined;
 
 			const result: ValidatorStakeHistory[] = [];
 			while (!finished) {
 				const stats: ValidatorStakeHistoryPaginatedResponse =
-					await getValidatorStakeHistory([address], undefined, after, limit);
+					await getValidatorStakeHistory([address], undefined, after);
 				result.push(...stats.data);
 				finished = !stats.hasNextPage;
 				after = stats.endCursor;
