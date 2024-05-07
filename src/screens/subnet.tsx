@@ -29,6 +29,7 @@ import {
 	MinerIPOrder,
 	NeuronMetagraphOrder,
 	NeuronRegEventsOrder,
+	RootValidatorOrder,
 } from "../services/subnetsService";
 import NeuronMetagraphTable from "../components/subnets/NeuronMetagraphTable";
 import { useNeuronMetagraph } from "../hooks/useNeuronMetagraph";
@@ -52,6 +53,8 @@ import { useSubnetHyperparams } from "../hooks/useSubnetHyperparams";
 import SubnetHyperparamTable from "../components/subnets/SubnetHyperparamTable";
 import { useNeuronDeregistrations } from "../hooks/useNeuronDeregistrations";
 import { NeuronDeregistrationChart } from "../components/subnets/NeuronDeregistrationChart";
+import RootNeuronMetagraphTable from "../components/subnets/RootValidatorsTable";
+import { useRootValidators } from "../hooks/useRootValidators";
 
 const subnetHeader = (theme: Theme) => css`
 	display: flex;
@@ -65,6 +68,18 @@ const subnetHeader = (theme: Theme) => css`
 
 const subnetName = css`
 	font-size: 28px;
+`;
+
+const stakingDataBlock = css`
+	padding: 0px 20px 20px;
+	margin: 8px 0 0;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+`;
+
+const stakingDataItem = css`
+	padding: 0 35px 0 0;
 `;
 
 const subnetDescription = css`
@@ -536,6 +551,85 @@ export const SubnetPage = () => {
 					</TabPane>
 				</TabbedContent>
 			</Card>
+		</>
+	);
+};
+
+export const RootSubnetPage = () => {
+	const id = "0";
+	const subnet = useSubnet({ id: { equalTo: id } });
+
+	const rootValidatorsInitialOrder: RootValidatorOrder = "STAKE_DESC";
+	const [rootValidatorsSort, setRootValidatorsSort] =
+		useState<RootValidatorOrder>(rootValidatorsInitialOrder);
+	const rootValidators = useRootValidators(undefined, 10, rootValidatorsSort);
+
+	useDOMEventTrigger("data-loaded", !subnet.loading);
+
+	const { hash: tab } = useLocation();
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
+		}
+	}, [tab]);
+
+	return (
+		<>
+			<Card data-test="subnet-info">
+				<CardHeader css={subnetHeader}>
+					<div css={subnetName}>Subnet 0 - Root</div>
+				</CardHeader>
+				<div css={stakingDataBlock}>
+					{["More", "data", "coming", "soon"].map((label) => (
+						<div css={stakingDataItem} key={label}>
+							<label>{label}</label>
+							<div className="stake_val">--</div>
+						</div>
+					))}
+				</div>
+				<div css={subnetDescription}>
+					<p>
+						The ‘root’ network is a meta subnet with id 0. This network
+						determines the proportion of the network’s block emission to be
+						distributed to each subnet network. This is currently set to 1 TAO
+						for every block mined.
+					</p>
+					<p>
+						Like other subnetworks, the root network consists of a set of
+						validators that set weights (W). These weights are then processed by
+						Yuma Consensus to determine an emission vector (E). The difference
+						is that the vector E has a length equal to the number of active
+						subnetworks currently running on the chain and each e_i in E is the
+						emission proportion that subnet i receives every block.
+					</p>
+					<p>
+						The root network also doubles as the network senate. This senate is
+						the top 12 keys on this network which have been granted veto power
+						on proposals submitted by the triumvirate.
+					</p>
+				</div>
+			</Card>
+			<div css={metagraphStyle}>
+				<TabbedContent defaultTab={tab.slice(1).toString()} noPadding>
+					<TabPane
+						label="Metagraph"
+						loading={rootValidators.loading}
+						error={!!rootValidators.error}
+						value="metagraph"
+					>
+						<RootNeuronMetagraphTable
+							rootValidators={rootValidators}
+							onSortChange={(sortKey: RootValidatorOrder) =>
+								setRootValidatorsSort(sortKey)
+							}
+							initialSort={rootValidatorsInitialOrder}
+						/>
+					</TabPane>
+				</TabbedContent>
+			</div>
 		</>
 	);
 };

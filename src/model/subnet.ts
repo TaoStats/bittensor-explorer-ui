@@ -184,6 +184,15 @@ export type NeuronMetagraph = {
 	validatorTrust: number;
 };
 
+export type RootValidator = {
+	id: string;
+	uid: number;
+	hotkey: string;
+	coldkey: string;
+	stake: bigint;
+	weights: string;
+};
+
 export type NeuronPerformance = {
 	id: string;
 	emission: bigint;

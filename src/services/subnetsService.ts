@@ -23,17 +23,19 @@ import {
 	NeuronPerformancePaginatedResponse,
 	NeuronDeregistration,
 	NeuronDeregistrationPaginatedResponse,
+	RootValidator,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
 import subnetsJson from "../subnets.json";
 import { extractItems } from "../utils/extractItems";
-import { fetchSubnets } from "./fetchService";
+import { fetchIndexer, fetchSubnets } from "./fetchService";
 
 export type SubnetsFilter = object;
 export type SubnetHyperparamsFilter = object;
 export type SingleSubnetStatsFilter = object;
 export type NeuronMetagraphFilter = object;
+export type RootValidatorFilter = object;
 export type NeuronPerformanceFilter = object;
 export type NeuronRegEventsFilter = object;
 
@@ -108,6 +110,16 @@ export type NeuronMetagraphOrder =
 	| "VALIDATOR_PERMIT_DESC"
 	| "VALIDATOR_TRUST_ASC"
 	| "VALIDATOR_TRUST_DESC";
+
+export type RootValidatorOrder =
+	| "ID_ASC"
+	| "ID_DESC"
+	| "HOTKEY_ASC"
+	| "HOTKEY_DESC"
+	| "STAKE_ASC"
+	| "STAKE_DESC"
+	| "UID_ASC"
+	| "UID_DESC";
 
 export type NeuronPerformanceOrder =
 	| "ID_ASC"
@@ -533,6 +545,42 @@ export async function getNeuronMetagraph(
 	);
 
 	return extractItems(response.neuronInfos, pagination, transform);
+}
+
+export async function getRootValidators(
+	filter: RootValidatorFilter | undefined,
+	order: RootValidatorOrder = "ID_DESC",
+	pagination: PaginationOptions
+) {
+	const response = await fetchIndexer<{
+		rootValidators: ResponseItems<RootValidator>;
+	}>(
+		`query ($first: Int!, $offset: Int!, $filter: RootValidatorFilter, $order: [RootValidatorsOrderBy!]!) {
+			rootValidators(first: $first, offset: $offset, filter: $filter, orderBy: $order) {
+				nodes {
+					id
+					uid
+					hotkey
+					stake
+					weights
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+					hasPreviousPage
+				}
+				totalCount
+			}
+		}`,
+		{
+			offset: (pagination.offset ?? 1) - 1,
+			first: pagination.limit,
+			filter,
+			order,
+		}
+	);
+
+	return extractItems(response.rootValidators, pagination, transform);
 }
 
 export async function getNeuronPerformance(

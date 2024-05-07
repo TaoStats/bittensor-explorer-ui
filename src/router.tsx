@@ -14,6 +14,7 @@ import { NETWORK_CONFIG } from "./config";
 import { ValidatorPage } from "./screens/validator";
 import { ValidatorsPage } from "./screens/validators";
 import { SubnetsPage } from "./screens/subnets";
+import { RootSubnetPage } from "./screens/subnet";
 import { SubnetPage } from "./screens/subnet";
 import { ColdkeyPage } from "./screens/coldkey";
 import { HotkeyPage } from "./screens/hotkey";
@@ -75,6 +76,10 @@ export const router = createBrowserRouter(
 				{
 					path: "subnets",
 					element: <SubnetsPage />,
+				},
+				{
+					path: "subnet/0",
+					element: <RootSubnetPage />,
 				},
 				{
 					path: "subnet/:id",
