@@ -262,7 +262,7 @@ export const theme = createTheme({
 					font-weight: 300;
 					letter-spacing: .05em;
 					line-height: 1.3em;
-					padding: 9px 10px;
+					padding: 13px 10px;
 					border-bottom: 1px solid ${theme.palette.text.secondary};
 				`,
 				head: ({theme}) => css`
@@ -270,6 +270,7 @@ export const theme = createTheme({
 					font-weight: 500;
 					text-transform: uppercase;
 					color: ${theme.palette.success.dark} !important;
+					vertical-align: bottom;
 				`
 			}
 		},

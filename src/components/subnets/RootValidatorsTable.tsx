@@ -179,7 +179,7 @@ function RootValidatorsTable(props: RootValidatorsTableProps) {
 									</span>
 								);
 							}}
-							headerCss={orangeText}
+							headerCss={[orangeText, boldText]}
 							key={`SN${subnet.netUid}`}
 						/>
 					)
