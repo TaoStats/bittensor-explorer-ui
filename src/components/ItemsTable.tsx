@@ -47,7 +47,7 @@ const tableStyle = css`
 	}
 
 	& > tbody > tr:nth-of-type(odd) {
-		background-color: rgba(28,28,28,.44);
+		background-color: rgba(28, 28, 28, 0.44);
 		-webkit-box-shadow: inset 0 0 8px 0 rgba(255, 255, 255, 0.05);
 		-moz-box-shadow: inset 0 0 8px 0 rgba(255, 255, 255, 0.05);
 		box-shadow: inset 0 0 8px 0 rgba(255, 255, 255, 0.05);
@@ -182,6 +182,7 @@ export type ItemsTableAttributeProps<T, A extends any[], S> = {
 	label: ReactNode;
 	align?: "left" | "center" | "right" | "justify" | "inherit" | undefined;
 	colCss?: Interpolation<Theme>;
+	headerCss?: Interpolation<Theme>;
 	sortable?: boolean;
 	sortProperty?: string;
 	onSortChange?: (sortOrder: SortOrder<S>) => void;
@@ -371,7 +372,10 @@ export const ItemsTable = <
 								const { label, align, sortable, sortProperty } = child.props;
 								if (sortable !== true)
 									return (
-										<TableCell align={align} css={cellStyle}>
+										<TableCell
+											align={align}
+											css={[cellStyle, child.props.headerCss]}
+										>
 											{label}
 										</TableCell>
 									);
