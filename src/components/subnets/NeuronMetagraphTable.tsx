@@ -83,8 +83,8 @@ const orderMappings = {
 		[SortDirection.DESC]: "EMISSION_DESC",
 	},
 	updated: {
-		[SortDirection.ASC]: "LAST_UPDATE_DESC",
-		[SortDirection.DESC]: "LAST_UPDATE_ASC",
+		[SortDirection.ASC]: "UPDATED_DESC",
+		[SortDirection.DESC]: "UPDATED_ASC",
 	},
 	active: {
 		[SortDirection.ASC]: "ACTIVE_ASC",
