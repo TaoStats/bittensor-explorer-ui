@@ -24,15 +24,20 @@ export const TokenomicsChart = (props: TokenomicsChartProps) => {
 	} = props;
 
 	const unissuedPercent = unissued.mul(100).div(totalSupply);
-	const stakedPercent = stakedCirculatingSupply.mul(100).div(circulatingSupply);
-	const freePercent = freeCirculatingSupply.mul(100).div(circulatingSupply);
+	const strUnissuedPercent = formatNumber(unissuedPercent, {decimalPlaces: 2 });
 
-	const strStaked = `Circulating Delegated/Staked (${formatNumber(stakedPercent, { decimalPlaces: 2 } )}% 
-		of ${nFormatter(circulatingSupply.toNumber(), 2)})`;
-	const strFree = `Circulating Free (${formatNumber(freePercent, { decimalPlaces: 2 })}% 
-		of ${nFormatter(circulatingSupply.toNumber(), 2)})`;
-	const strUnissued = `Unissued (${formatNumber(unissuedPercent, { decimalPlaces: 2 })}% 
-		of ${nFormatter(totalSupply.toNumber(), 2)})`;
+	const stakedPercent = stakedCirculatingSupply.mul(100).div(circulatingSupply);
+	const strStakedPercent = formatNumber(stakedPercent, { decimalPlaces: 2 });
+	
+	const freePercent = freeCirculatingSupply.mul(100).div(circulatingSupply);
+	const strFreePercent = formatNumber(freePercent, { decimalPlaces: 2 });
+	
+	const strCirculatingSupply = nFormatter(circulatingSupply.toNumber(), 2);
+	const strTotalSupply = nFormatter(totalSupply.toNumber(), 2);
+
+	const strStaked = `Circulating Delegated/Staked (${strStakedPercent}% of ${strCirculatingSupply})`;
+	const strFree = `Circulating Free (${strFreePercent}% of ${strCirculatingSupply})`;
+	const strUnissued = `Unissued (${strUnissuedPercent}% of ${strTotalSupply})`;
 
 	return (
 		<div>
@@ -48,9 +53,9 @@ export const TokenomicsChart = (props: TokenomicsChartProps) => {
 					},
 				}}
 				series={[
-					parseFloat(stakedCirculatingSupply.toFixed(0)),
-					parseFloat(freeCirculatingSupply.toFixed(0)),
-					parseFloat(unissued.toFixed(0)),
+					stakedCirculatingSupply.toDecimalPlaces(0).toNumber(),
+					freeCirculatingSupply.toDecimalPlaces(0).toNumber(),
+					unissued.toDecimalPlaces(0).toNumber(),
 				]}
 			/>
 		</div>
