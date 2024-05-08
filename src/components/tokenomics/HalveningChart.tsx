@@ -39,6 +39,12 @@ export const HalveningChart = (props: HalveningChartProps) => {
 	];
 	const events = [];
 
+	for (let i = 0; i <= 6; i++) {
+		taoIssued.push({
+			x: new Date(halveningData[i].time * 1000).toDateString(),
+			y: parseInt(halveningData[i].total.replace(/,/g, "")),
+		});
+	}
 	for (let i = 0; i < initialEvents.length; i++) {
 		events.push({
 			x: new Date(initialEvents[i].time).getTime(),
@@ -52,10 +58,6 @@ export const HalveningChart = (props: HalveningChartProps) => {
 		});
 	}
 	for (let i = 1; i <= 6; i++) {
-		taoIssued.push({
-			x: new Date(halveningData[i].time * 1000).toDateString(),
-			y: parseInt(halveningData[i].total.replace(/,/g, "")),
-		});
 		events.push({
 			x: new Date(halveningData[i].time * 1000).getTime(),
 			borderColor: "#fff",
