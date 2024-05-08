@@ -70,10 +70,6 @@ const subnetName = css`
 	font-size: 28px;
 `;
 
-const stakingDataItem = css`
-	padding: 0 35px 0 0;
-`;
-
 const subnetDescription = css`
 	padding: 0px 20px 20px;
 	display: block;
