@@ -77,7 +77,7 @@ export const TokenomicsPage = () => {
 	);
 	const circulationPercent = circulatingSupply.mul(100).div(totalSupply);
 	const blocksPerHalvening = 10500000;
-	const secondsPerHalvening = 126000000;
+	const secondsPerHalvening = blocksPerHalvening * 12;
 	const blocks = Math.floor(blocksPerHalvening - circulatingSupply.toNumber());
 
 	const halveningData: any = [
