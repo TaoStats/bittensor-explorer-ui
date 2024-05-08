@@ -33,7 +33,7 @@ export const HalveningChart = (props: HalveningChartProps) => {
 
 	const initialEvents: any = [
 		{ time: "09 Jan 2021", name: "Kusanagi Network" },
-		{ time: "12 Mar 2021", name: "Kusanagi Network Halted" },
+		{ time: "12 May 2021", name: "Kusanagi Network Halted" },
 		{ time: "21 Nov 2021", name: "Nakamoto Network" },
 		{ time: "20 Mar 2023", name: "Finney Network" },
 	];
