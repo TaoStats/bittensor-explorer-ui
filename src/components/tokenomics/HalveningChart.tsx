@@ -49,7 +49,7 @@ export const HalveningChart = (props: HalveningChartProps) => {
 				style: {
 					color: "#000",
 				},
-				text: "Kusangi Network Halted",
+				text: "Kusanagi Network Halted",
 			},
 		},
 		{
@@ -116,12 +116,11 @@ export const HalveningChart = (props: HalveningChartProps) => {
 							tools: {
 								download: true,
 								selection: false,
-								zoom: true,
-								zoomin: true,
-								zoomout: true,
-								pan: true,
+								zoom: false,
+								zoomin: false,
+								zoomout: false,
+								pan: false,
 							},
-							autoSelected: "pan",
 							export: {
 								csv: {
 									filename: "halvening-chart",
