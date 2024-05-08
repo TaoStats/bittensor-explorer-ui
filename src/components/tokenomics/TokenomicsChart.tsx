@@ -27,16 +27,12 @@ export const TokenomicsChart = (props: TokenomicsChartProps) => {
 	const stakedPercent = stakedCirculatingSupply.mul(100).div(circulatingSupply);
 	const freePercent = freeCirculatingSupply.mul(100).div(circulatingSupply);
 
-	const strStaked = `Circulating Delegated/Staked (${formatNumber(
-		stakedPercent,
-		{ decimalPlaces: 2 }
-	)}% of ${nFormatter(circulatingSupply.toNumber(), 2)})`;
-	const strFree = `Circulating Free (${formatNumber(freePercent, {
-		decimalPlaces: 2,
-	})}% of ${nFormatter(circulatingSupply.toNumber(), 2)})`;
-	const strUnissued = `Unissued (${formatNumber(unissuedPercent, {
-		decimalPlaces: 2,
-	})}% of ${nFormatter(totalSupply.toNumber(), 2)})`;
+	const strStaked = `Circulating Delegated/Staked (${formatNumber(stakedPercent, { decimalPlaces: 2 } )}% 
+		of ${nFormatter(circulatingSupply.toNumber(), 2)})`;
+	const strFree = `Circulating Free (${formatNumber(freePercent, { decimalPlaces: 2 })}% 
+		of ${nFormatter(circulatingSupply.toNumber(), 2)})`;
+	const strUnissued = `Unissued (${formatNumber(unissuedPercent, { decimalPlaces: 2 })}% 
+		of ${nFormatter(totalSupply.toNumber(), 2)})`;
 
 	return (
 		<div>
