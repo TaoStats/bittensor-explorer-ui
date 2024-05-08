@@ -31,48 +31,26 @@ export const HalveningChart = (props: HalveningChartProps) => {
 		},
 	];
 
-	const events = [
-		{
-			x: new Date("09 Jan 2021").getTime(),
-			borderColor: "#fff",
-			label: {
-				style: {
-					color: "#000",
-				},
-				text: "Kusangi Network",
-			},
-		},
-		{
-			x: new Date("12 Mar 2021").getTime(),
-			borderColor: "#fff",
-			label: {
-				style: {
-					color: "#000",
-				},
-				text: "Kusanagi Network Halted",
-			},
-		},
-		{
-			x: new Date("21 Nov 2021").getTime(),
-			borderColor: "#fff",
-			label: {
-				style: {
-					color: "#000",
-				},
-				text: "Nakamoto Network",
-			},
-		},
-		{
-			x: new Date("20 Mar 2023").getTime(),
-			borderColor: "#fff",
-			label: {
-				style: {
-					color: "#000",
-				},
-				text: "Finney Network",
-			},
-		},
+	const initialEvents: any = [
+		{ time: "09 Jan 2021", name: "Kusanagi Network" },
+		{ time: "12 Mar 2021", name: "Kusanagi Network Halted" },
+		{ time: "21 Nov 2021", name: "Nakamoto Network" },
+		{ time: "20 Mar 2023", name: "Finney Network" },
 	];
+	const events = [];
+
+	for (let i = 0; i < initialEvents.length; i++) {
+		events.push({
+			x: new Date(initialEvents[i].time).getTime(),
+			borderColor: "#fff",
+			label: {
+				style: {
+					color: "#000",
+				},
+				text: initialEvents[i].name,
+			},
+		});
+	}
 	for (let i = 1; i <= 6; i++) {
 		taoIssued.push({
 			x: new Date(halveningData[i].time * 1000).toDateString(),
