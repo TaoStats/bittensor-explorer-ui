@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { Theme, css } from "@emotion/react";
-import { Card } from "../components/Card";
 import { Link } from "../components/Link";
 import Loading from "../components/Loading";
 import NotFound from "../components/NotFound";
@@ -17,7 +16,7 @@ const defaultText = (theme: Theme) => css`
 const header = css`
 	font-size: 19px;
 	color: white;
-	margin: 25px 0;
+	margin: 40px 0;
 `;
 
 const supplyInfo = css`
@@ -179,7 +178,7 @@ export const TokenomicsPage = () => {
 
 	return (
 		<>
-			<Card css={defaultText}>
+			<div css={defaultText}>
 				<div css={header}>SUPPLY DATA</div>
 				<div css={supplyInfo}>
 					<span css={supplyText}>Ciculating Supply</span>
@@ -323,7 +322,7 @@ export const TokenomicsPage = () => {
 						))}
 					</tbody>
 				</table>
-			</Card>
+			</div>
 		</>
 	);
 };

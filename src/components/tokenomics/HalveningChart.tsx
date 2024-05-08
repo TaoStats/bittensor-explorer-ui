@@ -108,7 +108,7 @@ export const HalveningChart = (props: HalveningChartProps) => {
 						xaxis: events,
 					},
 					chart: {
-						background: theme.palette.primary.dark,
+						background: theme.palette.primary.main,
 						toolbar: {
 							show: true,
 							offsetX: 0,
