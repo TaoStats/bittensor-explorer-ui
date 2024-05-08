@@ -18,6 +18,7 @@ import { RootSubnetPage } from "./screens/subnet";
 import { SubnetPage } from "./screens/subnet";
 import { ColdkeyPage } from "./screens/coldkey";
 import { HotkeyPage } from "./screens/hotkey";
+import { TokenomicsPage } from "./screens/tokenomics";
 
 export const router = createBrowserRouter(
 	[
@@ -92,6 +93,10 @@ export const router = createBrowserRouter(
 				{
 					path: "hotkey/:hkey",
 					element: <HotkeyPage />,
+				},
+				{
+					path: "tokenomics",
+					element: <TokenomicsPage />,
 				},
 				{
 					path: "*",
