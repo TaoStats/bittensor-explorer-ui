@@ -41,6 +41,7 @@ export const TokenomicsChart = (props: TokenomicsChartProps) => {
 	return (
 		<div>
 			<DonutChart
+				height={560}
 				options={{
 					labels: [strStaked, strFree, strUnissued],
 					legend: {

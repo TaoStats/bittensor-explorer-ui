@@ -47,7 +47,7 @@ const stakingDataBlock = css`
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-end;
-	margin-top: 40px;
+	margin: 40px 0;
 `;
 
 const stakingDataBox = css`
