@@ -37,7 +37,6 @@ export const HalveningChart = (props: HalveningChartProps) => {
 		{ time: "21 Nov 2021", name: "Nakamoto Network" },
 		{ time: "20 Mar 2023", name: "Finney Network" },
 	];
-	const events = [];
 
 	for (let i = 0; i <= 6; i++) {
 		taoIssued.push({
@@ -45,15 +44,19 @@ export const HalveningChart = (props: HalveningChartProps) => {
 			y: parseInt(halveningData[i].total.replace(/,/g, "")),
 		});
 	}
+
+	const events = [];
+
 	for (let i = 0; i < initialEvents.length; i++) {
+		const { time, name } = initialEvents[i];
 		events.push({
-			x: new Date(initialEvents[i].time).getTime(),
+			x: new Date(time).getTime(),
 			borderColor: "#fff",
 			label: {
 				style: {
 					color: "#000",
 				},
-				text: initialEvents[i].name,
+				text: name,
 			},
 		});
 	}
@@ -65,9 +68,7 @@ export const HalveningChart = (props: HalveningChartProps) => {
 				style: {
 					color: "#000",
 				},
-				text:
-					(i == 1 ? "1st" : i == 2 ? "2nd" : i == 3 ? "3rd" : `${i}th`) +
-					" Halvening",
+				text: (i == 1 ? "1st" : i == 2 ? "2nd" : i == 3 ? "3rd" : `${i}th`) + " Halvening",
 			},
 		});
 	}
