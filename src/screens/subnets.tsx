@@ -44,7 +44,7 @@ export const SubnetsPage = () => {
 	const subnetsInitialOrder: SubnetsOrder = "EMISSION_DESC";
 	const [subnetSort, setSubnetSort] =
 		useState<SubnetsOrder>(subnetsInitialOrder);
-	const subnets = useSubnets(undefined, subnetSort);
+	const subnets = useSubnets({ netUid: { notEqualTo: 0 } }, subnetSort);
 	const subnetEmissionsHistory = useSubnetsHistory();
 	const subnetRegCostHistory = useSubnetRegCostHistory();
 	const subnetStat = useSubnetStat("subnet_stats");
