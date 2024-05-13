@@ -238,14 +238,12 @@ export const Header = () => {
 													<li key={`subnet-menu-column-${menuIndex}`}>
 														<ul>
 															{Array.from(
-																Array(Math.floor((totalSubnets + 2 - menuIndex) / subnetMenuColumn))
+																Array(Math.min(
+																	Math.floor((totalSubnets + 2) / subnetMenuColumn),
+																	totalSubnets - Math.floor((totalSubnets + 2) / subnetMenuColumn)* menuIndex
+																))
 															).map((_, itemIndex) => {
-																let passed = 0;
-																for (let i = 0; i < menuIndex; i++) {
-																	passed += Math.floor(
-																		(totalSubnets + 2 - i) / subnetMenuColumn
-																	);
-																}
+																const passed = (totalSubnets + 2) / subnetMenuColumn * menuIndex;
 																const netUid = parseInt(
 																	subnetIDs[passed + itemIndex] ?? "0"
 																);
