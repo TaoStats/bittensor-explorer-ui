@@ -2449,11 +2449,11 @@ span.menuItem-glow {
 
 .main-menu nav .subMenu li a {
   font-family: "Archivo", sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   color: #8a8a8a;
   display: inline-block;
-  padding: 8px 15px;
+  padding: 4px 15px;
   width: 100%;
   border-radius: 4px;
 }
@@ -3934,11 +3934,11 @@ span.menuItem-glow {
 }
 
 .apexcharts-menu-item:hover {
-  background: rgba(34,34,34,.7) !important;
+  background: rgba(34, 34, 34, 0.7) !important;
 }
 
 .apexcharts-menu.apexcharts-menu-open {
-  background: rgba(0,0,0,.7);
+  background: rgba(0, 0, 0, 0.7);
 }
 
 .apexcharts-legend.apexcharts-align-right.apx-legend-position-top {
