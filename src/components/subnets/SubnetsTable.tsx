@@ -84,8 +84,9 @@ function SubnetsTable(props: SubnetsTableProps) {
 				ownerSum: BigInt(0),
 			}
 		);
+		const snData = subnets.data?.filter((sn) => sn.netUid !== 0);
 		return [
-			...subnets.data,
+			...snData,
 			{
 				id: "total",
 				recycledLifetime: totalSum,
