@@ -150,7 +150,7 @@ function RootValidatorsTable(props: RootValidatorsTableProps) {
 					sortProperty="hotkey"
 					key="hotkey"
 				/>,
-				...[{ netUid: 0, emission: 0 }, ...(subnets.data || [])].map(
+				...(subnets.data ?? []).map(
 					(subnet) => (
 						<RootValidatorsTableAttribute
 							label={
