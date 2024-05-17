@@ -911,7 +911,7 @@ export async function getColdkeyInfo(
 		neuronInfos: ResponseItems<ColdkeyInfo>;
 	}>(
 		`query($after: Cursor) {
-			neuronInfos(filter: {coldkey: {equalTo: "${coldkey}"}}) {
+			neuronInfos(after: $after, filter: {coldkey: {equalTo: "${coldkey}"}}) {
 				nodes {
 					hotkey
 					stake
