@@ -52,7 +52,7 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 		<InfoTable
 			data={info}
 			loading={info.loading}
-			notFound={info.error !== null}
+			notFound={info.error !== undefined}
 			notFoundMessage="Invalid coldkey."
 			error={info.error}
 		>
