@@ -25,6 +25,8 @@ import {
 	NeuronDeregistrationPaginatedResponse,
 	RootValidator,
 	ColdkeySubnetPaginatedResponse,
+	ColdkeyInfo,
+	ColdkeyInfoPaginatedResponse,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -876,7 +878,7 @@ export async function getMinerIncentive(
 
 export async function getColdkeySubnets(coldkey: string, after?: string): Promise<ColdkeySubnetPaginatedResponse> {
 	const response = await fetchSubnets<{
-		neuronInfos: ResponseItems<NeuronMetagraph>;
+		neuronInfos: ResponseItems<{netUid: number}>;
 	}>(
 		`query($after: Cursor) {
 			neuronInfos(filter: {coldkey: {equalTo: "${coldkey}"}}, after: $after, orderBy: NET_UID_ASC, distinct: NET_UID) {
@@ -897,16 +899,19 @@ export async function getColdkeySubnets(coldkey: string, after?: string): Promis
 	return {
 		hasNextPage: response.neuronInfos?.pageInfo.hasNextPage,
 		endCursor: response.neuronInfos?.pageInfo.endCursor,
-		data: response.neuronInfos?.nodes,
+		data: response.neuronInfos?.nodes.map(({netUid}) => netUid),
 	};
 }
 
-export async function getColdkeyInfo(filter: NeuronMetagraphFilter) {
+export async function getColdkeyInfo(
+	coldkey: string,
+	after?: string
+): Promise<ColdkeyInfoPaginatedResponse> {
 	const response = await fetchSubnets<{
-		neuronInfos: ResponseItems<NeuronMetagraph>;
+		neuronInfos: ResponseItems<ColdkeyInfo>;
 	}>(
-		`query($filter: NeuronInfoFilter) {
-			neuronInfos(filter: $filter) {
+		`query($after: Cursor) {
+			neuronInfos(filter: {coldkey: {equalTo: "${coldkey}"}}) {
 				nodes {
 					hotkey
 					stake
@@ -919,11 +924,14 @@ export async function getColdkeyInfo(filter: NeuronMetagraphFilter) {
 			}
 		}`,
 		{
-			filter,
+			after,
 		}
 	);
-
-	return extractItems(response.neuronInfos, { limit: 1024 }, transform);
+	return {
+		hasNextPage: response.neuronInfos?.pageInfo.hasNextPage,
+		endCursor: response.neuronInfos?.pageInfo.endCursor,
+		data: response.neuronInfos?.nodes,
+	};
 }
 
 function addSubnetName<T extends { netUid: number; name?: string }>(

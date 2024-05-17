@@ -4,14 +4,13 @@ import { getColdkeySubnets } from "../services/subnetsService";
 import { useCallback, useEffect, useState } from "react";
 import {
 	ColdkeySubnetPaginatedResponse,
-	NeuronMetagraph,
 } from "../model/subnet";
 import { DataError } from "../utils/error";
 
 export function useColdKeySubnets(coldkey: string) {
 	const rollbar = useRollbar();
 
-	const [data, setData] = useState<NeuronMetagraph[]>([]);
+	const [data, setData] = useState<number[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<DataError>();
 
@@ -20,7 +19,7 @@ export function useColdKeySubnets(coldkey: string) {
 			let finished = false;
 			let after: string | undefined = undefined;
 
-			const result: NeuronMetagraph[] = [];
+			const result = [];
 			while (!finished) {
 				const stats: ColdkeySubnetPaginatedResponse = await getColdkeySubnets(
 					coldkey,

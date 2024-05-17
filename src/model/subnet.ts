@@ -280,5 +280,17 @@ export type MinerIncentiveResponse = {
 export type ColdkeySubnetPaginatedResponse = {
 	hasNextPage: boolean;
 	endCursor: string;
-	data: NeuronMetagraph[];
+	data: number[];
+};
+
+export type ColdkeyInfo = {
+	hotkey: string;
+	stake: bigint;
+	dailyReward: bigint;
+};
+
+export type ColdkeyInfoPaginatedResponse = {
+	hasNextPage: boolean;
+	endCursor: string;
+	data: ColdkeyInfo[];
 };

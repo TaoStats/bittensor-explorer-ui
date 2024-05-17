@@ -35,7 +35,7 @@ export type ColdkeyPageParams = {
 export const ColdkeyPage = () => {
 	const { coldkey } = useParams() as ColdkeyPageParams;
 	const subnetIds = useColdKeySubnets(coldkey);
-	const coldkeyInfo = useColdKeyInfo({ coldkey: { equalTo: coldkey } });
+	const coldkeyInfo = useColdKeyInfo(coldkey);
 
 	useDOMEventTrigger("data-loaded", !subnetIds.loading);
 
@@ -50,11 +50,11 @@ export const ColdkeyPage = () => {
 				</div>
 			</div>
 			<div css={subnetColdkeys}>
-				{subnetIds.data?.map((subnet) => (
+				{subnetIds.data?.map((netUid) => (
 					<ColdkeySubnets
-						netUid={subnet.netUid}
+						netUid={netUid}
 						coldkey={coldkey}
-						key={`coldkey_subnets_${subnet.netUid}`}
+						key={`coldkey_subnets_${netUid}`}
 					/>
 				))}
 			</div>
