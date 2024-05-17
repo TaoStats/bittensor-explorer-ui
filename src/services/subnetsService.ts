@@ -878,7 +878,7 @@ export async function getColdkeySubnets(coldkey: string, after?: string): Promis
 	const response = await fetchSubnets<{
 		neuronInfos: ResponseItems<NeuronMetagraph>;
 	}>(
-		`query($filter: NeuronInfoFilter, $after: Cursor) {
+		`query($after: Cursor) {
 			neuronInfos(filter: {coldkey: {equalTo: "${coldkey}"}}, after: $after, orderBy: NET_UID_ASC, distinct: NET_UID) {
 				nodes {
 					netUid
