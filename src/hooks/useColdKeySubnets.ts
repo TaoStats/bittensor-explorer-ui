@@ -2,9 +2,7 @@ import { useRollbar } from "@rollbar/react";
 import { getColdkeySubnets } from "../services/subnetsService";
 
 import { useCallback, useEffect, useState } from "react";
-import {
-	ColdkeySubnetPaginatedResponse,
-} from "../model/subnet";
+import { ColdkeySubnetPaginatedResponse } from "../model/subnet";
 import { DataError } from "../utils/error";
 
 export function useColdKeySubnets(coldkey: string) {
@@ -14,21 +12,13 @@ export function useColdKeySubnets(coldkey: string) {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<DataError>();
 
-	const fetchData = useCallback(async () => {
+	const fetchData = useCallback(async (coldkey: string) => {
 		try {
-			let finished = false;
-			let after: string | undefined = undefined;
-
 			const result = [];
-			while (!finished) {
-				const stats: ColdkeySubnetPaginatedResponse = await getColdkeySubnets(
-					coldkey,
-					after
-				);
-				result.push(...stats.data);
-				finished = !stats.hasNextPage;
-				after = stats.endCursor;
-			}
+			const res: ColdkeySubnetPaginatedResponse = await getColdkeySubnets(
+				coldkey
+			);
+			result.push(...res.data);
 			setData(result);
 		} catch (e) {
 			if (e instanceof DataError) {
@@ -46,8 +36,8 @@ export function useColdKeySubnets(coldkey: string) {
 		setData([]);
 		setError(undefined);
 		setLoading(true);
-		fetchData();
-	}, [fetchData]);
+		fetchData(coldkey);
+	}, [fetchData, coldkey]);
 
 	return {
 		loading,
