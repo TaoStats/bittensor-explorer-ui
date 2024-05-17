@@ -24,6 +24,7 @@ import {
 	NeuronDeregistration,
 	NeuronDeregistrationPaginatedResponse,
 	RootValidator,
+	ColdkeySubnetPaginatedResponse,
 } from "../model/subnet";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -873,12 +874,12 @@ export async function getMinerIncentive(
 	};
 }
 
-export async function getColdkeySubnets(filter: NeuronMetagraphFilter) {
+export async function getColdkeySubnets(coldkey: string, after?: string): Promise<ColdkeySubnetPaginatedResponse> {
 	const response = await fetchSubnets<{
 		neuronInfos: ResponseItems<NeuronMetagraph>;
 	}>(
-		`query($filter: NeuronInfoFilter) {
-			neuronInfos(filter: $filter, orderBy: NET_UID_ASC, distinct: NET_UID) {
+		`query($filter: NeuronInfoFilter, $after: Cursor) {
+			neuronInfos(filter: {coldkey: {equalTo: "${coldkey}"}}, after: $after, orderBy: NET_UID_ASC, distinct: NET_UID) {
 				nodes {
 					netUid
 				}
@@ -889,11 +890,15 @@ export async function getColdkeySubnets(filter: NeuronMetagraphFilter) {
 			}
 		}`,
 		{
-			filter,
+			after
 		}
 	);
 
-	return extractItems(response.neuronInfos, { limit: 1024 }, transform);
+	return {
+		hasNextPage: response.neuronInfos?.pageInfo.hasNextPage,
+		endCursor: response.neuronInfos?.pageInfo.endCursor,
+		data: response.neuronInfos?.nodes,
+	};
 }
 
 export async function getColdkeyInfo(filter: NeuronMetagraphFilter) {

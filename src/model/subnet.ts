@@ -276,3 +276,9 @@ export type MinerIncentiveResponse = {
 	error?: DataError;
 	data: MinerIncentive[];
 };
+
+export type ColdkeySubnetPaginatedResponse = {
+	hasNextPage: boolean;
+	endCursor: string;
+	data: NeuronMetagraph[];
+};
