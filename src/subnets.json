@@ -125,9 +125,9 @@
         "description": ""
     },
     "25": {
-        "name": "Unregistered",
-        "github": "",
-        "description": ""
+        "name": "Protein Folding",
+        "github": "https://github.com/macrocosm-os/folding",
+        "description": "The protein folding subnet is Bittensors’ first venture into academic use cases, built and maintained by Macrocosmos AI."
     },
     "26": {
         "name": "TensorAlchemy",
