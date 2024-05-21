@@ -106,7 +106,7 @@ export function useValidatorsStakeHistory(
 				const data = stats.data.filter((stat) => stat.address === vali);
 				const current = validators.data.find((it) => it.address === vali);
 				data.push({
-					timestamp: new Date(now).toISOString(),
+					timestamp: new Date(now).toISOString().substring(0, 19),
 					...current,
 				} as ValidatorStakeHistory);
 				result.push({
