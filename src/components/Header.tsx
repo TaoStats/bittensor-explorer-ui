@@ -48,7 +48,7 @@ export const Header = () => {
 					backgroundColor: "#FB4137",
 				}}
 			>
-				Notice: Chain Upgrades in Progress! Block times may be temporarily
+				Notice: Update in progress! Block times may be temporarily
 				delayed and the latest data might not be immediately reflected on
 				taostats.io. We appreciate your patience and understanding during this
 				update period.
