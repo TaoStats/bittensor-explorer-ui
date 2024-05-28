@@ -10,9 +10,9 @@
         "description": ""
     },
     "2": {
-        "name": "Machine Translation",
-        "github": "https://github.com/bittranslateio/bittranslate",
-        "description": ""
+        "name": "Omron",
+        "github": "https://github.com/inference-labs-inc/omron-subnet",
+        "description": "Omron subnet, building cryptographically verified efficient and intelligent capital networks. "
     },
     "3": {
         "name": "MyShell TTS",
@@ -49,15 +49,15 @@
         "github": "https://github.com/RaoFoundation/pretraining",
         "description": ""
     },
-    "10": {
-        "name": "Map Reduce",
-        "github": "https://github.com/dream-well/map-reduce-subnet",
-        "description": ""
+   "10": {
+        "name": "Sturdy",
+        "github": "https://github.com/Sturdy-Subnet/sturdy-subnet/",
+        "description": "The Sturdy Subnet is a Bittensor subnetwork that enables the creation of decentralized, autonomous yield optimizers. "
     },
     "11": {
-        "name": "Transcription",
-        "github": "https://github.com/Cazure8/transcription-subnet",
-        "description": ""
+        "name": "Dippy Roleplay",
+        "github": "https://github.com/impel-intelligence/dippy-bittensor-subnet",
+        "description": "The Dippy Roleplay subnet on Bittensor aims to create the world's best open-source roleplay LLM by leveraging the collective efforts of the open-source community."
     },
     "12": {
         "name": "Horde",
@@ -80,13 +80,13 @@
         "description": ""
     },
     "16": {
-        "name": "Audio",
-        "github": "https://github.com/UncleTensor/AudioSubnet",
+        "name": "BitAds",
+        "github": "https://github.com/eseckft/BitAds.ai/",
         "description": ""
     },
     "17": {
-        "name": "Flavia",
-        "github": "https://github.com/CortexLM/flavia",
+        "name": "Three Gen",
+        "github": "https://github.com/404-Repo/three-gen-subnet",
         "description": ""
     },
     "18": {
@@ -125,13 +125,13 @@
         "description": ""
     },
     "25": {
-        "name": "Hivetrain",
-        "github": "https://github.com/bit-current/DistributedTraining/",
-        "description": ""
+        "name": "Protein Folding",
+        "github": "https://github.com/macrocosm-os/folding",
+        "description": "The protein folding subnet is Bittensors’ first venture into academic use cases, built and maintained by Macrocosmos AI."
     },
     "26": {
-        "name": "Image Alchemy",
-        "github": "https://github.com/Supreme-Emperor-Wang/ImageAlchemy",
+        "name": "Tensor Alchemy",
+        "github": "https://github.com/TensorAlchemy/TensorAlchemy",
         "description": ""
     },
     "27": {
@@ -141,7 +141,7 @@
     },
     "28": {
         "name": "Foundry S&P 500 Oracle",
-        "github": "https://github.com/teast21/snpOracle",
+        "github": "https://github.com/foundryservices/snpOracle",
         "description": ""
     },
     "29": {
@@ -162,6 +162,26 @@
     "32": {
         "name": "It's AI",
         "github": "https://github.com/It-s-AI/llm-detection",
+        "description": ""
+    },
+    "33": {
+        "name": "Conversation Genome",
+        "github": "https://github.com/afterpartyai/bittensor-conversation-genome-project",
+        "description": "The Conversation Genome Project (conversations.xyz) enables structured data processing at scale to decentralize access to personalized AI."
+    },
+    "34": {
+        "name": "Healthi",
+        "github": "https://github.com/Healthi-Labs/healthi-subnet",
+        "description": "Leverages AI to predict health outcomes by analyzing electronic health records."
+    },
+    "35": {
+        "name": "Unknown",
+        "github": "",
+        "description": ""
+    },
+    "36": {
+        "name": "Unregistered",
+        "github": "",
         "description": ""
     }
 }
