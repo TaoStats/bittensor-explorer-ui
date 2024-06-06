@@ -183,5 +183,15 @@
         "name": "Human Intelligence Primitive",
         "github": "https://github.com/HIP-Labs/HIP-Subnet",
         "description": "The HIP (Human Intelligence Primitive) Subnet is a Bittensor subnet designed to provide human intelligence services to other subnets."
+    },
+    "37": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "38": {
+        "name": "",
+        "github": "",
+        "description": ""
     }
 }
