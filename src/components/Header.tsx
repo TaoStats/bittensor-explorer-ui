@@ -240,10 +240,10 @@ export const Header = () => {
 															{Array.from(
 																Array(Math.min(
 																	Math.floor((totalSubnets + 2) / subnetMenuColumn),
-																	totalSubnets - Math.floor((totalSubnets + 2) / subnetMenuColumn)* menuIndex
+																	totalSubnets - Math.floor((totalSubnets + 2) / subnetMenuColumn) * menuIndex
 																))
 															).map((_, itemIndex) => {
-																const passed = (totalSubnets + 2) / subnetMenuColumn * menuIndex;
+																const passed = Math.floor((totalSubnets + 2) / subnetMenuColumn) * menuIndex;
 																const netUid = parseInt(
 																	subnetIDs[passed + itemIndex] ?? "0"
 																);
