@@ -142,6 +142,7 @@ function StakingCalculator({
 		yearlyTAO: 0,
 		yearlyUSD: 0,
 		apr: 0,
+		take: 1,
 	});
 	const [valisForTable, setValisForTable] = useState<any[]>([]);
 
@@ -166,6 +167,7 @@ function StakingCalculator({
 			yearlyTAO: yearlyReturn,
 			yearlyUSD: yearlyReturn * priceDecimal,
 			apr: apr * valiTake,
+			take: valiTake,
 		};
 	};
 
@@ -195,6 +197,9 @@ function StakingCalculator({
 				...validators[i],
 				...ma,
 				...ret,
+				nom:
+					rawAmountToDecimal(ma?.norm30DayAvg?.toString()).toNumber() *
+					ret.take,
 				highlighted: weightCopiers.includes(validators[i]?.address ?? ""),
 			});
 		}

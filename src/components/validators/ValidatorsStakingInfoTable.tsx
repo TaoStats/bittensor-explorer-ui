@@ -162,18 +162,16 @@ function ValidatorsStakingInfoTable(props: ValidatorsStakingInfoTableProps) {
 			<ValidatorsStakingInfoTableAttribute
 				label={`NOM./24h/k${currency}`}
 				align="right"
-				render={({ norm30DayAvg }) => {
+				render={({ nom }) => {
 					return (
 						<>
-							{rawAmountToDecimal(norm30DayAvg?.toString())
-								.toNumber()
-								.toFixed(3)}
+							{nom.toFixed(3)}
 							{currency}
 						</>
 					);
 				}}
 				sortable
-				sortProperty="norm30DayAvg"
+				sortProperty="nom"
 			/>
 		</ItemsTable>
 	);
