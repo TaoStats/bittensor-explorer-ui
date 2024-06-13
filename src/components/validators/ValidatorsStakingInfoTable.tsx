@@ -7,7 +7,7 @@ import { NETWORK_CONFIG } from "../../config";
 import { SortDirection } from "../../model/sortDirection";
 import { SortOrder } from "../../model/sortOrder";
 import { Validator } from "../../model/validator";
-import { formatNumber, rawAmountToDecimal } from "../../utils/number";
+import { formatNumber } from "../../utils/number";
 
 export type ValidatorsStakingInfoTableProps = {
 	validators: any[];
