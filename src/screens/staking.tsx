@@ -161,7 +161,7 @@ export const StakingPage = () => {
 						Enter TAO quantity and price to calculate staking returns
 					</div>
 					<div css={description}>
-						The APR above isa network average based on the total validator
+						The APR above is a network average based on the total validator
 						emissions for ALL validators across the network and does not take
 						into account differences in validator performance, take, or subnet
 						allocation. The APR does not calculate compounding as it would be a
