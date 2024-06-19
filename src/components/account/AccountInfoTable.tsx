@@ -53,6 +53,11 @@ const createdAt = css`
 	display: flex;
 	align-items: center;
 	gap: 8px;
+
+	@media (max-width: 499px) {
+		flex-direction: column;
+		align-items: start;
+	}
 `;
 
 const blockLink = css`
