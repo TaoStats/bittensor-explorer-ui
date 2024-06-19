@@ -41,11 +41,12 @@ export const ColdkeyPage = () => {
 	const {
 		data: { loading, isColdkey },
 	} = useAddressInfo(coldkey);
+
+	useDOMEventTrigger("data-loaded", !subnetIds.loading);
+
 	if (!loading && !isColdkey) {
 		return <Navigate to={`/account/${coldkey}`} replace />;
 	}
-
-	useDOMEventTrigger("data-loaded", !subnetIds.loading);
 
 	return (
 		<>
