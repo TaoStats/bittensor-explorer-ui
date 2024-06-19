@@ -96,7 +96,7 @@ export const AccountPage = () => {
 	const verifiedDelegates = useVerifiedDelegates();
 
 	const {
-		data: { isHotkey, isValidator },
+		data: { isHotkey, isValidator, isColdkey },
 	} = useAddressInfo(address);
 
 	const blockHeight =
@@ -244,6 +244,9 @@ export const AccountPage = () => {
 	}
 	if (isHotkey) {
 		return <Navigate to={`/hotkey/${address}`} replace />;
+	}
+	if (isColdkey) {
+		return <Navigate to={`/coldkey/${address}`} replace />;
 	}
 
 	return account.error ? (

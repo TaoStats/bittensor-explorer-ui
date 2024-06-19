@@ -10,9 +10,12 @@ import { rawAmountToDecimal } from "../utils/number";
 export function useAddressInfo(address: string) {
 	const rollbar = useRollbar();
 
-	const [data, setData] = useState<{ isHotkey: boolean; isValidator: boolean }>(
-		{ isHotkey: false, isValidator: false }
-	);
+	const [data, setData] = useState<{
+		loading: boolean;
+		isHotkey: boolean;
+		isValidator: boolean;
+		isColdkey: boolean;
+	}>({ loading: true, isHotkey: false, isValidator: false, isColdkey: false });
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<DataError>();
 
@@ -20,9 +23,10 @@ export function useAddressInfo(address: string) {
 		try {
 			const result: ItemsResponse<NeuronMetagraph> = await getNeuronMetagraph(
 				{
-					hotkey: {
-						equalTo: address,
-					},
+					or: [
+						{ hotkey: { equalTo: address } },
+						{ coldkey: { equalTo: address } },
+					],
 					netUid: {
 						notEqualTo: 0,
 					},
@@ -32,14 +36,18 @@ export function useAddressInfo(address: string) {
 					limit: 1024,
 				}
 			);
+
+			const hotkeys = result.data.filter((x) => x.hotkey === address);
+			const coldkeys = result.data.filter((x) => x.coldkey === address);
 			const isValidator =
-				result.data.find(
+				hotkeys.find(
 					(cur) =>
 						cur.dividends > 0 &&
 						rawAmountToDecimal(cur.stake.toString()).gt(1000)
 				) != undefined;
-			const isHotkey = result.data.length > 0;
-			setData({ isHotkey, isValidator });
+			const isHotkey = hotkeys.length > 0;
+			const isColdkey = coldkeys.length > 0;
+			setData({ loading: false, isHotkey, isValidator, isColdkey });
 		} catch (e) {
 			if (e instanceof DataError) {
 				rollbar.error(e);
@@ -53,7 +61,12 @@ export function useAddressInfo(address: string) {
 	}, []);
 
 	useEffect(() => {
-		setData({ isHotkey: false, isValidator: false });
+		setData({
+			loading: true,
+			isHotkey: false,
+			isValidator: false,
+			isColdkey: false,
+		});
 		setError(undefined);
 		setLoading(true);
 		fetchData();

@@ -2,8 +2,7 @@
 import { Navigate, useLocation, useParams } from "react-router-dom";
 import { css } from "@emotion/react";
 import { useHotkeyNet } from "../hooks/useHotkeyNet";
-import { rawAmountToDecimal } from "../utils/number";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Card } from "../components/Card";
 import { HotkeyInfoTable } from "../components/hotkey/HotkeyInfoTable";
 import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
@@ -11,6 +10,7 @@ import HotkeyMetagraphTable from "../components/hotkey/HotkeyMetagraphTable";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import { TabbedContent, TabPane } from "../components/TabbedContent";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
+import { useAddressInfo } from "../hooks/useAddressInfo";
 
 const perfContainer = css`
 	margin-top: 50px;
@@ -47,15 +47,10 @@ export const HotkeyPage = () => {
 	);
 
 	const neuronMetagraph = useHotkeyNet(hkey);
-	const isValidator = useMemo(() => {
-		if (neuronMetagraph.loading) return false;
-		return (
-			neuronMetagraph.data.find(
-				(cur) =>
-					cur.dividends > 0 && rawAmountToDecimal(cur.stake.toString()).gt(1000)
-			) != undefined
-		);
-	}, [neuronMetagraph]);
+
+	const {
+		data: { loading, isHotkey, isValidator },
+	} = useAddressInfo(hkey);
 
 	const [activeSubnet, setActiveSubnet] = useState(-1);
 	useEffect(() => {
@@ -75,6 +70,10 @@ export const HotkeyPage = () => {
 
 	if (isValidator) {
 		return <Navigate to={`/validator/${hkey}`} replace />;
+	}
+
+	if (!loading && !isHotkey) {
+		return <Navigate to={`/account/${hkey}`} replace />;
 	}
 
 	return (
