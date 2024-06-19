@@ -46,7 +46,7 @@ const accountLabelAddress = css`
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-	flex: 0 0 auto;
+	flex: 0 0 auto !important;
 	width: 400px;
 
 	${theme.breakpoints.down("lg")} {
