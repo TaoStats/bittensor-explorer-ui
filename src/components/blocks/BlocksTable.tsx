@@ -33,7 +33,7 @@ const orderMappings = {
 	},
 };
 
-function ExtrinsicsTable(props: BlocksTableProps) {
+function BlocksTable(props: BlocksTableProps) {
 	const {
 		blocks,
 		showTime,
@@ -133,4 +133,4 @@ function ExtrinsicsTable(props: BlocksTableProps) {
 	);
 }
 
-export default ExtrinsicsTable;
+export default BlocksTable;

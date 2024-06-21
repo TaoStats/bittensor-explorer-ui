@@ -38,6 +38,8 @@ import {
 import { useAppStats } from "../contexts";
 import { useValidator7DayMA } from "../hooks/useValidators7DayMA";
 import { Validator7DayMAChart } from "../components/validators/Validator7DayMAChart";
+import { useExtrinsics } from "../hooks/useExtrinsics";
+import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
 
 const validatorHeader = (theme: Theme) => css`
 	display: flex;
@@ -187,7 +189,7 @@ const stakeButton = css`
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-	flex: 0 0 auto;
+	flex: 0 0 auto !important;
 	width: 400px;
 
 	${theme.breakpoints.down("lg")} {
@@ -209,6 +211,10 @@ export const ValidatorPage = () => {
 	const validator = useValidator({ address: { equalTo: address } });
 
 	const verifiedDelegates = useVerifiedDelegates();
+	const extrinsics = useExtrinsics(
+		{ signer: { equalTo: address } },
+		"BLOCK_HEIGHT_DESC"
+	);
 
 	const info = verifiedDelegates[address];
 
@@ -501,6 +507,15 @@ export const ValidatorPage = () => {
 							address={info?.name ?? address}
 							download
 						/>
+					</TabPane>
+					<TabPane
+						label="Extrinsics"
+						count={extrinsics.pagination.totalCount}
+						loading={extrinsics.loading}
+						error={extrinsics.error}
+						value="extrinsics"
+					>
+						<ExtrinsicsTable extrinsics={extrinsics} showTime />
 					</TabPane>
 					<TabPane
 						label="Delegation"

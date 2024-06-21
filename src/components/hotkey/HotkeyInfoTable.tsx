@@ -11,6 +11,10 @@ const addressItem = css`
 	white-space: nowrap;
 `;
 
+const whiteText = css`
+	color: white;
+`;
+
 export type HotkeyInfoTableProps = {
 	hotkey: string;
 	loading: boolean;
@@ -32,16 +36,7 @@ export const HotkeyInfoTable = (props: HotkeyInfoTableProps) => {
 		<InfoTable data={props} loading={loading} error={error}>
 			<HotkeyInfoTableAttribute
 				label="Hotkey"
-				render={() => (
-					<Link
-						href={`/account/${hotkey}`}
-						color="white"
-						target="_self"
-						css={addressItem}
-					>
-						{hotkey} ▶
-					</Link>
-				)}
+				render={() => <span css={whiteText}>{hotkey}</span>}
 				copyToClipboard={() => hotkey}
 			/>
 			<HotkeyInfoTableAttribute

@@ -8,8 +8,11 @@ import Spinner from "../Spinner";
 import Decimal from "decimal.js";
 import { NETWORK_CONFIG } from "../../config";
 import { DataError } from "../../utils/error";
+import { css } from "@emotion/react";
+import { Link } from "../Link";
 
 export type ColdkeyInfoTableProps = {
+	coldkey: string;
 	info: {
 		loading: boolean;
 		data: ColdkeyInfo[];
@@ -17,10 +20,16 @@ export type ColdkeyInfoTableProps = {
 	};
 };
 
+const addressItem = css`
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+`;
+
 const ColdkeyInfoTableAttribute = InfoTableAttribute<any>;
 
 export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
-	const { info } = props;
+	const { coldkey, info } = props;
 
 	const taoPrice = useTaoPrice();
 
@@ -33,17 +42,14 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 			if (info.loading || !info.data)
 				return [hotkeys.size, 0, totalStake, totalDailyReward];
 
-			info.data.forEach(({hotkey, stake, dailyReward}) => {
+			info.data.forEach(({ hotkey, stake, dailyReward }) => {
 				totalDailyReward = totalDailyReward.add(
 					rawAmountToDecimal(dailyReward.toString())
 				);
 				if (hotkeys.has(hotkey)) return;
 				hotkeys.add(hotkey);
-				totalStake = totalStake.add(
-					rawAmountToDecimal(stake.toString())
-				);
+				totalStake = totalStake.add(rawAmountToDecimal(stake.toString()));
 			});
-
 
 			return [hotkeys.size, info.data.length, totalStake, totalDailyReward];
 		}, [info]);
@@ -56,6 +62,20 @@ export const ColdkeyInfoTable = (props: ColdkeyInfoTableProps) => {
 			notFoundMessage="Invalid coldkey."
 			error={info.error}
 		>
+			<ColdkeyInfoTableAttribute
+				label="Coldkey"
+				render={() => (
+					<Link
+						href={`/account/${coldkey}`}
+						color="white"
+						target="_self"
+						css={addressItem}
+					>
+						{coldkey} ▶
+					</Link>
+				)}
+				copyToClipboard={() => coldkey}
+			/>
 			<ColdkeyInfoTableAttribute
 				label="Total Neurons"
 				render={() => totalNeurons}

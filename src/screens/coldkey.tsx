@@ -41,7 +41,7 @@ export const ColdkeyPage = () => {
 
 	return (
 		<>
-			<ColdkeyInfoTable info={coldkeyInfo} />
+			<ColdkeyInfoTable coldkey={coldkey} info={coldkeyInfo} />
 			<div css={metagraphComment}>
 				<div>Click on any UID for detailed stats.</div>
 				<div css={validatorComment}>

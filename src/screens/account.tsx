@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { useEffect, useMemo, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { css, Theme } from "@emotion/react";
 
 import { Card, CardHeader, CardRow } from "../components/Card";
@@ -32,56 +32,57 @@ import {
 import { AccounBalanceHistoryChart } from "../components/account/AccounBalanceHistoryChart";
 import { AccounDelegateHistoryChart } from "../components/account/AccounDelegateHistoryChart";
 import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
+import { useAddressInfo } from "../hooks/useAddressInfo";
 
 const accountInfoStyle = css`
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 `;
 
 const accountLabelAddress = css`
-  opacity: 0.5;
-  overflow: hidden;
-  text-overflow: ellipsis;
+	opacity: 0.5;
+	overflow: hidden;
+	text-overflow: ellipsis;
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-  flex: 0 0 auto;
-  width: 400px;
+	flex: 0 0 auto !important;
+	width: 400px;
 
-  ${theme.breakpoints.down("lg")} {
-    width: auto;
-  }
+	${theme.breakpoints.down("lg")} {
+		width: auto;
+	}
 `;
 
 const accountHeader = (theme: Theme) => css`
-  display: flex;
-  gap: 4px;
-  align-items: center;
-  word-break: keep-all;
-  color: ${theme.palette.text.primary};
+	display: flex;
+	gap: 4px;
+	align-items: center;
+	word-break: keep-all;
+	color: ${theme.palette.text.primary};
 `;
 
 const infoSection = css`
-  display: flex;
-  @media only screen and (max-width: 767px) {
-    flex-direction: column;
-  }
+	display: flex;
+	@media only screen and (max-width: 767px) {
+		flex-direction: column;
+	}
 `;
 
 const summary = css`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: 100%;
-  @media only screen and (max-width: 767px) {
-    grid-template-columns: repeat(1, 1fr);
-  }
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	width: 100%;
+	@media only screen and (max-width: 767px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
 `;
 
 const accountTitle = css`
-  display: block;
-  opacity: 0.8;
-  width: 144px;
-  font-size: 12px;
+	display: block;
+	opacity: 0.8;
+	width: 144px;
+	font-size: 12px;
 `;
 
 export type AccountPageParams = {
@@ -94,8 +95,12 @@ export const AccountPage = () => {
 	const { state } = useAppStats();
 	const verifiedDelegates = useVerifiedDelegates();
 
+	const {
+		data: { isHotkey, isValidator },
+	} = useAddressInfo(address);
+
 	const blockHeight =
-    Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) * 1000;
+		Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) * 1000;
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics(
@@ -106,9 +111,12 @@ export const AccountPage = () => {
 	const [transferSort, setTransferSort] = useState<TransfersOrder>(
 		transfersInitialOrder
 	);
-	const transfers = useTransfers({
-		or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
-	}, transferSort);
+	const transfers = useTransfers(
+		{
+			or: [{ from: { equalTo: address } }, { to: { equalTo: address } }],
+		},
+		transferSort
+	);
 	const delegateBalances = useDelegateBalances(
 		{
 			account: { equalTo: address },
@@ -128,28 +136,29 @@ export const AccountPage = () => {
 	);
 	const delegateSearchFilter = useMemo(() => {
 		const lowerSearch = delegatesSearch?.trim().toLowerCase() || "";
-		if(verifiedDelegates !== undefined) {
-			const filtered = Object.keys(verifiedDelegates).filter((hotkey: string) => {
-				const delegateInfo = verifiedDelegates[hotkey];
-				const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
-				if(lowerSearch !== "" && delegateName.includes(lowerSearch))
-					return true;
-				return false;
-			});
-			if(filtered.length > 0) {
+		if (verifiedDelegates !== undefined) {
+			const filtered = Object.keys(verifiedDelegates).filter(
+				(hotkey: string) => {
+					const delegateInfo = verifiedDelegates[hotkey];
+					const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
+					if (lowerSearch !== "" && delegateName.includes(lowerSearch))
+						return true;
+					return false;
+				}
+			);
+			if (filtered.length > 0) {
 				return {
 					delegate: {
 						in: filtered,
-					}
+					},
 				};
 			}
 		}
-		if(lowerSearch === "")
-			return {};
+		if (lowerSearch === "") return {};
 		return {
 			delegate: {
 				includesInsensitive: delegatesSearch,
-			}
+			},
 		};
 	}, [delegatesSearch]);
 	const delegates = useDelegates(
@@ -183,13 +192,13 @@ export const AccountPage = () => {
 	useDOMEventTrigger(
 		"data-loaded",
 		!account.loading &&
-		!extrinsics.loading &&
-		!transfers.loading &&
-		!taoPrice.loading &&
-		!delegates.loading &&
-		!delegateBalances.loading &&
-		!accountBalanceHistory.loading &&
-		!accountDelegateHistory.loading
+			!extrinsics.loading &&
+			!transfers.loading &&
+			!taoPrice.loading &&
+			!delegates.loading &&
+			!delegateBalances.loading &&
+			!accountBalanceHistory.loading &&
+			!accountDelegateHistory.loading
 	);
 
 	useEffect(() => {
@@ -230,6 +239,13 @@ export const AccountPage = () => {
 		}
 	}, [tab]);
 
+	if (isValidator) {
+		return <Navigate to={`/validator/${address}`} replace />;
+	}
+	if (isHotkey) {
+		return <Navigate to={`/hotkey/${address}`} replace />;
+	}
+
 	return account.error ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid account address</Card>
@@ -262,7 +278,7 @@ export const AccountPage = () => {
 					<AccountPortfolio balance={balance} taoPrice={taoPrice} />
 				</Card>
 			</CardRow>
-			{(
+			{
 				<Card data-test="account-historical-items">
 					<div>
 						<TabbedContent defaultTab={tab.slice(1).toString()}>
@@ -293,8 +309,8 @@ export const AccountPage = () => {
 						</TabbedContent>
 					</div>
 				</Card>
-			)}
-			{(
+			}
+			{
 				<Card data-test="account-related-items">
 					<div>
 						<TabbedContent defaultTab={tab.slice(1).toString()}>
@@ -353,7 +369,7 @@ export const AccountPage = () => {
 						</TabbedContent>
 					</div>
 				</Card>
-			)}
+			}
 		</>
 	);
 };

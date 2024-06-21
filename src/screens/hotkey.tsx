@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate, useLocation, useParams } from "react-router-dom";
 import { css } from "@emotion/react";
 import { useHotkeyNet } from "../hooks/useHotkeyNet";
 import { rawAmountToDecimal } from "../utils/number";
@@ -8,6 +8,9 @@ import { Card } from "../components/Card";
 import { HotkeyInfoTable } from "../components/hotkey/HotkeyInfoTable";
 import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
 import HotkeyMetagraphTable from "../components/hotkey/HotkeyMetagraphTable";
+import { useExtrinsics } from "../hooks/useExtrinsics";
+import { TabbedContent, TabPane } from "../components/TabbedContent";
+import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
 
 const perfContainer = css`
 	margin-top: 50px;
@@ -38,6 +41,11 @@ export type HotkeyPageParams = {
 export const HotkeyPage = () => {
 	const { hkey } = useParams() as HotkeyPageParams;
 
+	const extrinsics = useExtrinsics(
+		{ signer: { equalTo: hkey } },
+		"BLOCK_HEIGHT_DESC"
+	);
+
 	const neuronMetagraph = useHotkeyNet(hkey);
 	const isValidator = useMemo(() => {
 		if (neuronMetagraph.loading) return false;
@@ -55,6 +63,16 @@ export const HotkeyPage = () => {
 		if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
 	}, [neuronMetagraph]);
 
+	const { hash: tab } = useLocation();
+	useEffect(() => {
+		if (tab) {
+			document.getElementById(tab)?.scrollIntoView();
+			window.scrollBy(0, -175);
+		} else {
+			window.scrollTo(0, 0);
+		}
+	}, [tab]);
+
 	if (isValidator) {
 		return <Navigate to={`/validator/${hkey}`} replace />;
 	}
@@ -65,7 +83,24 @@ export const HotkeyPage = () => {
 				<HotkeyInfoTable hotkey={hkey} {...neuronMetagraph} />
 			</Card>
 			<Card>
-				<HotkeyMetagraphTable {...neuronMetagraph} />
+				<TabbedContent defaultTab={tab.slice(1).toString()}>
+					<TabPane
+						label="Metagraph"
+						loading={neuronMetagraph.loading}
+						error={!!neuronMetagraph.error}
+						value="metagraph"
+					>
+						<HotkeyMetagraphTable {...neuronMetagraph} />
+					</TabPane>
+					<TabPane
+						label="extrinsics"
+						loading={extrinsics.loading}
+						error={extrinsics.error}
+						value="extrinsics"
+					>
+						<ExtrinsicsTable extrinsics={extrinsics} showTime />
+					</TabPane>
+				</TabbedContent>
 			</Card>
 			<Card>
 				<div css={perfContainer}>

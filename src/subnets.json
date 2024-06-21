@@ -6,7 +6,7 @@
     },
     "1": {
         "name": "Text Prompting",
-        "github": "https://github.com/opentensor/prompting",
+        "github": "https://github.com/macrocosm-os/prompting",
         "description": ""
     },
     "2": {
@@ -30,9 +30,9 @@
         "description": ""
     },
     "6": {
-        "name": "Decentralized Distributed Data",
-        "github": "https://github.com/gitphantomman/d3_subnet/",
-        "description": ""
+        "name": "Infinite Games",
+        "github": "https://github.com/amedeo-gigaver/infinite_games",
+        "description": "Incentivizing the prediction of future events."
     },
     "7": {
         "name": "Subvortex",
@@ -46,7 +46,7 @@
     },
     "9": {
         "name": "Pretraining",
-        "github": "https://github.com/RaoFoundation/pretraining",
+        "github": "https://github.com/macrocosm-os/pretraining",
         "description": ""
     },
    "10": {
@@ -66,7 +66,7 @@
     },
     "13": {
         "name": "Dataverse",
-        "github": "https://github.com/RusticLuftig/data-universe/",
+        "github": "https://github.com/macrocosm-os/data-universe/",
         "description": ""
     },
     "14": {
@@ -190,7 +190,7 @@
         "description": " "
     },
     "38": {
-        "name": "",
+        "name": "Unknown",
         "github": "",
         "description": ""
     }
