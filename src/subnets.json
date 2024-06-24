@@ -6,7 +6,7 @@
     },
     "1": {
         "name": "Text Prompting",
-        "github": "https://github.com/opentensor/prompting",
+        "github": "https://github.com/macrocosm-os/prompting",
         "description": ""
     },
     "2": {
@@ -30,9 +30,9 @@
         "description": ""
     },
     "6": {
-        "name": "Decentralized Distributed Data",
-        "github": "https://github.com/gitphantomman/d3_subnet/",
-        "description": ""
+        "name": "Infinite Games",
+        "github": "https://github.com/amedeo-gigaver/infinite_games",
+        "description": "Incentivizing the prediction of future events."
     },
     "7": {
         "name": "Subvortex",
@@ -46,7 +46,7 @@
     },
     "9": {
         "name": "Pretraining",
-        "github": "https://github.com/RaoFoundation/pretraining",
+        "github": "https://github.com/macrocosm-os/pretraining",
         "description": ""
     },
    "10": {
@@ -66,7 +66,7 @@
     },
     "13": {
         "name": "Dataverse",
-        "github": "https://github.com/RusticLuftig/data-universe/",
+        "github": "https://github.com/macrocosm-os/data-universe/",
         "description": ""
     },
     "14": {
@@ -150,8 +150,8 @@
         "description": ""
     },
     "30": {
-        "name": "WomboAI",
-        "github": "https://github.com/womboai/wombo-bittensor-subnet",
+        "name": "",
+        "github": "",
         "description": ""
     },
     "31": {
@@ -185,12 +185,47 @@
         "description": "The HIP (Human Intelligence Primitive) Subnet is a Bittensor subnet designed to provide human intelligence services to other subnets."
     },
     "37": {
-        "name": "Unknown",
-        "github": "",
-        "description": " "
+        "name": "Finetuning",
+        "github": "https://github.com/macrocosm-os/finetuning",
+        "description": "The Finetuning subnet 37 rewards miners for fine-tuning Large Language Models (LLMs)."
     },
     "38": {
         "name": "Unknown",
+        "github": "",
+        "description": ""
+    },
+    "39": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "40": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "41": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "42": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "43": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "44": {
+        "name": "",
+        "github": "",
+        "description": ""
+    },
+    "45": {
+        "name": "",
         "github": "",
         "description": ""
     }
