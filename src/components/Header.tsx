@@ -73,15 +73,15 @@ export const Header = () => {
 											priceChange24h > 0
 												? "success"
 												: priceChange24h < 0
-												? "warning"
-												: ""
+													? "warning"
+													: ""
 										}`}
 									>
 										{priceChange24h > 0
 											? "▴"
 											: priceChange24h < 0
-											? "▾"
-											: ""}
+												? "▾"
+												: ""}
 										{` ${priceChange24h}%`}
 									</span>
 								</li>
