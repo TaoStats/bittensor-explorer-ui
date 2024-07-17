@@ -4,7 +4,6 @@ import PolygonGray from "../assets/polygon-gray.svg";
 import { useAppStats } from "../contexts";
 import { nFormatter } from "../utils/number";
 import subnets from "../subnets.json";
-import Marquee from "react-fast-marquee";
 
 export const Header = () => {
 	const {
@@ -43,9 +42,11 @@ export const Header = () => {
 
 	return (
 		<header className="new-site-header">
-			<a href="https://keycheck.taostats.io/" 
+			{/* <a
+				href="https://keycheck.taostats.io/"
 				rel="noreferrer"
-				target="_blank">
+				target="_blank"
+			>
 				<Marquee
 					speed={0}
 					style={{
@@ -55,8 +56,11 @@ export const Header = () => {
 						paddingLeft: "10px",
 					}}
 				>
-					After the recent attack, taostats.io have released an interface to help you determine if your key may have been affected. Click here to check your key.
-				</Marquee></a>
+					After the recent attack, taostats.io have released an
+					interface to help you determine if your key may have been
+					affected. Click here to check your key.
+				</Marquee>
+			</a> */}
 			<div className="header-top">
 				<div className="container">
 					<div className="ht-inner">
@@ -64,16 +68,30 @@ export const Header = () => {
 							<ul>
 								<li>
 									<label>Price.</label> ${price}{" "}
-									<span className={`${priceChange24h > 0 ? "success" : priceChange24h < 0 ? "warning" : ""}`}>
-										{priceChange24h > 0 ? "▴" : priceChange24h < 0 ? "▾" : ""}
+									<span
+										className={`${
+											priceChange24h > 0
+												? "success"
+												: priceChange24h < 0
+												? "warning"
+												: ""
+										}`}
+									>
+										{priceChange24h > 0
+											? "▴"
+											: priceChange24h < 0
+											? "▾"
+											: ""}
 										{` ${priceChange24h}%`}
 									</span>
 								</li>
 								<li>
-									<label>24 Vol.</label> ${nFormatter(volume24h, 2)}
+									<label>24 Vol.</label> $
+									{nFormatter(volume24h, 2)}
 								</li>
 								<li>
-									<label>Market Cap</label> ${nFormatter(marketCap, 2)}
+									<label>Market Cap</label> $
+									{nFormatter(marketCap, 2)}
 								</li>
 							</ul>
 						</div>
@@ -102,7 +120,10 @@ export const Header = () => {
 									<a href="#" className="btn">
 										BUY TAO
 										<span>
-											<img src={PolygonGray} alt="Taostats down caret" />
+											<img
+												src={PolygonGray}
+												alt="Taostats down caret"
+											/>
 										</span>
 									</a>
 									<ul className="menu">
@@ -217,7 +238,11 @@ export const Header = () => {
 							<span />
 						</div>
 
-						<div className={`main-menu fade-in-out ${isFaded ? "active" : ""}`}>
+						<div
+							className={`main-menu fade-in-out ${
+								isFaded ? "active" : ""
+							}`}
+						>
 							<div className="container">
 								<div className="ht-search">
 									<form action="/search" method="get">
@@ -233,7 +258,9 @@ export const Header = () => {
 								<nav>
 									<ul>
 										<li className="menu-item">
-											<a href="https://taostats.io">Home</a>
+											<a href="https://taostats.io">
+												Home
+											</a>
 											<span className="menuItem-glow" />
 										</li>
 										<li
@@ -245,35 +272,87 @@ export const Header = () => {
 												Subnets
 												<span
 													className="has-btn"
-													onClick={(e) => openSubMenu(e)}
+													onClick={(e) =>
+														openSubMenu(e)
+													}
 												/>
 											</a>
 											<ul className="megaMenu subMenu">
-												{Array.from(Array(3)).map((_, menuIndex) => (
-													<li key={`subnet-menu-column-${menuIndex}`}>
-														<ul>
-															{Array.from(
-																Array(Math.min(
-																	Math.floor((totalSubnets + 2) / subnetMenuColumn),
-																	totalSubnets - Math.floor((totalSubnets + 2) / subnetMenuColumn) * menuIndex
-																))
-															).map((_, itemIndex) => {
-																const passed = Math.floor((totalSubnets + 2) / subnetMenuColumn) * menuIndex;
-																const netUid = parseInt(
-																	subnetIDs[passed + itemIndex] ?? "0"
-																);
-																const name = (subnets as any)[netUid]?.name || "Unknown";
-																return (
-																	<li key={`subnet-menu-item-${itemIndex}`}>
-																		<a href={`/subnet/${netUid}`}>
-																			{netUid}: {name}
-																		</a>
-																	</li>
-																);
-															})}
-														</ul>
-													</li>
-												))}
+												{Array.from(Array(3)).map(
+													(_, menuIndex) => (
+														<li
+															key={`subnet-menu-column-${menuIndex}`}
+														>
+															<ul>
+																{Array.from(
+																	Array(
+																		Math.min(
+																			Math.floor(
+																				(totalSubnets +
+																					2) /
+																					subnetMenuColumn
+																			),
+																			totalSubnets -
+																				Math.floor(
+																					(totalSubnets +
+																						2) /
+																						subnetMenuColumn
+																				) *
+																					menuIndex
+																		)
+																	)
+																).map(
+																	(
+																		_,
+																		itemIndex
+																	) => {
+																		const passed =
+																			Math.floor(
+																				(totalSubnets +
+																					2) /
+																					subnetMenuColumn
+																			) *
+																			menuIndex;
+																		const netUid =
+																			parseInt(
+																				subnetIDs[
+																					passed +
+																						itemIndex
+																				] ??
+																					"0"
+																			);
+																		const name =
+																			(
+																				subnets as any
+																			)[
+																				netUid
+																			]
+																				?.name ||
+																			"Unknown";
+																		return (
+																			<li
+																				key={`subnet-menu-item-${itemIndex}`}
+																			>
+																				<a
+																					href={`/subnet/${netUid}`}
+																				>
+																					{
+																						netUid
+																					}
+
+																					:{" "}
+																					{
+																						name
+																					}
+																				</a>
+																			</li>
+																		);
+																	}
+																)}
+															</ul>
+														</li>
+													)
+												)}
 											</ul>
 											<span className="menuItem-glow"></span>
 										</li>
@@ -286,36 +365,56 @@ export const Header = () => {
 												Blockchain
 												<span
 													className="has-btn"
-													onClick={(e) => openSubMenu(e)}
+													onClick={(e) =>
+														openSubMenu(e)
+													}
 												/>
 											</a>
 											<ul className="subMenu">
 												<li>
-													<a href="/#blocks">Blocks</a>
+													<a href="/#blocks">
+														Blocks
+													</a>
 												</li>
 												<li>
-													<a href="/#transfers">Transfers</a>
+													<a href="/#transfers">
+														Transfers
+													</a>
 												</li>
 												<li>
-													<a href="/#delegation">Delegation</a>
+													<a href="/#delegation">
+														Delegation
+													</a>
 												</li>
 												<li>
-													<a href="/validators">Validators</a>
+													<a href="/validators">
+														Validators
+													</a>
 												</li>
 												<li>
-													<a href="/#accounts">Accounts</a>
+													<a href="/#accounts">
+														Accounts
+													</a>
 												</li>
 												<li>
-													<a href="/subnets">Subnets</a>
+													<a href="/subnets">
+														Subnets
+													</a>
 												</li>
 												<li>
-													<a href="/tokenomics/">Tokenomics</a>
+													<a href="/tokenomics/">
+														Tokenomics
+													</a>
 												</li>
 												<li>
-													<a href="https://nx.taostats.io/">Nakamoto</a>
+													<a href="https://nx.taostats.io/">
+														Nakamoto
+													</a>
 												</li>
 												<li>
-													<a href="https://kx.taostats.io/">Kusanagi</a>
+													<a href="https://kx.taostats.io/">
+														Kusanagi
+													</a>
 												</li>
 											</ul>
 											<span className="menuItem-glow"></span>
@@ -329,7 +428,9 @@ export const Header = () => {
 												Validators
 												<span
 													className="has-btn"
-													onClick={(e) => openSubMenu(e)}
+													onClick={(e) =>
+														openSubMenu(e)
+													}
 												/>
 											</a>
 											<ul className="subMenu">
@@ -339,7 +440,9 @@ export const Header = () => {
 													</a>
 												</li>
 												<li>
-													<a href="/staking">Delegation/Staking</a>
+													<a href="/staking">
+														Delegation/Staking
+													</a>
 												</li>
 											</ul>
 											<span className="menuItem-glow"></span>
@@ -353,15 +456,21 @@ export const Header = () => {
 												Developers
 												<span
 													className="has-btn"
-													onClick={(e) => openSubMenu(e)}
+													onClick={(e) =>
+														openSubMenu(e)
+													}
 												/>
 											</a>
 											<ul className="subMenu">
 												<li>
-													<a href="https://corcel.io/">Corcel</a>
+													<a href="https://corcel.io/">
+														Corcel
+													</a>
 												</li>
 												<li>
-													<a href="https://taostats.io/api/">Taostats API</a>
+													<a href="https://taostats.io/api/">
+														Taostats API
+													</a>
 												</li>
 											</ul>
 											<span className="menuItem-glow" />
@@ -375,15 +484,30 @@ export const Header = () => {
 												Resources
 												<span
 													className="has-btn"
-													onClick={(e) => openSubMenu(e)}
+													onClick={(e) =>
+														openSubMenu(e)
+													}
 												/>
 											</a>
 											<ul className="subMenu">
 												<li className="">
-													<a href="https://taostats.io/links/">Links</a>
+													<a href="https://taostats.io/links/">
+														Links
+													</a>
 												</li>
 												<li className="">
-													<a href="https://taostats.io/media/">Media</a>
+													<a href="https://taostats.io/media/">
+														Media
+													</a>
+												</li>
+												<li className="">
+													<a
+														href="https://keycheck.taostats.io/"
+														target="_blank"
+														rel="noreferrer"
+													>
+														Keycheck
+													</a>
 												</li>
 											</ul>
 											<span className="menuItem-glow" />
@@ -394,22 +518,39 @@ export const Header = () => {
 											</a>
 											<ul
 												className="megaMenu subMenu"
-												style={{ left: "auto", right: 0 }}
+												style={{
+													left: "auto",
+													right: 0,
+												}}
 											>
-												<li style={{ width: "25%", paddingRight: "16px" }}>
+												<li
+													style={{
+														width: "25%",
+														paddingRight: "16px",
+													}}
+												>
 													<div className="menu-col-box">
 														<p>
-															Dive into detailed guides on Bittensor, Taostats,
-															subnets, miners, validators, and blockchain
+															Dive into detailed
+															guides on Bittensor,
+															Taostats, subnets,
+															miners, validators,
+															and blockchain
 															analytics.
 														</p>
 													</div>
 												</li>
-												<li style={{ width: "25%", paddingRight: "16px" }}>
+												<li
+													style={{
+														width: "25%",
+														paddingRight: "16px",
+													}}
+												>
 													<ul>
 														<li className="mi-title">
 															<a href="https://docs.taostats.io/docs/index">
-																What is Bittensor
+																What is
+																Bittensor
 															</a>
 														</li>
 														<li>
@@ -434,16 +575,23 @@ export const Header = () => {
 														</li>
 													</ul>
 												</li>
-												<li style={{ width: "25%", paddingRight: "16px" }}>
+												<li
+													style={{
+														width: "25%",
+														paddingRight: "16px",
+													}}
+												>
 													<ul>
 														<li className="mi-title">
 															<a href="https://docs.taostats.io/docs/subnet">
-																Bittensor Architecture
+																Bittensor
+																Architecture
 															</a>
 														</li>
 														<li>
 															<a href="https://docs.taostats.io/docs/subnet">
-																Subnet Architecture
+																Subnet
+																Architecture
 															</a>
 														</li>
 														<li>
@@ -458,12 +606,18 @@ export const Header = () => {
 														</li>
 														<li>
 															<a href="https://docs.taostats.io/docs/user">
-																Bittensor Personas
+																Bittensor
+																Personas
 															</a>
 														</li>
 													</ul>
 												</li>
-												<li style={{ width: "25%", paddingRight: "16px" }}>
+												<li
+													style={{
+														width: "25%",
+														paddingRight: "16px",
+													}}
+												>
 													<ul>
 														<li className="mi-title">
 															<a href="https://docs.taostats.io/docs/what-is-taostats">
@@ -499,14 +653,20 @@ export const Header = () => {
 									</ul>
 								</nav>
 								<div className="ht-btns">
-									<a href="https://delegate.taostats.io" className="btn">
+									<a
+										href="https://delegate.taostats.io"
+										className="btn"
+									>
 										Stake Tao
 									</a>
 									<div className="menu-dropdown">
 										<a href="#" className="btn">
 											BUY TAO
 											<span>
-												<img src={PolygonGray} alt="Taostats down caret" />
+												<img
+													src={PolygonGray}
+													alt="Taostats down caret"
+												/>
 											</span>
 										</a>
 										<ul className="menu">
