@@ -1,20 +1,29 @@
 body {
 	position: relative;
 	margin: 0;
-	font-family: inter,sans-serif;
+	font-family: inter, sans-serif;
 	line-height: 1.3em;
-	letter-spacing: .05em;
+	letter-spacing: 0.05em;
 	font-size: 17px;
 }
 
-body::-webkit-scrollbar, div > ::-webkit-scrollbar {
+body::-webkit-scrollbar,
+div > ::-webkit-scrollbar {
 	height: 0.45em;
 }
 
-body::-webkit-scrollbar-track, div > ::-webkit-scrollbar-track {
+body::-webkit-scrollbar-track,
+div > ::-webkit-scrollbar-track {
 	background-color: #181818;
 }
 
-body::-webkit-scrollbar-thumb, div > ::-webkit-scrollbar-thumb {
+body::-webkit-scrollbar-thumb,
+div > ::-webkit-scrollbar-thumb {
 	background-color: #252525;
+}
+
+.apexcharts-tooltip {
+	position: absolute;
+	transform: translate(-40%, 0%);
+	pointer-events: none;
 }

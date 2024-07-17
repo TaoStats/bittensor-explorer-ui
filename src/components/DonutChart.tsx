@@ -1,9 +1,15 @@
+/** @jsxImportSource @emotion/react */
 import Chart from "react-apexcharts";
 import { HTMLAttributes } from "react";
 import { ApexOptions } from "apexcharts";
 import { formatNumber } from "../utils/number";
 import { useTheme } from "@emotion/react";
 
+// const apexcharts = css`
+//   position: absolute;
+//   transform: translate(-40%, 0%);
+//   pointer-events: none;
+// `;
 export type DonutChartProps = HTMLAttributes<HTMLDivElement> & {
 	series?: ApexAxisChartSeries | ApexNonAxisChartSeries;
 	options?: ApexOptions;
@@ -16,6 +22,7 @@ export const DonutChart = (props: DonutChartProps) => {
 
 	return (
 		<Chart
+			// css={apexcharts}
 			options={{
 				colors: [
 					theme.palette.success.main,
@@ -27,7 +34,8 @@ export const DonutChart = (props: DonutChartProps) => {
 				},
 				tooltip: {
 					y: {
-						formatter: (val: number) => formatNumber(val, { decimalPlaces: 2 }),
+						formatter: (val: number) =>
+							formatNumber(val, { decimalPlaces: 2 }),
 					},
 				},
 				stroke: {
