@@ -318,7 +318,7 @@ export const ValidatorPage = () => {
 
 	return validator.notFound ||
 		validator.data === undefined ||
-		(chainStats !== undefined &&
+		(chainStats === undefined ||
 			validator.data.height <
 			Number(chainStats.blocksFinalized) - 7200) ? (
 		<CardRow css={infoSection}>
