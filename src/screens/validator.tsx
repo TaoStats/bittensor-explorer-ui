@@ -42,163 +42,163 @@ import { useExtrinsics } from "../hooks/useExtrinsics";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
 
 const validatorHeader = (theme: Theme) => css`
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px;
-	align-items: center;
-	word-break: keep-all;
-	color: ${theme.palette.text.primary};
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    word-break: keep-all;
+    color: ${theme.palette.text.primary};
 `;
 
 const infoSection = css`
-	display: flex;
-	@media only screen and (max-width: 1139px) {
-		flex-direction: column;
-	}
+    display: flex;
+    @media only screen and (max-width: 1139px) {
+        flex-direction: column;
+    }
 `;
 
 const validatorInfo = css`
-	display: flex;
-	gap: 10px;
+    display: flex;
+    gap: 10px;
 `;
 
 const validatorAddress = css`
-	opacity: 0.5;
-	overflow: hidden;
-	text-overflow: ellipsis;
+    opacity: 0.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
 `;
 
 const validatorTitle = css`
-	display: block;
-	opacity: 0.8;
-	width: 144px;
-	font-size: 12px;
+    display: block;
+    opacity: 0.8;
+    width: 144px;
+    font-size: 12px;
 `;
 
 const verifiedBadge = css`
-	background-color: #7aff97;
-	color: #000;
-	font-size: 10px;
-	text-transform: uppercase;
-	padding: 5px;
-	font-weight: 500;
+    background-color: #7aff97;
+    color: #000;
+    font-size: 10px;
+    text-transform: uppercase;
+    padding: 5px;
+    font-weight: 500;
 `;
 
 const website = css`
-	line-height: 18px;
-	cursor: pointer;
+    line-height: 18px;
+    cursor: pointer;
 `;
 
 const validatorDescription = css`
-	padding: 0px 20px 20px;
-	display: block;
-	opacity: 0.8;
-	font-size: 12px;
+    padding: 0px 20px 20px;
+    display: block;
+    opacity: 0.8;
+    font-size: 12px;
 `;
 
 const neuronBoxes = css`
-	display: grid;
-	grid-template-columns: repeat(8, 1fr);
-	gap: 5px;
-	@media only screen and (max-width: 1779px) {
-		grid-template-columns: repeat(7, 1fr);
-	}
-	@media only screen and (max-width: 1569px) {
-		grid-template-columns: repeat(6, 1fr);
-	}
-	@media only screen and (max-width: 1339px) {
-		grid-template-columns: repeat(5, 1fr);
-	}
-	@media only screen and (max-width: 1199px) {
-		grid-template-columns: repeat(4, 1fr);
-	}
-	@media only screen and (max-width: 991px) {
-		grid-template-columns: repeat(3, 1fr);
-	}
-	@media only screen and (max-width: 767px) {
-		grid-template-columns: repeat(2, 1fr);
-	}
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 5px;
+    @media only screen and (max-width: 1779px) {
+        grid-template-columns: repeat(7, 1fr);
+    }
+    @media only screen and (max-width: 1569px) {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    @media only screen and (max-width: 1339px) {
+        grid-template-columns: repeat(5, 1fr);
+    }
+    @media only screen and (max-width: 1199px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    @media only screen and (max-width: 991px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+    @media only screen and (max-width: 767px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
 `;
 const neuronBox = css`
-	border: 1px solid gray;
-	padding: 10px 0 10px 10px;
-	cursor: pointer;
+    border: 1px solid gray;
+    padding: 10px 0 10px 10px;
+    cursor: pointer;
 
-	&:hover {
-		border-color: white;
-	}
+    &:hover {
+        border-color: white;
+    }
 
-	@media only screen and (max-width: 429px) {
-		padding: 5px 0 5px 5px;
-	}
+    @media only screen and (max-width: 429px) {
+        padding: 5px 0 5px 5px;
+    }
 `;
 const selectedNeuronBox = css`
-	border-color: #14dec2 !important;
+    border-color: #14dec2 !important;
 `;
 const statRow = css`
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-	gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
 `;
 const statBigLabel = css`
-	font-size: 26px;
-	line-height: 26px;
-	color: #fa9b00;
+    font-size: 26px;
+    line-height: 26px;
+    color: #fa9b00;
 `;
 const statFullWidth = css`
-	flex: 1;
+    flex: 1;
 `;
 const statThreeItems = css`
-	display: grid;
-	grid-template-columns: 1fr 1fr 3fr;
-	margin: 2px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 3fr;
+    margin: 2px 0;
 `;
 const statTwoItems = css`
-	display: grid;
-	grid-template-columns: 3fr 2fr;
-	margin: 2px 0;
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    margin: 2px 0;
 `;
 const statLabel = css`
-	color: gray;
-	font-size: 11px;
-	line-height: 11px;
-	@media only screen and (max-width: 429px) {
-		font-size: 9px;
-		line-height: 9px;
-	}
+    color: gray;
+    font-size: 11px;
+    line-height: 11px;
+    @media only screen and (max-width: 429px) {
+        font-size: 9px;
+        line-height: 9px;
+    }
 `;
 const statValue = css`
-	color: #fff;
-	font-size: 13px;
-	line-height: 13px;
-	@media only screen and (max-width: 429px) {
-		font-size: 11px;
-		line-height: 11px;
-	}
+    color: #fff;
+    font-size: 13px;
+    line-height: 13px;
+    @media only screen and (max-width: 429px) {
+        font-size: 11px;
+        line-height: 11px;
+    }
 `;
 const statWarning = css`
-	color: #ff7a7a;
+    color: #ff7a7a;
 `;
 const statBreak = css`
-	margin-top: 5px;
+    margin-top: 5px;
 `;
 
 const stakeButton = css`
-	padding: 20px;
+    padding: 20px;
 `;
 
 const portfolioStyle = (theme: Theme) => css`
-	flex: 0 0 auto !important;
-	width: 400px;
+    flex: 0 0 auto !important;
+    width: 400px;
 
-	${theme.breakpoints.down("lg")} {
-		width: auto;
-	}
+    ${theme.breakpoints.down("lg")} {
+        width: auto;
+    }
 `;
 
 const perfContainer = css`
-	margin-top: 50px;
+    margin-top: 50px;
 `;
 
 export type ValidatorPageParams = {
@@ -209,6 +209,9 @@ export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
 
 	const validator = useValidator({ address: { equalTo: address } });
+	const {
+		state: { chainStats },
+	} = useAppStats();
 
 	const verifiedDelegates = useVerifiedDelegates();
 	const extrinsics = useExtrinsics(
@@ -223,7 +226,9 @@ export const ValidatorPage = () => {
 		state: { tokenLoading, tokenStats },
 	} = useAppStats();
 	const dominance =
-		tokenLoading || tokenStats === undefined || tokenStats.delegatedSupply === 0
+		tokenLoading ||
+			tokenStats === undefined ||
+			tokenStats.delegatedSupply === 0
 			? 0
 			: rawAmountToDecimal(balance.data).toNumber() /
 			tokenStats.delegatedSupply;
@@ -311,7 +316,11 @@ export const ValidatorPage = () => {
 
 	const sevenDaysMA = useValidator7DayMA(address);
 
-	return validator.notFound ? (
+	return validator.notFound ||
+		validator.data === undefined ||
+		(chainStats !== undefined &&
+			validator.data.height <
+			Number(chainStats.blocksFinalized) - 7200) ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid validator address</Card>
 		</CardRow>
@@ -331,7 +340,9 @@ export const ValidatorPage = () => {
 									<img
 										src={WebSvg}
 										css={website}
-										onClick={() => navigateToAbsolutePath(info?.url)}
+										onClick={() =>
+											navigateToAbsolutePath(info?.url)
+										}
 									/>
 								)}
 							</div>
@@ -340,7 +351,9 @@ export const ValidatorPage = () => {
 						)}
 					</CardHeader>
 					{info?.description && (
-						<div css={validatorDescription}>{info?.description}</div>
+						<div css={validatorDescription}>
+							{info?.description}
+						</div>
 					)}
 					<ValidatorInfoTable
 						account={address}
@@ -393,33 +406,55 @@ export const ValidatorPage = () => {
 												? selectedNeuronBox
 												: undefined,
 										]}
-										onClick={() => setActiveSubnet(meta.netUid)}
+										onClick={() =>
+											setActiveSubnet(meta.netUid)
+										}
 										key={`validator_performance_subnet_${meta.netUid}`}
 									>
 										<div css={statRow}>
-											<div css={statBigLabel}>{meta.netUid}</div>
+											<div css={statBigLabel}>
+												{meta.netUid}
+											</div>
 											<div css={statFullWidth}>
 												<div css={statThreeItems}>
-													<span css={statLabel}>Pos</span>
-													<span css={statLabel}>UID</span>
-													<span css={statLabel}>Axon</span>
+													<span css={statLabel}>
+														Pos
+													</span>
+													<span css={statLabel}>
+														UID
+													</span>
+													<span css={statLabel}>
+														Axon
+													</span>
 												</div>
 												<div css={statThreeItems}>
-													<span css={statValue}>{meta.rank}</span>
-													<span css={statValue}>{meta.uid}</span>
-													<span css={statValue}>{shortenIP(meta.axonIp)}</span>
+													<span css={statValue}>
+														{meta.rank}
+													</span>
+													<span css={statValue}>
+														{meta.uid}
+													</span>
+													<span css={statValue}>
+														{shortenIP(meta.axonIp)}
+													</span>
 												</div>
 											</div>
 										</div>
 										<div css={[statTwoItems, statBreak]}>
-											<span css={statLabel}>Daily Rewards</span>
-											<span css={statLabel}>Dividends</span>
+											<span css={statLabel}>
+												Daily Rewards
+											</span>
+											<span css={statLabel}>
+												Dividends
+											</span>
 										</div>
 										<div css={statTwoItems}>
 											<span css={statValue}>
 												{NETWORK_CONFIG.currency}
 												{formatNumber(
-													rawAmountToDecimal(meta.dailyReward.toString()),
+													rawAmountToDecimal(
+														meta.dailyReward.toString()
+													),
 													{
 														decimalPlaces: 2,
 													}
@@ -428,15 +463,19 @@ export const ValidatorPage = () => {
 											<span
 												css={[
 													statValue,
-													rawAmountToDecimalBy(meta.dividends, 65535).lessThan(
-														dominance
-													)
+													rawAmountToDecimalBy(
+														meta.dividends,
+														65535
+													).lessThan(dominance)
 														? statWarning
 														: undefined,
 												]}
 											>
 												{formatNumber(
-													rawAmountToDecimalBy(meta.dividends, 65535),
+													rawAmountToDecimalBy(
+														meta.dividends,
+														65535
+													),
 													{
 														decimalPlaces: 5,
 													}
@@ -451,14 +490,19 @@ export const ValidatorPage = () => {
 											<span
 												css={[
 													statValue,
-													meta.updated > 1000 ? statWarning : undefined,
+													meta.updated > 1000
+														? statWarning
+														: undefined,
 												]}
 											>
 												{meta.updated}
 											</span>
 											<span css={statValue}>
 												{formatNumber(
-													rawAmountToDecimalBy(meta.validatorTrust, 65535),
+													rawAmountToDecimalBy(
+														meta.validatorTrust,
+														65535
+													),
 													{
 														decimalPlaces: 5,
 													}
@@ -532,7 +576,10 @@ export const ValidatorPage = () => {
 							}
 							initialSort={delegatesInitialOrder}
 							onFilterChange={(newFilter?: DelegateFilter) =>
-								setDelegatesFilter({ ...delegatesFilter, ...newFilter })
+								setDelegatesFilter({
+									...delegatesFilter,
+									...newFilter,
+								})
 							}
 							initialFilter={delegatesInitialFilter}
 							address={info?.name ?? address}

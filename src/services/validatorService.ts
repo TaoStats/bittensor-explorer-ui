@@ -1,10 +1,10 @@
 import {
-	ValidatorResponse,
-	ValidatorStakeHistory,
-	ValidatorStakeHistoryPaginatedResponse,
-	Validator,
-	ValidatorMovingAveragePaginatedResponse,
-	ValidatorMovingAverage,
+    ValidatorResponse,
+    ValidatorStakeHistory,
+    ValidatorStakeHistoryPaginatedResponse,
+    Validator,
+    ValidatorMovingAveragePaginatedResponse,
+    ValidatorMovingAverage,
 } from "../model/validator";
 import { ResponseItems } from "../model/itemsConnection";
 import { PaginationOptions } from "../model/paginationOptions";
@@ -21,21 +21,24 @@ import { rawAmountToDecimaledString } from "../utils/number";
 export type ValidatorsFilter = object;
 
 export type ValidatorsOrder =
-	| "AMOUNT_ASC"
-	| "AMOUNT_DESC"
-	| "NOMINATORS_ASC"
-	| "NOMINATORS_DESC"
-	| "NOMINATOR_RETURN_PER_K_ASC"
-	| "NOMINATOR_RETURN_PER_K_DESC"
-	| "TAKE_ASC"
-	| "TAKE_DESC";
+    | "AMOUNT_ASC"
+    | "AMOUNT_DESC"
+    | "NOMINATORS_ASC"
+    | "NOMINATORS_DESC"
+    | "NOMINATOR_RETURN_PER_K_ASC"
+    | "NOMINATOR_RETURN_PER_K_DESC"
+    | "TAKE_ASC"
+    | "TAKE_DESC";
 
 export async function getValidator(filter: ValidatorsFilter) {
-	const response = await fetchIndexer<{ validators: ResponseItems<Validator> }>(
-		`query ($filter: ValidatorFilter) {
+    const response = await fetchIndexer<{
+        validators: ResponseItems<Validator>;
+    }>(
+        `query ($filter: ValidatorFilter) {
 			validators(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
 				nodes {
 					id
+					height
 					owner
 					totalDailyReturn
 					nominatorReturnPerK
@@ -52,29 +55,29 @@ export async function getValidator(filter: ValidatorsFilter) {
 				}
 			}
 		}`,
-		{
-			filter,
-		}
-	);
+        {
+            filter,
+        }
+    );
 
-	const verifiedDelegates = await fetchVerifiedDelegates();
-	const data = extractItems(
-		response.validators,
-		{ limit: 1 },
-		addValidatorName,
-		verifiedDelegates
-	);
-	return data.data[0];
+    const verifiedDelegates = await fetchVerifiedDelegates();
+    const data = extractItems(
+        response.validators,
+        { limit: 1 },
+        addValidatorName,
+        verifiedDelegates
+    );
+    return data.data[0];
 }
 
 export async function getValidators(
-	order: ValidatorsOrder = "AMOUNT_DESC",
-	pagination: PaginationOptions
+    order: ValidatorsOrder = "AMOUNT_DESC",
+    pagination: PaginationOptions
 ) {
-	const response = await fetchIndexer<{
-		validators: ResponseItems<ValidatorResponse>;
-	}>(
-		`query($first: Int!, $order: [ValidatorsOrderBy!]!) {
+    const response = await fetchIndexer<{
+        validators: ResponseItems<ValidatorResponse>;
+    }>(
+        `query($first: Int!, $order: [ValidatorsOrderBy!]!) {
 			validators(first: $first, orderBy: $order, 
 				filter: {
 					amount: {
@@ -83,6 +86,7 @@ export async function getValidators(
 				}
 			) {
 				nodes {
+					height
 					address
 					amount
 					amountChange
@@ -104,58 +108,58 @@ export async function getValidators(
 				totalCount
 			  }
 		}`,
-		{
-			first: 64,
-			order,
-		}
-	);
+        {
+            first: 64,
+            order,
+        }
+    );
 
-	const verifiedDelegates = await fetchVerifiedDelegates();
-	return extractItems(
-		response.validators,
-		pagination,
-		addValidatorName,
-		verifiedDelegates
-	);
+    const verifiedDelegates = await fetchVerifiedDelegates();
+    return extractItems(
+        response.validators,
+        pagination,
+        addValidatorName,
+        verifiedDelegates
+    );
 }
 
 function addValidatorName(
-	resp: ValidatorResponse,
-	verifiedDelegates: Record<string, DelegateInfo>
+    resp: ValidatorResponse,
+    verifiedDelegates: Record<string, DelegateInfo>
 ): Validator {
-	const { registrations, validatorPermits, ...rest } = resp;
-	const info = (verifiedDelegates as Record<string, DelegateInfo>)[
-		resp.address
-	];
-	const validator: Validator = {
-		...rest,
-		registrations: JSON.parse(registrations ?? "[]"),
-		validatorPermits: JSON.parse(validatorPermits ?? "[]"),
-		name: info?.name,
-	};
-	return validator;
+    const { registrations, validatorPermits, ...rest } = resp;
+    const info = (verifiedDelegates as Record<string, DelegateInfo>)[
+        resp.address
+    ];
+    const validator: Validator = {
+        ...rest,
+        registrations: JSON.parse(registrations ?? "[]"),
+        validatorPermits: JSON.parse(validatorPermits ?? "[]"),
+        name: info?.name,
+    };
+    return validator;
 }
 
 export async function getValidatorStakeHistory(
-	address: string[],
-	from?: string,
-	after?: string
+    address: string[],
+    from?: string,
+    after?: string
 ): Promise<ValidatorStakeHistoryPaginatedResponse> {
-	address.forEach((addr) => {
-		if (!isAddress(addr)) {
-			throw new DataError("Invalid account address");
-		}
-	});
+    address.forEach((addr) => {
+        if (!isAddress(addr)) {
+            throw new DataError("Invalid account address");
+        }
+    });
 
-	let filter = `address: { in: ${JSON.stringify(address)} }`;
-	if (from) {
-		filter += `, timestamp: { greaterThan: "${from}" }`;
-	}
+    let filter = `address: { in: ${JSON.stringify(address)} }`;
+    if (from) {
+        filter += `, timestamp: { greaterThan: "${from}" }`;
+    }
 
-	const response = await fetchHistorical<{
-		validators: ResponseItems<ValidatorStakeHistory>;
-	}>(
-		`query($after: Cursor) {
+    const response = await fetchHistorical<{
+        validators: ResponseItems<ValidatorStakeHistory>;
+    }>(
+        `query($after: Cursor) {
 			validators(after: $after, filter: { ${filter} }, orderBy: HEIGHT_ASC) {
 				nodes {
 					address
@@ -173,28 +177,28 @@ export async function getValidatorStakeHistory(
 				}
 			}
 		}`,
-		{
-			after,
-		}
-	);
+        {
+            after,
+        }
+    );
 
-	return {
-		hasNextPage: response.validators?.pageInfo.hasNextPage,
-		endCursor: response.validators?.pageInfo.endCursor,
-		data: response.validators?.nodes,
-	};
+    return {
+        hasNextPage: response.validators?.pageInfo.hasNextPage,
+        endCursor: response.validators?.pageInfo.endCursor,
+        data: response.validators?.nodes,
+    };
 }
 
 export async function getValidatorsMovingAverage(
-	filter: any,
-	order?: any,
-	after?: string,
-	first?: number
+    filter: any,
+    order?: any,
+    after?: string,
+    first?: number
 ): Promise<ValidatorMovingAveragePaginatedResponse> {
-	const response = await fetchHistorical<{
-		validators: ResponseItems<ValidatorMovingAverage>;
-	}>(
-		`query($first: Int, $after: Cursor, $filter: ValidatorFilter, $order: [ValidatorsOrderBy!]!) {
+    const response = await fetchHistorical<{
+        validators: ResponseItems<ValidatorMovingAverage>;
+    }>(
+        `query($first: Int, $after: Cursor, $filter: ValidatorFilter, $order: [ValidatorsOrderBy!]!) {
 			validators(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					address
@@ -210,17 +214,17 @@ export async function getValidatorsMovingAverage(
 				}
 			}
 		}`,
-		{
-			filter,
-			order,
-			after,
-			first,
-		}
-	);
+        {
+            filter,
+            order,
+            after,
+            first,
+        }
+    );
 
-	return {
-		hasNextPage: response.validators?.pageInfo.hasNextPage,
-		endCursor: response.validators?.pageInfo.endCursor,
-		data: response.validators?.nodes,
-	};
+    return {
+        hasNextPage: response.validators?.pageInfo.hasNextPage,
+        endCursor: response.validators?.pageInfo.endCursor,
+        data: response.validators?.nodes,
+    };
 }
