@@ -316,11 +316,11 @@ export const ValidatorPage = () => {
 
 	const sevenDaysMA = useValidator7DayMA(address);
 
-	return validator.notFound ||
+	return chainStats === undefined ? (
+		<></>
+	) : validator.notFound ||
 		validator.data === undefined ||
-		(chainStats === undefined ||
-			validator.data.height <
-			Number(chainStats.blocksFinalized) - 7200) ? (
+		validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid validator address</Card>
 		</CardRow>
