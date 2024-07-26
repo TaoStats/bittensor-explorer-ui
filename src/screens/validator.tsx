@@ -40,6 +40,7 @@ import { useValidator7DayMA } from "../hooks/useValidators7DayMA";
 import { Validator7DayMAChart } from "../components/validators/Validator7DayMAChart";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
+import Loading from "../components/Loading";
 
 const validatorHeader = (theme: Theme) => css`
     display: flex;
@@ -210,7 +211,7 @@ export const ValidatorPage = () => {
 
 	const validator = useValidator({ address: { equalTo: address } });
 	const {
-		state: { chainStats },
+		state: { chainStats, chainLoading },
 	} = useAppStats();
 
 	const verifiedDelegates = useVerifiedDelegates();
@@ -316,8 +317,8 @@ export const ValidatorPage = () => {
 
 	const sevenDaysMA = useValidator7DayMA(address);
 
-	return chainStats === undefined ? (
-		<></>
+	return chainLoading || chainStats === undefined || validator.loading ? (
+		<Loading />
 	) : validator.notFound ||
 		validator.data === undefined ||
 		validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
