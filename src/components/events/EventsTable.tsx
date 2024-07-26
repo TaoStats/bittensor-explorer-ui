@@ -1,62 +1,63 @@
 /** @jsxImportSource @emotion/react */
-import { Event } from "../../model/event";
-import { PaginatedResource } from "../../model/paginatedResource";
 
-import { ButtonLink } from "../ButtonLink";
-import { ItemsTable, ItemsTableAttribute } from "../ItemsTable";
-import { Link } from "../Link";
+import { Event, PaginatedResource } from "../../model";
+import { ButtonLink, ItemsTable, ItemsTableAttribute, Link } from "../elements";
 
 export type EventsTableProps = {
-	events: PaginatedResource<Event>;
-	showExtrinsic?: boolean;
+    events: PaginatedResource<Event>;
+    showExtrinsic?: boolean;
 };
 
 const EventsItemsTableAttribute = ItemsTableAttribute<Event>;
 
-function EventsTable(props: EventsTableProps) {
-	const { events, showExtrinsic } = props;
+export function EventsTable(props: EventsTableProps) {
+    const { events, showExtrinsic } = props;
 
-	return (
-		<ItemsTable
-			data={events.data}
-			loading={events.loading}
-			notFound={events.notFound}
-			notFoundMessage="No events found"
-			error={events.error}
-			pagination={events.pagination}
-			data-test="events-table"
-		>
-			<EventsItemsTableAttribute
-				label="ID"
-				render={(event) => <Link to={`/event/${event.id}`}>{event.id}</Link>}
-			/>
-			<EventsItemsTableAttribute
-				label="Name"
-				render={(event) => (
-					<ButtonLink
-						to={`/search?query=${event.module}.${event.event}`}
-						size="small"
-						color="secondary"
-					>
-						{event.module}.{event.event}
-					</ButtonLink>
-				)}
-			/>
-			{showExtrinsic && (
-				<EventsItemsTableAttribute
-					label="Extrinsic"
-					render={(event) =>
-						event.extrinsicId != "-1" ? (
-							<Link to={`/extrinsic/${event.blockHeight}-${event.extrinsicId}`}>
-								<span>{`${event.blockHeight}-${event.extrinsicId}`}</span>
-							</Link>
-						) : (
-							"System Event"
-						)
-					}
-				/>
-			)}
-			{/* <EventsItemsTableAttribute
+    return (
+        <ItemsTable
+            data={events.data}
+            loading={events.loading}
+            notFound={events.notFound}
+            notFoundMessage="No events found"
+            error={events.error}
+            pagination={events.pagination}
+            data-test="events-table"
+        >
+            <EventsItemsTableAttribute
+                label="ID"
+                render={(event) => (
+                    <Link to={`/event/${event.id}`}>{event.id}</Link>
+                )}
+            />
+            <EventsItemsTableAttribute
+                label="Name"
+                render={(event) => (
+                    <ButtonLink
+                        to={`/search?query=${event.module}.${event.event}`}
+                        size="small"
+                        color="secondary"
+                    >
+                        {event.module}.{event.event}
+                    </ButtonLink>
+                )}
+            />
+            {showExtrinsic && (
+                <EventsItemsTableAttribute
+                    label="Extrinsic"
+                    render={(event) =>
+                        event.extrinsicId != "-1" ? (
+                            <Link
+                                to={`/extrinsic/${event.blockHeight}-${event.extrinsicId}`}
+                            >
+                                <span>{`${event.blockHeight}-${event.extrinsicId}`}</span>
+                            </Link>
+                        ) : (
+                            "System Event"
+                        )
+                    }
+                />
+            )}
+            {/* <EventsItemsTableAttribute
 				label="Parameters"
 				colCss={parametersColCss(showExtrinsic)}
 				render={(event) => {
@@ -78,8 +79,6 @@ function EventsTable(props: EventsTableProps) {
 					);
 				}}
 			/> */}
-		</ItemsTable>
-	);
+        </ItemsTable>
+    );
 }
-
-export default EventsTable;

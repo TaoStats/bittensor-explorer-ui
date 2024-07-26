@@ -1,14 +1,8 @@
-import { useBlock } from "../../hooks/useBlock";
-import { useRuntimeSpec } from "../../hooks/useRuntimeSpec";
-import { Event } from "../../model/event";
-import { Resource } from "../../model/resource";
-import { getEventMetadataByName } from "../../utils/queryMetadata";
-import { BlockTimestamp } from "../BlockTimestamp";
-
-import { ButtonLink } from "../ButtonLink";
-import DataViewer from "../DataViewer";
-import { InfoTable, InfoTableAttribute } from "../InfoTable";
-import { Link } from "../Link";
+import { useBlock, useRuntimeSpec } from "../../hooks";
+import { Resource, Event } from "../../model";
+import { getEventMetadataByName } from "../../utils";
+import { InfoTableAttribute, InfoTable, BlockTimestamp, ButtonLink, Link } from "../elements";
+import { DataViewer } from "../elements/DataViewer";
 
 export type EventInfoTableProps = {
 	event: Resource<Event>;

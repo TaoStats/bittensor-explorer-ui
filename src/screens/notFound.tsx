@@ -1,4 +1,4 @@
-import { Card, CardHeader } from "../components/Card";
+import { Card, CardHeader } from "../components";
 
 export const NotFoundPage = () => {
 	return (

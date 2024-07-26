@@ -1,0 +1,184 @@
+/** @jsxImportSource @emotion/react */
+import {
+    Children,
+    cloneElement,
+    PropsWithChildren,
+    ReactElement,
+    ReactNode,
+    useEffect,
+    useState,
+} from "react";
+import { useNavigate } from "react-router-dom";
+import { Theme, css } from "@emotion/react";
+import { Tab, TabProps, Tabs } from "@mui/material";
+import ErrorIcon from "@mui/icons-material/Warning";
+
+import { Spinner } from "./Spinner";
+
+const tabsWrapperStyle = css`
+    margin-bottom: 32px;
+`;
+
+const tabsStyle = (theme: Theme) => css`
+    margin-bottom: -1px;
+    min-height: 32px;
+    padding: 0px 20px;
+
+    .MuiTab-root {
+        text-transform: uppercase;
+
+        & > span {
+            padding-bottom: 4px;
+        }
+
+        & > span:first-of-type::after {
+            position: absolute;
+            content: "";
+            width: 0px;
+            height: 4px;
+            background-color: ${theme.palette.success.main};
+            transition: all 0.5s;
+            -webkit-transition: all 0.5s;
+            display: inline-block;
+            bottom: 0;
+            left: 0;
+        }
+    }
+
+    .MuiTab-root:hover,
+    .MuiTab-root.Mui-selected {
+        & > span:first-of-type::after {
+            width: 9px;
+        }
+    }
+
+    .MuiTabs-indicator {
+        display: none;
+    }
+`;
+
+const noPaddingStyle = css`
+    padding: 0;
+`;
+
+const tabStyle = (theme: Theme) => css`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px;
+    margin-right: 32px;
+    color: ${theme.palette.secondary.main};
+    justify-content: flex-start;
+    min-width: inherit;
+    min-height: inherit;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+
+    &.Mui-selected {
+        color: ${theme.palette.secondary.light};
+    }
+`;
+
+const tabErrorStyle = css`
+    margin-left: 8px;
+    position: relative;
+    top: 1px;
+    color: #ef5350;
+`;
+
+type TabPaneProps = Omit<TabProps, "children"> &
+    PropsWithChildren<{
+        label: ReactNode;
+        count?: number;
+        loading?: boolean;
+        error?: boolean;
+        value: string;
+    }>;
+
+export const TabPane = (props: TabPaneProps) => {
+    return <>{props.children}</>;
+};
+
+type TabbedContentProps = {
+    defaultTab?: string;
+    noPadding?: boolean;
+    children:
+    | ReactElement<TabPaneProps>
+    | (ReactElement<TabPaneProps> | false)[];
+};
+
+export const TabbedContent = (props: TabbedContentProps) => {
+    const { defaultTab, noPadding, children } = props;
+
+    const navigate = useNavigate();
+
+    const tabHandles = Children.map(children, (child) => {
+        if (!child) {
+            return null;
+        }
+
+        const {
+            value,
+            label,
+            count,
+            loading,
+            error,
+            children, // ignore
+            ...restProps
+        } = child.props;
+
+        return (
+            <Tab
+                title=""
+                key={value}
+                id={`#${value}`}
+                css={tabStyle}
+                label={
+                    <>
+                        <span>{label}</span>
+                        {loading && <Spinner small />}
+                        {!!error && <ErrorIcon css={tabErrorStyle} />}
+                    </>
+                }
+                value={value}
+                data-test={`${value}-tab`}
+                {...restProps}
+            />
+        );
+    });
+
+    const tabPanes = Children.map(
+        children,
+        (child) => child && cloneElement(child, { key: child.props.value })
+    );
+
+    const [tab, setTab] = useState<string | undefined>(
+        tabPanes[0]?.props.value
+    );
+
+    useEffect(() => {
+        if (tabPanes.find((it) => it.props.value === defaultTab))
+            setTab(defaultTab);
+    }, [defaultTab]);
+
+    return (
+        <>
+            <div css={tabsWrapperStyle}>
+                <Tabs
+                    css={[tabsStyle, noPadding && noPaddingStyle]}
+                    onChange={(_, tab) => {
+                        setTab(tab);
+                        navigate(`#${tab}`);
+                    }}
+                    value={tab || tabHandles[0]!.props.value}
+                    variant="scrollable"
+                    scrollButtons={false}
+                >
+                    {tabHandles}
+                </Tabs>
+            </div>
+            {tab ? tabPanes.find((it) => it.props.value === tab) : tabPanes[0]}
+        </>
+    );
+};

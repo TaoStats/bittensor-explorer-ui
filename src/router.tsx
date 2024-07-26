@@ -1,25 +1,26 @@
 import { createBrowserRouter, redirect } from "react-router-dom";
 
-import { ResultLayout } from "./components/ResultLayout";
+import { ResultLayout } from "./components/elements/ResultLayout";
 import { encodeAddress } from "./utils/formatAddress";
-
-import { AccountPage } from "./screens/account";
-import { BlockPage } from "./screens/block";
-import { EventPage } from "./screens/event";
-import { ExtrinsicPage } from "./screens/extrinsic";
-import { HomePage } from "./screens/home";
-import { NotFoundPage } from "./screens/notFound";
-import { SearchPage } from "./screens/search";
+import {
+	AccountPage,
+	BlockPage,
+	ColdkeyPage,
+	EventPage,
+	ExtrinsicPage,
+	HomePage,
+	HotkeyPage,
+	NotFoundPage,
+	RootSubnetPage,
+	SearchPage,
+	StakingPage,
+	SubnetPage,
+	SubnetsPage,
+	TokenomicsPage,
+	ValidatorPage,
+	ValidatorsPage,
+} from "./screens";
 import { NETWORK_CONFIG } from "./config";
-import { ValidatorPage } from "./screens/validator";
-import { ValidatorsPage } from "./screens/validators";
-import { SubnetsPage } from "./screens/subnets";
-import { RootSubnetPage } from "./screens/subnet";
-import { SubnetPage } from "./screens/subnet";
-import { ColdkeyPage } from "./screens/coldkey";
-import { HotkeyPage } from "./screens/hotkey";
-import { TokenomicsPage } from "./screens/tokenomics";
-import { StakingPage } from "./screens/staking";
 
 export const router = createBrowserRouter(
 	[

@@ -1,46 +1,52 @@
 /** @jsxImportSource @emotion/react */
-import { useLocation, useParams } from "react-router-dom";
-
-import { useDOMEventTrigger } from "../hooks/useDOMEventTrigger";
-import { useDelegates } from "../hooks/useDelegates";
-import { useDelegateBalances } from "../hooks/useDelegateBalances";
-import { useValidatorBalance } from "../hooks/useValidatorBalance";
-import { Card, CardHeader, CardRow } from "../components/Card";
-import { ValidatorInfoTable } from "../components/validators/ValidatorInfoTable";
-import { TabPane, TabbedContent } from "../components/TabbedContent";
-import DelegatesTable from "../components/delegates/DelegatesTable";
-import {
-	DelegateBalancesOrder,
-	DelegateFilter,
-	DelegatesOrder,
-} from "../services/delegateService";
 import { useEffect, useState } from "react";
-import WebSvg from "../assets/web.svg";
-import NominatorsTable from "../components/validators/NominatorsTable";
 import { css, Theme } from "@emotion/react";
-import { MIN_DELEGATION_AMOUNT, NETWORK_CONFIG } from "../config";
-import { ButtonLink } from "../components/ButtonLink";
-import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio";
-import { ValidatorStakeHistoryChart } from "../components/validators/ValidatorStakeHistoryChart";
-import { useValidatorStakeHistory } from "../hooks/useValidatorHistory";
-import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
-import { useValidator } from "../hooks/useValidator";
-import { useSubnets } from "../hooks/useSubnets";
-import SubnetsTable from "../components/validators/SubnetsTable";
-import { HotkeyPerformanceChart } from "../components/hotkey/HotkeyPerformanceChart";
-import { useNeuronMetagraph } from "../hooks/useNeuronMetagraph";
+import { useParams, useLocation } from "react-router-dom";
 import {
-	formatNumber,
-	rawAmountToDecimal,
-	rawAmountToDecimalBy,
-	shortenIP,
-} from "../utils/number";
+    Loading,
+    Card,
+    CardHeader,
+    CardRow,
+    ValidatorInfoTable,
+    ButtonLink,
+    ValidatorPortfolio,
+    TabbedContent,
+    TabPane,
+    ValidatorStakeHistoryChart,
+    HotkeyPerformanceChart,
+    Validator7DayMAChart,
+    ExtrinsicsTable,
+    DelegatesTable,
+    NominatorsTable,
+    ValidatorSubnetsTable,
+} from "../components";
+import WebSvg from "../assets/web.svg";
+import { MIN_DELEGATION_AMOUNT, NETWORK_CONFIG } from "../config";
 import { useAppStats } from "../contexts";
-import { useValidator7DayMA } from "../hooks/useValidators7DayMA";
-import { Validator7DayMAChart } from "../components/validators/Validator7DayMAChart";
-import { useExtrinsics } from "../hooks/useExtrinsics";
-import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
-import Loading from "../components/Loading";
+import {
+    useValidator,
+    useVerifiedDelegates,
+    useExtrinsics,
+    useValidatorBalance,
+    useValidatorStakeHistory,
+    useDelegateBalances,
+    useDelegates,
+    useNeuronMetagraph,
+    useDOMEventTrigger,
+    useSubnets,
+    useValidator7DayMA,
+} from "../hooks";
+import {
+    DelegateBalancesOrder,
+    DelegatesOrder,
+    DelegateFilter,
+} from "../services";
+import {
+    rawAmountToDecimal,
+    shortenIP,
+    rawAmountToDecimalBy,
+    formatNumber,
+} from "../utils";
 
 const validatorHeader = (theme: Theme) => css`
     display: flex;
@@ -203,406 +209,406 @@ const perfContainer = css`
 `;
 
 export type ValidatorPageParams = {
-	address: string;
+    address: string;
 };
 
 export const ValidatorPage = () => {
-	const { address } = useParams() as ValidatorPageParams;
+    const { address } = useParams() as ValidatorPageParams;
 
-	const validator = useValidator({ address: { equalTo: address } });
-	const {
-		state: { chainStats, chainLoading },
-	} = useAppStats();
+    const validator = useValidator({ address: { equalTo: address } });
+    const {
+        state: { chainStats, chainLoading },
+    } = useAppStats();
 
-	const verifiedDelegates = useVerifiedDelegates();
-	const extrinsics = useExtrinsics(
-		{ signer: { equalTo: address } },
-		"BLOCK_HEIGHT_DESC"
-	);
+    const verifiedDelegates = useVerifiedDelegates();
+    const extrinsics = useExtrinsics(
+        { signer: { equalTo: address } },
+        "BLOCK_HEIGHT_DESC"
+    );
 
-	const info = verifiedDelegates[address];
+    const info = verifiedDelegates[address];
 
-	const balance = useValidatorBalance({ address: { equalTo: address } });
-	const {
-		state: { tokenLoading, tokenStats },
-	} = useAppStats();
-	const dominance =
-		tokenLoading ||
-			tokenStats === undefined ||
-			tokenStats.delegatedSupply === 0
-			? 0
-			: rawAmountToDecimal(balance.data).toNumber() /
-			tokenStats.delegatedSupply;
+    const balance = useValidatorBalance({ address: { equalTo: address } });
+    const {
+        state: { tokenLoading, tokenStats },
+    } = useAppStats();
+    const dominance =
+        tokenLoading ||
+        tokenStats === undefined ||
+        tokenStats.delegatedSupply === 0
+            ? 0
+            : rawAmountToDecimal(balance.data).toNumber() /
+              tokenStats.delegatedSupply;
 
-	const validatorStakeHistory = useValidatorStakeHistory(address);
+    const validatorStakeHistory = useValidatorStakeHistory(address);
 
-	const nominatorsInitialOrder: DelegateBalancesOrder = "AMOUNT_DESC";
-	const [nominatorSort, setNominatorSort] = useState<DelegateBalancesOrder>(
-		nominatorsInitialOrder
-	);
-	const nominators = useDelegateBalances(
-		{
-			delegate: { equalTo: address },
-			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
-		},
-		nominatorSort
-	);
+    const nominatorsInitialOrder: DelegateBalancesOrder = "AMOUNT_DESC";
+    const [nominatorSort, setNominatorSort] = useState<DelegateBalancesOrder>(
+        nominatorsInitialOrder
+    );
+    const nominators = useDelegateBalances(
+        {
+            delegate: { equalTo: address },
+            amount: { greaterThan: MIN_DELEGATION_AMOUNT },
+        },
+        nominatorSort
+    );
 
-	const delegatesInitialOrder: DelegatesOrder = "BLOCK_NUMBER_DESC";
-	const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
-		delegatesInitialOrder
-	);
-	const delegatesInitialFilter: DelegateFilter = {
-		amount: { greaterThan: MIN_DELEGATION_AMOUNT },
-	};
-	const [delegatesFilter, setDelegatesFilter] = useState<DelegateFilter>(
-		delegatesInitialFilter
-	);
-	const delegates = useDelegates(
-		{
-			delegate: { equalTo: address },
-			...delegatesFilter,
-		},
-		delegateSort
-	);
+    const delegatesInitialOrder: DelegatesOrder = "BLOCK_NUMBER_DESC";
+    const [delegateSort, setDelegateSort] = useState<DelegatesOrder>(
+        delegatesInitialOrder
+    );
+    const delegatesInitialFilter: DelegateFilter = {
+        amount: { greaterThan: MIN_DELEGATION_AMOUNT },
+    };
+    const [delegatesFilter, setDelegatesFilter] = useState<DelegateFilter>(
+        delegatesInitialFilter
+    );
+    const delegates = useDelegates(
+        {
+            delegate: { equalTo: address },
+            ...delegatesFilter,
+        },
+        delegateSort
+    );
 
-	const neuronMetagraph = useNeuronMetagraph(
-		{
-			hotkey: { equalTo: address },
-			netUid: { notEqualTo: 0 },
-		},
-		1024,
-		"NET_UID_ASC"
-	);
+    const neuronMetagraph = useNeuronMetagraph(
+        {
+            hotkey: { equalTo: address },
+            netUid: { notEqualTo: 0 },
+        },
+        1024,
+        "NET_UID_ASC"
+    );
 
-	useEffect(() => {
-		const interval = setInterval(neuronMetagraph.refetch, 12 * 1000);
-		return () => clearInterval(interval);
-	}, [neuronMetagraph]);
+    useEffect(() => {
+        const interval = setInterval(neuronMetagraph.refetch, 12 * 1000);
+        return () => clearInterval(interval);
+    }, [neuronMetagraph]);
 
-	useDOMEventTrigger(
-		"data-loaded",
-		!balance.loading && !nominators.loading && !delegates.loading
-	);
+    useDOMEventTrigger(
+        "data-loaded",
+        !balance.loading && !nominators.loading && !delegates.loading
+    );
 
-	const navigateToAbsolutePath = (path: string) => {
-		let url;
+    const navigateToAbsolutePath = (path: string) => {
+        let url;
 
-		if (path.startsWith("http://") || path.startsWith("https://")) {
-			url = path;
-		} else {
-			url = "https://" + path;
-		}
+        if (path.startsWith("http://") || path.startsWith("https://")) {
+            url = path;
+        } else {
+            url = "https://" + path;
+        }
 
-		window.open(url, "_blank");
-	};
+        window.open(url, "_blank");
+    };
 
-	const { hash: tab } = useLocation();
-	useEffect(() => {
-		if (tab) {
-			document.getElementById(tab)?.scrollIntoView();
-			window.scrollBy(0, -175);
-		} else {
-			window.scrollTo(0, 0);
-		}
-	}, [tab]);
+    const { hash: tab } = useLocation();
+    useEffect(() => {
+        if (tab) {
+            document.getElementById(tab)?.scrollIntoView();
+            window.scrollBy(0, -175);
+        } else {
+            window.scrollTo(0, 0);
+        }
+    }, [tab]);
 
-	const subnets = useSubnets(undefined);
+    const subnets = useSubnets(undefined);
 
-	const [activeSubnet, setActiveSubnet] = useState(-1);
-	useEffect(() => {
-		const firstId = neuronMetagraph.data?.at(0)?.netUid || -1;
-		if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
-	}, [neuronMetagraph]);
+    const [activeSubnet, setActiveSubnet] = useState(-1);
+    useEffect(() => {
+        const firstId = neuronMetagraph.data?.at(0)?.netUid || -1;
+        if (activeSubnet === -1 && firstId !== -1) setActiveSubnet(firstId);
+    }, [neuronMetagraph]);
 
-	const sevenDaysMA = useValidator7DayMA(address);
+    const sevenDaysMA = useValidator7DayMA(address);
 
-	return chainLoading || chainStats === undefined || validator.loading ? (
-		<Loading />
-	) : validator.notFound ||
-		validator.data === undefined ||
-		validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
-		<CardRow css={infoSection}>
-			<Card>Invalid validator address</Card>
-		</CardRow>
-	) : (
-		<>
-			<CardRow css={infoSection}>
-				<Card>
-					<CardHeader css={validatorHeader}>
-						<div css={validatorTitle}>Validator</div>
-						{info?.name ? (
-							<div css={validatorInfo}>
-								<div css={validatorAddress}>{info?.name}</div>
-								<div>
-									<span css={verifiedBadge}>verified</span>
-								</div>
-								{info?.url && (
-									<img
-										src={WebSvg}
-										css={website}
-										onClick={() =>
-											navigateToAbsolutePath(info?.url)
-										}
-									/>
-								)}
-							</div>
-						) : (
-							<div css={validatorAddress}>{address}</div>
-						)}
-					</CardHeader>
-					{info?.description && (
-						<div css={validatorDescription}>
-							{info?.description}
-						</div>
-					)}
-					<ValidatorInfoTable
-						account={address}
-						balance={balance}
-						info={validator}
-					/>
-					<div css={stakeButton}>
-						<ButtonLink
-							to={`https://delegate.taostats.io/staking?hkey=${address}`}
-							size="small"
-							variant="outlined"
-							color="secondary"
-							target="_blank"
-						>
-							DELEGATE STAKE
-						</ButtonLink>
-					</div>
-				</Card>
-				<Card css={portfolioStyle} data-test="account-portfolio">
-					<ValidatorPortfolio hotkey={address} info={validator} />
-				</Card>
-			</CardRow>
-			<Card data-test="account-historical-items">
-				<TabbedContent defaultTab={tab.slice(1).toString()}>
-					<TabPane
-						label="Staked"
-						loading={validatorStakeHistory.loading}
-						error={!!validatorStakeHistory.error}
-						value="staked"
-					>
-						<ValidatorStakeHistoryChart
-							account={address}
-							stakeHistory={validatorStakeHistory}
-							balance={balance}
-						/>
-					</TabPane>
-					<TabPane
-						label="Performance"
-						loading={validator.loading}
-						error={!!validator.error}
-						value="performance"
-					>
-						<div css={perfContainer}>
-							<div css={neuronBoxes}>
-								{neuronMetagraph.data?.map((meta) => (
-									<div
-										css={[
-											neuronBox,
-											meta.netUid === activeSubnet
-												? selectedNeuronBox
-												: undefined,
-										]}
-										onClick={() =>
-											setActiveSubnet(meta.netUid)
-										}
-										key={`validator_performance_subnet_${meta.netUid}`}
-									>
-										<div css={statRow}>
-											<div css={statBigLabel}>
-												{meta.netUid}
-											</div>
-											<div css={statFullWidth}>
-												<div css={statThreeItems}>
-													<span css={statLabel}>
-														Pos
-													</span>
-													<span css={statLabel}>
-														UID
-													</span>
-													<span css={statLabel}>
-														Axon
-													</span>
-												</div>
-												<div css={statThreeItems}>
-													<span css={statValue}>
-														{meta.rank}
-													</span>
-													<span css={statValue}>
-														{meta.uid}
-													</span>
-													<span css={statValue}>
-														{shortenIP(meta.axonIp)}
-													</span>
-												</div>
-											</div>
-										</div>
-										<div css={[statTwoItems, statBreak]}>
-											<span css={statLabel}>
-												Daily Rewards
-											</span>
-											<span css={statLabel}>
-												Dividends
-											</span>
-										</div>
-										<div css={statTwoItems}>
-											<span css={statValue}>
-												{NETWORK_CONFIG.currency}
-												{formatNumber(
-													rawAmountToDecimal(
-														meta.dailyReward.toString()
-													),
-													{
-														decimalPlaces: 2,
-													}
-												)}
-											</span>
-											<span
-												css={[
-													statValue,
-													rawAmountToDecimalBy(
-														meta.dividends,
-														65535
-													).lessThan(dominance)
-														? statWarning
-														: undefined,
-												]}
-											>
-												{formatNumber(
-													rawAmountToDecimalBy(
-														meta.dividends,
-														65535
-													),
-													{
-														decimalPlaces: 5,
-													}
-												)}
-											</span>
-										</div>
-										<div css={[statTwoItems, statBreak]}>
-											<span css={statLabel}>Updated</span>
-											<span css={statLabel}>vTrust</span>
-										</div>
-										<div css={statTwoItems}>
-											<span
-												css={[
-													statValue,
-													meta.updated > 1000
-														? statWarning
-														: undefined,
-												]}
-											>
-												{meta.updated}
-											</span>
-											<span css={statValue}>
-												{formatNumber(
-													rawAmountToDecimalBy(
-														meta.validatorTrust,
-														65535
-													),
-													{
-														decimalPlaces: 5,
-													}
-												)}
-											</span>
-										</div>
-									</div>
-								))}
-							</div>
-							{activeSubnet > -1 && (
-								<HotkeyPerformanceChart
-									netUid={activeSubnet}
-									hotkey={address}
-								/>
-							)}
-						</div>
-					</TabPane>
-					<TabPane
-						label="Reward"
-						loading={sevenDaysMA.loading}
-						error={!!sevenDaysMA.error}
-						value="reward"
-					>
-						<Validator7DayMAChart
-							address={address}
-							movingAverage={sevenDaysMA}
-						/>
-					</TabPane>
-				</TabbedContent>
-			</Card>
-			<Card>
-				<TabbedContent defaultTab={tab.slice(1).toString()}>
-					<TabPane
-						label="Nominator"
-						count={nominators.pagination.totalCount}
-						loading={nominators.loading}
-						error={nominators.error}
-						value="nominator"
-					>
-						<NominatorsTable
-							nominators={nominators}
-							onSortChange={(sortKey: DelegateBalancesOrder) =>
-								setNominatorSort(sortKey)
-							}
-							initialSort={nominatorSort}
-							address={info?.name ?? address}
-							download
-						/>
-					</TabPane>
-					<TabPane
-						label="Extrinsics"
-						count={extrinsics.pagination.totalCount}
-						loading={extrinsics.loading}
-						error={extrinsics.error}
-						value="extrinsics"
-					>
-						<ExtrinsicsTable extrinsics={extrinsics} showTime />
-					</TabPane>
-					<TabPane
-						label="Delegation"
-						count={delegates.pagination.totalCount}
-						loading={delegates.loading}
-						error={delegates.error}
-						value="delegation"
-					>
-						<DelegatesTable
-							delegates={delegates}
-							showTime
-							onSortChange={(sortKey: DelegatesOrder) =>
-								setDelegateSort(sortKey)
-							}
-							initialSort={delegatesInitialOrder}
-							onFilterChange={(newFilter?: DelegateFilter) =>
-								setDelegatesFilter({
-									...delegatesFilter,
-									...newFilter,
-								})
-							}
-							initialFilter={delegatesInitialFilter}
-							address={info?.name ?? address}
-							download
-							fromValidator
-						/>
-					</TabPane>
-					<TabPane
-						label="Subnets"
-						count={subnets.pagination.totalCount}
-						loading={subnets.loading}
-						error={subnets.error}
-						value="subnets"
-					>
-						<SubnetsTable
-							subnets={subnets}
-							registrations={validator.data?.registrations}
-							validatorPermits={validator.data?.validatorPermits}
-						/>
-					</TabPane>
-				</TabbedContent>
-			</Card>
-		</>
-	);
+    return chainLoading || chainStats === undefined || validator.loading ? (
+        <Loading />
+    ) : validator.notFound ||
+      validator.data === undefined ||
+      validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
+        <CardRow css={infoSection}>
+            <Card>Invalid validator address</Card>
+        </CardRow>
+    ) : (
+        <>
+            <CardRow css={infoSection}>
+                <Card>
+                    <CardHeader css={validatorHeader}>
+                        <div css={validatorTitle}>Validator</div>
+                        {info?.name ? (
+                            <div css={validatorInfo}>
+                                <div css={validatorAddress}>{info?.name}</div>
+                                <div>
+                                    <span css={verifiedBadge}>verified</span>
+                                </div>
+                                {info?.url && (
+                                    <img
+                                        src={WebSvg}
+                                        css={website}
+                                        onClick={() =>
+                                            navigateToAbsolutePath(info?.url)
+                                        }
+                                    />
+                                )}
+                            </div>
+                        ) : (
+                            <div css={validatorAddress}>{address}</div>
+                        )}
+                    </CardHeader>
+                    {info?.description && (
+                        <div css={validatorDescription}>
+                            {info?.description}
+                        </div>
+                    )}
+                    <ValidatorInfoTable
+                        account={address}
+                        balance={balance}
+                        info={validator}
+                    />
+                    <div css={stakeButton}>
+                        <ButtonLink
+                            to={`https://delegate.taostats.io/staking?hkey=${address}`}
+                            size="small"
+                            variant="outlined"
+                            color="secondary"
+                            target="_blank"
+                        >
+                            DELEGATE STAKE
+                        </ButtonLink>
+                    </div>
+                </Card>
+                <Card css={portfolioStyle} data-test="account-portfolio">
+                    <ValidatorPortfolio hotkey={address} info={validator} />
+                </Card>
+            </CardRow>
+            <Card data-test="account-historical-items">
+                <TabbedContent defaultTab={tab.slice(1).toString()}>
+                    <TabPane
+                        label="Staked"
+                        loading={validatorStakeHistory.loading}
+                        error={!!validatorStakeHistory.error}
+                        value="staked"
+                    >
+                        <ValidatorStakeHistoryChart
+                            account={address}
+                            stakeHistory={validatorStakeHistory}
+                            balance={balance}
+                        />
+                    </TabPane>
+                    <TabPane
+                        label="Performance"
+                        loading={validator.loading}
+                        error={!!validator.error}
+                        value="performance"
+                    >
+                        <div css={perfContainer}>
+                            <div css={neuronBoxes}>
+                                {neuronMetagraph.data?.map((meta) => (
+                                    <div
+                                        css={[
+                                            neuronBox,
+                                            meta.netUid === activeSubnet
+                                                ? selectedNeuronBox
+                                                : undefined,
+                                        ]}
+                                        onClick={() =>
+                                            setActiveSubnet(meta.netUid)
+                                        }
+                                        key={`validator_performance_subnet_${meta.netUid}`}
+                                    >
+                                        <div css={statRow}>
+                                            <div css={statBigLabel}>
+                                                {meta.netUid}
+                                            </div>
+                                            <div css={statFullWidth}>
+                                                <div css={statThreeItems}>
+                                                    <span css={statLabel}>
+                                                        Pos
+                                                    </span>
+                                                    <span css={statLabel}>
+                                                        UID
+                                                    </span>
+                                                    <span css={statLabel}>
+                                                        Axon
+                                                    </span>
+                                                </div>
+                                                <div css={statThreeItems}>
+                                                    <span css={statValue}>
+                                                        {meta.rank}
+                                                    </span>
+                                                    <span css={statValue}>
+                                                        {meta.uid}
+                                                    </span>
+                                                    <span css={statValue}>
+                                                        {shortenIP(meta.axonIp)}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div css={[statTwoItems, statBreak]}>
+                                            <span css={statLabel}>
+                                                Daily Rewards
+                                            </span>
+                                            <span css={statLabel}>
+                                                Dividends
+                                            </span>
+                                        </div>
+                                        <div css={statTwoItems}>
+                                            <span css={statValue}>
+                                                {NETWORK_CONFIG.currency}
+                                                {formatNumber(
+                                                    rawAmountToDecimal(
+                                                        meta.dailyReward.toString()
+                                                    ),
+                                                    {
+                                                        decimalPlaces: 2,
+                                                    }
+                                                )}
+                                            </span>
+                                            <span
+                                                css={[
+                                                    statValue,
+                                                    rawAmountToDecimalBy(
+                                                        meta.dividends,
+                                                        65535
+                                                    ).lessThan(dominance)
+                                                        ? statWarning
+                                                        : undefined,
+                                                ]}
+                                            >
+                                                {formatNumber(
+                                                    rawAmountToDecimalBy(
+                                                        meta.dividends,
+                                                        65535
+                                                    ),
+                                                    {
+                                                        decimalPlaces: 5,
+                                                    }
+                                                )}
+                                            </span>
+                                        </div>
+                                        <div css={[statTwoItems, statBreak]}>
+                                            <span css={statLabel}>Updated</span>
+                                            <span css={statLabel}>vTrust</span>
+                                        </div>
+                                        <div css={statTwoItems}>
+                                            <span
+                                                css={[
+                                                    statValue,
+                                                    meta.updated > 1000
+                                                        ? statWarning
+                                                        : undefined,
+                                                ]}
+                                            >
+                                                {meta.updated}
+                                            </span>
+                                            <span css={statValue}>
+                                                {formatNumber(
+                                                    rawAmountToDecimalBy(
+                                                        meta.validatorTrust,
+                                                        65535
+                                                    ),
+                                                    {
+                                                        decimalPlaces: 5,
+                                                    }
+                                                )}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            {activeSubnet > -1 && (
+                                <HotkeyPerformanceChart
+                                    netUid={activeSubnet}
+                                    hotkey={address}
+                                />
+                            )}
+                        </div>
+                    </TabPane>
+                    <TabPane
+                        label="Reward"
+                        loading={sevenDaysMA.loading}
+                        error={!!sevenDaysMA.error}
+                        value="reward"
+                    >
+                        <Validator7DayMAChart
+                            address={address}
+                            movingAverage={sevenDaysMA}
+                        />
+                    </TabPane>
+                </TabbedContent>
+            </Card>
+            <Card>
+                <TabbedContent defaultTab={tab.slice(1).toString()}>
+                    <TabPane
+                        label="Nominator"
+                        count={nominators.pagination.totalCount}
+                        loading={nominators.loading}
+                        error={nominators.error}
+                        value="nominator"
+                    >
+                        <NominatorsTable
+                            nominators={nominators}
+                            onSortChange={(sortKey: DelegateBalancesOrder) =>
+                                setNominatorSort(sortKey)
+                            }
+                            initialSort={nominatorSort}
+                            address={info?.name ?? address}
+                            download
+                        />
+                    </TabPane>
+                    <TabPane
+                        label="Extrinsics"
+                        count={extrinsics.pagination.totalCount}
+                        loading={extrinsics.loading}
+                        error={extrinsics.error}
+                        value="extrinsics"
+                    >
+                        <ExtrinsicsTable extrinsics={extrinsics} showTime />
+                    </TabPane>
+                    <TabPane
+                        label="Delegation"
+                        count={delegates.pagination.totalCount}
+                        loading={delegates.loading}
+                        error={delegates.error}
+                        value="delegation"
+                    >
+                        <DelegatesTable
+                            delegates={delegates}
+                            showTime
+                            onSortChange={(sortKey: DelegatesOrder) =>
+                                setDelegateSort(sortKey)
+                            }
+                            initialSort={delegatesInitialOrder}
+                            onFilterChange={(newFilter?: DelegateFilter) =>
+                                setDelegatesFilter({
+                                    ...delegatesFilter,
+                                    ...newFilter,
+                                })
+                            }
+                            initialFilter={delegatesInitialFilter}
+                            address={info?.name ?? address}
+                            download
+                            fromValidator
+                        />
+                    </TabPane>
+                    <TabPane
+                        label="Subnets"
+                        count={subnets.pagination.totalCount}
+                        loading={subnets.loading}
+                        error={subnets.error}
+                        value="subnets"
+                    >
+                        <ValidatorSubnetsTable
+                            subnets={subnets}
+                            registrations={validator.data?.registrations}
+                            validatorPermits={validator.data?.validatorPermits}
+                        />
+                    </TabPane>
+                </TabbedContent>
+            </Card>
+        </>
+    );
 };
