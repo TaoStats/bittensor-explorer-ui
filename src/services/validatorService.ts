@@ -31,11 +31,14 @@ export type ValidatorsOrder =
 	| "TAKE_DESC";
 
 export async function getValidator(filter: ValidatorsFilter) {
-	const response = await fetchIndexer<{ validators: ResponseItems<Validator> }>(
+	const response = await fetchIndexer<{
+		validators: ResponseItems<Validator>;
+	}>(
 		`query ($filter: ValidatorFilter) {
 			validators(first: 1, offset: 0, filter: $filter, orderBy: ID_DESC) {
 				nodes {
 					id
+					height
 					owner
 					totalDailyReturn
 					nominatorReturnPerK
@@ -83,6 +86,7 @@ export async function getValidators(
 				}
 			) {
 				nodes {
+					height
 					address
 					amount
 					amountChange

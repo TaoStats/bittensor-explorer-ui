@@ -1,6 +1,7 @@
 import { DataError } from "../utils/error";
-
+	
 export type ValidatorResponse = {
+	height: number;
 	address: string;
 	amount: bigint;
 	amountChange: bigint;

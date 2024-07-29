@@ -40,6 +40,7 @@ import { useValidator7DayMA } from "../hooks/useValidators7DayMA";
 import { Validator7DayMAChart } from "../components/validators/Validator7DayMAChart";
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
+import Loading from "../components/Loading";
 
 const validatorHeader = (theme: Theme) => css`
 	display: flex;
@@ -209,6 +210,9 @@ export const ValidatorPage = () => {
 	const { address } = useParams() as ValidatorPageParams;
 
 	const validator = useValidator({ address: { equalTo: address } });
+	const {
+		state: { chainStats, chainLoading },
+	} = useAppStats();
 
 	const verifiedDelegates = useVerifiedDelegates();
 	const extrinsics = useExtrinsics(
@@ -223,7 +227,9 @@ export const ValidatorPage = () => {
 		state: { tokenLoading, tokenStats },
 	} = useAppStats();
 	const dominance =
-		tokenLoading || tokenStats === undefined || tokenStats.delegatedSupply === 0
+		tokenLoading ||
+			tokenStats === undefined ||
+			tokenStats.delegatedSupply === 0
 			? 0
 			: rawAmountToDecimal(balance.data).toNumber() /
 			tokenStats.delegatedSupply;
@@ -311,7 +317,11 @@ export const ValidatorPage = () => {
 
 	const sevenDaysMA = useValidator7DayMA(address);
 
-	return validator.notFound ? (
+	return chainLoading || chainStats === undefined || validator.loading ? (
+		<Loading />
+	) : validator.notFound ||
+		validator.data === undefined ||
+		validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid validator address</Card>
 		</CardRow>
@@ -331,7 +341,9 @@ export const ValidatorPage = () => {
 									<img
 										src={WebSvg}
 										css={website}
-										onClick={() => navigateToAbsolutePath(info?.url)}
+										onClick={() =>
+											navigateToAbsolutePath(info?.url)
+										}
 									/>
 								)}
 							</div>
@@ -340,7 +352,9 @@ export const ValidatorPage = () => {
 						)}
 					</CardHeader>
 					{info?.description && (
-						<div css={validatorDescription}>{info?.description}</div>
+						<div css={validatorDescription}>
+							{info?.description}
+						</div>
 					)}
 					<ValidatorInfoTable
 						account={address}
@@ -393,33 +407,55 @@ export const ValidatorPage = () => {
 												? selectedNeuronBox
 												: undefined,
 										]}
-										onClick={() => setActiveSubnet(meta.netUid)}
+										onClick={() =>
+											setActiveSubnet(meta.netUid)
+										}
 										key={`validator_performance_subnet_${meta.netUid}`}
 									>
 										<div css={statRow}>
-											<div css={statBigLabel}>{meta.netUid}</div>
+											<div css={statBigLabel}>
+												{meta.netUid}
+											</div>
 											<div css={statFullWidth}>
 												<div css={statThreeItems}>
-													<span css={statLabel}>Pos</span>
-													<span css={statLabel}>UID</span>
-													<span css={statLabel}>Axon</span>
+													<span css={statLabel}>
+														Pos
+													</span>
+													<span css={statLabel}>
+														UID
+													</span>
+													<span css={statLabel}>
+														Axon
+													</span>
 												</div>
 												<div css={statThreeItems}>
-													<span css={statValue}>{meta.rank}</span>
-													<span css={statValue}>{meta.uid}</span>
-													<span css={statValue}>{shortenIP(meta.axonIp)}</span>
+													<span css={statValue}>
+														{meta.rank}
+													</span>
+													<span css={statValue}>
+														{meta.uid}
+													</span>
+													<span css={statValue}>
+														{shortenIP(meta.axonIp)}
+													</span>
 												</div>
 											</div>
 										</div>
 										<div css={[statTwoItems, statBreak]}>
-											<span css={statLabel}>Daily Rewards</span>
-											<span css={statLabel}>Dividends</span>
+											<span css={statLabel}>
+												Daily Rewards
+											</span>
+											<span css={statLabel}>
+												Dividends
+											</span>
 										</div>
 										<div css={statTwoItems}>
 											<span css={statValue}>
 												{NETWORK_CONFIG.currency}
 												{formatNumber(
-													rawAmountToDecimal(meta.dailyReward.toString()),
+													rawAmountToDecimal(
+														meta.dailyReward.toString()
+													),
 													{
 														decimalPlaces: 2,
 													}
@@ -428,15 +464,19 @@ export const ValidatorPage = () => {
 											<span
 												css={[
 													statValue,
-													rawAmountToDecimalBy(meta.dividends, 65535).lessThan(
-														dominance
-													)
+													rawAmountToDecimalBy(
+														meta.dividends,
+														65535
+													).lessThan(dominance)
 														? statWarning
 														: undefined,
 												]}
 											>
 												{formatNumber(
-													rawAmountToDecimalBy(meta.dividends, 65535),
+													rawAmountToDecimalBy(
+														meta.dividends,
+														65535
+													),
 													{
 														decimalPlaces: 5,
 													}
@@ -451,14 +491,19 @@ export const ValidatorPage = () => {
 											<span
 												css={[
 													statValue,
-													meta.updated > 1000 ? statWarning : undefined,
+													meta.updated > 1000
+														? statWarning
+														: undefined,
 												]}
 											>
 												{meta.updated}
 											</span>
 											<span css={statValue}>
 												{formatNumber(
-													rawAmountToDecimalBy(meta.validatorTrust, 65535),
+													rawAmountToDecimalBy(
+														meta.validatorTrust,
+														65535
+													),
 													{
 														decimalPlaces: 5,
 													}
@@ -532,7 +577,10 @@ export const ValidatorPage = () => {
 							}
 							initialSort={delegatesInitialOrder}
 							onFilterChange={(newFilter?: DelegateFilter) =>
-								setDelegatesFilter({ ...delegatesFilter, ...newFilter })
+								setDelegatesFilter({
+									...delegatesFilter,
+									...newFilter,
+								})
 							}
 							initialFilter={delegatesInitialFilter}
 							address={info?.name ?? address}
