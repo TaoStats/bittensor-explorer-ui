@@ -23,7 +23,7 @@ import { ButtonLink } from "../components/ButtonLink";
 import { ValidatorPortfolio } from "../components/validators/ValidatorPortfolio";
 import { ValidatorStakeHistoryChart } from "../components/validators/ValidatorStakeHistoryChart";
 import { useValidatorStakeHistory } from "../hooks/useValidatorHistory";
-import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
+
 import { useValidator } from "../hooks/useValidator";
 import { useSubnets } from "../hooks/useSubnets";
 import SubnetsTable from "../components/validators/SubnetsTable";
@@ -41,6 +41,7 @@ import { Validator7DayMAChart } from "../components/validators/Validator7DayMACh
 import { useExtrinsics } from "../hooks/useExtrinsics";
 import ExtrinsicsTable from "../components/extrinsics/ExtrinsicsTable";
 import Loading from "../components/Loading";
+import verifiedDelegates from "../delegates";
 
 const validatorHeader = (theme: Theme) => css`
 	display: flex;
@@ -214,7 +215,6 @@ export const ValidatorPage = () => {
 		state: { chainStats, chainLoading },
 	} = useAppStats();
 
-	const verifiedDelegates = useVerifiedDelegates();
 	const extrinsics = useExtrinsics(
 		{ signer: { equalTo: address } },
 		"BLOCK_HEIGHT_DESC"
@@ -228,11 +228,11 @@ export const ValidatorPage = () => {
 	} = useAppStats();
 	const dominance =
 		tokenLoading ||
-			tokenStats === undefined ||
-			tokenStats.delegatedSupply === 0
+		tokenStats === undefined ||
+		tokenStats.delegatedSupply === 0
 			? 0
 			: rawAmountToDecimal(balance.data).toNumber() /
-			tokenStats.delegatedSupply;
+			  tokenStats.delegatedSupply;
 
 	const validatorStakeHistory = useValidatorStakeHistory(address);
 
@@ -320,8 +320,8 @@ export const ValidatorPage = () => {
 	return chainLoading || chainStats === undefined || validator.loading ? (
 		<Loading />
 	) : validator.notFound ||
-		validator.data === undefined ||
-		validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
+	  validator.data === undefined ||
+	  validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid validator address</Card>
 		</CardRow>

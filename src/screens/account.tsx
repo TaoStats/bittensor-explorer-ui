@@ -29,10 +29,10 @@ import {
 	useAccountBalanceHistory,
 	useAccountDelegateHistory,
 } from "../hooks/useAccountHistory";
-import { AccounBalanceHistoryChart } from "../components/account/AccounBalanceHistoryChart";
-import { AccounDelegateHistoryChart } from "../components/account/AccounDelegateHistoryChart";
-import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
+import { AccounBalanceHistoryChart } from "../components/account/AccountBalanceHistoryChart";
+import { AccounDelegateHistoryChart } from "../components/account/AccountDelegateHistoryChart";
 import { useAddressInfo } from "../hooks/useAddressInfo";
+import verifiedDelegates from "../delegates";
 
 const accountInfoStyle = css`
 	display: flex;
@@ -93,14 +93,14 @@ export const AccountPage = () => {
 	const { address } = useParams() as AccountPageParams;
 	const balance = useBalance({ address: { equalTo: address } });
 	const { state } = useAppStats();
-	const verifiedDelegates = useVerifiedDelegates();
 
 	const {
 		data: { isHotkey, isValidator },
 	} = useAddressInfo(address);
 
 	const blockHeight =
-		Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) * 1000;
+		Math.floor(Number(state.chainStats?.blocksFinalized ?? 0) / 1000) *
+		1000;
 
 	const account = useAccount(address);
 	const extrinsics = useExtrinsics(
@@ -121,7 +121,9 @@ export const AccountPage = () => {
 		{
 			account: { equalTo: address },
 			amount: { greaterThan: MIN_DELEGATION_AMOUNT },
-			updatedAt: { greaterThan: blockHeight > 1000 ? blockHeight - 1000 : 0 },
+			updatedAt: {
+				greaterThan: blockHeight > 1000 ? blockHeight - 1000 : 0,
+			},
 		},
 		"AMOUNT_DESC"
 	);
@@ -140,8 +142,12 @@ export const AccountPage = () => {
 			const filtered = Object.keys(verifiedDelegates).filter(
 				(hotkey: string) => {
 					const delegateInfo = verifiedDelegates[hotkey];
-					const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
-					if (lowerSearch !== "" && delegateName.includes(lowerSearch))
+					const delegateName =
+						delegateInfo?.name.trim().toLowerCase() || "";
+					if (
+						lowerSearch !== "" &&
+						delegateName.includes(lowerSearch)
+					)
 						return true;
 					return false;
 				}
@@ -321,7 +327,10 @@ export const AccountPage = () => {
 								error={extrinsics.error}
 								value="extrinsics"
 							>
-								<ExtrinsicsTable extrinsics={extrinsics} showTime />
+								<ExtrinsicsTable
+									extrinsics={extrinsics}
+									showTime
+								/>
 							</TabPane>
 
 							<TabPane
