@@ -231,8 +231,7 @@ export const ValidatorPage = () => {
 		tokenStats === undefined ||
 		tokenStats.delegatedSupply === 0
 			? 0
-			: rawAmountToDecimal(balance.data).toNumber() /
-			  tokenStats.delegatedSupply;
+			: rawAmountToDecimal(balance.data).toNumber() / tokenStats.delegatedSupply;
 
 	const validatorStakeHistory = useValidatorStakeHistory(address);
 
@@ -320,8 +319,8 @@ export const ValidatorPage = () => {
 	return chainLoading || chainStats === undefined || validator.loading ? (
 		<Loading />
 	) : validator.notFound ||
-	  validator.data === undefined ||
-	  validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
+		validator.data === undefined ||
+		validator.data.height < Number(chainStats.blocksFinalized) - 7200 ? (
 		<CardRow css={infoSection}>
 			<Card>Invalid validator address</Card>
 		</CardRow>
