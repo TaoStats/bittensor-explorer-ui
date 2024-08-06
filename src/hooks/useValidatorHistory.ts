@@ -13,8 +13,8 @@ import {
 	ValidatorStakeHistoryResponse,
 	ValidatorsStakeHistoryResponse,
 } from "../model/validator";
-import { fetchVerifiedDelegates } from "../services/delegateService";
 import { shortenHash } from "../utils/shortenHash";
+import verifiedDelegates from "../delegates";
 
 export function useValidatorStakeHistory(
 	address: string
@@ -70,10 +70,12 @@ export function useValidatorsStakeHistory(
 ): ValidatorsStakeHistoryResponse {
 	const rollbar = useRollbar();
 
-	const [data, setData] = useState<{
-		address: string;
-		data: ValidatorStakeHistory[];
-	}[]>([]);
+	const [data, setData] = useState<
+		{
+			address: string;
+			data: ValidatorStakeHistory[];
+		}[]
+	>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<DataError>();
 
@@ -83,7 +85,10 @@ export function useValidatorsStakeHistory(
 		});
 		const valis = [];
 		for (const validator of validators.data) {
-			if (hasWeightCopiers || !weightCopiers.includes(validator.address)) {
+			if (
+				hasWeightCopiers ||
+				!weightCopiers.includes(validator.address)
+			) {
 				valis.push(validator.address);
 			}
 			if (valis.length >= 12) break;
@@ -94,9 +99,10 @@ export function useValidatorsStakeHistory(
 			const from = now - 8 * 24 * 60 * 60 * 1000;
 
 			const stats: ValidatorStakeHistoryPaginatedResponse =
-				await getValidatorStakeHistory(valis, new Date(from).toISOString());
-
-			const verifiedDelegates = await fetchVerifiedDelegates();
+				await getValidatorStakeHistory(
+					valis,
+					new Date(from).toISOString()
+				);
 
 			const result: {
 				address: string;
@@ -104,13 +110,18 @@ export function useValidatorsStakeHistory(
 			}[] = [];
 			for (const vali of valis) {
 				const data = stats.data.filter((stat) => stat.address === vali);
-				const current = validators.data.find((it) => it.address === vali);
+				const current = validators.data.find(
+					(it) => it.address === vali
+				);
 				data.push({
 					timestamp: new Date(now).toISOString().substring(0, 19),
 					...current,
 				} as ValidatorStakeHistory);
 				result.push({
-					address: verifiedDelegates[vali]?.name ?? shortenHash(vali) ?? "",
+					address:
+						verifiedDelegates[vali]?.name ??
+						shortenHash(vali) ??
+						"",
 					data,
 				});
 			}

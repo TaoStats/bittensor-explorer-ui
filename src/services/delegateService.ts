@@ -9,6 +9,7 @@ import { PaginationOptions } from "../model/paginationOptions";
 
 import { extractItems } from "../utils/extractItems";
 import { fetchIndexer } from "./fetchService";
+import verifiedDelegates from "../delegates";
 
 export type DelegateFilter = {
 	[key: string]: any;
@@ -55,21 +56,6 @@ export async function getValidatorBalances(
 	return fetchValidatorBalances(filter);
 }
 
-export async function fetchVerifiedDelegates() {
-	const res = await fetch(
-		"https://raw.githubusercontent.com/opentensor/bittensor-delegates/main/public/delegates.json",
-		{
-			method: "GET",
-		}
-	);
-
-	if (res.status !== 200) return {};
-
-	const delegates: Record<string, DelegateInfo> = await res.json();
-
-	return delegates;
-}
-
 /*** PRIVATE ***/
 
 async function fetchDelegates(
@@ -82,12 +68,12 @@ async function fetchDelegates(
 			delegates(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
-                    account
-                    delegate
-                    action
-                    amount
-                    blockNumber
-                    extrinsicId
+					account
+					delegate
+					action
+					amount
+					blockNumber
+					extrinsicId
 				}
 				pageInfo {
 					endCursor
@@ -104,7 +90,6 @@ async function fetchDelegates(
 			order,
 		}
 	);
-	const verifiedDelegates = await fetchVerifiedDelegates();
 	const items = extractItems(
 		response.delegates,
 		pagination,
@@ -127,9 +112,9 @@ async function fetchDelegateBalances(
 			delegateBalances(first: $first, after: $after, filter: $filter, orderBy: $order) {
 				nodes {
 					id
-                    account
-                    delegate
-                    amount
+					account
+					delegate
+					amount
 					updatedAt
 					delegateFrom
 				}
@@ -148,7 +133,6 @@ async function fetchDelegateBalances(
 			order,
 		}
 	);
-	const verifiedDelegates = await fetchVerifiedDelegates();
 	const items = extractItems(
 		response.delegateBalances,
 		pagination,

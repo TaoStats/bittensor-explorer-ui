@@ -14,9 +14,9 @@ import { extractItems } from "../utils/extractItems";
 import { fetchHistorical, fetchIndexer } from "./fetchService";
 import { isAddress } from "@polkadot/util-crypto";
 import { DataError } from "../utils/error";
-import { fetchVerifiedDelegates } from "./delegateService";
 import { DelegateInfo } from "../model/delegate";
 import { rawAmountToDecimaledString } from "../utils/number";
+import verifiedDelegates from "../delegates";
 
 export type ValidatorsFilter = object;
 
@@ -60,7 +60,6 @@ export async function getValidator(filter: ValidatorsFilter) {
 		}
 	);
 
-	const verifiedDelegates = await fetchVerifiedDelegates();
 	const data = extractItems(
 		response.validators,
 		{ limit: 1 },
@@ -116,8 +115,6 @@ export async function getValidators(
 			order,
 		}
 	);
-
-	const verifiedDelegates = await fetchVerifiedDelegates();
 	return extractItems(
 		response.validators,
 		pagination,
