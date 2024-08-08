@@ -184,7 +184,7 @@ function StakingCalculator({
 
 	useEffect(() => {
 		if (validator) setResult(calcReturn(validator));
-	}, [validator]);
+	}, [JSON.stringify(validator), JSON.stringify(movingAvg)]);
 
 	const calcValidatorsForTable = () => {
 		const newValis = [];
@@ -205,7 +205,7 @@ function StakingCalculator({
 
 	useEffect(() => {
 		calcValidatorsForTable();
-	}, [validators]);
+	}, [JSON.stringify(validators), JSON.stringify(movingAvg)]);
 
 	return (
 		<div>
