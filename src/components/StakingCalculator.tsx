@@ -292,7 +292,7 @@ function StakingCalculator({
 					</div>
 					<div css={returnTitle}>Ready to delegate some stake?</div>
 					<ButtonLink
-						to={`https://delegate.taostats.io/staking/?hkey=${validator?.address}&_gl=1*1n668ce*_ga*MTg2NzIzMTA0Ny4xNzEyMDc3NDk3*_ga_VCM7H6TDR4*MTcxNjkzNzQ5NS4yNS4xLjE3MTY5MzkzOTkuMC4wLjA.`}
+						to={`https://delegate.taostats.io/delegate?hotkey=${validator?.address}&_gl=1*1n668ce*_ga*MTg2NzIzMTA0Ny4xNzEyMDc3NDk3*_ga_VCM7H6TDR4*MTcxNjkzNzQ5NS4yNS4xLjE3MTY5MzkzOTkuMC4wLjA.`}
 						size="small"
 						color="secondary"
 						variant="contained"

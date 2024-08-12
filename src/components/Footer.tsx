@@ -144,7 +144,7 @@ export const Footer = () => {
 							Taostats is funded by public delegation. Support us
 							by delegating{" "}
 							<a
-								href="https://delegate.taostats.io/staking?hkey=5Hddm3iBFD2GLT5ik7LZnT3XJUnRnN8PoeCFgGQgawUVKNm8"
+								href="https://delegate.taostats.io/delegate?hotkey=5Hddm3iBFD2GLT5ik7LZnT3XJUnRnN8PoeCFgGQgawUVKNm8"
 								style={{ color: "#14dec2" }}
 							>
 								stake to the taostats.io validator
