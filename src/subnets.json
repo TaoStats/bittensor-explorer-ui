@@ -75,8 +75,8 @@
         "description": ""
     },
     "15": {
-        "name": "Blockchain Insights",
-        "github": "https://github.com/blockchain-insights/blockchain-data-subnet",
+        "name": "Unknown",
+        "github": "",
         "description": ""
     },
     "16": {
@@ -165,9 +165,9 @@
         "description": ""
     },
     "33": {
-        "name": "Conversation Genome",
+        "name": "ReadyAI",
         "github": "https://github.com/afterpartyai/bittensor-conversation-genome-project",
-        "description": "The Conversation Genome Project (conversations.xyz) enables structured data processing at scale to decentralize access to personalized AI."
+        "description": "ReadyAI (readyai.ai) enables structured data processing at scale, democratizing access to the valuable digital commodity of structured data  – the key ingredient for high quality fine tuned models and RAG solutions."
     },
     "34": {
         "name": "BitMind",
