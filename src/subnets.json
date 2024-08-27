@@ -75,9 +75,9 @@
         "description": ""
     },
     "15": {
-        "name": "Unknown",
-        "github": "",
-        "description": ""
+        "name": "de_val",
+        "github": "https://github.com/deval-core/De-Val",
+        "description": "de_val sets the new benchmark for AI excellence, offering a decentralized evaluation platform designed to enhance LLM performance with unmatched quality. With de_val, you can rigorously test your AI models throughout the ML ops pipeline (offline testing, A/B testing, and continuous monitoring), measuring hallucinations, misattributions, relevancy, and summarization comprehensiveness, so you can understand your outputs at scale and deploy with confidence."
     },
     "16": {
         "name": "BitAds",
