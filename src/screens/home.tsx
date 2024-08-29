@@ -19,7 +19,7 @@ import { useDelegates } from "../hooks/useDelegates";
 import { DelegateFilter, DelegatesOrder } from "../services/delegateService";
 import { useLocation } from "react-router-dom";
 import { MIN_DELEGATION_AMOUNT } from "../config";
-import verifiedDelegates from "../delegates";
+import { useVerifiedDelegates } from "../hooks/useVerifiedDelegates";
 
 const contentStyle = css`
 	position: relative;
@@ -48,6 +48,8 @@ const infoSection = css`
 `;
 
 export const HomePage = () => {
+	const verifiedDelegates = useVerifiedDelegates();
+
 	const blocksInitialOrder: BlocksOrder = "HEIGHT_DESC";
 	const [blockSort, setBlockSort] = useState<BlocksOrder>(blocksInitialOrder);
 	const blocks = useBlocks(undefined, blockSort);
@@ -107,12 +109,8 @@ export const HomePage = () => {
 			const filtered = Object.keys(verifiedDelegates).filter(
 				(hotkey: string) => {
 					const delegateInfo = verifiedDelegates[hotkey];
-					const delegateName =
-						delegateInfo?.name.trim().toLowerCase() || "";
-					if (
-						lowerSearch !== "" &&
-						delegateName.includes(lowerSearch)
-					)
+					const delegateName = delegateInfo?.name.trim().toLowerCase() || "";
+					if (lowerSearch !== "" && delegateName.includes(lowerSearch))
 						return true;
 					return false;
 				}
@@ -190,9 +188,7 @@ export const HomePage = () => {
 							<BlocksTable
 								blocks={blocks}
 								showTime
-								onSortChange={(sortKey: BlocksOrder) =>
-									setBlockSort(sortKey)
-								}
+								onSortChange={(sortKey: BlocksOrder) => setBlockSort(sortKey)}
 								initialSort={blocksInitialOrder}
 							/>
 						</TabPane>
@@ -211,10 +207,7 @@ export const HomePage = () => {
 								}
 								initialSort={transfersInitialOrder}
 								onFilterChange={(newFilter?: TransfersFilter) =>
-									setTransfersFilter({
-										...transfersFilter,
-										...newFilter,
-									})
+									setTransfersFilter({ ...transfersFilter, ...newFilter })
 								}
 								initialFilter={transfersInitialFilter}
 							/>
@@ -234,10 +227,7 @@ export const HomePage = () => {
 								}
 								initialSort={delegatesInitialOrder}
 								onFilterChange={(newFilter?: DelegateFilter) =>
-									setDelegatesFilter({
-										...delegatesFilter,
-										...newFilter,
-									})
+									setDelegatesFilter({ ...delegatesFilter, ...newFilter })
 								}
 								initialFilter={delegatesInitialFilter}
 								onSearchChange={(newSearch?: string) =>
@@ -260,10 +250,7 @@ export const HomePage = () => {
 								}
 								initialSort={balancesInitialOrder}
 								onFilterChange={(newFilter?: BalancesFilter) =>
-									setBalanceFilter({
-										...balanceFilter,
-										...newFilter,
-									})
+									setBalanceFilter({ ...balanceFilter, ...newFilter })
 								}
 								initialFilter={balancesInitialFilter}
 								onSearchChange={(newSearch?: string) =>

@@ -14,10 +14,10 @@ import { Balance } from "../../model/balance";
 import { Resource } from "../../model/resource";
 
 const spinnerContainer = css`
-	display: flex;
-	width: 100%;
-	align-items: center;
-	justify-content: center;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
 `;
 
 export type AccounBalanceHistoryChartProps = {
@@ -225,18 +225,13 @@ export const AccounBalanceHistoryChart = (
 								month: "short",
 								year: "2-digit",
 							};
-							const formattedDate = day.toLocaleDateString(
-								"en-US",
-								options
-							);
+							const formattedDate = day.toLocaleDateString("en-US", options);
 							return formattedDate;
 						},
 					},
 					y: {
 						formatter: (val: number) =>
-							NETWORK_CONFIG.currency +
-							" " +
-							nFormatter(val, 2).toString(),
+							NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString(),
 					},
 				},
 				xaxis: {
@@ -261,8 +256,7 @@ export const AccounBalanceHistoryChart = (
 						style: {
 							colors: "#a8a8a8",
 						},
-						formatter: (val: number) =>
-							nFormatter(val, 2).toString(),
+						formatter: (val: number) => nFormatter(val, 2).toString(),
 					},
 					axisTicks: {
 						show: false,

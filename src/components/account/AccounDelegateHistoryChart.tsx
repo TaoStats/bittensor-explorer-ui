@@ -10,12 +10,12 @@ import {
 	AccountDelegateHistoryResponse,
 } from "../../model/accountHistory";
 import { NETWORK_CONFIG } from "../../config";
+import { useVerifiedDelegates } from "../../hooks/useVerifiedDelegates";
 import { DelegateBalance } from "../../model/delegate";
 import { Resource } from "../../model/resource";
 import fileDownload from "js-file-download";
 import Button from "@mui/material/Button";
 import { shortenHash } from "../../utils/shortenHash";
-import verifiedDelegates from "../../delegates";
 
 const spinnerContainer = css`
 	display: flex;
@@ -49,6 +49,8 @@ export const AccounDelegateHistoryChart = (
 
 	const { account, delegateHistory, delegate } = props;
 
+	const verifiedDelegates = useVerifiedDelegates();
+
 	const loading = delegateHistory.loading;
 	const timestamps = useMemo(() => {
 		let suffix: string[] = [];
@@ -73,9 +75,7 @@ export const AccounDelegateHistoryChart = (
 		if (!delegateHistory.data) return 0;
 		const resp = (delegateHistory.data as any).reduce(
 			(prev: number, cur: AccountDelegateHistory) => {
-				const now = rawAmountToDecimal(
-					cur.amount.toString()
-				).toNumber();
+				const now = rawAmountToDecimal(cur.amount.toString()).toNumber();
 				return now > prev ? now : prev;
 			},
 			0
@@ -153,10 +153,7 @@ export const AccounDelegateHistoryChart = (
 			delegates.forEach((validator) => {
 				const delegate = (validator.data as any).find((stake: any) => {
 					const check = new Date(stake.x).toISOString();
-					return (
-						now.toISOString().substring(0, 10) ===
-						check.substring(0, 10)
-					);
+					return now.toISOString().substring(0, 10) === check.substring(0, 10);
 				}) as any;
 				if (delegate) {
 					const valiName = validator.name || "";
@@ -174,9 +171,7 @@ export const AccounDelegateHistoryChart = (
 			const totalIncrease = total - (prevTotalAmount[""] ?? 0);
 			prevTotalAmount[""] = total;
 
-			csvResult.push(
-				`${now},${valis.join(",")},${total},${totalIncrease}`
-			);
+			csvResult.push(`${now},${valis.join(",")},${total},${totalIncrease}`);
 		});
 		const header = delegates.reduce(
 			(header, _, index) => {
@@ -333,8 +328,7 @@ export const AccounDelegateHistoryChart = (
 								const lastDay = new Date();
 								lastDay.setDate(lastDay.getDate() + 1);
 								if (
-									day.getFullYear() ===
-										lastDay.getFullYear() &&
+									day.getFullYear() === lastDay.getFullYear() &&
 									day.getMonth() === lastDay.getMonth() &&
 									day.getDate() === lastDay.getDate()
 								)
@@ -344,18 +338,13 @@ export const AccounDelegateHistoryChart = (
 									month: "short",
 									year: "2-digit",
 								};
-								const formattedDate = day.toLocaleDateString(
-									"en-US",
-									options
-								);
+								const formattedDate = day.toLocaleDateString("en-US", options);
 								return formattedDate;
 							},
 						},
 						y: {
 							formatter: (val: number) =>
-								NETWORK_CONFIG.currency +
-								" " +
-								nFormatter(val, 2).toString(),
+								NETWORK_CONFIG.currency + " " + nFormatter(val, 2).toString(),
 						},
 					},
 					xaxis: {
@@ -380,8 +369,7 @@ export const AccounDelegateHistoryChart = (
 							style: {
 								colors: "#a8a8a8",
 							},
-							formatter: (val: number) =>
-								nFormatter(val, 2).toString(),
+							formatter: (val: number) => nFormatter(val, 2).toString(),
 						},
 						axisTicks: {
 							show: false,
