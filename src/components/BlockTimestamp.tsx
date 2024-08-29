@@ -24,12 +24,10 @@ export const BlockTimestamp = ({
 		blockHeight,
 	]);
 
-	return loading ? (
+	return loading || !data ? (
 		<Spinner small />
 	) : error ? (
 		<ErrorIcon css={errorIconStyle} />
-	) : !data ? (
-		<>Nakamoto</>
 	) : (
 		<Time time={data} {...props} />
 	);
