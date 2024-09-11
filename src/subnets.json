@@ -230,9 +230,9 @@
         "description": "Gen42 leverages the Bittensor network to provide decentralized code generation services. "
     },
     "46": {
-        "name": "Unregistered",
-        "github": "",
-        "description": ""
+        "name": "Safe Scan",
+        "github": "https://github.com/safe-scan-ai/cancer-ai",
+        "description": "Cancer detection model competition"
     },
     "47": {
         "name": "Unregistered",
