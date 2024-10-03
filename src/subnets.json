@@ -230,9 +230,9 @@
         "description": "Gen42 leverages the Bittensor network to provide decentralized code generation services. "
     },
     "46": {
-        "name": "Safe Scan",
-        "github": "https://github.com/safe-scan-ai/cancer-ai/",
-        "description": "Leveraging the power of AI and blockchain technology to revolutionize cancer detection"
+        "name": "Neural 3D",
+        "github": "https://github.com/GoNeuralAI/neural-subnet",
+        "description": "Neural 3D is a Bittensor subnet creating AI-based 3D assets, giving creatives access to near real-time world-building capabilities."
     },
     "47": {
         "name": "Unregistered",
