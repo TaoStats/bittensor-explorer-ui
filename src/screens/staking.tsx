@@ -170,7 +170,7 @@ export const StakingPage = () => {
 					<div css={description}>
 						The APR used the caluclate the returns below uses the specific take
 						and 30 day Moving Average of the selected validator to give a more
-						accurate result. Past performance is not a guarentee of future
+						accurate result. Past performance is not a guarantee of future
 						returns.
 					</div>
 				</div>
